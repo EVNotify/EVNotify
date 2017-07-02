@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EVNotify</title>
+        <meta charset="utf-8"></meta>
+        <!-- jQuery -->
+        <script src="./js/jquery-3.2.0.min.js"></script>
+        <!-- Cordova -->
+        <script src="cordova.js"></script>
+        <!-- Material CSS -->
+        <link rel="stylesheet" href="./css/material.min.css">
+        <!-- EVNotify CSS -->
+        <link rel="stylesheet" href="./css/evnotify.css">
+        <!-- Material JS -->
+        <script src="./js/material.min.js"></script>
+        <!-- Material Icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!-- Progressbar JS -->
+        <script src="./js/progressbar.min.js"></script>
+        <!-- GetMDL Select CSS -->
+        <link rel="stylesheet" href="./css/getmdl-select.min.css">
+        <!-- GetMDL Select JS -->
+        <script src="./js/getmdl-select.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="./js/sweetalert2.min.js"></script>
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="./css/sweetalert2.min.css">
+        <!-- bluetooth JS -->
+        <script src="./js/bluetooth.js"></script>
+        <!-- obd2 JS -->
+        <script src="./js/obd2.js"></script>
+        <!-- storage JS -->
+        <script src="./js/storage.js"></script>
+        <!-- server JS -->
+        <script src="./js/server.js"></script>
+        <!-- user JS -->
+        <script src="./js/user.js"></script>
+        <!-- german translation -->
+        <script src="./lng/de.js"></script>
+        <!-- translation JS -->
+        <script src="./lng/index.js"></script>
+        <script type="text/javascript">
+        function onLoad() {
+            /**
+             * Function which shows message on the snackbar
+             * @param  {String} text The text to show
+             */
+            var showMessage = function(text) {
+                var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
+                    message: text,
+                    duration: 2222
+                });
+            },
+            config = JSON.parse(getValue('config', '{}'));
+
+            translatePage(getValue('lng', 'en'));
+
+            // validate settings to determine what to do
+            if(!getValue('setupCompleted')) setup(getValue('lng', 'en'));
+            else if(!getValue('token')) login(getValue('lng', 'en'));
+            else if(config.device && config.car) watchSoC(config.car, config.soc, config.polling);
+            else showMessage(translate('MISSING_CONFIGURATION', getValue('lng', 'en')));
+        }
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <!-- Always show a header, even on smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title translate" id="HEADER_OVERVIEW"></span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons" onclick="stopWatch()">stop</i>
+                    </label>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link translate" href="index.html" id="MENU_OVERVIEW"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_CHARGE"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_NOTIFYME"></a>
+                    <a class="mdl-navigation__link translate" href="settings.html" id="MENU_SETTINGS"></a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <div id="socCycle" class="socCycle"></div>
+                    <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
+                        <div class="mdl-snackbar__text"></div>
+                        <button type="button" class="mdl-snackbar__action"></button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+    <script type="text/javascript">
+    socCycle = new ProgressBar.Circle('#socCycle', {
+        color: '#3f51b5',
+        strokeWidth: 4,
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1234,
+        text: { autoStyleContainer: false },
+        from: { color: '#FA5858', width: 1 },
+        to: { color: '#3ADF00', width: 4 },
+        value: 23,
+        step: function(state, circle) {
+            circle.path.setAttribute('stroke', state.color);
+            circle.path.setAttribute('stroke-width', state.width);
+
+            var value = Math.round(circle.value() * 100);
+
+            circle.setText('&nbsp&nbsp&nbsp&nbsp&nbsp' + value + '% <br><br>(00:00:00h)');  // TODO real estimated time
+        }
+    });
+
+    socCycle.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    socCycle.text.style.fontSize = '2rem';
+    </script>
+</html>
