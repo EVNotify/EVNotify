@@ -47,7 +47,12 @@ function setup(lng) {
             title: translate('REGISTER', lng),
             text: translate('REGISTER_TEXT', lng),
             input: 'password',
-            inputAttributes: {min: 6},
+            inputValidator: function (input) {
+                return new Promise(function (resolve, reject) {
+                    if (input.length >= 6) resolve();
+                    else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                });
+            },
             preConfirm: function(password) {
                 return new Promise(function (resolve, reject) {
                     setTimeout(function () {
@@ -87,11 +92,16 @@ function login(lng) {
     swal({
         title: translate('LOGIN_TEXT', lng),
         input: 'password',
-        inputAttributes: {min: 6},
         showCancelButton: true,
         cancelButtonText: translate('CANCEL', lng),
         confirmButtonText: translate('LOGIN', lng),
         showLoaderOnConfirm: true,
+        inputValidator: function (input) {
+            return new Promise(function (resolve, reject) {
+                if (input.length >= 6) resolve();
+                else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+            });
+        },
         preConfirm: function (password) {
             return new Promise(function (resolve, reject) {
                 setTimeout(function() {
@@ -105,7 +115,7 @@ function login(lng) {
             });
         },
         allowOutsideClick: false
-    }).then(function (email) {
+    }).then(function () {
         swal({
             type: 'success',
             title: translate('LOGIN_SUCCESSFUL', lng)
