@@ -2,7 +2,7 @@ function setValue(key, value) {
     if(key && value && typeof key === 'string')
         window.localStorage.setItem(key, ((typeof value === 'object')? JSON.stringify(value) : value));
 
-    return "";
+    return value;
 }
 
 function getValue(key, defaultValue) {

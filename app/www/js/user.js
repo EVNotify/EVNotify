@@ -1,6 +1,6 @@
 /**
  * Function which guides user through the setup process in the specified language
- * @param  {String} lng the language to use
+ * @param  {String} lng the language to use (user will be asked for prefered language also in the setup process)
  */
 function setup(lng) {
     swal.setDefaults({
@@ -9,10 +9,22 @@ function setup(lng) {
         allowOutsideClick: false,
         showLoaderOnConfirm: true,
         animation: false,
-        progressSteps: ['1', '2', '3']
+        progressSteps: ['1', '2', '3', '4']
     });
 
     var steps = [
+        {
+            title: 'LANGUAGE_SETUP',
+            input: 'select',
+            inputOptions: {en: 'LNG_EN', de: 'LNG_DE'}, // available languages
+            showCancelButton: true,
+            preConfirm: function (language) {
+                return new Promise(function (resolve, reject) {
+                    lng = setValue('lng', language);
+                    resolve();
+                });
+            }
+        },
         {
             title: translate('WELCOME', lng),
             text: translate('WELCOME_TEXT', lng),
