@@ -127,7 +127,7 @@ function changePW(lng) {
         inputValidator: function (input) {
             return new Promise(function (resolve, reject) {
                 if (input.length >= 6) resolve();
-                else reject(translate('PASSWORD_LENGTH_ERROR'));
+                else reject(translate('PASSWORD_LENGTH_ERROR', lng));
             });
         },
         progressSteps: ['1', '2', '3']
@@ -163,7 +163,7 @@ function changePW(lng) {
             preConfirm: function (password) {
                 return new Promise(function (resolve, reject) {
                     setTimeout(function() {
-                        if (password !== pw1) reject(translate('PASSWORD_MISMATCH'));
+                        if (password !== pw1) reject(translate('PASSWORD_MISMATCH', lng));
                         else {
                             sendRequest('changepw', {
                                 akey: getValue('akey'),
@@ -184,7 +184,7 @@ function changePW(lng) {
     swal.queue(steps).then(function (result) {
         swal.resetDefaults()
         swal({
-            title: translate('CHANGE_PASSWORD_SUCCESSFUL'),
+            title: translate('CHANGE_PASSWORD_SUCCESSFUL', lng),
             confirmButtonText: 'OK',
             type: 'success',
             showCancelButton: false
