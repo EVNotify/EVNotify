@@ -5,6 +5,7 @@
 function setup(lng) {
     swal.setDefaults({
         confirmButtonText: translate('NEXT', lng),
+        cancelButtonText: translate('CANCEL', lng),
         showCancelButton: true,
         allowOutsideClick: false,
         showLoaderOnConfirm: true,
@@ -88,6 +89,7 @@ function login(lng) {
         input: 'password',
         inputAttributes: {min: 6},
         showCancelButton: true,
+        cancelButtonText: translate('CANCEL', lng),
         confirmButtonText: translate('LOGIN', lng),
         showLoaderOnConfirm: true,
         preConfirm: function (password) {
@@ -108,5 +110,86 @@ function login(lng) {
             type: 'success',
             title: translate('LOGIN_SUCCESSFUL', lng)
         });
+    });
+}
+
+/**
+ * Function which changes the password for the account
+ * @param  {String} lng the language to use for the change password process
+ */
+function changePW(lng) {
+    swal.setDefaults({
+        input: 'password',
+        confirmButtonText: translate('NEXT', lng),
+        cancelButtonText: translate('CANCEL', lng),
+        showCancelButton: true,
+        allowOutsideClick: false,
+        inputValidator: function (input) {
+            return new Promise(function (resolve, reject) {
+                if (input.length >= 6) resolve();
+                else reject(translate('PASSWORD_LENGTH_ERROR'));
+            });
+        },
+        progressSteps: ['1', '2', '3']
+    });
+
+    var oldPW,
+        pw1,
+        steps = [
+        {
+            title: translate('OLD_PASSWORD', lng),
+            text: translate('OLD_PASSWORD_TEXT', lng),
+            preConfirm: function(password) {
+                return new Promise(function (resolve, reject) {
+                    oldPW = password;
+                    resolve();
+                });
+            }
+        },
+        {
+            title: translate('NEW_PASSWORD', lng),
+            text: translate('NEW_PASSWORD_TEXT', lng),
+            preConfirm: function(password) {
+                return new Promise(function (resolve, reject) {
+                    pw1 = password;
+                    resolve();
+                });
+            }
+        },
+        {
+            title: translate('NEW_PASSWORD_RETYPE', lng),
+            text: translate('NEW_PASSWORD_RETYPE_TEXT', lng),
+            showLoaderOnConfirm: true,
+            preConfirm: function (password) {
+                return new Promise(function (resolve, reject) {
+                    setTimeout(function() {
+                        if (password !== pw1) reject(translate('PASSWORD_MISMATCH'));
+                        else {
+                            sendRequest('changepw', {
+                                akey: getValue('akey'),
+                                token: getValue('token'),
+                                password: oldPW,
+                                newpassword: password
+                            }, function(err, changeRes) {
+                                if(!err && changeRes) resolve();
+                                else reject(translate('CHANGE_PASSWORD_FAILED', lng));
+                            });
+                        }
+                    }, 2000)
+                });
+            }
+        }
+    ];
+
+    swal.queue(steps).then(function (result) {
+        swal.resetDefaults()
+        swal({
+            title: translate('CHANGE_PASSWORD_SUCCESSFUL'),
+            confirmButtonText: 'OK',
+            type: 'success',
+            showCancelButton: false
+        });
+    }, function () {
+        swal.resetDefaults()
     });
 }
