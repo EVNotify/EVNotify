@@ -9,7 +9,7 @@ function setup(lng) {
         showCancelButton: true,
         allowOutsideClick: false,
         showLoaderOnConfirm: true,
-        animation: false,
+        animation: true,
         progressSteps: ['1', '2', '3', '4']
     });
 
