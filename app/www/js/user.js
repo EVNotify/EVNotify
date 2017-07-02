@@ -14,9 +14,9 @@ function setup(lng) {
 
     var steps = [
         {
-            title: 'LANGUAGE_SETUP',
+            title: translate('LANGUAGE_SETUP', lng),
             input: 'select',
-            inputOptions: {en: 'LNG_EN', de: 'LNG_DE'}, // available languages
+            inputOptions: {en: translate('LNG_EN', lng), de: translate('LNG_DE', lng)}, // available languages
             showCancelButton: true,
             preConfirm: function (language) {
                 return new Promise(function (resolve, reject) {
@@ -73,5 +73,40 @@ function setup(lng) {
         window.location.href = './settings.html';
     }, function () {
         swal.resetDefaults();
+    });
+}
+
+/**
+ * Function which logins the user to retrieve token
+ * NOTE: This function is normally not necessary because on setup the user retrieves a valid token
+ * Will be useful later if user can change account to connect the account with multiple devices
+ * @param  {String} lng the language to use for the login process
+ */
+function login(lng) {
+    swal({
+        title: translate('LOGIN_TEXT', lng),
+        input: 'password',
+        inputAttributes: {min: 6},
+        showCancelButton: true,
+        confirmButtonText: translate('LOGIN', lng),
+        showLoaderOnConfirm: true,
+        preConfirm: function (password) {
+            return new Promise(function (resolve, reject) {
+                setTimeout(function() {
+                    sendRequest('login', {akey: getValue('akey'), password: password}, function(err, loginRes) {
+                        if(!err && loginRes) {
+                            setValue('token', loginRes.token);
+                            resolve();
+                        } else reject(translate('LOGN_FAILED', lng));
+                    });
+                }, 2000)
+            });
+        },
+        allowOutsideClick: false
+    }).then(function (email) {
+        swal({
+            type: 'success',
+            title: translate('LOGIN_SUCCESSFUL', lng)
+        });
     });
 }
