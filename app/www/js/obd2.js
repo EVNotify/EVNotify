@@ -19,14 +19,14 @@ function watchSoC(device, car, soc, interval) {
     lng = getValue('lng', 'en');
 
     // ensure that required variables are available
-    if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'undefined' && typeof bt !== 'undefined') {
+    if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'undefined' && typeof bluetooth !== 'undefined') {
         // check if car is supported
         if(typeof SOC_CMD[car] !== 'undefined') {
             // check if bluetooth is enabled
-            bt.isEnabled(function(enabled) {
+            bluetooth.isEnabled(function(enabled) {
                 if(enabled) {
                     // connect to device
-                    bt.connect(device, function(err, connected) {
+                    bluetooth.connect(device, function(err, connected) {
                         if(!err && connected) {
                             /**
                              * subscribe to raw data and handle incoming data
@@ -63,10 +63,10 @@ function watchSoC(device, car, soc, interval) {
 
                             // send command to car in the given interval
                             setInterval(function () {
-                                bt.sendCommand(SOC_CMD[car], function(err, sent) {
+                                bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
                                     if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
                                 });
-                            }, ((interval)? interval : 60) * 1000;
+                            }, ((interval)? interval : 60) * 1000);
                         } else showMessage(translate('BLUETOOTH_CONNECTION_ERROR', lng));
                     });
                 } else showMessage(translate('BLUETOOTH_DISABLED', lng));

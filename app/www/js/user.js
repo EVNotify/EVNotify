@@ -33,7 +33,7 @@ function setup(lng) {
                 return new Promise(function (resolve, reject) {
                     setTimeout(function() {
                         // get key for account to prepare registration
-                        sendRequest('getkey', false, function(err, keyRes) {
+                        sendRequest('getkey', {}, function(err, keyRes) {
                             if(!err && keyRes) {
                                 setValue('akey', keyRes.akey);
                                 resolve();
@@ -75,6 +75,7 @@ function setup(lng) {
 
     swal.queue(steps).then(function (result) {
         swal.resetDefaults();
+        setValue('setupCompleted', true);
         // go to settings page after successfull registration
         window.location.href = './settings.html';
     }, function () {

@@ -3,6 +3,8 @@
     <head>
         <title>EVNotify</title>
         <meta charset="utf-8"></meta>
+        <!-- Client Variables -->
+        <script src="./client.js"></script>
         <!-- jQuery -->
         <script src="./js/jquery-3.2.0.min.js"></script>
         <!-- Cordova -->
@@ -25,8 +27,6 @@
         <script src="./js/sweetalert2.min.js"></script>
         <!-- SweetAlert2 CSS -->
         <link rel="stylesheet" href="./css/sweetalert2.min.css">
-        <!-- bluetooth JS -->
-        <script src="./js/bluetooth.js"></script>
         <!-- obd2 JS -->
         <script src="./js/obd2.js"></script>
         <!-- storage JS -->
@@ -57,10 +57,16 @@
          */
         function onDeviceReady() {
             // build deviceList
-            var deviceList = document.getElementById('deviceList');
+            var deviceList = document.getElementById('deviceList'),
+                s = document.createElement('script');
 
-            if(typeof bt !== 'undefined') {
-                bt.list(function(err, devices) {
+            // append bluetooth file to body
+            s.type = 'text/javascript';
+            s.src = './js/bluetooth.js';
+            $('head').append(s);
+
+            if(typeof bluetooth !== 'undefined') {
+                bluetooth.list(function(err, devices) {
                     if(!err && devices) {
                         // iterate through received paired devices to list them
                         devices.forEach(function(device) {

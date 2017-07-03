@@ -3,6 +3,8 @@
     <head>
         <title>EVNotify</title>
         <meta charset="utf-8"></meta>
+    	<!-- Client Variables -->
+    	<script src="./client.js"></script>
         <!-- jQuery -->
         <script src="./js/jquery-3.2.0.min.js"></script>
         <!-- Cordova -->
@@ -25,8 +27,6 @@
         <script src="./js/sweetalert2.min.js"></script>
         <!-- SweetAlert2 CSS -->
         <link rel="stylesheet" href="./css/sweetalert2.min.css">
-        <!-- bluetooth JS -->
-        <script src="./js/bluetooth.js"></script>
         <!-- obd2 JS -->
         <script src="./js/obd2.js"></script>
         <!-- storage JS -->
@@ -44,6 +44,13 @@
          * Function which loads several other functions on page load
          */
         function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        /**
+         * Function which gets triggered when device is ready and the bluetooth plugin should be usable
+         */
+        function onDeviceReady() {
             /**
              * Function which shows message on the snackbar
              * @param  {String} text The text to show
@@ -54,8 +61,14 @@
                     duration: 2222
                 });
             },
-            config = JSON.parse(getValue('config', '{}'));
+            config = JSON.parse(getValue('config', '{}')),
+            s = document.createElement('script');
 
+            // append bluetooth file to body
+            s.type = 'text/javascript';
+            s.src = './js/bluetooth.js';
+            $('head').append(s);
+            
             translatePage(getValue('lng', 'en'));
 
             // validate settings to determine what to do
