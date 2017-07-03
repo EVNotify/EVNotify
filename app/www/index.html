@@ -61,7 +61,7 @@
             // validate settings to determine what to do
             if(!getValue('setupCompleted')) setup(getValue('lng', 'en'));
             else if(!getValue('token')) login(getValue('lng', 'en'));
-            else if(config.device && config.car) watchSoC(config.car, config.soc, config.polling);
+            else if(config.device && config.car) watchSoC(config.device, config.car, config.soc, config.polling);
             else showMessage(translate('MISSING_CONFIGURATION', getValue('lng', 'en')));
         }
         </script>
