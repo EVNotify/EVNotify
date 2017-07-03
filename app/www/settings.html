@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EVNotify</title>
+        <meta charset="utf-8"></meta>
+        <!-- jQuery -->
+        <script src="./js/jquery-3.2.0.min.js"></script>
+        <!-- Cordova -->
+        <script src="cordova.js"></script>
+        <!-- Material CSS -->
+        <link rel="stylesheet" href="./css/material.min.css">
+        <!-- EVNotify CSS -->
+        <link rel="stylesheet" href="./css/evnotify.css">
+        <!-- Material JS -->
+        <script src="./js/material.min.js"></script>
+        <!-- Material Icons -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <!-- Progressbar JS -->
+        <script src="./js/progressbar.min.js"></script>
+        <!-- GetMDL Select CSS -->
+        <link rel="stylesheet" href="./css/getmdl-select.min.css">
+        <!-- GetMDL Select JS -->
+        <script src="./js/getmdl-select.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="./js/sweetalert2.min.js"></script>
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="./css/sweetalert2.min.css">
+        <!-- bluetooth JS -->
+        <script src="./js/bluetooth.js"></script>
+        <!-- obd2 JS -->
+        <script src="./js/obd2.js"></script>
+        <!-- storage JS -->
+        <script src="./js/storage.js"></script>
+        <!-- server JS -->
+        <script src="./js/server.js"></script>
+        <!-- user JS -->
+        <script src="./js/user.js"></script>
+        <!-- german translation -->
+        <script src="./lng/de.js"></script>
+        <!-- translation JS -->
+        <script src="./lng/index.js"></script>
+        <script>
+        /**
+         * Function which loads several other functions on page load
+         * NOTE: Binds deviceReady event to use device API's such as the required bluetooth plugin
+         */
+        function onLoad() {
+            translatePage(getValue('lng', 'en'));
+            // update selects
+            getmdlSelect.init('.getmdl-select');
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        /**
+         * Function which gets triggered when device is ready and the bluetooth plugin should be usable
+         * NOTE: fills the bluetooth devices list with paired ones
+         */
+        function onDeviceReady() {
+            // build deviceList
+            var deviceList = document.getElementById('deviceList');
+
+            if(typeof bt !== 'undefined') {
+                bt.list(function(err, devices) {
+                    if(!err && devices) {
+                        // iterate through received paired devices to list them
+                        devices.forEach(function(device) {
+                            var li = document.createElement('li');
+
+                            li.className += 'mdl-menu__item';
+                            li.innerText = device.name;
+                            li.setAttribute('data-val', device.id);
+                            deviceList.appendChild(li);
+                        });
+
+                        // update deviceDiv and DOM
+                        getmdlSelect.init('#deviceDiv');
+                        componentHandler.upgradeDom();
+                    }
+                });
+            }
+        }
+
+        /**
+         * Function which loads the settings and applies them to the specific page elements
+         */
+        function loadSettings() {
+            var config = JSON.parse(getValue('config', '{}')),
+                akey = document.getElementById('akey'),
+                akeyDiv = document.getElementById('akeyDiv'),
+                email = document.getElementById('email'),
+                emailDiv = document.getElementById('emailDiv'),
+                notifyVal = document.getElementById('notifyVal'),
+                device = document.getElementById('device'),
+                deviceDiv = document.getElementById('deviceDiv'),
+                polling = document.getElementById('polling'),
+                pollingDiv = document.getElementById('pollingDiv'),
+                language = document.getElementById('language'),
+                languageDiv = document.getElementById('languageDiv');
+
+            if(getValue('akey')) {
+                akey.value = getValue('akey');
+                akeyDiv.className += ' is-upgraded is-focused';
+            }
+            if(config.email) {
+                email.value = config.email;
+                emailDiv.className += ' is-upgraded is-focused';
+            }
+            if(config.soc) notifyVal.innerText = config.soc + ' %';
+            if(config.device) {
+                deviceDiv.className += ' is-dirty is-focused';
+                device.value = config.device.name;
+                device.setAttribute('data-val', config.device.id);
+            }
+            if(config.pollingObj) {
+                pollingDiv.className += ' is-dirty is-focused';
+                polling.value = config.pollingObj.title;
+                polling.setAttribute('data-val', config.pollingObj.val);
+            }
+            if(config.lngObj) {
+                languageDiv.className += ' is-dirty is-focused';
+                language.value = config.lngObj.name;
+                language.setAttribute('data-val', config.lngObj.lng);
+            }
+        }
+
+        /**
+         * Function which saves the settings and sends the new settings to backend server
+         * NOTE: Requires the users account password to authenticate to prevent abuse
+         */
+        function saveSettings() {
+            var lng = setValue('lng', document.getElementById('language').getAttribute('data-val')),
+                settingsObj = setValue('config', {
+                    lngObj: {
+                        lng: document.getElementById('language').getAttribute('data-val'),
+                        name: document.getElementById('language').value
+                    },
+                    lng: lng,
+                    telegram: getValue('telegram'),
+                    email: document.getElementById('email').value,
+                    push: false,
+                    soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
+                    device: {
+                        id: document.getElementById('device').getAttribute('data-val'),
+                        name: document.getElementById('device').value
+                    },
+                    pollingObj: {
+                        val: parseInt(document.getElementById('polling').getAttribute('data-val')),
+                        title: document.getElementById('polling').value
+                    },
+                    polling: parseInt(document.getElementById('polling').getAttribute('data-val'))
+                });
+
+            swal({
+                title: translate('SETTINGS_PASSWORD', lng),
+                input: 'password',
+                showCancelButton: true,
+                confirmButtonText: translate('NEXT', lng),
+                cancelButtonText: translate('CANCEL', lng),
+                showLoaderOnConfirm: true,
+                inputValidator: function (input) {
+                    return new Promise(function (resolve, reject) {
+                        if (input.length >= 6) resolve();
+                        else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                    });
+                },
+                preConfirm: function (password) {
+                    return new Promise(function (resolve, reject) {
+                        setTimeout(function() {
+                            sendRequest('settings', {
+                                akey: getValue('akey'),
+                                password: password,
+                                token: getValue('token'),
+                                option: 'SET',
+                                optionObj: settingsObj
+                            }, function(err, settingsRes) {
+                                if(!err && settingsRes) resolve();
+                                else reject(translate('SET_SETTINGS_FAILED', lng));
+                            })
+                        }, 2000);
+                    });
+                },
+                allowOutsideClick: false
+            }).then(function () {
+                swal({
+                    type: 'success',
+                    title: translate('SET_SETTINGS_SUCCESSFUL', lng)
+                });
+            });
+        }
+        </script>
+    </head>
+    <body onload="onLoad(); loadSettings()">
+        <!-- Always shows a header, even on smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title translate" id="HEADER_SETTINGS"></span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link translate" href="index.html" id="MENU_OVERVIEW"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_CHARGE"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_NOTIFYME"></a>
+                    <a class="mdl-navigation__link translate" href="settings.html" id="MENU_SETTINGS"></a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <!-- Your content goes here -->
+                    <form action="#" id="settingsForm">
+                        <!-- Account -->
+                        <span class="mdl-textfield settingsSection translate" id="SETTINGS_ACCOUNT"></span>
+                        <!-- AKey -->
+                        <div id="akeyDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label settingsPart">
+                            <input class="mdl-textfield__input" type="text" readonly="readonly" id="akey">
+                            <label class="mdl-textfield__label translate" for="akey" id="SETTINGS_AKEY"></label>
+                        </div>
+                        <!-- Password -->
+                        <button onclick="event.preventDefault(); changePW()"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect pwBtn translate" id="CHANGE_PASSWORD">
+                        </button>
+                        <!-- Language -->
+                        <div id="languageDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
+                            <input class="mdl-textfield__input" type="text" id="language" readonly tabIndex="-1">
+                            <label for="language">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                            </label>
+                            <label for="language" class="mdl-textfield__label translate" id="LANGUAGE"></label>
+                            <ul for="language" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="languageList">
+                                <li class="mdl-menu__item translate" data-val="en" id="LNG_EN"></li>
+                                <li class="mdl-menu__item translate" data-val="de" id="LNG_DE"></li>
+                            </ul>
+                        </div>
+                        <!-- Notifications -->
+                        <span class="mdl-textfield settingsSection translate" id="NOTIFICATIONS"></span>
+                        <!-- E-Mail -->
+                        <div id="emailDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label settingsPart">
+                            <input class="mdl-textfield__input" type="email" id="email">
+                            <label class="mdl-textfield__label translate" for="email" id="EMAIL_NOTIFICATION"></label>
+                        </div>
+                        <!-- Push -->
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect marginLeft" for="push">
+                            <input type="checkbox" id="push" disabled="true" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label translate" id="PUSH_NOTIFICATION"></span>
+                        </label>
+                        <!-- Telegram -->
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect marginLeft" for="telegram">
+                            <input type="checkbox" id="telegram" disabled="true" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label translate" id="TELEGRAM_NOTIFICATION"></span>
+                            <a class="translate" onclick="manageTelegram()" id="TELEGRAM_MANAGE_NOTIFICATION"></a>
+                        </label>
+                        <!-- Notifcation SoC value -->
+                        <p>
+                            <input class="mdl-slider mdl-js-slider" type="range" min="10" max="100" tabindex="0" oninput="document.getElementById('notifyVal').innerText = this.value + ' %';">
+                            <span style="text-align: center; font-weight: bold; display: block" class="mdl-textfield__info marginLeft" id="notifyVal">70 %</span>
+                            <span style="text-align: center" class="mdl-textfield__info marginLeft translate" id="SETTINGS_SOC_HELP"></span>
+                        </p>
+                        <!-- System -->
+                        <span class="mdl-textfield settingsSection translate" id="SETTINGS_SYSTEM"></span>
+                        <!-- Device -->
+                        <div id="deviceDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
+                            <input class="mdl-textfield__input" type="text" id="device" readonly tabIndex="-1">
+                            <label for="device">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                            </label>
+                            <label for="device" class="mdl-textfield__label translate" id="SETTINGS_DEVICES"></label>
+                            <ul for="device" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="deviceList">
+                            </ul>
+                        </div>
+                        <!-- Polling -->
+                        <div id="pollingDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
+                            <input class="mdl-textfield__input" type="text" id="polling" readonly tabIndex="-1">
+                            <label for="polling">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                            </label>
+                            <label for="polling" class="mdl-textfield__label translate" id="SETTINGS_POLLING"></label>
+                            <ul for="polling" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="pollingList">
+                                <li class="mdl-menu__item translate" data-val="30" id="POLLING_30"></li>
+                                <li class="mdl-menu__item translate" data-val="60" id="POLLING_60"></li>
+                                <li class="mdl-menu__item translate" data-val="300" id="POLLING_300"></li>
+                                <li class="mdl-menu__item translate" data-val="600" id="POLLING_600"></li>
+                                <li class="mdl-menu__item translate" data-val="1800" id="POLLING_1800"></li>
+                                <li class="mdl-menu__item translate" data-val="3600" id="POLLING_3600"></li>
+                            </ul>
+                        </div>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLIING_WARNING"></span>
+                        <!-- Save Button -->
+                        <button onclick="event.preventDefault(); saveSettings()" style="width: 100%; margin-top: 5%"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect translate" id="SAVE_SETTINGS">
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
