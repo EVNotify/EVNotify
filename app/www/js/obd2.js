@@ -54,6 +54,7 @@ function watchSoC(device, car, soc, interval) {
                                             // send notification request
                                             sendRequest('notification', {akey: getValue('akey'), token: getValue('token')}, function(err, notificationRes) {
                                                 if(err) showMessage(translate('NOTIFICATION_SENT_ERROR', lng));
+                                                else NOTIFICATION_SENT = true;
                                             });
                                         }
                                     }
