@@ -1,6 +1,6 @@
 /**
  * Function which handles the bluetooth connection and communication with the car and sends the notifications
- * @param  {String} device      the device uuid/adress of the OBD2-Dongle
+ * @param  {Object} device      the device object containing name and uuid/adress of the OBD2-Dongle
  * @param  {String} car         the car (EVNotify will support more cars soon)
  * @param  {Integer} soc        the soc value on which the user should be notified
  * @param  {Integer} interval   the given interval to check for new soc
