@@ -137,10 +137,11 @@
          * NOTE: Requires the users account password to authenticate to prevent abuse
          */
         function saveSettings() {
-            var lng = setValue('lng', document.getElementById('language').getAttribute('data-val')),
+            var lngVal = document.getElementById('language').getAttribute('data-val'),
+                lng = setValue('lng', ((lngVal && lngVal !== 'null')? lngVal : getValue('lng', 'en'))),
                 settingsObj = setValue('config', {
                     lngObj: {
-                        lng: document.getElementById('language').getAttribute('data-val'),
+                        lng: lng,
                         name: document.getElementById('language').value
                     },
                     lng: lng,

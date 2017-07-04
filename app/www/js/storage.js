@@ -1,5 +1,5 @@
 function setValue(key, value) {
-    if(key && value && typeof key === 'string')
+    if(key && typeof value !== 'undefined' && typeof key === 'string')
         window.localStorage.setItem(key, ((typeof value === 'object')? JSON.stringify(value) : value));
 
     return value;

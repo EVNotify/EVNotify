@@ -3,85 +3,93 @@
  * @param  {String} lng the language to use (user will be asked for prefered language also in the setup process)
  */
 function setup(lng) {
-    swal.setDefaults({
+    swal({
+        title: translate('LANGUAGE_SETUP', lng),
+        input: 'select',
+        animation: true,
         confirmButtonText: translate('NEXT', lng),
         cancelButtonText: translate('CANCEL', lng),
-        showCancelButton: true,
         allowOutsideClick: false,
-        showLoaderOnConfirm: true,
-        animation: true,
-        progressSteps: ['1', '2', '3', '4']
-    });
-
-    var steps = [
-        {
-            title: translate('LANGUAGE_SETUP', lng),
-            input: 'select',
-            inputOptions: {en: translate('LNG_EN', lng), de: translate('LNG_DE', lng)}, // available languages
-            showCancelButton: true,
-            preConfirm: function (language) {
-                return new Promise(function (resolve, reject) {
-                    lng = setValue('lng', language);
-                    translatePage(lng);
-                    resolve();
-                });
-            }
-        },
-        {
-            title: translate('WELCOME', lng),
-            text: translate('WELCOME_TEXT', lng),
-            preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    setTimeout(function() {
-                        // get key for account to prepare registration
-                        sendRequest('getkey', {}, function(err, keyRes) {
-                            if(!err && keyRes) {
-                                setValue('akey', keyRes.akey);
-                                resolve();
-                            } else reject(translate('CONNECTION_ERROR', lng));
-                        });
-                    }, 2000)
-                });
-            }
-        },
-        {
-            title: translate('REGISTER', lng),
-            text: translate('REGISTER_TEXT', lng),
-            input: 'password',
-            inputValidator: function (input) {
-                return new Promise(function (resolve, reject) {
-                    if (input.length >= 6) resolve();
-                    else reject(translate('PASSWORD_LENGTH_ERROR', lng));
-                });
-            },
-            preConfirm: function(password) {
-                return new Promise(function (resolve, reject) {
-                    setTimeout(function () {
-                        // register account
-                        sendRequest('register', {akey: getValue('akey'), password: password}, function(err, regRes) {
-                            if(!err && regRes) {
-                                setValue('token', regRes.token);
-                                resolve();
-                            } else reject(translate('CONNECTION_ERROR', lng));
-                        });
-                    }, 2000);
-                });
-            }
-        },
-        {
-            title: translate('SETUP_COMPLETE', lng),
-            text: translate('SETUP_COMPLETE_TEXT', lng)
+        inputOptions: {en: translate('LNG_EN', lng), de: translate('LNG_DE', lng)}, // available languages
+        showCancelButton: true,
+        preConfirm: function (language) {
+            return new Promise(function (resolve, reject) {
+                lng = setValue('lng', language);
+                translatePage(lng);
+                resolve();
+            });
         }
-    ];
+    }).then(function() {
+        swal.setDefaults({
+            confirmButtonText: translate('NEXT', lng),
+            cancelButtonText: translate('CANCEL', lng),
+            showCancelButton: true,
+            allowOutsideClick: false,
+            showLoaderOnConfirm: true,
+            animation: true,
+            progressSteps: ['1', '2', '3']
+        });
 
-    swal.queue(steps).then(function (result) {
-        swal.resetDefaults();
-        setValue('setupCompleted', true);
-        // go to settings page after successfull registration
-        window.location.href = './settings.html';
-    }, function () {
-        swal.resetDefaults();
-    });
+        var steps = [
+            {
+                title: translate('WELCOME', lng),
+                text: translate('WELCOME_TEXT', lng),
+                preConfirm: function () {
+                    return new Promise(function (resolve, reject) {
+                        setTimeout(function() {
+                            // get key for account to prepare registration
+                            sendRequest('getkey', {}, function(err, keyRes) {
+                                if(!err && keyRes) {
+                                    setValue('akey', keyRes.akey);
+                                    resolve();
+                                } else reject(translate('CONNECTION_ERROR', lng));
+                            });
+                        }, 2000)
+                    });
+                }
+            },
+            {
+                title: translate('REGISTER', lng),
+                text: translate('REGISTER_TEXT', lng),
+                input: 'password',
+                inputValidator: function (input) {
+                    return new Promise(function (resolve, reject) {
+                        if (input.length >= 6) resolve();
+                        else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                    });
+                },
+                preConfirm: function(password) {
+                    return new Promise(function (resolve, reject) {
+                        setTimeout(function () {
+                            // register account
+                            sendRequest('register', {akey: getValue('akey'), password: password}, function(err, regRes) {
+                                if(!err && regRes) {
+                                    setValue('token', regRes.token);
+                                    resolve();
+                                } else reject(translate('CONNECTION_ERROR', lng));
+                            });
+                        }, 2000);
+                    });
+                }
+            },
+            {
+                title: translate('SETUP_COMPLETE', lng),
+                text: translate('SETUP_COMPLETE_TEXT', lng)
+            }
+        ];
+
+        swal.queue(steps).then(function (result) {
+            swal.resetDefaults();
+            setValue('setupCompleted', true);
+            // go to settings page after successfull registration
+            window.location.href = './settings.html';
+        }, function () {
+            swal.resetDefaults();
+        });
+    },
+    function(dismiss) {
+
+    })
 }
 
 /**
