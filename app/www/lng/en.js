@@ -20,11 +20,11 @@ en = JSON.parse('{\
     "PASSWORD_LENGTH_ERROR": "The password must be at least 6 characters.",\
     "CONNECTION_ERROR": "Network error. Please try again.",\
     "SETUP_COMPLETE": "Done!",\
-    "SETUP_COMPLETE_TEXT": "Du bist nun bereit, den Ladezustand Deines Elektroautos zu überwachen. Alles was Du nun tun musst, ist Deine gewünschten\
-    Benachrichtigunswege anzugeben und den OBD2-Dongle, welcher an die OBD2-Schnittstelle des Autos angesteckt werden muss, auszuwählen.\
-    Anschließend speichern. Alle Einstellungen können jederzeit angepasst werden. Bitte beachte, dass manche OBD2-Dongle auch dann aktiv bleiben, wenn das Auto längst aus ist.\
-    Lasse den OBD2-Dongle daher nicht über einen längeren Zeitraum angesteckt. Falls Du Fragen oder Fehler gefunden hast, geh bitte in das entsprechende Repository auf GitHub.\
-    EVNotify befindet sich noch im Entwicklungsstadium. Bitte nicht vergessen - es steckt viel Arbeit hinter all dem. Wenn was nicht klappt, melden - dann wird es behoben ;-)",\
+    "SETUP_COMPLETE_TEXT": "You are now ready to track your state of charge of your electric vehicle. All you have to do now, \
+    is to set your notifications and to select your OBD2-Dongle, which needs to be connected on the OBD2-Interface of the car.\
+    After that save. All settings can be adjusted at any time. Please have in mind, that some OBD2-Dongle even stays active when the car is turned off for a longer time.\
+    For that reason do not let the OBD2-Dongle connected to the car for a longer time. If you have questions or fouund a bug, feel free to visit the repository on GitHub.\
+    EVNotify is still on an early stage of development. Please do not forget - there is a lot of work behind it. If something does not work, report it - it will be fixed ;-)",\
     "LOGIN": "Login",\
     "LOGIN_TEXT": "Login with your existing account.",\
     "LOGIN_FAILED": "Login failed.",\
