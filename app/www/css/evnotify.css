@@ -1,0 +1,24 @@
+.socCycle {
+    margin: 0 auto;
+    width: 300px;
+    height: 200px;
+    position: relative;
+    margin-top: 5%;
+}
+.settingsSection {
+    font-size: 1.5em;
+    margin-left: 5%;
+}
+.settingsPart {
+    width: 90%;
+    margin-left: 5%;
+}
+.pwBtn {
+    position: absolute;
+    right: 0;
+    margin-right: 5%;
+}
+.marginLeft {
+    margin-left: 5%;
+    width: 90%;
+}
