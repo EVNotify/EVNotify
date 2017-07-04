@@ -124,9 +124,12 @@
             }
             if(config.lngObj) {
                 languageDiv.className += ' is-dirty is-focused';
-                language.value = config.lngObj.name;
+                language.value = translate(config.lngObj.name, config.lngObj.lng);
                 language.setAttribute('data-val', config.lngObj.lng);
+                setValue('lng', config.lngObj.lng);
             }
+
+            translatePage(getValue('lng', 'en'));
         }
 
         /**
@@ -141,6 +144,7 @@
                         name: document.getElementById('language').value
                     },
                     lng: lng,
+                    car: 'IONIQ',   // later it will supports more cars
                     telegram: getValue('telegram'),
                     email: document.getElementById('email').value,
                     push: false,
@@ -156,8 +160,11 @@
                     polling: parseInt(document.getElementById('polling').getAttribute('data-val'))
                 });
 
+            translatePage(lng);
+
             swal({
                 title: translate('SETTINGS_PASSWORD', lng),
+                text: translate('SETTINGS_PASSWORD_TEXT', lng),
                 input: 'password',
                 showCancelButton: true,
                 confirmButtonText: translate('NEXT', lng),
@@ -227,7 +234,7 @@
                             <label class="mdl-textfield__label translate" for="akey" id="SETTINGS_AKEY"></label>
                         </div>
                         <!-- Password -->
-                        <button onclick="event.preventDefault(); changePW()"
+                        <button onclick="event.preventDefault(); changePW(getValue('lng', 'en'))"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect pwBtn translate" id="CHANGE_PASSWORD">
                         </button>
                         <!-- Language -->
@@ -257,9 +264,9 @@
                         <!-- Telegram -->
                         <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect marginLeft" for="telegram">
                             <input type="checkbox" id="telegram" disabled="true" class="mdl-checkbox__input">
-                            <span class="mdl-checkbox__label translate" id="TELEGRAM_NOTIFICATION"></span>
+                            <span class="mdl-checkbox__label translate" id="TELEGRAM_NOTIFICATION"></span><br>
                             <a class="translate" onclick="manageTelegram()" id="TELEGRAM_MANAGE_NOTIFICATION"></a>
-                        </label>
+                        </label><br><br>
                         <!-- Notifcation SoC value -->
                         <p>
                             <input class="mdl-slider mdl-js-slider" type="range" min="10" max="100" tabindex="0" oninput="document.getElementById('notifyVal').innerText = this.value + ' %';">
@@ -294,7 +301,7 @@
                                 <li class="mdl-menu__item translate" data-val="3600" id="POLLING_3600"></li>
                             </ul>
                         </div>
-                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLIING_WARNING"></span>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLING_WARNING"></span>
                         <!-- Save Button -->
                         <button onclick="event.preventDefault(); saveSettings()" style="width: 100%; margin-top: 5%"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect translate" id="SAVE_SETTINGS">

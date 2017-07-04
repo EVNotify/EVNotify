@@ -26,7 +26,7 @@ function watchSoC(device, car, soc, interval) {
             bluetooth.isEnabled(function(enabled) {
                 if(enabled) {
                     // connect to device
-                    bluetooth.connect(device, function(err, connected) {
+                    bluetooth.connect(device.id, function(err, connected) {
                         if(!err && connected) {
                             /**
                              * subscribe to raw data and handle incoming data
@@ -44,7 +44,7 @@ function watchSoC(device, car, soc, interval) {
                                 convertSoC(decoded, function(converted) {
                                     // debug only
                                     if(converted >= 0 && converted <= 100) {
-                                        showMessage(translate('CHARGING_STATE, lng') + converted + '%');
+                                        showMessage(translate('CHARGING_STATE', lng) + converted + '%');
                                         // reset block data again
                                         BLOCKDATA = '';
                                         // animate the soc in the cycle

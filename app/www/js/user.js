@@ -22,6 +22,7 @@ function setup(lng) {
             preConfirm: function (language) {
                 return new Promise(function (resolve, reject) {
                     lng = setValue('lng', language);
+                    translatePage(lng);
                     resolve();
                 });
             }
@@ -91,7 +92,8 @@ function setup(lng) {
  */
 function login(lng) {
     swal({
-        title: translate('LOGIN_TEXT', lng),
+        title: translate('LOGIN', lng),
+        text: translate('LOGIN_TEXT', lng),
         input: 'password',
         showCancelButton: true,
         cancelButtonText: translate('CANCEL', lng),
@@ -110,7 +112,7 @@ function login(lng) {
                         if(!err && loginRes) {
                             setValue('token', loginRes.token);
                             resolve();
-                        } else reject(translate('LOGN_FAILED', lng));
+                        } else reject(translate('LOGIN_FAILED', lng));
                     });
                 }, 2000)
             });
