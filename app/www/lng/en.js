@@ -41,7 +41,7 @@ en = JSON.parse('{\
     "CHARGING_STATE": "State of charge ",\
     "NOTIFICATION_SENT_ERROR": "An error occured trying to sent the notifications.",\
     "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
-    "BLUETOOTH_CONNECTED": "Connection successfully established.",\
+    "BLUETOOTH_CONNECTED": "Connection successfully established. Please press the start button on the top to start!",\
     "BLUETOOTH_NOT_CONNECTED": "Connection failed.",\
     "PREPARATION": "Prepartion.. Please wait..",\
     "BLUETOOTH_CONNECTION_ERROR": "A bluetooth connection could not be established with the device.",\
@@ -51,6 +51,7 @@ en = JSON.parse('{\
     "SETTINGS_PASSWORD": "Password",\
     "SETTINGS_PASSWORD_TEXT": "Please enter your password to save the settings.",\
     "SET_SETTINGS_FAILED": "Saving the settings failed.",\
+    "GET_SETTINGS_FAILED": "Fetching the settings failed.",\
     "SET_SETTINGS_SUCCESSFUL": "The settings have been saved successfully.",\
     "HEADER_SETTINGS": "Settings",\
     "SETTINGS_ACCOUNT": "Account",\
@@ -62,6 +63,12 @@ en = JSON.parse('{\
     "PUSH_NOTIFICATION": "Push-Notification",\
     "TELEGRAM_NOTIFICATION": "Telegram-Notification",\
     "TELEGRAM_MANAGE_NOTIFICATION": "Manage Telegram integration",\
+    "TELEGRAM_UNSUBSCRIBE": "Deactivate telegram notifications",\
+    "TELEGRAM_UNSUBSCRIBE_TEXT": "To no longer receive telegram notifications, simply write /unsubscribe to the Telegram-Bot (https://telegram.me/evnotifybot).\
+    You can reenable the telegram notifications at any times.",\
+    "TELEGRAM_SUBSCRIBE": "Activate telegram notifications",\
+    "TELEGRAM_SUBSCRIBE_TEXT": "To activate telegram notifications, just write /subscribe to the Telegram-Bot (https://telegram.me/evnotifybot).\
+    You have to specify the token below. Do not share this with others! Preferably you should delete the message on telegram after the setup.",\
     "SETTINGS_SOC_HELP": "The desired state of charge at which the notifications should be sent.",\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Device",\
