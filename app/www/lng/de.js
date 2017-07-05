@@ -42,6 +42,9 @@ de = JSON.parse('{\
     "CHARGING_STATE": "Ladezustand ",\
     "NOTIFICATION_SENT_ERROR": "Fehler beim Senden der Benachrichtigungen aufgetreten.",\
     "BLUETOOTH_DATA_SENT_ERROR": "Fehler beim Senden der Daten per Bluetooth aufgetreten.",\
+    "BLUETOOTH_CONNECTED": "Verbindung erfolgreich hergestellt.",\
+    "BLUETOOTH_NOT_CONNECTED": "Verbindung fehlgeschlagen.",\
+    "PREPARATION": "Vorbereitung.. Bitte warten..",\
     "BLUETOOTH_CONNECTION_ERROR": "Es konnte keine Bluetooth-Verbindung mit dem Gerät hergestellt werden.",\
     "BLUETOOTH_DISABLED": "Bluetooth ist nicht aktiviert. Bitte Bluetooth einschalten!",\
     "UNSUPPORTED_CAR": "Nicht unterstützes Auto. Weitere Autos werden in Zukunft unterstützt werden.",\

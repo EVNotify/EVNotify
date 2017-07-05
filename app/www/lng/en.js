@@ -41,6 +41,9 @@ en = JSON.parse('{\
     "CHARGING_STATE": "State of charge ",\
     "NOTIFICATION_SENT_ERROR": "An error occured trying to sent the notifications.",\
     "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
+    "BLUETOOTH_CONNECTED": "Connection successfully established.",\
+    "BLUETOOTH_NOT_CONNECTED": "Connection failed.",\
+    "PREPARATION": "Prepartion.. Please wait..",\
     "BLUETOOTH_CONNECTION_ERROR": "A bluetooth connection could not be established with the device.",\
     "BLUETOOTH_DISABLED": "Bluetooth is disabled. Please turn bluetooth on!",\
     "UNSUPPORTED_CAR": "The car is currently not supported. More cars will be added soon.",\
