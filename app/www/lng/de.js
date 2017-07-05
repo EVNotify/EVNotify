@@ -1,4 +1,6 @@
 de = JSON.parse('{\
+    "DEBUG_MODE_ENABLED": "Debug-Modus aktiviert",\
+    "DEBUG_MODE_DISABLED": "Debug-Modus deaktiviert",\
     "TITLE_EVNOTIFY": "EVNotify",\
     "HEADER_OVERVIEW": "Übersicht",\
     "MENU_OVERVIEW": "Übersicht",\
@@ -42,7 +44,7 @@ de = JSON.parse('{\
     "CHARGING_STATE": "Ladezustand ",\
     "NOTIFICATION_SENT_ERROR": "Fehler beim Senden der Benachrichtigungen aufgetreten.",\
     "BLUETOOTH_DATA_SENT_ERROR": "Fehler beim Senden der Daten per Bluetooth aufgetreten.",\
-    "BLUETOOTH_CONNECTED": "Verbindung erfolgreich hergestellt.",\
+    "BLUETOOTH_CONNECTED": "Verbindung erfolgreich hergestellt. Drücke nun den Start-Knopf oben, um zu starten!",\
     "BLUETOOTH_NOT_CONNECTED": "Verbindung fehlgeschlagen.",\
     "PREPARATION": "Vorbereitung.. Bitte warten..",\
     "BLUETOOTH_CONNECTION_ERROR": "Es konnte keine Bluetooth-Verbindung mit dem Gerät hergestellt werden.",\
@@ -52,6 +54,7 @@ de = JSON.parse('{\
     "SETTINGS_PASSWORD": "Passwort",\
     "SETTINGS_PASSWORD_TEXT": "Bitte gib Dein Passwort ein, um die Einstellungen zu speichern.",\
     "SET_SETTINGS_FAILED": "Speichern der Einstellungen fehlgeschlagen.",\
+    "GET_SETTINGS_FAILED": "Holen der Einstellungen fehlgeschlagen.",\
     "SET_SETTINGS_SUCCESSFUL": "Die Einstellungen wurden erfolgreich gespeichert.",\
     "HEADER_SETTINGS": "Einstellungen",\
     "SETTINGS_ACCOUNT": "Benutzerkonto",\
@@ -63,6 +66,12 @@ de = JSON.parse('{\
     "PUSH_NOTIFICATION": "Push-Benachrichtigung",\
     "TELEGRAM_NOTIFICATION": "Telegram-Benachrichtigung",\
     "TELEGRAM_MANAGE_NOTIFICATION": "Telegram-Verknüpfung verwalten",\
+    "TELEGRAM_UNSUBSCRIBE": "Telegram-Benachrichtigung abwählen",\
+    "TELEGRAM_UNSUBSCRIBE_TEXT": "Um keine Telegram-Benachrichtigungen mehr zu erhalten, dem Telegram-Bot (https://telegram.me/evnotifybot) einfach /unsubscribe schreiben.\
+    Du kannst die Telegram-Benachrichtigungen jederzeit wieder aktivieren.",\
+    "TELEGRAM_SUBSCRIBE": "Telegram-Benachrichtigungen aktivieren",\
+    "TELEGRAM_SUBSCRIBE_TEXT": "Um Telegram-Benachrichtigungen zu aktivieren, schreibe dem Telegram-Bot (https://telegram.me/evnotifybot) einfach /subscribe.\
+    Gib dabei den untenstehenden Token an. Diesen niemals an Dritte weitergeben! Am besten löschst Du nach der Einrichtigung die Textnachricht von Telegram mit dem Token.",\
     "SETTINGS_SOC_HELP": "Der gewünschte Ladezustand, bei dem die Benachrichtigungen verschickt werden sollen.",\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Gerät",\

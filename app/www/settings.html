@@ -128,6 +128,9 @@
                 language.setAttribute('data-val', config.lngObj.lng);
                 setValue('lng', config.lngObj.lng);
             }
+            if(parseInt(getValue('telegram'), 0) > 0) {
+                document.getElementById('telegramCheckbox').className += ' is-upgraded is-checked';
+            }
 
             translatePage(getValue('lng', 'en'));
         }
@@ -201,6 +204,60 @@
                 });
             });
         }
+
+        function manageTelegram(lng) {
+            swal({
+                title: translate('SETTINGS_PASSWORD', lng),
+                text: translate('SETTINGS_PASSWORD_TEXT', lng),
+                input: 'password',
+                showCancelButton: true,
+                confirmButtonText: translate('NEXT', lng),
+                cancelButtonText: translate('CANCEL', lng),
+                showLoaderOnConfirm: true,
+                inputValidator: function (input) {
+                    return new Promise(function (resolve, reject) {
+                        if (input.length >= 6) resolve();
+                        else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                    });
+                },
+                preConfirm: function (password) {
+                    return new Promise(function (resolve, reject) {
+                        setTimeout(function() {
+                            // get user settings
+                            sendRequest('settings', {
+                                akey: getValue('akey'),
+                                password: password,
+                                token: getValue('token'),
+                                option: 'GET'
+                            }, function(err, settingsRes) {
+                                if(!err && settingsRes && settingsRes.settings) {
+                                    // update telegram value
+                                    setValue('telegram', settingsRes.settings.telegram);
+                                    resolve();
+                                } else reject(translate('GET_SETTINGS_FAILED', lng));
+                            });
+                        }, 2000);
+                    });
+                },
+                allowOutsideClick: false
+            }).then(function () {
+                if(parseInt(getValue('telegram', 0)) > 0) {
+                    // instruction of how to unsubscribe
+                    swal({
+                        type: 'info',
+                        title: translate('TELEGRAM_UNSUBSCRIBE', lng),
+                        text: translate('TELEGRAM_UNSUBSCRIBE_TEXT', lng)
+                    });
+                } else {
+                    // instruction of how to subscribe
+                    swal({
+                        type: 'info',
+                        title: translate('TELEGRAM_SUBSCRIBE', lng),
+                        html: translate('TELEGRAM_SUBSCRIBE_TEXT', lng) + '<br>Token: ' + getValue('token')
+                    });
+                }
+            });
+        }
         </script>
     </head>
     <body onload="onLoad(); loadSettings()">
@@ -263,13 +320,13 @@
                             <span class="mdl-checkbox__label translate" id="PUSH_NOTIFICATION"></span>
                         </label>
                         <!-- Telegram -->
-                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect marginLeft" for="telegram">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect marginLeft" for="telegram" id="telegramCheckbox">
                             <input type="checkbox" id="telegram" disabled="true" class="mdl-checkbox__input">
                             <span class="mdl-checkbox__label translate" id="TELEGRAM_NOTIFICATION"></span><br>
-                            <a class="translate" onclick="manageTelegram()" id="TELEGRAM_MANAGE_NOTIFICATION"></a>
+                            <a class="translate" onclick="manageTelegram(getValue('lng', 'en'))" id="TELEGRAM_MANAGE_NOTIFICATION"></a>
                         </label><br><br>
                         <!-- Notifcation SoC value -->
-                        <p>
+                        <p style="text-align: center">
                             <input class="mdl-slider mdl-js-slider" type="range" min="10" max="100" tabindex="0" oninput="document.getElementById('notifyVal').innerText = this.value + ' %';">
                             <span style="text-align: center; font-weight: bold; display: block" class="mdl-textfield__info marginLeft" id="notifyVal">70 %</span>
                             <span style="text-align: center" class="mdl-textfield__info marginLeft translate" id="SETTINGS_SOC_HELP"></span>

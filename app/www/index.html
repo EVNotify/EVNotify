@@ -85,12 +85,53 @@
                         bluetooth.connect(config.device.id, function(err, connected) {
                             if(!err && connected) {
                                 showMessage(translate('BLUETOOTH_CONNECTED', lng));
-                                watchSoC(config.device, config.car, config.soc, config.polling);
                             } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng));
                         })
                     } else showMessage(translate('BLUETOOTH_DISABLED', lng));
                 });
             } else showMessage(translate('MISSING_CONFIGURATION', getValue('lng', 'en')));
+        }
+
+        /**
+         * Function to begin with state of charge monitoring
+         */
+        function startWatch() {
+            var config = JSON.parse(getValue('config', '{}'));
+
+            watchSoC(config.device, config.car, config.soc, config.polling);
+        }
+
+        function stopWatch() {
+            if(RUNNING_INTERVAL) clearInterval(RUNNING_INTERVAL);
+
+            // try to unsubscribe to prevent multiple listeners
+            try {
+                bluetoothSerial.unsubscribeRawData();
+            } catch (e) {}
+        }
+
+        /**
+         * Function which enables or disables the debug mode
+         */
+        function toggleDebug() {
+            /**
+             * Function which shows message on the snackbar
+             * @param  {String} text The text to show
+             */
+            var showMessage = function(text) {
+                var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
+                    message: text,
+                    duration: 2222
+                });
+            };
+
+            if(DEBUG) {
+                DEBUG = false;
+                showMessage(translate('DEBUG_MODE_DISABLED', getValue('lng', 'en')));
+            } else {
+                showMessage(translate('DEBUG_MODE_ENABLED', getValue('lng', 'en')));
+                DEBUG = true;
+            }
         }
 
         /**
@@ -160,7 +201,7 @@
                             });
 
                             // send command to car in the given interval
-                            setInterval(function () {
+                            RUNNING_INTERVAL = setInterval(function () {
                                 bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
                                     if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
                                 });
@@ -213,7 +254,13 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons" onclick="startWatch()">play_arrow</i>
+                    </label>
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
                         <i class="material-icons" onclick="stopWatch()">stop</i>
+                    </label>
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons" onclick="toggleDebug()">bug_report</i>
                     </label>
                 </div>
             </header>
