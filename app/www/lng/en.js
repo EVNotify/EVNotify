@@ -1,4 +1,6 @@
 en = JSON.parse('{\
+    "DEBUG_MODE_ENABLED": "Debug mode enabled",\
+    "DEBUG_MODE_DISABLED": "Debug mode disabled",\
     "TITLE_EVNOTIFY": "EVNotify",\
     "HEADER_OVERVIEW": "Overview",\
     "MENU_OVERVIEW": "Overview",\
