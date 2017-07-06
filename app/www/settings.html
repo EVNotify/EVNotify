@@ -183,16 +183,29 @@
                 preConfirm: function (password) {
                     return new Promise(function (resolve, reject) {
                         setTimeout(function() {
+                            // get user settings to fetch telegram information to prevent overwrite
                             sendRequest('settings', {
                                 akey: getValue('akey'),
                                 password: password,
                                 token: getValue('token'),
-                                option: 'SET',
-                                optionObj: settingsObj
+                                option: 'GET'
                             }, function(err, settingsRes) {
-                                if(!err && settingsRes) resolve();
-                                else reject(translate('SET_SETTINGS_FAILED', lng));
-                            })
+                                if(!err && settingsRes && settingsRes.settings) {
+                                    // update telegram value
+                                    settingsObj.telegram = setValue('telegram', settingsRes.settings.telegram);
+                                    // update the settings
+                                    sendRequest('settings', {
+                                        akey: getValue('akey'),
+                                        password: password,
+                                        token: getValue('token'),
+                                        option: 'SET',
+                                        optionObj: settingsObj
+                                    }, function(err, settingsRes) {
+                                        if(!err && settingsRes) resolve();
+                                        else reject(translate('SET_SETTINGS_FAILED', lng));
+                                    });
+                                } else reject(translate('GET_SETTINGS_FAILED', lng));
+                            });
                         }, 2000);
                     });
                 },
