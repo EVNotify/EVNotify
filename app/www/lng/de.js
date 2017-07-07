@@ -18,6 +18,8 @@ de = JSON.parse('{\
     muss zunächst ein Account erstellt werden. Dieser dient zur Verwaltung der Benachrichtigungen.\
     Stelle sicher, dass Du über eine aktive Internet- sowie Bluetooth-Verbindung verfügst.\
     Die App benötigt zudem einen entsprechenden OBD2-Dongle. Schalte das Bluetooth bei der Nutzung von EVNotify immer ein.",\
+    "LOGIN_TYPE_LOGIN": "Bestehenden Account benutzen",\
+    "LOGIN_TYPE_REGISTER": "Neuen Account erstellen",\
     "REGISTER": "Account erstellen",\
     "REGISTER_TEXT": "Fast geschafft. Fehlt nur noch ein Passwort. Zur eigenen Sicherheit bitte ein starkes Passwort wählen (mind. 6 Zeichen).",\
     "PASSWORD_LENGTH_ERROR": "Das Passwort muss aus mindestens 6 Zeichen bestehen.",\
@@ -29,9 +31,12 @@ de = JSON.parse('{\
     Lasse den OBD2-Dongle daher nicht über einen längeren Zeitraum angesteckt. Falls Du Fragen oder Fehler gefunden hast, geh bitte in das entsprechende Repository auf GitHub.\
     EVNotify befindet sich noch im Entwicklungsstadium. Bitte nicht vergessen - es steckt viel Arbeit hinter all dem. Wenn was nicht klappt, melden - dann wird es behoben ;-)",\
     "LOGIN": "Anmelden",\
-    "LOGIN_TEXT": "Melde Dich mit Deinem bestehenden Account an.",\
+    "LOGIN_TEXT": "Melde Dich mit Deinem bestehenden Account an (AKey).",\
+    "LOGIN_PASSWORD": "Passwort",\
+    "LOGIN_PASSWORD_TEXT": "Gib nun das Passwort des Accounts an.",\
     "LOGIN_FAILED": "Anmeldung fehlgeschlagen.",\
     "LOGIN_SUCCESSFUL": "Anmeldung erfolgreich.",\
+    "AKEY_LENGTH_ERROR": "Der AKey muss aus 6 Zeichen bestehen.",\
     "OLD_PASSWORD": "Altes Passwort",\
     "OLD_PASSWORD_TEXT": "Bitte gib Dein altes Passwort an.",\
     "NEW_PASSWORD": "Neues Passwort",\

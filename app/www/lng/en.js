@@ -17,6 +17,8 @@ en = JSON.parse('{\
     "WELCOME_TEXT": "Before you can be notified, you first have to create an account.\
     It is required to manage your notifications. Ensure that you have an active internet and bluetooth connection.\
     The app also requires to have a OBD2-Dongle. Please turn bluetooth on every time you use EVNotify.",\
+    "LOGIN_TYPE_LOGIN": "Use existing account",\
+    "LOGIN_TYPE_REGISTER": "Create new account",\
     "REGISTER": "Create account",\
     "REGISTER_TEXT": "Almost there. Misses only a password. For your own safety please use a strong password (at least with 6 characters).",\
     "PASSWORD_LENGTH_ERROR": "The password must be at least 6 characters.",\
@@ -28,9 +30,12 @@ en = JSON.parse('{\
     For that reason do not let the OBD2-Dongle connected to the car for a longer time. If you have questions or fouund a bug, feel free to visit the repository on GitHub.\
     EVNotify is still on an early stage of development. Please do not forget - there is a lot of work behind it. If something does not work, report it - it will be fixed ;-)",\
     "LOGIN": "Login",\
-    "LOGIN_TEXT": "Login with your existing account.",\
+    "LOGIN_TEXT": "Login with your existing account (AKey).",\
+    "LOGIN_PASSWORD": "Password",\
+    "LOGIN_PASSWORD_TEXT": "Now enter the password of the account.",\
     "LOGIN_FAILED": "Login failed.",\
     "LOGIN_SUCCESSFUL": "Login successful.",\
+    "AKEY_LENGTH_ERROR": "The akey must be 6 characters long.",\
     "OLD_PASSWORD": "Old password",\
     "OLD_PASSWORD_TEXT": "Please enter your old password.",\
     "NEW_PASSWORD": "New password",\
@@ -45,7 +50,7 @@ en = JSON.parse('{\
     "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
     "BLUETOOTH_CONNECTED": "Connection successfully established. Please press the start button on the top to start!",\
     "BLUETOOTH_NOT_CONNECTED": "Connection failed.",\
-    "PREPARATION": "Prepartion.. Please wait..",\
+    "PREPARATION": "Preparation.. Please wait..",\
     "BLUETOOTH_CONNECTION_ERROR": "A bluetooth connection could not be established with the device.",\
     "BLUETOOTH_DISABLED": "Bluetooth is disabled. Please turn bluetooth on!",\
     "UNSUPPORTED_CAR": "The car is currently not supported. More cars will be added soon.",\

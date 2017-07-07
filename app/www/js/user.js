@@ -34,55 +34,112 @@ function setup(lng) {
             {
                 title: translate('WELCOME', lng),
                 text: translate('WELCOME_TEXT', lng),
-                preConfirm: function () {
+                input: 'select',
+                inputOptions: {register: translate('LOGIN_TYPE_REGISTER', lng), login: translate('LOGIN_TYPE_LOGIN', lng)},
+                preConfirm: function (loginType) {
                     return new Promise(function (resolve, reject) {
                         setTimeout(function() {
-                            // get key for account to prepare registration
-                            sendRequest('getkey', {}, function(err, keyRes) {
-                                if(!err && keyRes) {
-                                    setValue('akey', keyRes.akey);
-                                    resolve();
-                                } else reject(translate('CONNECTION_ERROR', lng));
-                            });
+                            if(loginType === 'login') {
+                                // login modal
+                                var loginModal = {
+                                    title: translate('LOGIN', lng),
+                                    text: translate('LOGIN_TEXT', lng),
+                                    input: 'text',
+                                    inputValidator: function (input) {
+                                        return new Promise(function (resolve, reject) {
+                                            if (input.length === 6) resolve();
+                                            else reject(translate('AKEY_LENGTH_ERROR', lng));
+                                        });
+                                    },
+                                    preConfirm: function(akey) {
+                                        return new Promise(function (resolve, reject) {
+                                            // save entered akey
+                                            setValue('akey', akey);
+                                            // add password modal for login
+                                            swal.insertQueueStep({
+                                                title: translate('LOGIN_PASSWORD', lng),
+                                                text: translate('LOGIN_PASSWORD_TEXT', lng),
+                                                input: 'password',
+                                                inputValidator: function (input) {
+                                                    return new Promise(function (resolve, reject) {
+                                                        if (input.length >= 6) resolve();
+                                                        else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                                                    });
+                                                },
+                                                preConfirm: function(password) {
+                                                    return new Promise(function (resolve, reject) {
+                                                        setTimeout(function () {
+                                                            // login account
+                                                            sendRequest('login', {akey: getValue('akey'), password: password}, function(err, regRes) {
+                                                                if(!err && regRes) {
+                                                                    setValue('token', regRes.token);
+                                                                    resolve();
+                                                                } else reject(translate('LOGIN_FAILED', lng));
+                                                            });
+                                                        }, 2000);
+                                                    });
+                                                }
+                                            });
+                                            resolve();
+                                        });
+                                    }
+                                };
+                                // steps.push(loginModal);
+                                swal.insertQueueStep(loginModal);
+                                resolve();
+                            } else {
+                                // get key for account to prepare registration
+                                sendRequest('getkey', {}, function(err, keyRes) {
+                                    if(!err && keyRes) {
+                                        setValue('akey', keyRes.akey);
+                                        // add password modal for register
+                                        swal.insertQueueStep({
+                                            title: translate('REGISTER', lng),
+                                            text: translate('REGISTER_TEXT', lng),
+                                            input: 'password',
+                                            inputValidator: function (input) {
+                                                return new Promise(function (resolve, reject) {
+                                                    if (input.length >= 6) resolve();
+                                                    else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                                                });
+                                            },
+                                            preConfirm: function(password) {
+                                                return new Promise(function (resolve, reject) {
+                                                    setTimeout(function () {
+                                                        // register account
+                                                        sendRequest('register', {akey: getValue('akey'), password: password}, function(err, regRes) {
+                                                            if(!err && regRes) {
+                                                                setValue('token', regRes.token);
+                                                                resolve();
+                                                            } else reject(translate('CONNECTION_ERROR', lng));
+                                                        });
+                                                    }, 2000);
+                                                });
+                                            }
+                                        });
+                                        resolve();
+                                    } else reject(translate('CONNECTION_ERROR', lng));
+                                });
+                            }
                         }, 2000)
                     });
                 }
-            },
-            {
-                title: translate('REGISTER', lng),
-                text: translate('REGISTER_TEXT', lng),
-                input: 'password',
-                inputValidator: function (input) {
-                    return new Promise(function (resolve, reject) {
-                        if (input.length >= 6) resolve();
-                        else reject(translate('PASSWORD_LENGTH_ERROR', lng));
-                    });
-                },
-                preConfirm: function(password) {
-                    return new Promise(function (resolve, reject) {
-                        setTimeout(function () {
-                            // register account
-                            sendRequest('register', {akey: getValue('akey'), password: password}, function(err, regRes) {
-                                if(!err && regRes) {
-                                    setValue('token', regRes.token);
-                                    resolve();
-                                } else reject(translate('CONNECTION_ERROR', lng));
-                            });
-                        }, 2000);
-                    });
-                }
-            },
-            {
-                title: translate('SETUP_COMPLETE', lng),
-                text: translate('SETUP_COMPLETE_TEXT', lng)
             }
         ];
 
         swal.queue(steps).then(function (result) {
-            swal.resetDefaults();
-            setValue('setupCompleted', true);
-            // go to settings page after successfull registration
-            window.location.href = './settings.html';
+            swal({
+                title: translate('SETUP_COMPLETE', lng),
+                text: translate('SETUP_COMPLETE_TEXT', lng),
+                preConfirm: function() {
+                    return new Promise(function (resolve, reject) {
+                        swal.resetDefaults();
+                        setValue('setupCompleted', true);
+                        // go to settings page after successfull registration
+                        window.location.href = './settings.html';
+                    });
+                }
+            });
         }, function () {
             swal.resetDefaults();
         });
