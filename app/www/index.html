@@ -209,7 +209,7 @@
                                  * the car response is good - if there was a charging error or a connection error
                                  * send a notification to user and inform it about the issue
                                  */
-                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (interval * 2))) {
+                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (interval * 2)) && !NOTIFICATION_SENT) {
                                      // send error notification
                                      sendRequest('notification', {akey: getValue('akey'), token: getValue('token'), error: true}, function(err, notificationRes) {
                                          if(err) showMessage(translate('NOTIFICATION_SENT_ERROR', lng));
