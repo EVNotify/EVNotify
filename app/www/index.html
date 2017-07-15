@@ -9,6 +9,8 @@
         <script src="./js/jquery-3.2.0.min.js"></script>
         <!-- Cordova -->
         <script src="cordova.js"></script>
+        <!-- Promise polyfill -->
+        <script src="./js/promise.js"></script>
         <!-- Material CSS -->
         <link rel="stylesheet" href="./css/material.min.css">
         <!-- EVNotify CSS -->
@@ -62,18 +64,19 @@
                 });
             },
             config = JSON.parse(getValue('config', '{}')),
-            s = document.createElement('script');
+            s = document.createElement('script'),
+            lng = getValue('lng', en);
 
             // append bluetooth file to body
             s.type = 'text/javascript';
             s.src = './js/bluetooth.js';
             $('head').append(s);
 
-            translatePage(getValue('lng', 'en'));
+            translatePage(lng);
 
             // validate settings to determine what to do
-            if(!getValue('setupCompleted')) setup(getValue('lng', 'en'));
-            else if(!getValue('token')) login(getValue('lng', 'en'));
+            if(!getValue('setupCompleted')) setup(lng);
+            else if(!getValue('token')) login(lng);
             else if(config.device && config.car) {
                 /**
                  * NOTE: We need to do all the obd2 handling here - don't ask why,
@@ -89,7 +92,7 @@
                         })
                     } else showMessage(translate('BLUETOOTH_DISABLED', lng));
                 });
-            } else showMessage(translate('MISSING_CONFIGURATION', getValue('lng', 'en')));
+            } else showMessage(translate('MISSING_CONFIGURATION', lng));
         }
 
         /**

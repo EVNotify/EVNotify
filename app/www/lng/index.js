@@ -14,7 +14,7 @@ function translate(text, lng) {
  * @return {Boolean}      whether or not the text meets the requirements to be a translatable text
  */
 function isTranslatable(text) {
-    return (text === text.toUpperCase() && !parseInt(text) && document.getElementById(text));
+    return ((text)? (text === text.toUpperCase() && !parseInt(text) && document.getElementById(text)) : false);
 }
 
 /**
@@ -22,7 +22,11 @@ function isTranslatable(text) {
  * @param  {String} lng the language in which the page should be translated
  */
 function translatePage(lng) {
-    for (var translation in document.getElementsByClassName('translate')) {
-        if(isTranslatable(translation)) document.getElementById(translation).innerText = translate(translation, lng);
+    var foundElements = document.getElementsByClassName('translate');
+
+    for (var translation in foundElements) {
+        var curElement = foundElements[translation];
+
+        if(isTranslatable(curElement.id)) document.getElementById(curElement.id).innerText = translate(curElement.id, lng);
     }
 }
