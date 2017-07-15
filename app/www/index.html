@@ -252,8 +252,10 @@
             if(data && data.indexOf('5:') !== -1) {
                 if(DEBUG) $('#debugData').append('FOUND END' + '<br>');
                 if(DEBUG) $('#debugData').append('DATA END: ' + BLOCKDATA + '<br>');
-                // 4: - last byte before 5:
-                callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:')).split(' ')[7], 16) / 2);
+                // cut out eventually spaces before or after BLOCKDATA
+                BLOCKDATA = BLOCKDATA.trim();
+                // 4: - last byte before 5: (new calculation removes spaces and concats them in pairs together to avoid wrong calculation)
+                callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:') +2, BLOCKDATA.lastIndexOf(':') ).replace(/\s/g, '').match(/.{1,2}/g)[6], 16)/ 2);
             } else callback(-1);
         }
 
