@@ -25,6 +25,10 @@ With EVNotify you can just check the state of charge remotly - or simply gets no
 - open source
 - more features and supported cars will be added soon
 
+### Prerequisites
+To use EVNotify you need to download the Android Application linked above. The app must be installed on an Android device with Android version greater than Android 4.1 (Android 5 or greater recommended). The android device must have a bluetooth connection and a internet connection. The app also runs on Android TV Sticks.
+EVNotify communicates over the obd2 interface of the car, so a bluetooth capable obd2-dongle is required. For supported obd2 dongle please have a look at the wiki.
+
 ### Contributing
 Feel free to help and to contribute to this repository. Even if you can't code, feel free to create issues if you have discovered a bug or a strange behavior. If you want to commit code, please create a pull request for it in a seperate branch (dev or a feature-branch, not master!).
 
