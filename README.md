@@ -10,6 +10,23 @@ Stay tuned and please report any issues or suggestions.
 Originally this application was developed to have a possibility to remotly see the charging state for the Hyundai IONIQ, which isn't possible in Europe due to missing BlueLink connection.
 Then I decided to enhance it so you'll get notified when the desired state of charge has been achieved. Also I want to support more cars in the future.
 
-Image the following situation:
+Imagine the following situation:
 You are charging your electric vehicle on a fast charger. To proceed with your roadtrip, you need to charge until 80%. You are drinking a coffee in the meantime. But you want to drive away as fast as possible because every minute that passes costs time and money. Normally you have to check for the charging state every few minutes, leave everything, physically needs to go to the car, which is annoying.
 With EVNotify you can just check the state of charge remotly - or simply gets notified when the desired state of charge is set so you can go. Without having to worry every about your state of charge every few minutes. Simply enjoy!
+
+### Features and benefits of EVNotify
+- free to use - available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.evnotify.app)
+- state of charge monitoring
+- multiple notification possibilities if desired state of charge had been achieved (e.g. Mail, Push, Telegram)
+- easy to use
+- use your existing harware
+- connect multiple devices together
+- continuous development
+- open source
+- more features and supported cars will be added soon
+
+### Contributing
+Feel free to help and to contribute to this repository. Even if you can't code, feel free to create issues if you have discovered a bug or a strange behavior. If you want to commit code, please create a pull request for it in a seperate branch (dev or a feature-branch, not master!).
+
+### Need help?
+Have a look at the Wiki here for EVNotify.
