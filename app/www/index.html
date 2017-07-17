@@ -65,7 +65,7 @@
             },
             config = JSON.parse(getValue('config', '{}')),
             s = document.createElement('script'),
-            lng = getValue('lng', en);
+            lng = getValue('lng', 'en');
 
             // append bluetooth file to body
             s.type = 'text/javascript';
@@ -212,7 +212,7 @@
                                  * the car response is good - if there was a charging error or a connection error
                                  * send a notification to user and inform it about the issue
                                  */
-                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (interval * 2)) && !NOTIFICATION_SENT) {
+                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (((interval)? interval : 60) * 2)) && !NOTIFICATION_SENT) {
                                      // send error notification
                                      sendRequest('notification', {akey: getValue('akey'), token: getValue('token'), error: true}, function(err, notificationRes) {
                                          if(err) showMessage(translate('NOTIFICATION_SENT_ERROR', lng));
@@ -220,8 +220,24 @@
                                      });
                                  }
 
-                                bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
-                                    if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
+                                /**
+                                 * determine if connection is still established.
+                                 * If not, reconnect to prevent no car response and notification error message send
+                                 */
+                                bluetooth.isConnected(function(connected) {
+                                    if(connected) {
+                                        bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
+                                            if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
+                                        });
+                                    } else {
+                                        bluetooth.connect(device.id, function(err, connected) {
+                                            if(!err && connected) {
+                                                bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
+                                                    if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
+                                                });
+                                            } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng));
+                                        });
+                                    }
                                 });
                             }, ((interval)? interval : 60) * 1000);
                         } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng));
@@ -274,13 +290,13 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="startWatch()">play_arrow</i>
+                        <i class="material-icons" onclick="startWatch()">&#xE037;</i>
                     </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="stopWatch()">stop</i>
+                        <i class="material-icons" onclick="stopWatch()">&#xE047;</i>
                     </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="toggleDebug()">bug_report</i>
+                        <i class="material-icons" onclick="toggleDebug()">&#xE868;</i>
                     </label>
                 </div>
             </header>
@@ -296,6 +312,7 @@
             <main class="mdl-layout__content">
                 <div class="page-content">
                     <div id="socCycle" class="socCycle"></div>
+                    <code id="debugData"></code>
                     <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
                         <div class="mdl-snackbar__text"></div>
                         <button type="button" class="mdl-snackbar__action"></button>
