@@ -81,12 +81,15 @@ de = JSON.parse('{\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Gerät",\
     "SETTINGS_POLLING": "Abfrage-Intervall",\
-    "POLLING_30": "alle 30 Sekunden",\
-    "POLLING_60": "jede Minute",\
-    "POLLING_300": "alle 5 Minuten",\
-    "POLLING_600": "alle 10 Minuten",\
-    "POLLING_1800": "jede halbe Stunde",\
-    "POLLING_3600": "jede Stunde",\
+    "SETTINGS_SYNC": "Automatische Synchronisierung",\
+    "INTERVAL_0": "deaktiviert",\
+    "INTERVAL_30": "alle 30 Sekunden",\
+    "INTERVAL_60": "jede Minute",\
+    "INTERVAL_300": "alle 5 Minuten",\
+    "INTERVAL_600": "alle 10 Minuten",\
+    "INTERVAL_1800": "jede halbe Stunde",\
+    "INTERVAL_3600": "jede Stunde",\
     "POLLING_WARNING": "Kurze Abfrage-Intervalle führen zu erhöhtem Akkuverbrauch.",\
+    "SYNC_WARNING": "Kurze Synchronisierungs-Intervalle führen zu erhöhtem Datenverbrauch.",\
     "SAVE_SETTINGS": "Einstellungen speichern"\
 }');

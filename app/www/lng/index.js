@@ -27,6 +27,6 @@ function translatePage(lng) {
     for (var translation in foundElements) {
         var curElement = foundElements[translation];
 
-        if(isTranslatable(curElement.id)) document.getElementById(curElement.id).innerText = translate(curElement.id, lng);
+        if(isTranslatable(curElement.id)) curElement.innerText = translate(curElement.id, lng);
     }
 }

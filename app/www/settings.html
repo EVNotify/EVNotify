@@ -102,6 +102,8 @@
                 deviceDiv = document.getElementById('deviceDiv'),
                 polling = document.getElementById('polling'),
                 pollingDiv = document.getElementById('pollingDiv'),
+                sync = document.getElementById('sync'),
+                syncDiv = document.getElementById('syncDiv'),
                 language = document.getElementById('language'),
                 languageDiv = document.getElementById('languageDiv');
 
@@ -123,6 +125,11 @@
                 pollingDiv.className += ' is-dirty is-focused';
                 polling.value = config.pollingObj.title;
                 polling.setAttribute('data-val', config.pollingObj.val);
+            }
+            if(config.syncObj) {
+                syncDiv.className += ' is-dirty is-focused';
+                sync.value = config.syncObj.title;
+                sync.setAttribute('data-val', config.syncObj.val);
             }
             if(config.lngObj) {
                 languageDiv.className += ' is-dirty is-focused';
@@ -163,7 +170,12 @@
                         val: parseInt(document.getElementById('polling').getAttribute('data-val')),
                         title: document.getElementById('polling').value
                     },
-                    polling: parseInt(document.getElementById('polling').getAttribute('data-val'))
+                    polling: parseInt(document.getElementById('polling').getAttribute('data-val')),
+                    syncObj: {
+                        val: parseInt(document.getElementById('sync').getAttribute('data-val')),
+                        title: document.getElementById('sync').value
+                    },
+                    autoSync: parseInt(document.getElementById('sync').getAttribute('data-val'))
                 });
 
             translatePage(lng);
@@ -366,15 +378,33 @@
                             </label>
                             <label for="polling" class="mdl-textfield__label translate" id="SETTINGS_POLLING"></label>
                             <ul for="polling" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="pollingList">
-                                <li class="mdl-menu__item translate" data-val="30" id="POLLING_30"></li>
-                                <li class="mdl-menu__item translate" data-val="60" id="POLLING_60"></li>
-                                <li class="mdl-menu__item translate" data-val="300" id="POLLING_300"></li>
-                                <li class="mdl-menu__item translate" data-val="600" id="POLLING_600"></li>
-                                <li class="mdl-menu__item translate" data-val="1800" id="POLLING_1800"></li>
-                                <li class="mdl-menu__item translate" data-val="3600" id="POLLING_3600"></li>
+                                <li class="mdl-menu__item translate" data-val="30" id="INTERVAL_30"></li>
+                                <li class="mdl-menu__item translate" data-val="60" id="INTERVAL_60"></li>
+                                <li class="mdl-menu__item translate" data-val="300" id="INTERVAL_300"></li>
+                                <li class="mdl-menu__item translate" data-val="600" id="INTERVAL_600"></li>
+                                <li class="mdl-menu__item translate" data-val="1800" id="INTERVAL_1800"></li>
+                                <li class="mdl-menu__item translate" data-val="3600" id="INTERVAL_3600"></li>
                             </ul>
                         </div>
-                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLING_WARNING"></span>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLING_WARNING"></span><br><br><br>
+                        <!-- Sync -->
+                        <div id="syncDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
+                            <input class="mdl-textfield__input" type="text" id="sync" readonly tabIndex="-1">
+                            <label for="sync">
+                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                            </label>
+                            <label for="sync" class="mdl-textfield__label translate" id="SETTINGS_SYNC"></label>
+                            <ul for="sync" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="syncList">
+                                <li class="mdl-menu__item translate" data-val="0" id="INTERVAL_0"></li>
+                                <li class="mdl-menu__item translate" data-val="30" id="INTERVAL_30"></li>
+                                <li class="mdl-menu__item translate" data-val="60" id="INTERVAL_60"></li>
+                                <li class="mdl-menu__item translate" data-val="300" id="INTERVAL_300"></li>
+                                <li class="mdl-menu__item translate" data-val="600" id="INTERVAL_600"></li>
+                                <li class="mdl-menu__item translate" data-val="1800" id="INTERVAL_1800"></li>
+                                <li class="mdl-menu__item translate" data-val="3600" id="INTERVAL_3600"></li>
+                            </ul>
+                        </div>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="SYNC_WARNING"></span><br>
                         <!-- Save Button -->
                         <button onclick="event.preventDefault(); saveSettings()" style="width: 100%; margin-top: 5%"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect translate" id="SAVE_SETTINGS">
