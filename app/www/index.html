@@ -35,6 +35,8 @@
         <script src="./js/server.js"></script>
         <!-- user JS -->
         <script src="./js/user.js"></script>
+        <!-- sync JS -->
+        <script src="./js/sync.js"></script>
         <!-- german translation -->
         <script src="./lng/de.js"></script>
         <!-- english translation -->
@@ -72,7 +74,11 @@
             s.src = './js/bluetooth.js';
             $('head').append(s);
 
+            // translate the page
             translatePage(lng);
+
+            // reset last soc
+            removeValue('lastSoC');
 
             // validate settings to determine what to do
             if(!getValue('setupCompleted')) setup(lng);
@@ -85,7 +91,7 @@
                 bluetooth.isEnabled(function(enabled) {
                     if(enabled) {
                         // connect to device
-                        bluetooth.connect(config.device.id, function(err, connected) {
+                        bluetooth.connect(config.device, function(err, connected) {
                             if(!err && connected) {
                                 showMessage(translate('BLUETOOTH_CONNECTED', lng));
                             } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng));
@@ -93,6 +99,9 @@
                     } else showMessage(translate('BLUETOOTH_DISABLED', lng));
                 });
             } else showMessage(translate('MISSING_CONFIGURATION', lng));
+
+            // start sync
+            if(config.autoSync) startSync(config.autoSync);
         }
 
         /**
@@ -139,7 +148,7 @@
 
         /**
          * Function which handles the bluetooth connection and communication with the car and sends the notifications
-         * @param  {Object} device      the device object containing name and uuid/adress of the OBD2-Dongle
+         * @param  {String} device      the device uuid/adress of the OBD2-Dongle
          * @param  {String} car         the car (EVNotify will support more cars soon)
          * @param  {Integer} soc        the soc value on which the user should be notified
          * @param  {Integer} interval   the given interval to check for new soc
@@ -181,11 +190,12 @@
                                 convertSoC(decoded, function(converted) {
                                     // debug only
                                     if(converted >= 0 && converted <= 100) {
-                                        showMessage(translate('CHARGING_STATE', lng) + converted + '%');
                                         // reset block data again
                                         BLOCKDATA = '';
                                         // set last successfull car response to current time
                                         LAST_CAR_ACTIVITY = new Date().getTime() / 1000;
+                                        // save soc locally
+                                        setValue('lastSoC', parseInt(converted));
                                         // animate the soc in the cycle
                                         socCycle.animate(((converted == 100)? 1 : '0.' + parseInt(converted)));
                                         // check if the desired soc value was achieved
@@ -230,7 +240,7 @@
                                             if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
                                         });
                                     } else {
-                                        bluetooth.connect(device.id, function(err, connected) {
+                                        bluetooth.connect(device, function(err, connected) {
                                             if(!err && connected) {
                                                 bluetooth.sendCommand(SOC_CMD[car], function(err, sent) {
                                                     if(err) showMessage(translate('BLUETOOTH_DATA_SENT_ERROR', lng));
