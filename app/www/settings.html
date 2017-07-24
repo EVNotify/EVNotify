@@ -116,10 +116,10 @@
                 emailDiv.className += ' is-upgraded is-focused';
             }
             if(config.soc) notifyVal.innerText = config.soc + ' %';
-            if(config.device) {
+            if(config.deviceObj) {
                 deviceDiv.className += ' is-dirty is-focused';
-                device.value = config.device.name;
-                device.setAttribute('data-val', config.device.id);
+                device.value = config.deviceObj.name;
+                device.setAttribute('data-val', config.deviceObj.id);
             }
             if(config.pollingObj) {
                 pollingDiv.className += ' is-dirty is-focused';
@@ -162,10 +162,11 @@
                     email: document.getElementById('email').value,
                     push: false,
                     soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
-                    device: {
+                    deviceObj: {
                         id: document.getElementById('device').getAttribute('data-val'),
                         name: document.getElementById('device').value
                     },
+                    device: document.getElementById('device').getAttribute('data-val'),
                     pollingObj: {
                         val: parseInt(document.getElementById('polling').getAttribute('data-val')),
                         title: document.getElementById('polling').value
@@ -285,6 +286,150 @@
                 }
             });
         }
+
+        /**
+        * Function to switch account, retrieve new settings and save them
+        * @param  {String} lng the language to use for the dialogs
+        */
+        function switchAccount(lng) {
+            swal.queue([{
+                title: translate('SWITCH_ACCOUNT', lng),
+                text: translate('SWITCH_ACCOUNT_TEXT', lng),
+                input: 'text',
+                showLoaderOnConfirm: true,
+                allowOutsideClick: false,
+                inputValidator: function (input) {
+                    return new Promise(function (resolve, reject) {
+                        if (input.length === 6) resolve();
+                        else reject(translate('AKEY_LENGTH_ERROR', lng));
+                    });
+                },
+                preConfirm: function(akey) {
+                    return new Promise(function (resolve, reject) {
+                        // save entered akey
+                        setValue('akey', akey);
+                        // add password modal for login
+                        swal.insertQueueStep({
+                            title: translate('LOGIN_PASSWORD', lng),
+                            text: translate('LOGIN_PASSWORD_TEXT', lng),
+                            input: 'password',
+                            showLoaderOnConfirm: true,
+                            allowOutsideClick: false,
+                            inputValidator: function (input) {
+                                return new Promise(function (resolve, reject) {
+                                    if (input.length >= 6) resolve();
+                                    else reject(translate('PASSWORD_LENGTH_ERROR', lng));
+                                });
+                            },
+                            preConfirm: function(password) {
+                                return new Promise(function (resolve, reject) {
+                                    setTimeout(function () {
+                                        // login account
+                                        sendRequest('login', {akey: getValue('akey'), password: password}, function(err, regRes) {
+                                            if(!err && regRes) {
+                                                setValue('token', regRes.token);
+                                                // get and save current settings from new linked account
+                                                syncSettings('pull', function(err, syncRes) {
+                                                    if(!err) resolve();
+                                                    else reject(translate('SYNC_SETTINGS_FAILED', lng));
+                                                });
+                                            } else reject(translate('LOGIN_FAILED', lng));
+                                        });
+                                    }, 2000);
+                                });
+                            }
+                        });
+                        resolve();
+                    });
+                }
+            }]).then(function() {
+                swal({
+                    type: 'success',
+                    title: translate('SWITCH_ACCOUNT_SUCCESSFUL', lng)
+                });
+            });
+        }
+
+        /**
+         * Function which allows to sync settings based on the type (pull/push)
+         * NOTE: if no type is specified, a dialog prompts the user for the action to use
+         * @param  {[type]}   type     [description]
+         * @param  {Function} callback [description]
+         * @return {[type]}            [description]
+         */
+        function syncSettings(type, callback) {
+            var pullSettings = function(callback) {
+                    // get the settings from server
+                    sendRequest('sync', {akey: getValue('akey'), token: getValue('token'), type: 'pull'}, function(err, syncRes) {
+                        if(!err && syncRes && syncRes.syncRes) {
+                            var settings = JSON.parse(getValue('config', '{}'));
+
+                            // overwrite specific keys
+                            settings.email = syncRes.syncRes.email;
+                            settings.telegram = syncRes.syncRes.telegram;
+                            settings.soc = syncRes.syncRes.soc;
+                            settings.curSoC = syncRes.syncRes.curSoC;
+                            settings.polling = syncRes.syncRes.polling;
+                            settings.autoSync = syncRes.syncRes.autoSync;
+                            settings.lng = syncRes.syncRes.lng;
+                            settings.push = syncRes.syncRes.push;
+                            // save new settings
+                            setValue('config', settings);
+                            loadSettings();
+                        }
+                        callback(err, syncRes);
+                    });
+                },
+                pushSettings = function(callback) {
+                    // push the current settings to server
+                    sendRequest('sync', {akey: getValue('akey'), token: getValue('token'), type: 'push', syncObj: JSON.parse(getValue('config', '{}'))}, function(err, syncRes) {
+                        callback(err, syncRes);
+                    });
+                },
+                lng = getValue('lng', 'en');
+
+            if(type === 'pull') {
+                // pull settings
+                pullSettings(function(err, pullRes) {
+                    callback(err, pullRes);
+                });
+            } else if(type === 'push') {
+                // push settings
+                pushSettings(function(err, pushRes) {
+                    callback(err, pushRes);
+                });
+            } else {
+                // show dialog
+                swal({
+                    title: translate('SYNC', lng),
+                    text: translate('SYNC_TEXT', lng),
+                    input: 'select',
+                    inputOptions: {pull: translate('SYNC_TYPE_PULL', lng), sync: translate('SYNC_TYPE_PUSH', lng)},
+                    preConfirm: function (syncType) {
+                        return new Promise(function (resolve, reject) {
+                            setTimeout(function() {
+                                if(syncType === 'pull') {
+                                    pullSettings(function(err, pullRes) {
+                                        if(!err) resolve();
+                                        else reject(translate('SYNC_SETTINGS_FAILED', lng));
+                                    });
+                                } else {
+                                    pushSettings(function(err, pushRes) {
+                                        if(!err) resolve();
+                                        else reject(translate('SYNC_SETTINGS_FAILED', lng));
+                                    });
+                                }
+                            }, 2000);
+                        });
+                    }
+                }).then(function() {
+                    swal({
+                        type: 'success',
+                        title: translate('SYNC_SETTINGS_SUCCESSFUL', lng)
+                    });
+                });
+            }
+        }
         </script>
     </head>
     <body onload="onLoad(); loadSettings()">
@@ -296,6 +441,12 @@
                     <span class="mdl-layout-title translate" id="HEADER_SETTINGS"></span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons" onclick="switchAccount(getValue('lng', 'en'))">&#xE853;</i>
+                    </label>
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons" onclick="syncSettings()">&#xE627;</i>
+                    </label>
                 </div>
             </header>
             <div class="mdl-layout__drawer">
