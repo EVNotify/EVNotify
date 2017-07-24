@@ -90,5 +90,14 @@ en = JSON.parse('{\
     "INTERVAL_3600": "every hour",\
     "POLLING_WARNING": "Short polling intervals lead to increased battery consumption.",\
     "SYNC_WARNING": "Short syncronization intervals leads to increased data usage",\
+    "SWITCH_ACCOUNT": "Change account",\
+    "SWITCH_ACCOUNT_TEXT": "Connect as many devices as you want. Just register with an existing account here. Specify the AKey of the account to be used.",\
+    "SYNC_SETTINGS_FAILED": "Syncronization failed.",\
+    "SYNC_SETTINGS_SUCCESSFUL": "Syncronization successful.",\
+    "SWITCH_ACCOUNT_SUCCESSFUL": "Account changed successfully.",\
+    "SYNC": "Sync settings",\
+    "SYNC_TEXT": "Here you have the possibility to manually synchronize the settings. You can either get the current settings or set them for other linked devices. This can overwrite existing settings!",\
+    "SYNC_TYPE_PULL": "Get settings",\
+    "SYNC_TYPE_PUSH": "Set settings",\
     "SAVE_SETTINGS": "Save settings"\
 }');
