@@ -80,12 +80,24 @@ en = JSON.parse('{\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Device",\
     "SETTINGS_POLLING": "Polling-Interval",\
-    "POLLING_30": "every 30 seconds",\
-    "POLLING_60": "every minute",\
-    "POLLING_300": "every 5 minutes",\
-    "POLLING_600": "every 10 minutes",\
-    "POLLING_1800": "every half an hour",\
-    "POLLING_3600": "every hour",\
+    "SETTINGS_SYNC": "Automatic syncronization",\
+    "INTERVAL_0": "deactivated",\
+    "INTERVAL_30": "every 30 seconds",\
+    "INTERVAL_60": "every minute",\
+    "INTERVAL_300": "every 5 minutes",\
+    "INTERVAL_600": "every 10 minutes",\
+    "INTERVAL_1800": "every half an hour",\
+    "INTERVAL_3600": "every hour",\
     "POLLING_WARNING": "Short polling intervals lead to increased battery consumption.",\
+    "SYNC_WARNING": "Short syncronization intervals leads to increased data usage",\
+    "SWITCH_ACCOUNT": "Change account",\
+    "SWITCH_ACCOUNT_TEXT": "Connect as many devices as you want. Just register with an existing account here. Specify the AKey of the account to be used.",\
+    "SYNC_SETTINGS_FAILED": "Syncronization failed.",\
+    "SYNC_SETTINGS_SUCCESSFUL": "Syncronization successful.",\
+    "SWITCH_ACCOUNT_SUCCESSFUL": "Account changed successfully.",\
+    "SYNC": "Sync settings",\
+    "SYNC_TEXT": "Here you have the possibility to manually synchronize the settings. You can either get the current settings or set them for other linked devices. This can overwrite existing settings!",\
+    "SYNC_TYPE_PULL": "Get settings",\
+    "SYNC_TYPE_PUSH": "Set settings",\
     "SAVE_SETTINGS": "Save settings"\
 }');

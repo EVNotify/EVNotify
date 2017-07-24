@@ -81,12 +81,24 @@ de = JSON.parse('{\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Gerät",\
     "SETTINGS_POLLING": "Abfrage-Intervall",\
-    "POLLING_30": "alle 30 Sekunden",\
-    "POLLING_60": "jede Minute",\
-    "POLLING_300": "alle 5 Minuten",\
-    "POLLING_600": "alle 10 Minuten",\
-    "POLLING_1800": "jede halbe Stunde",\
-    "POLLING_3600": "jede Stunde",\
+    "SETTINGS_SYNC": "Automatische Synchronisierung",\
+    "INTERVAL_0": "deaktiviert",\
+    "INTERVAL_30": "alle 30 Sekunden",\
+    "INTERVAL_60": "jede Minute",\
+    "INTERVAL_300": "alle 5 Minuten",\
+    "INTERVAL_600": "alle 10 Minuten",\
+    "INTERVAL_1800": "jede halbe Stunde",\
+    "INTERVAL_3600": "jede Stunde",\
     "POLLING_WARNING": "Kurze Abfrage-Intervalle führen zu erhöhtem Akkuverbrauch.",\
+    "SYNC_WARNING": "Kurze Synchronisierungs-Intervalle führen zu erhöhtem Datenverbrauch.",\
+    "SWITCH_ACCOUNT": "Account wechseln",\
+    "SWITCH_ACCOUNT_TEXT": "Verbinde beliebig viele Geräte miteinander. Einfach mit einem bestehenden Account hier anmelden. Dazu den AKey des zu nutzenden Accounts angeben.",\
+    "SYNC_SETTINGS_FAILED": "Synchronisation fehlgeschlagen.",\
+    "SYNC_SETTINGS_SUCCESSFUL": "Synchronisation erfolgreich.",\
+    "SWITCH_ACCOUNT_SUCCESSFUL": "Account erfolgreich gewechselt.",\
+    "SYNC": "Einstellungen synchronisieren",\
+    "SYNC_TEXT": "Du hast hier die Möglichkeit, manuell die Einstellungen zu synchronisieren. Du kannst Dir entweder die aktuellen Einstellungen holen oder diese für verknüpfte Geräte setzen. Dies kann existierende Einstellungen überschreiben!",\
+    "SYNC_TYPE_PULL": "Einstellungen holen",\
+    "SYNC_TYPE_PUSH": "Einstellungen setzen",\
     "SAVE_SETTINGS": "Einstellungen speichern"\
 }');
