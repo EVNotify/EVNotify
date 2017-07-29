@@ -83,6 +83,7 @@ de = JSON.parse('{\
     "SETTINGS_POLLING": "Abfrage-Intervall",\
     "SETTINGS_SYNC": "Automatische Synchronisierung",\
     "INTERVAL_0": "deaktiviert",\
+    "INTERVAL_10": "alle 10 Sekunden",\
     "INTERVAL_30": "alle 30 Sekunden",\
     "INTERVAL_60": "jede Minute",\
     "INTERVAL_300": "alle 5 Minuten",\
