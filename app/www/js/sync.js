@@ -5,8 +5,8 @@
  */
 var startSync = function(interval) {
     var syncData = function() {
-        // push or pull data based if car currently communicates or not
-        if(RUNNING_INTERVAL) {  // push
+        // push or pull data based if car currently communicates or not and sync curMode type
+        if((RUNNING_INTERVAL && SYNC_MODE === 'auto') || SYNC_MODE === 'upload') {  // push
             // check if the state of charge changes
             if(getValue('lastSoC') >= 0 && getValue('lastSoC') !== LAST_SOC) {
                 // push soc
@@ -14,7 +14,7 @@ var startSync = function(interval) {
                     if(err) console.log(err);   // fail silently
                 });
             }
-        } else {    // pull
+        } else if(SYNC_MODE === 'download' || SYNC_MODE === 'auto'){    // pull
             // receive settings and state of charge
             sendRequest('sync', {akey: getValue('akey'), token: getValue('token'), type: 'pull'}, function(err, syncRes) {
                 if(!err && syncRes && syncRes.syncRes) {
@@ -44,7 +44,68 @@ var startSync = function(interval) {
     if(RUNNING_SYNC) clearInterval(RUNNING_SYNC);
     // start sync
     syncData(); // once before interval
+    toggleAutoSyncMode();
     RUNNING_SYNC = setInterval(function () {
         syncData();
     }, ((interval)? interval : 60) * 1000);
+};
+
+/**
+ * [description]
+ * @param  {[type]} curMode [description]
+ * @return {[type]}      [description]
+ */
+var toggleAutoSyncMode = function(curMode) {
+    var cloudIcon = document.getElementById('cloudIcon'),
+        lng = getValue('lng', 'en'),
+        skipConnect = ((curMode)? false : true),
+        autoSyncOn = JSON.parse(getValue('config', '{}')).autoSync,
+        curMode = ((autoSyncOn)? ((curMode)? ((curMode === 'download')? SYNC_MODE = 'upload' : SYNC_MODE = 'download') : SYNC_MODE = 'auto') : SYNC_MODE = 'disabled'),   // determine curMode
+        icons = {download: '&#xE2C0;', upload: '&#xE2C3;', auto: '&#xE2BF;', disabled: '&#xE2C1;'},
+        /**
+         * Function which shows message on the snackbar
+         * @param  {String} text The text to show
+         * @return {Object}     returns global window
+         */
+        showMessage = function(text) {
+            var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
+                message: text,
+                duration: 2222
+            });
+            return this;
+        };
+
+    // toggle curMode
+    if(cloudIcon) {
+        cloudIcon.innerHTML = icons[curMode];
+        if(typeof socCycle !== 'undefined') socCycle.animate(0); // reset cycle
+        if(curMode === 'download') {
+            stopWatch();    // stop connection
+        } else if((curMode === 'upload' || curMode === 'auto') && !skipConnect) {
+            // re-establish connection, maybe directly in startWatch?!
+            if(typeof bluetooth !== 'undefined') {
+                bluetooth.setInfoState('searching');
+                bluetooth.isEnabled(function(enabled) {
+                    if(enabled) {
+                        // check if connection already established
+                        bluetooth.isConnected(function(connected) {
+                            if(!connected) {
+                                // connect to device
+                                bluetooth.connect(JSON.parse(getValue('config', '{}')).device, function(err, connected) {
+                                    if(!err && connected) {
+                                        showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
+                                        startWatch();
+                                    } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
+                                });
+                            } else {
+                                showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
+                                startWatch();
+                            }
+                        });
+                    } else showMessage(translate('BLUETOOTH_DISABLED', lng)).bluetooth.setInfoState('disabled');
+                });
+            }
+        }
+        showMessage(translate('SYNC_MODE_' + curMode.toUpperCase(), lng));
+    }
 };

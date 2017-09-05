@@ -48,9 +48,10 @@ en = JSON.parse('{\
     "CHARGING_STATE": "State of charge ",\
     "NOTIFICATION_SENT_ERROR": "An error occured trying to sent the notifications.",\
     "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
-    "BLUETOOTH_CONNECTED": "Connection successfully established. Please press the start button on the top to start!",\
+    "BLUETOOTH_CONNECTED": "Connection successfully established. Now a communication with the car will be established!",\
     "BLUETOOTH_NOT_CONNECTED": "Connection failed.",\
     "PREPARATION": "Preparation.. Please wait..",\
+    "RESET_SUCCESSFULL": "OBD2-Dongle successfully configured.",\
     "BLUETOOTH_CONNECTION_ERROR": "A bluetooth connection could not be established with the device.",\
     "BLUETOOTH_DISABLED": "Bluetooth is disabled. Please turn bluetooth on!",\
     "UNSUPPORTED_CAR": "The car is currently not supported. More cars will be added soon.",\
@@ -71,10 +72,10 @@ en = JSON.parse('{\
     "TELEGRAM_NOTIFICATION": "Telegram-Notification",\
     "TELEGRAM_MANAGE_NOTIFICATION": "Manage Telegram integration",\
     "TELEGRAM_UNSUBSCRIBE": "Deactivate telegram notifications",\
-    "TELEGRAM_UNSUBSCRIBE_TEXT": "To no longer receive telegram notifications, simply write /unsubscribe to the Telegram-Bot (https://telegram.me/evnotifybot).\
+    "TELEGRAM_UNSUBSCRIBE_TEXT": "To no longer receive telegram notifications, simply write /unsubscribe to the \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\>.\
     You can reenable the telegram notifications at any times.",\
     "TELEGRAM_SUBSCRIBE": "Activate telegram notifications",\
-    "TELEGRAM_SUBSCRIBE_TEXT": "To activate telegram notifications, just write /subscribe to the Telegram-Bot (https://telegram.me/evnotifybot).\
+    "TELEGRAM_SUBSCRIBE_TEXT": "To activate telegram notifications, just write /subscribe to the \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\>.\
     You have to specify the token below. Do not share this with others! Preferably you should delete the message on telegram after the setup.",\
     "SETTINGS_SOC_HELP": "The desired state of charge at which the notifications should be sent.",\
     "SETTINGS_SYSTEM": "System",\
@@ -100,5 +101,9 @@ en = JSON.parse('{\
     "SYNC_TEXT": "Here you have the possibility to manually synchronize the settings. You can either get the current settings or set them for other linked devices. This can overwrite existing settings!",\
     "SYNC_TYPE_PULL": "Get settings",\
     "SYNC_TYPE_PUSH": "Set settings",\
-    "SAVE_SETTINGS": "Save settings"\
+    "SAVE_SETTINGS": "Save settings",\
+    "SYNC_MODE_DISABLED": "Auto-Sync is not enabled.",\
+    "SYNC_MODE_AUTO": "Auto-Sync active. Mode: Automatic change",\
+    "SYNC_MODE_UPLOAD": "Auto-Sync active. Mode: Send state of charge only",\
+    "SYNC_MODE_DOWNLOAD": "Auto-Sync active. Mode: Receive state of charge only"\
 }');

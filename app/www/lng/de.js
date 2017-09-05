@@ -49,9 +49,10 @@ de = JSON.parse('{\
     "CHARGING_STATE": "Ladezustand ",\
     "NOTIFICATION_SENT_ERROR": "Fehler beim Senden der Benachrichtigungen aufgetreten.",\
     "BLUETOOTH_DATA_SENT_ERROR": "Fehler beim Senden der Daten per Bluetooth aufgetreten.",\
-    "BLUETOOTH_CONNECTED": "Verbindung erfolgreich hergestellt. Drücke nun den Start-Knopf oben, um zu starten!",\
+    "BLUETOOTH_CONNECTED": "Verbindung erfolgreich hergestellt. Es wird nun eine Kommunikation mit dem Auto aufgebaut!",\
     "BLUETOOTH_NOT_CONNECTED": "Verbindung fehlgeschlagen.",\
     "PREPARATION": "Vorbereitung.. Bitte warten..",\
+    "RESET_SUCCESSFULL": "OBD2-Dongle erfolgreich konfiguriert.",\
     "BLUETOOTH_CONNECTION_ERROR": "Es konnte keine Bluetooth-Verbindung mit dem Gerät hergestellt werden.",\
     "BLUETOOTH_DISABLED": "Bluetooth ist nicht aktiviert. Bitte Bluetooth einschalten!",\
     "UNSUPPORTED_CAR": "Nicht unterstützes Auto. Weitere Autos werden in Zukunft unterstützt werden.",\
@@ -72,10 +73,10 @@ de = JSON.parse('{\
     "TELEGRAM_NOTIFICATION": "Telegram-Benachrichtigung",\
     "TELEGRAM_MANAGE_NOTIFICATION": "Telegram-Verknüpfung verwalten",\
     "TELEGRAM_UNSUBSCRIBE": "Telegram-Benachrichtigung abwählen",\
-    "TELEGRAM_UNSUBSCRIBE_TEXT": "Um keine Telegram-Benachrichtigungen mehr zu erhalten, dem Telegram-Bot (https://telegram.me/evnotifybot) einfach /unsubscribe schreiben.\
+    "TELEGRAM_UNSUBSCRIBE_TEXT": "Um keine Telegram-Benachrichtigungen mehr zu erhalten, dem \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\> einfach /unsubscribe schreiben.\
     Du kannst die Telegram-Benachrichtigungen jederzeit wieder aktivieren.",\
     "TELEGRAM_SUBSCRIBE": "Telegram-Benachrichtigungen aktivieren",\
-    "TELEGRAM_SUBSCRIBE_TEXT": "Um Telegram-Benachrichtigungen zu aktivieren, schreibe dem Telegram-Bot (https://telegram.me/evnotifybot) einfach /subscribe.\
+    "TELEGRAM_SUBSCRIBE_TEXT": "Um Telegram-Benachrichtigungen zu aktivieren, schreibe dem \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\> einfach /subscribe.\
     Gib dabei den untenstehenden Token an. Diesen niemals an Dritte weitergeben! Am besten löschst Du nach der Einrichtigung die Textnachricht von Telegram mit dem Token.",\
     "SETTINGS_SOC_HELP": "Der gewünschte Ladezustand, bei dem die Benachrichtigungen verschickt werden sollen.",\
     "SETTINGS_SYSTEM": "System",\
@@ -101,5 +102,9 @@ de = JSON.parse('{\
     "SYNC_TEXT": "Du hast hier die Möglichkeit, manuell die Einstellungen zu synchronisieren. Du kannst Dir entweder die aktuellen Einstellungen holen oder diese für verknüpfte Geräte setzen. Dies kann existierende Einstellungen überschreiben!",\
     "SYNC_TYPE_PULL": "Einstellungen holen",\
     "SYNC_TYPE_PUSH": "Einstellungen setzen",\
-    "SAVE_SETTINGS": "Einstellungen speichern"\
+    "SAVE_SETTINGS": "Einstellungen speichern",\
+    "SYNC_MODE_DISABLED": "Auto-Sync ist nicht aktiviert.",\
+    "SYNC_MODE_AUTO": "Auto-Sync aktiv. Modus: Automatischer Wechsel",\
+    "SYNC_MODE_UPLOAD": "Auto-Sync aktiv. Modus: Nur Ladezustand senden",\
+    "SYNC_MODE_DOWNLOAD": "Auto-Sync aktiv. Modus: Nur Ladezustand empfangen"\
 }');

@@ -80,6 +80,30 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
             });
         },
         /**
+         * Function which sets icon to inform user about the connection state
+         * @param  {String} state   the state (valid types: 'disabled', 'failed', 'connected', 'searching', 'unknown')
+         * @return {Object}         returns this
+         */
+        setInfoState: function(state) {
+            var self = this,
+                states = {
+                    disabled: {color: '#808080', icon: '&#xE1A9;'},
+                    failed: {color: '#8b0000', icon: '&#xE1A9;'},
+                    connected: {color: '#008000', icon: '&#xE1A8;'},
+                    searching: {color: '#4d89e8', icon: '&#xE1AA;'},
+                    unknown: {color: '#ff0000', icon: '&#xE1A6;'}
+                },
+                connectionInfo = document.getElementById('connectionInfo');
+
+            if(states[state] && connectionInfo) {
+                // apply color and icon
+                connectionInfo.style.color = states[state].color;
+                connectionInfo.innerHTML = states[state].icon;
+            }
+
+            return self;
+        },
+        /**
          * Function which disconnects from current device
          * @param  {Function} callback callback function
          */
