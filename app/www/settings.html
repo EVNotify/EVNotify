@@ -98,6 +98,7 @@
                 email = document.getElementById('email'),
                 emailDiv = document.getElementById('emailDiv'),
                 notifyVal = document.getElementById('notifyVal'),
+                notifySlider = document.getElementById('notifySlider'),
                 device = document.getElementById('device'),
                 deviceDiv = document.getElementById('deviceDiv'),
                 polling = document.getElementById('polling'),
@@ -115,7 +116,10 @@
                 email.value = config.email;
                 emailDiv.className += ' is-upgraded is-focused';
             }
-            if(config.soc) notifyVal.innerText = config.soc + ' %';
+            if(config.soc) {
+                notifyVal.innerText = config.soc + ' %';
+                notifySlider.MaterialSlider.change(config.soc);
+            }
             if(config.deviceObj) {
                 deviceDiv.className += ' is-dirty is-focused';
                 device.value = config.deviceObj.name;
@@ -274,7 +278,7 @@
                     swal({
                         type: 'info',
                         title: translate('TELEGRAM_UNSUBSCRIBE', lng),
-                        text: translate('TELEGRAM_UNSUBSCRIBE_TEXT', lng)
+                        html: translate('TELEGRAM_UNSUBSCRIBE_TEXT', lng)
                     });
                 } else {
                     // instruction of how to subscribe
@@ -505,7 +509,7 @@
                         </label><br><br>
                         <!-- Notifcation SoC value -->
                         <p style="text-align: center">
-                            <input class="mdl-slider mdl-js-slider" type="range" min="10" max="100" tabindex="0" oninput="document.getElementById('notifyVal').innerText = this.value + ' %';">
+                            <input id="notifySlider" class="mdl-slider mdl-js-slider" type="range" min="10" max="100" tabindex="0" oninput="document.getElementById('notifyVal').innerText = this.value + ' %';">
                             <span style="text-align: center; font-weight: bold; display: block" class="mdl-textfield__info marginLeft" id="notifyVal">70 %</span>
                             <span style="text-align: center" class="mdl-textfield__info marginLeft translate" id="SETTINGS_SOC_HELP"></span>
                         </p>

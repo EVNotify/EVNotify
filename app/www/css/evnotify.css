@@ -22,3 +22,7 @@
     margin-left: 5%;
     width: 90%;
 }
+.connection-info-icon {
+    position: absolute;
+    right: 10%;
+}
