@@ -19,8 +19,6 @@
         <link rel="stylesheet" href="./css/evnotify.css">
         <!-- Material JS -->
         <script src="./js/material.min.js"></script>
-        <!-- Material Icons -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <!-- Progressbar JS -->
         <script src="./js/progressbar.min.js"></script>
         <!-- GetMDL Select CSS -->
@@ -51,6 +49,8 @@
          */
         function onLoad() {
             document.addEventListener("deviceready", onDeviceReady, false);
+            // translate the page
+            translatePage(getValue('lng', 'en'));
         }
 
         /**
@@ -77,9 +77,6 @@
             s.type = 'text/javascript';
             s.src = './js/bluetooth.js';
             $('head').append(s);
-
-            // translate the page
-            translatePage(lng);
 
             // reset last soc
             removeValue('lastSoC');
@@ -129,10 +126,10 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))">&#xE2C1;</i>
+                        <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
                     </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="toggleDebug()">&#xE868;</i>
+                        <img class="material-icons" onclick="toggleDebug()" src="./icons/debug.svg"></img>
                     </label>
                 </div>
             </header>
@@ -147,8 +144,8 @@
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
-                    <label class="mdl-button mdl-js-button mdl-button--icon connection-info-icon">
-                        <i class="material-icons" id="connectionInfo">&#xE1AA;</i>
+                    <label class="mdl-button--icon connection-info-icon">
+                        <img class="material-icons" id="connectionInfo" src="./icons/bluetooth_searching.svg"></img>
                     </label>
                     <div id="socCycle" class="socCycle"></div>
                     <code id="debugData"></code>

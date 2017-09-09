@@ -176,6 +176,7 @@ function watchSoC(device, car, soc, interval) {
  */
 function convertSoC(data, callback) {
     // return parseInt(data.substr(data.indexOf('4:')).split(' ')[7], 16) / 2;
+    if(DEBUG) $('#debugData').append('RAW DATA: ' + data + '<br>');
     if(BLOCKDATA) {
         BLOCKDATA += ' ' + data;
         if(DEBUG) $('#debugData').append('CONTINUE WITH BLOCK' + '<br>');
@@ -206,13 +207,13 @@ function resetDongle(callback) {
             message: text,
             duration: 2222
         });
-    }
+    },
+    lng = getValue('lng', 'en'),
     callbackHandler = function(message) {
-        showMessage(translate(message), lng);
+        showMessage(translate(message, lng));
         if(message === 'RESET_SUCCESSFULL') callback(null, true);
         else callback(message, false);
-    },
-    lng = getValue('lng', 'en');
+    };
 
     //TODO: beautify this......
     bluetooth.isConnected(function(connected) {

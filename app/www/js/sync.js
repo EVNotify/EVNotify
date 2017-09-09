@@ -61,7 +61,6 @@ var toggleAutoSyncMode = function(curMode) {
         skipConnect = ((curMode)? false : true),
         autoSyncOn = JSON.parse(getValue('config', '{}')).autoSync,
         curMode = ((autoSyncOn)? ((curMode)? ((curMode === 'download')? SYNC_MODE = 'upload' : SYNC_MODE = 'download') : SYNC_MODE = 'auto') : SYNC_MODE = 'disabled'),   // determine curMode
-        icons = {download: '&#xE2C0;', upload: '&#xE2C3;', auto: '&#xE2BF;', disabled: '&#xE2C1;'},
         /**
          * Function which shows message on the snackbar
          * @param  {String} text The text to show
@@ -77,7 +76,7 @@ var toggleAutoSyncMode = function(curMode) {
 
     // toggle curMode
     if(cloudIcon) {
-        cloudIcon.innerHTML = icons[curMode];
+        cloudIcon.src = './icons/cloud_' + curMode + '.svg';
         if(typeof socCycle !== 'undefined') socCycle.animate(0); // reset cycle
         if(curMode === 'download') {
             stopWatch();    // stop connection

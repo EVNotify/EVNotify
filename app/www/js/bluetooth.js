@@ -86,20 +86,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         setInfoState: function(state) {
             var self = this,
-                states = {
-                    disabled: {color: '#808080', icon: '&#xE1A9;'},
-                    failed: {color: '#8b0000', icon: '&#xE1A9;'},
-                    connected: {color: '#008000', icon: '&#xE1A8;'},
-                    searching: {color: '#4d89e8', icon: '&#xE1AA;'},
-                    unknown: {color: '#ff0000', icon: '&#xE1A6;'}
-                },
                 connectionInfo = document.getElementById('connectionInfo');
 
-            if(states[state] && connectionInfo) {
-                // apply color and icon
-                connectionInfo.style.color = states[state].color;
-                connectionInfo.innerHTML = states[state].icon;
-            }
+            if(connectionInfo) connectionInfo.src = './icons/' + ((state === 'unknown')? 'battery_' : 'bluetooth_') + state + '.svg';
 
             return self;
         },

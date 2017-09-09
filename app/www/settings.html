@@ -17,8 +17,6 @@
         <link rel="stylesheet" href="./css/evnotify.css">
         <!-- Material JS -->
         <script src="./js/material.min.js"></script>
-        <!-- Material Icons -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <!-- Progressbar JS -->
         <script src="./js/progressbar.min.js"></script>
         <!-- GetMDL Select CSS -->
@@ -446,10 +444,10 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="switchAccount(getValue('lng', 'en'))">&#xE853;</i>
+                        <img class="material-icons" onclick="switchAccount(getValue('lng', 'en'))" src="./icons/account.svg"></img>
                     </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon">
-                        <i class="material-icons" onclick="syncSettings()">&#xE627;</i>
+                        <img class="material-icons" onclick="syncSettings()" src="./icons/sync.svg"></img>
                     </label>
                 </div>
             </header>
@@ -481,7 +479,7 @@
                         <div id="languageDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
                             <input class="mdl-textfield__input" type="text" id="language" readonly tabIndex="-1">
                             <label for="language">
-                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <img class="mdl-icon-toggle__label material-icons" src="./icons/keyboard_arrow_down.svg"></img>
                             </label>
                             <label for="language" class="mdl-textfield__label translate" id="LANGUAGE"></label>
                             <ul for="language" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="languageList">
@@ -519,7 +517,7 @@
                         <div id="deviceDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
                             <input class="mdl-textfield__input" type="text" id="device" readonly tabIndex="-1">
                             <label for="device">
-                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <img class="mdl-icon-toggle__label material-icons" src="./icons/keyboard_arrow_down.svg"></img>
                             </label>
                             <label for="device" class="mdl-textfield__label translate" id="SETTINGS_DEVICES"></label>
                             <ul for="device" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="deviceList">
@@ -529,7 +527,7 @@
                         <div id="pollingDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
                             <input class="mdl-textfield__input" type="text" id="polling" readonly tabIndex="-1">
                             <label for="polling">
-                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <img class="mdl-icon-toggle__label material-icons" src="./icons/keyboard_arrow_down.svg"></img>
                             </label>
                             <label for="polling" class="mdl-textfield__label translate" id="SETTINGS_POLLING"></label>
                             <ul for="polling" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="pollingList">
@@ -547,7 +545,7 @@
                         <div id="syncDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
                             <input class="mdl-textfield__input" type="text" id="sync" readonly tabIndex="-1">
                             <label for="sync">
-                                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                                <img class="mdl-icon-toggle__label material-icons" src="./icons/keyboard_arrow_down.svg"></img>
                             </label>
                             <label for="sync" class="mdl-textfield__label translate" id="SETTINGS_SYNC"></label>
                             <ul for="sync" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="syncList">
