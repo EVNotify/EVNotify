@@ -13,6 +13,10 @@
         <script src="./js/obd2.js"></script>
         <!-- Promise polyfill -->
         <script src="./js/promise.js"></script>
+        <!-- TextDecoder Polyfill -->
+        <script src="./js/encoding-indexes.js"></script>
+        <!-- TextDecoder non-utf support -->
+        <script src="./js/encoding.js"></script>
         <!-- Material CSS -->
         <link rel="stylesheet" href="./css/material.min.css">
         <!-- EVNotify CSS -->
@@ -122,13 +126,13 @@
             <header class="mdl-layout__header">
                 <div class="mdl-layout__header-row">
                     <!-- Title -->
-                    <span class="mdl-layout-title translate" id="HEADER_OVERVIEW"></span>
+                    <span class="mdl-layout-title translate" id="HEADER_OVERVIEW" style="position: absolute; top: 16px"></span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
-                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
                         <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
                     </label>
-                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
                         <img class="material-icons" onclick="toggleDebug()" src="./icons/debug.svg"></img>
                     </label>
                 </div>

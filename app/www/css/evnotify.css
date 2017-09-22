@@ -26,3 +26,12 @@
     position: absolute;
     right: 10%;
 }
+/* Android 4.1 Fixes */
+header.mdl-layout__header.is-casting-shadow,
+.mdl-snackbar.mdl-js-snackbar,
+.mdl-navigation {
+    display: block;
+}
+.mdl-snackbar.mdl-js-snackbar.mdl-snackbar--active {
+    position: absolute;
+}
