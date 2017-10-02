@@ -4,6 +4,14 @@ en = JSON.parse('{\
     "TITLE_EVNOTIFY": "EVNotify",\
     "HEADER_OVERVIEW": "Overview",\
     "MENU_OVERVIEW": "Overview",\
+    "MENU_CHARGING_STATIONS": "Charging stations",\
+    "HEADER_CHARGING_STATIONS": "Charging stations",\
+    "FETCHING_STATIONS": "Fetching stations.. Please wait..",\
+    "STATIONS_ERROR": "Error on fetching stations.",\
+    "POSITION_ERROR": "Failed to retrieve location. Allow permissions for location.",\
+    "LIST_VIEW": "List view",\
+    "MAPS_VIEW": "Maps view",\
+    "FAVORITES": "Favorites",\
     "MENU_CHARGE": "Charging cycles",\
     "MENU_NOTIFYME": "NotifyMe",\
     "MENU_SETTINGS": "Settings",\

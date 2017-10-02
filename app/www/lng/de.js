@@ -4,6 +4,14 @@ de = JSON.parse('{\
     "TITLE_EVNOTIFY": "EVNotify",\
     "HEADER_OVERVIEW": "Übersicht",\
     "MENU_OVERVIEW": "Übersicht",\
+    "MENU_CHARGING_STATIONS": "Stromtankstellen",\
+    "HEADER_CHARGING_STATIONS": "Stromtankstellen",\
+    "FETCHING_STATIONS": "Rufe Stationen ab.. Bitte warten..",\
+    "STATIONS_ERROR": "Fehler beim Abrufen der Stationen.",\
+    "POSITION_ERROR": "Fehler beim Abrufen der aktuellen Position. Erteile die Berechtigung für den Standort.",\
+    "LIST_VIEW": "Listenansicht",\
+    "MAPS_VIEW": "Kartenansicht",\
+    "FAVORITES": "Favoriten",\
     "MENU_CHARGE": "Ladezyklen",\
     "MENU_NOTIFYME": "NotifyMe",\
     "MENU_SETTINGS": "Einstellungen",\

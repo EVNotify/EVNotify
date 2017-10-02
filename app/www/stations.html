@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EVNotify</title>
+        <meta charset="utf-8"></meta>
+    	<!-- Client Variables -->
+    	<script src="./client.js"></script>
+        <!-- jQuery -->
+        <script src="./js/jquery-3.2.0.min.js"></script>
+        <!-- Cordova -->
+        <script src="cordova.js"></script>
+        <!-- Promise polyfill -->
+        <script src="./js/promise.js"></script>
+        <!-- Material CSS -->
+        <link rel="stylesheet" href="./css/material.min.css">
+        <!-- EVNotify CSS -->
+        <link rel="stylesheet" href="./css/evnotify.css">
+        <!-- Material JS -->
+        <script src="./js/material.min.js"></script>
+        <!-- Progressbar JS -->
+        <script src="./js/progressbar.min.js"></script>
+        <!-- GetMDL Select CSS -->
+        <link rel="stylesheet" href="./css/getmdl-select.min.css">
+        <!-- GetMDL Select JS -->
+        <script src="./js/getmdl-select.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="./js/sweetalert2.min.js"></script>
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="./css/sweetalert2.min.css">
+        <!-- storage JS -->
+        <script src="./js/storage.js"></script>
+        <!-- server JS -->
+        <script src="./js/server.js"></script>
+        <!-- user JS -->
+        <script src="./js/user.js"></script>
+        <!-- stations JS -->
+        <script src="./js/stations.js"></script>
+        <!-- german translation -->
+        <script src="./lng/de.js"></script>
+        <!-- english translation -->
+        <script src="./lng/en.js"></script>
+        <!-- translation JS -->
+        <script src="./lng/index.js"></script>
+        <script type="text/javascript">
+        /**
+         * Function which loads several other functions on page load
+         */
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+            // translate the page
+            translatePage(getValue('lng', 'en'));
+        }
+
+        /**
+         * Function which gets triggered when device is ready and the bluetooth plugin should be usable
+         */
+        function onDeviceReady() {
+            // TODO readout and apply filter for stations
+            // retrieve stations and build list
+            buildStations();
+        }
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <!-- Always show a header, even on smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header  mdl-layout--fixed-tabs">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title translate" id="HEADER_CHARGING_STATIONS" style="position: absolute; top: 16px"></span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
+                        <img class="material-icons" id="filterIcon" src="./icons/filter.svg" onclick="swal({text: 'Coming soon...'})"></img>
+                    </label>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
+                        <img class="material-icons" id="refreshIcon" src="./icons/refresh.svg" onclick="buildStations()"></img>
+                    </label>
+                </div>
+                <!-- Tabs -->
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                  <a href="#listView" class="mdl-layout__tab is-active translate" id="LIST_VIEW"></a>
+                  <a href="#mapsView" class="mdl-layout__tab translate" id="MAPS_VIEW"></a>
+                  <a href="#favorites" class="mdl-layout__tab translate" id="FAVORITES"></a>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link translate" href="index.html" id="MENU_OVERVIEW"></a>
+                    <a class="mdl-navigation__link translate" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_CHARGE"></a>
+                    <a class="mdl-navigation__link translate" href="" id="MENU_NOTIFYME"></a>
+                    <a class="mdl-navigation__link translate" href="settings.html" id="MENU_SETTINGS"></a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <section class="mdl-layout__tab-panel is-active" id="listView">
+                    <div class="page-content">
+                        <ul class="demo-list-three mdl-list" id="stationsList">
+                        </ul>
+                    </div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="mapsView">
+                    <div class="page-content">Coming soon...<!-- Your content goes here --></div>
+                </section>
+                <section class="mdl-layout__tab-panel" id="favorites">
+                    <div class="page-content">Coming soon...<!-- Your content goes here --></div>
+                </section>
+                <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
+                    <div class="mdl-snackbar__text"></div>
+                    <button type="button" class="mdl-snackbar__action"></button>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
