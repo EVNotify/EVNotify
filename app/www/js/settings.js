@@ -59,6 +59,7 @@ function loadSettings() {
         document.getElementById('telegramCheckbox').className += ' is-upgraded is-checked';
     }
 
+    verifyEmail(email);
     translatePage(getValue('lng', 'en'));
 }
 
@@ -351,4 +352,31 @@ function syncSettings(type, callback) {
             });
         });
     }
+}
+
+/**
+  * Function for verifying email address
+  * @param {Object} emailInput The email input object
+  */
+function verifyEmail(emailInput) {
+  var typingTimer,
+      emailDiv = document.getElementById('emailDiv'),
+      classes = emailDiv.className,
+      saveBtn = document.getElementById('SAVE_SETTINGS');
+
+  emailInput.onkeyup = function(event){
+    var EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    event = event || window.event;
+
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(function() {
+      if ((emailInput.value.length < 255) && (emailInput.value.length > 5) && EMAIL_REGEX.test(emailInput.value)) {
+        emailDiv.className = classes;
+        saveBtn.disabled = false;
+      } else {
+        emailDiv.className = classes + ' is-invalid';
+        saveBtn.disabled = true;
+      }
+    }, 500);
+  }
 }
