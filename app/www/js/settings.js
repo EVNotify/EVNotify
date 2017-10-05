@@ -360,6 +360,8 @@ function syncSettings(type, callback) {
   */
 function verifyEmail(emailInput) {
   var typingTimer,
+      emailDiv = document.getElementById('emailDiv'),
+      classes = emailDiv.className,
       saveBtn = document.getElementById('SAVE_SETTINGS');
 
   emailInput.onkeyup = function(event){
@@ -369,10 +371,10 @@ function verifyEmail(emailInput) {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(function() {
       if ((emailInput.value.length < 255) && (emailInput.value.length > 5) && EMAIL_REGEX.test(emailInput.value)) {
-        document.getElementById('emailDiv').classList.remove('is-invalid');
+        emailDiv.className = classes;
         saveBtn.disabled = false;
       } else {
-        document.getElementById('emailDiv').classList.add('is-invalid');
+        emailDiv.className = classes + ' is-invalid';
         saveBtn.disabled = true;
       }
     }, 500);
