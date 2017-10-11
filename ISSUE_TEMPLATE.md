@@ -12,7 +12,7 @@
   <summary>additional information</summary>
   
 
-  (_such as AKey [**NEVER EVER SHARE YOUR TOKEN!**], images_ or debug data from overview -> debug icon)
+  (_such as AKey [**NEVER EVER SHARE YOUR TOKEN!**], images_ or debug data from overview -> debug icon, your phone and android version)
 
 </details>
 
