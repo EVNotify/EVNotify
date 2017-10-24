@@ -18,15 +18,17 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <icon src="assets/hdpi/icon.png" density="hdpi" />
-        <icon src="assets/mdpi/icon.png" density="mdpi" />
-        <icon src="assets/xhdpi/icon.png" density="xhdpi" />
-        <icon src="assets/xxhdpi/icon.png" density="xxhdpi" />
-        <icon src="assets/xxxhdpi/icon.png" density="xxxhdpi" />
+        <icon density="hdpi" src="assets/hdpi/icon.png" />
+        <icon density="mdpi" src="assets/mdpi/icon.png" />
+        <icon density="xhdpi" src="assets/xhdpi/icon.png" />
+        <icon density="xxhdpi" src="assets/xxhdpi/icon.png" />
+        <icon density="xxxhdpi" src="assets/xxxhdpi/icon.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="cordova-plugin-bluetooth-serial" spec="~0.4.7" />
+    <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="~4.0.7" />
 </widget>

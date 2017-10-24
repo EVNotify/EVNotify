@@ -22,9 +22,32 @@
     margin-left: 5%;
     width: 90%;
 }
+.station-connectors {
+    float: right;
+    font-size: 10px;
+}
+.station-address {
+    margin-left: 20%;
+}
 .connection-info-icon {
     position: absolute;
     right: 10%;
+}
+.mdl-list__item-avatar.material-icons.operational {
+    background-color: #39dc64;
+}
+.mdl-list__item-avatar.material-icons.slow {
+    background-color: #ffb93a;
+}
+.mdl-list__item-avatar.material-icons.fault {
+    background-color: #ff3a3a;
+}
+.mdl-list__item--three-line {
+    height: auto;
+    box-sizing: unset;
+}
+.mdl-list__item--three-line .mdl-list__item-primary-content {
+    height: auto;
 }
 /* Android 4.1 Fixes */
 header.mdl-layout__header.is-casting-shadow,

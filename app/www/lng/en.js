@@ -4,12 +4,43 @@ en = JSON.parse('{\
     "TITLE_EVNOTIFY": "EVNotify",\
     "HEADER_OVERVIEW": "Overview",\
     "MENU_OVERVIEW": "Overview",\
+    "MENU_CHARGING_STATIONS": "Charging stations",\
+    "HEADER_CHARGING_STATIONS": "Charging stations",\
+    "HEADER_CHARGING_STATION": "Charging station",\
+    "FETCHING_STATIONS": "Fetching stations.. Please wait..",\
+    "FETCHING_STATION": "Fetching details from station.. Please wait..",\
+    "STATIONS_ERROR": "Error on fetching stations.",\
+    "STATION_ERROR": "Error on fetching station details.",\
+    "STATION_FAULT": "Station malfunction",\
+    "STATION_OPERATIONAL": "Station operational",\
+    "STATION_VERIFIED": "Station verified",\
+    "STATION_NOT_VERIFIED": "Station not verified",\
+    "STATION_BARRIERFREE": "Station barrier-free",\
+    "STATION_NOT_BARRIERFREE": "Station not barrier-free",\
+    "STATION_NO_INFORMATION": "No information",\
+    "STATION_NETWORK": "Charging network",\
+    "STATION_OPERATOR": "Operator",\
+    "STATION_CHARGING_TIME": "Charging time",\
+    "STATION_LOCATION": "Location",\
+    "STATION_INFORMATION": "General information",\
+    "STATION_FREE_CHARGING": "Free charging",\
+    "STATION_FREE_PARKING": "Free parking",\
+    "POSITION_ERROR": "Failed to retrieve location. Allow permissions for location.",\
+    "CARDS_ERROR": "Failed to retrieve charge cards.",\
+    "LIST_VIEW": "List view",\
+    "MAPS_VIEW": "Maps view",\
+    "FAVORITES": "Favorites",\
+    "GENERAL_VIEW": "General",\
+    "ACCESS_VIEW": "Access",\
+    "LOG_VIEW": "Log",\
     "MENU_CHARGE": "Charging cycles",\
     "MENU_NOTIFYME": "NotifyMe",\
     "MENU_SETTINGS": "Settings",\
     "MISSING_CONFIGURATION": "No device or car selected. Please visit the settings.",\
     "NEXT": "Next",\
     "CANCEL": "Cancel",\
+    "YES": "Yes",\
+    "NO": "Nein",\
     "LANGUAGE_SETUP": "Language selection",\
     "LNG_EN": "English",\
     "LNG_DE": "German",\
