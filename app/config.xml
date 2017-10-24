@@ -30,4 +30,5 @@
     </platform>
     <plugin name="cordova-plugin-bluetooth-serial" spec="~0.4.7" />
     <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="~4.0.7" />
 </widget>

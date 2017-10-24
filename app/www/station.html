@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EVNotify</title>
+        <meta charset="utf-8"></meta>
+    	<!-- Client Variables -->
+    	<script src="./client.js"></script>
+        <!-- jQuery -->
+        <script src="./js/jquery-3.2.0.min.js"></script>
+        <!-- Cordova -->
+        <script src="cordova.js"></script>
+        <!-- Promise polyfill -->
+        <script src="./js/promise.js"></script>
+        <!-- Material CSS -->
+        <link rel="stylesheet" href="./css/material.min.css">
+        <!-- EVNotify CSS -->
+        <link rel="stylesheet" href="./css/evnotify.css">
+        <!-- Material JS -->
+        <script src="./js/material.min.js"></script>
+        <!-- Progressbar JS -->
+        <script src="./js/progressbar.min.js"></script>
+        <!-- GetMDL Select CSS -->
+        <link rel="stylesheet" href="./css/getmdl-select.min.css">
+        <!-- GetMDL Select JS -->
+        <script src="./js/getmdl-select.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="./js/sweetalert2.min.js"></script>
+        <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="./css/sweetalert2.min.css">
+        <!-- storage JS -->
+        <script src="./js/storage.js"></script>
+        <!-- server JS -->
+        <script src="./js/server.js"></script>
+        <!-- user JS -->
+        <script src="./js/user.js"></script>
+        <!-- stations JS -->
+        <script src="./js/stations.js"></script>
+        <!-- german translation -->
+        <script src="./lng/de.js"></script>
+        <!-- english translation -->
+        <script src="./lng/en.js"></script>
+        <!-- translation JS -->
+        <script src="./lng/index.js"></script>
+        <script type="text/javascript">
+        /**
+         * Function which loads several other functions on page load
+         */
+        function onLoad() {
+            document.addEventListener("deviceready", onDeviceReady, false);
+            // translate the page
+            translatePage(getValue('lng', 'en'));
+        }
+
+        /**
+         * Function which gets triggered when device is ready and the bluetooth plugin should be usable
+         */
+        function onDeviceReady() {
+            // display the station details
+            buildStation();
+        }
+        </script>
+        <!-- Wide card with share menu button -->
+        <style>
+        .station-list {
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .station-card.mdl-card {
+          width: 100%;
+        }
+        .station-card > .mdl-card__title {
+          color: #fff;
+          height: 176px;
+          background-color: #3f51b5;
+          background-repeat: no-repeat;
+          background-size: contain;
+          width: auto;
+        }
+        .station-card > .mdl-card__menu {
+          color: #fff;
+        }
+        .mdl-card__title {
+            /*background: url("https://cdn.goingelectric.de/stromtankstellen/bilder2/1000/41cec5432041ff218f769e97de0aacb1.jpg");*/
+            background-position: center;
+        }
+        .mdl-card__title-text {
+            font-weight: bold;
+        }
+        </style>
+    </head>
+    <body onload="onLoad()">
+        <!-- Always show a header, even on smaller screens. -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title translate" id="HEADER_CHARGING_STATION" style="position: absolute; top: 16px"></span>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; left: 12px">
+                        <img class="material-icons" id="backIcon" src="./icons/back.svg" onclick="history.back()"></img>
+                    </label>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 12px">
+                        <img class="material-icons" id="navigateIcon" src="./icons/navigation.svg" onclick="startNavigation()"></img>
+                    </label>
+                </div>
+                <!-- Tabs -->
+                <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                  <a href="#generalView" class="mdl-layout__tab is-active translate" id="GENERAL_VIEW"></a>
+                  <a href="#accessView" class="mdl-layout__tab translate" id="ACCESS_VIEW"></a>
+                  <a href="#logView" class="mdl-layout__tab translate" id="LOG_VIEW"></a>
+                </div>
+            </header>
+            <main class="mdl-layout__content">
+                <div id="stationList">
+                    <section class="mdl-layout__tab-panel is-active" id="generalView">
+                        <div class="page-content">
+                            <ul class="station-list mdl-list">
+                                <div class="station-card mdl-card mdl-shadow--2dp">
+                                  <div class="mdl-card__title" id="station_photo_1">
+                                    <h2 class="mdl-card__title-text" id="station_title_1"></h2>
+                                  </div>
+                                  <div class="mdl-card__supporting-text">
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/map.svg"></img>
+                                              <p>
+                                                  <ul id="station_address"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/ev_station.svg"></img>
+                                              <p>
+                                                  <ul id="station_connectors"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/info.svg"></img>
+                                              <p>
+                                                  <ul id="station_status"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                  </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="mdl-layout__tab-panel" id="accessView">
+                        <div class="page-content">
+                            <ul class="station-list mdl-list">
+                                <div class="station-card mdl-card mdl-shadow--2dp">
+                                  <div class="mdl-card__title" id="station_photo_2">
+                                    <h2 class="mdl-card__title-text" id="station_title_2"></h2>
+                                  </div>
+                                  <div class="mdl-card__supporting-text">
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/info.svg"></img>
+                                              <p>
+                                                  <ul id="station_information"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/payment.svg"></img>
+                                              <p>
+                                                  <ul id="station_cards"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/euro.svg"></img>
+                                              <p>
+                                                  <ul id="station_costs"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                      <li class="mdl-list__item">
+                                          <span class="mdl-list__item-primary-content">
+                                              <img class="material-icons mdl-list__item-icon" src="./icons/clock.svg"></img>
+                                              <p>
+                                                  <ul id="station_openingtimes"></ul>
+                                              </p>
+                                          </span>
+                                      </li>
+                                  </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="mdl-layout__tab-panel" id="logView">
+                        <div class="page-content">
+                            <ul class="station-list mdl-list">
+                                <div class="station-card mdl-card mdl-shadow--2dp">
+                                  <div class="mdl-card__title" id="station_photo_3">
+                                    <h2 class="mdl-card__title-text" id="station_title_3"></h2>
+                                  </div>
+                                  <div class="mdl-card__supporting-text">
+                                      Coming soon..
+                                  </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
+                    <div class="mdl-snackbar__text"></div>
+                    <button type="button" class="mdl-snackbar__action"></button>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

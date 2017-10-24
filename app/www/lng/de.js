@@ -6,18 +6,41 @@ de = JSON.parse('{\
     "MENU_OVERVIEW": "Übersicht",\
     "MENU_CHARGING_STATIONS": "Stromtankstellen",\
     "HEADER_CHARGING_STATIONS": "Stromtankstellen",\
+    "HEADER_CHARGING_STATION": "Stromtankstelle",\
     "FETCHING_STATIONS": "Rufe Stationen ab.. Bitte warten..",\
+    "FETCHING_STATION": "Rufe Details der Station ab.. Bitte warten..",\
     "STATIONS_ERROR": "Fehler beim Abrufen der Stationen.",\
+    "STATION_ERROR": "Fehler beim Abrufen der Stationsdetails.",\
+    "STATION_FAULT": "Ladesäule defekt",\
+    "STATION_OPERATIONAL": "Ladesäule betriebsbereit",\
+    "STATION_VERIFIED": "Ladesäule verifiziert",\
+    "STATION_NOT_VERIFIED": "Ladesäule nicht verifiziert",\
+    "STATION_BARRIERFREE": "Barrierefrei",\
+    "STATION_NOT_BARRIERFREE": "Nicht barrierefrei",\
+    "STATION_NO_INFORMATION": "Keine Information",\
+    "STATION_NETWORK": "Ladenetzwerk",\
+    "STATION_OPERATOR": "Betreiber",\
+    "STATION_CHARGING_TIME": "Ladeweile",\
+    "STATION_LOCATION": "Standort",\
+    "STATION_INFORMATION": "Allgemeine Informationen",\
+    "STATION_FREE_CHARGING": "Kostenloses Laden",\
+    "STATION_FREE_PARKING": "Kostenloses Parken",\
     "POSITION_ERROR": "Fehler beim Abrufen der aktuellen Position. Erteile die Berechtigung für den Standort.",\
+    "CARDS_ERROR": "Fehler beim Abrufen der Ladekarten.",\
     "LIST_VIEW": "Listenansicht",\
     "MAPS_VIEW": "Kartenansicht",\
     "FAVORITES": "Favoriten",\
+    "GENERAL_VIEW": "Allgemeines",\
+    "ACCESS_VIEW": "Zugang",\
+    "LOG_VIEW": "Ladelog",\
     "MENU_CHARGE": "Ladezyklen",\
     "MENU_NOTIFYME": "NotifyMe",\
     "MENU_SETTINGS": "Einstellungen",\
     "MISSING_CONFIGURATION": "Kein Gerät und/oder Auto ausgewählt. Bitte in den Einstellungen entsprechend eintragen",\
     "NEXT": "Weiter",\
     "CANCEL": "Abbrechen",\
+    "YES": "Ja",\
+    "NO": "Nein",\
     "LANGUAGE_SETUP": "Sprachauswahl",\
     "LNG_EN": "Englisch",\
     "LNG_DE": "Deutsch",\

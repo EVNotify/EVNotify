@@ -42,6 +42,10 @@
 .mdl-list__item-avatar.material-icons.fault {
     background-color: #ff3a3a;
 }
+.mdl-list__item--three-line {
+    height: auto;
+    box-sizing: unset;
+}
 .mdl-list__item--three-line .mdl-list__item-primary-content {
     height: auto;
 }
