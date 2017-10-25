@@ -40,7 +40,7 @@ en = JSON.parse('{\
     "NEXT": "Next",\
     "CANCEL": "Cancel",\
     "YES": "Yes",\
-    "NO": "Nein",\
+    "NO": "No",\
     "LANGUAGE_SETUP": "Language selection",\
     "LNG_EN": "English",\
     "LNG_DE": "German",\
