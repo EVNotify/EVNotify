@@ -1,9 +1,12 @@
 .socCycle {
     margin: 0 auto;
     width: 300px;
-    height: 200px;
+    height: 250px;
     position: relative;
     margin-top: 5%;
+}
+.socCycle svg {
+    height: 100%;
 }
 .settingsSection {
     font-size: 1.5em;
@@ -49,12 +52,20 @@
 .mdl-list__item--three-line .mdl-list__item-primary-content {
     height: auto;
 }
+.charging-info-list {
+    border: 1px solid #ddd;
+}
+.charging-info-list .material-icons.mdl-list__item-icon {
+    float: left;
+}
 /* Android 4.1 Fixes */
 header.mdl-layout__header.is-casting-shadow,
 .mdl-snackbar.mdl-js-snackbar,
-.mdl-navigation {
+.mdl-navigation,
+.charging-info-list .mdl-list__item,
+.charging-info-list .mdl-list__item-primary-content {
     display: block;
 }
 .mdl-snackbar.mdl-js-snackbar.mdl-snackbar--active {
-    position: absolute;
+    position: fixed;
 }

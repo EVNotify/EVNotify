@@ -87,16 +87,20 @@ function watchSoC(device, car, soc, interval) {
                                 if(DEBUG) $('#debugInfo').append(decoded + '<br>NEXT<br>');
                                 // send data to convertSoC function to retrieve the converted soc
                                 convertSoC(decoded, function(converted) {
-                                    // debug only
+                                    // parse and round to integer
+                                    converted = parseInt(converted);
                                     if(converted >= 0 && converted <= 100) {
-                                        // reset block data again
+                                        // reset block data and raw data again
                                         BLOCKDATA = '';
+                                        RAWDATA = '';
                                         // set last successfull car response to current time
                                         LAST_CAR_ACTIVITY = new Date().getTime() / 1000;
                                         // save soc locally
-                                        setValue('lastSoC', parseInt(converted));
+                                        setValue('lastSoC', converted);
                                         // animate the soc in the cycle
-                                        socCycle.animate(((converted == 100)? 1 : '0.' + parseInt(converted)));
+                                        socCycle.animate(((converted === 100)? 1 : '0.' + converted));
+                                        // update charging information list
+                                        updateChargingInfo(converted);
                                         // check if the desired soc value was achieved
                                         if(converted >= soc && !NOTIFICATION_SENT) {
                                             // send notification request
@@ -121,7 +125,7 @@ function watchSoC(device, car, soc, interval) {
                                  * the car response is good - if there was a charging error or a connection error
                                  * send a notification to user and inform it about the issue
                                  */
-                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (((interval)? interval : 60) * 2)) && !NOTIFICATION_SENT) {
+                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (((interval)? interval : 60) * 5)) && !NOTIFICATION_SENT) {
                                      bluetooth.setInfoState('unknown');
                                      // send error notification
                                      sendRequest('notification', {akey: getValue('akey'), token: getValue('token'), error: true}, function(err, notificationRes) {
@@ -175,7 +179,8 @@ function watchSoC(device, car, soc, interval) {
  * @param  {Function} callback callback function
  */
 function convertSoC(data, callback) {
-    // return parseInt(data.substr(data.indexOf('4:')).split(' ')[7], 16) / 2;
+    // track the raw data
+    RAWDATA += data;
     if(DEBUG) $('#debugData').append('RAW DATA: ' + data + '<br>');
     if(BLOCKDATA) {
         BLOCKDATA += ' ' + data;
@@ -195,8 +200,19 @@ function convertSoC(data, callback) {
         // 4: - last byte before 5: (new calculation removes spaces and concats them in pairs together to avoid wrong calculation)
         callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:') +2, BLOCKDATA.lastIndexOf(':') ).replace(/\s/g, '').match(/.{1,2}/g)[6], 16)/ 2);
     } else callback(-1);
+
+    // detect CAN ERROR - re-initialize the obd interface again - cut out spaces
+    if(RAWDATA && RAWDATA.trim().replace(/\s/g, '').indexOf('CANERROR') !== -1) {
+        resetDongle(function(err, reset) {
+            RAWDATA = '';   // reset raw data tracking
+        });
+    }
 }
 
+/**
+ * Function which resets dongle to force specific format settings for dongle and re-initialization of obd2-interface
+ * @param {Function} callback   callback function
+ */
 function resetDongle(callback) {
     /**
      * Function which shows message on the snackbar
@@ -209,6 +225,11 @@ function resetDongle(callback) {
         });
     },
     lng = getValue('lng', 'en'),
+    /**
+     * callbackHandler for command step - checks if error occurred or not
+     * @param  {String} message the message to validate
+     * @return {void}
+     */
     callbackHandler = function(message) {
         showMessage(translate(message, lng));
         if(message === 'RESET_SUCCESSFULL') callback(null, true);
@@ -254,4 +275,62 @@ function resetDongle(callback) {
             });
         } else callbackHandler('BLUETOOTH_NOT_CONNECTED');
     });
+}
+
+/**
+ * Function which updates charging information based on given state of charge (and timestamp)
+ * NOTE: updates timestamp, range and duration
+ * @param  {Number} soc        the state of charge
+ * @param  {Number} timestamp  optional given timestamp (in UNIX time)
+ * @return {void}
+ */
+function updateChargingInfo(soc, timestamp) {
+    var timestampWidget = document.getElementById('charginginfo_timestamp'),
+        rangeWidget = document.getElementById('charginginfo_range'),
+        durationWidget = document.getElementById('charginginfo_duration'),
+        /**
+         * Function which formats given date to specific DD.MM.YYYY hh:mm format
+         * @param  {Date} date  the date to format
+         * @return {String}     the formatted date string
+         */
+        formatDate = function(date) {
+            if(!(date instanceof Date)) return '?';
+            var hours = date.getHours(),
+                minutes = date.getMinutes();
+
+            minutes = ((minutes < 10)? '0' + minutes : minutes); // correct low values
+
+            return date.getDate() + '.' + parseInt(date.getMonth() + 1) + '.' + date.getFullYear() + ' ' + hours + ':' + minutes;
+        };
+
+    // update information
+    if(timestampWidget && rangeWidget && durationWidget) {
+        timestampWidget.innerText = formatDate(((timestamp)? new Date(timestamp * 1000) : new Date()));
+        rangeWidget.innerText = calculateEstimatedRange(soc);
+        durationWidget.innerText = calculateEstimatedDuration(soc);
+    }
+}
+
+/**
+ * Function which calculates estimated range for given state of charge based on manual consumption value
+ * @param  {Number} soc     the state of charge to calculate the range for
+ * @return {String}         formatted string for estimated range
+ */
+function calculateEstimatedRange(soc) {
+    if(typeof soc !== 'number') return '?';
+    // TODO calulcation based on car
+    if(soc < 10) soc = '0' + soc.toString();    // correct low values
+    return parseInt((28 / getValue('consumption', 13)) * 100 * ((soc === 100)? 1 : '0.' + soc)) + 'km';
+    // TODO automate this later..
+}
+
+/**
+ * Function which calculates estimated charging time duration for given state of charge based on manual charging speed
+ * @param  {Number} soc     the state of charge to calculate the time for
+ * @return {String}         formatted string for estimated range
+ */
+function calculateEstimatedDuration(soc) {
+    // TODO based on car and charging speed
+    return '?'; // TODO
+    // TODO automate this later..
 }

@@ -152,8 +152,32 @@
                     <label class="mdl-button--icon connection-info-icon">
                         <img class="material-icons" id="connectionInfo" src="./icons/bluetooth_searching.svg"></img>
                     </label>
+                    <!-- State of Charge cycle -->
                     <div id="socCycle" class="socCycle"></div>
+                    <!-- Charging information  -->
+                    <ul class="charging-info-list mdl-list">
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <img class="material-icons mdl-list__item-icon" src="./icons/last_update.svg"></img>
+                                <p id="charginginfo_timestamp">?</p>
+                            </span>
+                        </li>
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <img class="material-icons mdl-list__item-icon" src="./icons/ev_station.svg"></img>
+                                <p id="charginginfo_range">?</p>
+                            </span>
+                        </li>
+                        <li class="mdl-list__item">
+                            <span class="mdl-list__item-primary-content">
+                                <img class="material-icons mdl-list__item-icon" src="./icons/clock.svg"></img>
+                                <p id="charginginfo_duration">?</p>
+                            </span>
+                        </li>
+                    </ul>
+                    <!-- Debug data -->
                     <code id="debugData"></code>
+                    <!-- infoMessage -->
                     <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
                         <div class="mdl-snackbar__text"></div>
                         <button type="button" class="mdl-snackbar__action"></button>
@@ -179,7 +203,7 @@
 
             var value = Math.round(circle.value() * 100);
 
-            circle.setText('&nbsp&nbsp&nbsp&nbsp&nbsp' + value + '% <br><br>(00:00:00h)');  // TODO real estimated time
+            circle.setText(value + '%');
         }
     });
 
