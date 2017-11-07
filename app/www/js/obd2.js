@@ -201,8 +201,11 @@ function convertSoC(data, callback) {
         callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:') +2, BLOCKDATA.lastIndexOf(':') ).replace(/\s/g, '').match(/.{1,2}/g)[6], 16)/ 2);
     } else callback(-1);
 
-    // detect CAN ERROR - re-initialize the obd interface again - cut out spaces
-    if(RAWDATA && RAWDATA.trim().replace(/\s/g, '').indexOf('CANERROR') !== -1) {
+    // trim and cut out spaces of raw data
+    RAWDATA = RAWDATA.trim().replace(/\s/g, '');
+
+    // detect interface errors - re-initialize the obd interface again
+    if(RAWDATA.indexOf('CANERROR') !== -1 || RAWDATA.indexOf('SEARCHING') !== -1 || RAWDATA.indexOf('UNABLETOCONNECT') !== -1) {
         resetDongle(function(err, reset) {
             RAWDATA = '';   // reset raw data tracking
         });
