@@ -58,12 +58,46 @@
 .charging-info-list .material-icons.mdl-list__item-icon {
     float: left;
 }
+.navigation-icon {
+    position: absolute;
+    right: 16px;
+}
+.navigation-icon.dashboard {
+    top: 96px;
+}
+.navigation-icon.stations {
+    top: 152px;
+}
+.navigation-icon.settings {
+    top: 208px;
+}
+.navigation-element {
+    position: absolute;
+    width: 160px;
+    z-index: 1;
+}
+.navigation-element.dashboard {
+    top: 80px;
+}
+.navigation-element.stations {
+    top: 136px;
+}
+.navigation-element.settings {
+    top: 192px;
+}
+.navigation-version-info {
+    color: #757575;
+    position: absolute;
+    right: 16px;
+    bottom: 0;
+}
 /* Android 4.1 Fixes */
 header.mdl-layout__header.is-casting-shadow,
 .mdl-snackbar.mdl-js-snackbar,
 .mdl-navigation,
 .charging-info-list .mdl-list__item,
-.charging-info-list .mdl-list__item-primary-content {
+.charging-info-list .mdl-list__item-primary-content,
+.mdl-layout__drawer {
     display: block;
 }
 .mdl-snackbar.mdl-js-snackbar.mdl-snackbar--active {

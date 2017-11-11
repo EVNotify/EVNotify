@@ -87,12 +87,20 @@
             <div class="mdl-layout__drawer">
                 <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link translate" href="index.html" id="MENU_OVERVIEW"></a>
-                    <a class="mdl-navigation__link translate" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
-                    <a class="mdl-navigation__link translate" href="" id="MENU_CHARGE"></a>
-                    <a class="mdl-navigation__link translate" href="" id="MENU_NOTIFYME"></a>
-                    <a class="mdl-navigation__link translate" href="settings.html" id="MENU_SETTINGS"></a>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element dashboard" href="index.html" id="MENU_OVERVIEW"></a>
+                        <img class="material-icons navigation-icon dashboard" src="./icons/dashboard.svg"></img>
+                    </div>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element stations" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
+                        <img class="material-icons navigation-icon stations" src="./icons/ev_station.svg"></img>
+                    </div>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element settings" href="settings.html" id="MENU_SETTINGS"></a>
+                        <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
+                    </div>
                 </nav>
+                <p class="navigation-version-info">v.1.1.7</p>
             </div>
             <main class="mdl-layout__content">
                 <section class="mdl-layout__tab-panel is-active" id="listView">

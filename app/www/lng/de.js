@@ -115,15 +115,18 @@ de = JSON.parse('{\
     "SETTINGS_POLLING": "Abfrage-Intervall",\
     "SETTINGS_SYNC": "Automatische Synchronisierung",\
     "INTERVAL_0": "deaktiviert",\
+    "INTERVAL_2": "alle 2 Sekunden",\
     "INTERVAL_5": "alle 5 Sekunden",\
     "INTERVAL_10": "alle 10 Sekunden",\
+    "INTERVAL_15": "alle 15 Sekunden",\
+    "INTERVAL_20": "alle 20 Sekunden",\
     "INTERVAL_30": "alle 30 Sekunden",\
     "INTERVAL_60": "jede Minute",\
     "INTERVAL_300": "alle 5 Minuten",\
     "INTERVAL_600": "alle 10 Minuten",\
     "INTERVAL_1800": "jede halbe Stunde",\
     "INTERVAL_3600": "jede Stunde",\
-    "POLLING_WARNING": "Kurze Abfrage-Intervalle führen zu erhöhtem Akkuverbrauch.",\
+    "POLLING_WARNING": "Kurze Abfrage-Intervalle führen zu erhöhtem Akkuverbrauch, haben dafür aber eine bessere Genauigkeit.",\
     "SYNC_WARNING": "Kurze Synchronisierungs-Intervalle führen zu erhöhtem Datenverbrauch.",\
     "SWITCH_ACCOUNT": "Account wechseln",\
     "SWITCH_ACCOUNT_TEXT": "Verbinde beliebig viele Geräte miteinander. Einfach mit einem bestehenden Account hier anmelden. Dazu den AKey des zu nutzenden Accounts angeben.",\

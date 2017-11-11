@@ -109,12 +109,20 @@
             <div class="mdl-layout__drawer">
                 <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link translate" href="index.html" id="MENU_OVERVIEW"></a>
-                    <a class="mdl-navigation__link translate" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
-                    <a class="mdl-navigation__link translate" href="" id="MENU_CHARGE"></a>
-                    <a class="mdl-navigation__link translate" href="" id="MENU_NOTIFYME"></a>
-                    <a class="mdl-navigation__link translate" href="settings.html" id="MENU_SETTINGS"></a>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element dashboard" href="index.html" id="MENU_OVERVIEW"></a>
+                        <img class="material-icons navigation-icon dashboard" src="./icons/dashboard.svg"></img>
+                    </div>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element stations" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
+                        <img class="material-icons navigation-icon stations" src="./icons/ev_station.svg"></img>
+                    </div>
+                    <div>
+                        <a class="mdl-navigation__link translate navigation-element settings" href="settings.html" id="MENU_SETTINGS"></a>
+                        <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
+                    </div>
                 </nav>
+                <p class="navigation-version-info">v.1.1.7</p>
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">
@@ -187,14 +195,12 @@
                             </label>
                             <label for="polling" class="mdl-textfield__label translate" id="SETTINGS_POLLING"></label>
                             <ul for="polling" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="pollingList">
+                                <li class="mdl-menu__item translate" data-val="2" id="INTERVAL_2"></li>
                                 <li class="mdl-menu__item translate" data-val="5" id="INTERVAL_5"></li>
                                 <li class="mdl-menu__item translate" data-val="10" id="INTERVAL_10"></li>
+                                <li class="mdl-menu__item translate" data-val="15" id="INTERVAL_15"></li>
+                                <li class="mdl-menu__item translate" data-val="20" id="INTERVAL_20"></li>
                                 <li class="mdl-menu__item translate" data-val="30" id="INTERVAL_30"></li>
-                                <li class="mdl-menu__item translate" data-val="60" id="INTERVAL_60"></li>
-                                <li class="mdl-menu__item translate" data-val="300" id="INTERVAL_300"></li>
-                                <li class="mdl-menu__item translate" data-val="600" id="INTERVAL_600"></li>
-                                <li class="mdl-menu__item translate" data-val="1800" id="INTERVAL_1800"></li>
-                                <li class="mdl-menu__item translate" data-val="3600" id="INTERVAL_3600"></li>
                             </ul>
                         </div>
                         <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="POLLING_WARNING"></span><br><br><br>
@@ -207,6 +213,7 @@
                             <label for="sync" class="mdl-textfield__label translate" id="SETTINGS_SYNC"></label>
                             <ul for="sync" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="syncList">
                                 <li class="mdl-menu__item translate" data-val="0" id="INTERVAL_0"></li>
+                                <li class="mdl-menu__item translate" data-val="10" id="INTERVAL_10"></li>
                                 <li class="mdl-menu__item translate" data-val="30" id="INTERVAL_30"></li>
                                 <li class="mdl-menu__item translate" data-val="60" id="INTERVAL_60"></li>
                                 <li class="mdl-menu__item translate" data-val="300" id="INTERVAL_300"></li>

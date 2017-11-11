@@ -114,15 +114,18 @@ en = JSON.parse('{\
     "SETTINGS_POLLING": "Polling-Interval",\
     "SETTINGS_SYNC": "Automatic syncronization",\
     "INTERVAL_0": "deactivated",\
+    "INTERVAL_2": "every 2 seconds",\
     "INTERVAL_5": "every 5 seconds",\
     "INTERVAL_10": "every 10 seconds",\
+    "INTERVAL_15": "every 15 seconds",\
+    "INTERVAL_20": "every 20 seconds",\
     "INTERVAL_30": "every 30 seconds",\
     "INTERVAL_60": "every minute",\
     "INTERVAL_300": "every 5 minutes",\
     "INTERVAL_600": "every 10 minutes",\
     "INTERVAL_1800": "every half an hour",\
     "INTERVAL_3600": "every hour",\
-    "POLLING_WARNING": "Short polling intervals lead to increased battery consumption.",\
+    "POLLING_WARNING": "Short polling intervals lead to increased battery consumption, but they have a higher accuracy.",\
     "SYNC_WARNING": "Short syncronization intervals leads to increased data usage",\
     "SWITCH_ACCOUNT": "Change account",\
     "SWITCH_ACCOUNT_TEXT": "Connect as many devices as you want. Just register with an existing account here. Specify the AKey of the account to be used.",\
