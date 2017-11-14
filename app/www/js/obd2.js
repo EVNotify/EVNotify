@@ -4,7 +4,7 @@
 function startWatch() {
     var config = JSON.parse(getValue('config', '{}'));
 
-    watchSoC(config.device, config.car, config.soc, config.polling);
+    watchSoC(config.device, config.car, config.soc, config.polling, config.errorDetection);
 }
 
 function stopWatch() {
@@ -47,10 +47,11 @@ function toggleDebug() {
  * Function which handles the bluetooth connection and communication with the car and sends the notifications
  * @param  {String} device      the device uuid/adress of the OBD2-Dongle
  * @param  {String} car         the car (EVNotify will support more cars soon)
- * @param  {Integer} soc        the soc value on which the user should be notified
- * @param  {Integer} interval   the given interval to check for new soc
+ * @param  {Number} soc         the soc value on which the user should be notified
+ * @param  {Number} interval    the given interval to check for new soc
+ * @param  {Number} errorinterval   the given interal to check for charging errors / interrupts to notify user
  */
-function watchSoC(device, car, soc, interval) {
+function watchSoC(device, car, soc, interval, errorinterval) {
     /**
      * Function which shows message on the snackbar
      * @param  {String} text The text to show
@@ -125,7 +126,7 @@ function watchSoC(device, car, soc, interval) {
                                  * the car response is good - if there was a charging error or a connection error
                                  * send a notification to user and inform it about the issue
                                  */
-                                 if(LAST_CAR_ACTIVITY && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + (((interval)? interval : 60) * 5)) && !NOTIFICATION_SENT) {
+                                 if(LAST_CAR_ACTIVITY && errorinterval && (new Date().getTime() / 1000 > LAST_CAR_ACTIVITY  + errorinterval) && !NOTIFICATION_SENT) {
                                      bluetooth.setInfoState('unknown');
                                      // send error notification
                                      sendRequest('notification', {akey: getValue('akey'), token: getValue('token'), error: true}, function(err, notificationRes) {
@@ -205,7 +206,7 @@ function convertSoC(data, callback) {
     RAWDATA = RAWDATA.trim().replace(/\s/g, '');
 
     // detect interface errors - re-initialize the obd interface again
-    if(RAWDATA.indexOf('CANERROR') !== -1 || RAWDATA.indexOf('SEARCHING') !== -1 || RAWDATA.indexOf('UNABLETOCONNECT') !== -1) {
+    if(RAWDATA.indexOf('CANERROR') !== -1 || RAWDATA.indexOf('STOPPED') !== -1 || RAWDATA.indexOf('UNABLETOCONNECT') !== -1) {
         resetDongle(function(err, reset) {
             RAWDATA = '';   // reset raw data tracking
         });

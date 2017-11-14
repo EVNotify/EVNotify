@@ -222,7 +222,22 @@
                                 <li class="mdl-menu__item translate" data-val="3600" id="INTERVAL_3600"></li>
                             </ul>
                         </div>
-                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="SYNC_WARNING"></span><br>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="SYNC_WARNING"></span><br><br><br>
+                        <!-- Charging Error Detection -->
+                        <div id="errorDetectionDiv" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height marginLeft">
+                            <input class="mdl-textfield__input" type="text" id="chargingerror" readonly tabIndex="-1">
+                            <label for="chargingerror">
+                                <img class="mdl-icon-toggle__label material-icons" src="./icons/keyboard_arrow_down.svg"></img>
+                            </label>
+                            <label for="chargingerror" class="mdl-textfield__label translate" id="SETTINGS_CHARGINGERROR_DETECTION"></label>
+                            <ul for="chargingerror" class="mdl-menu mdl-menu--bottom-left mdl-js-menu" id="chargingerrorList">
+                                <li class="mdl-menu__item translate" data-val="0" id="INTERVAL_0"></li>
+                                <li class="mdl-menu__item translate" data-val="120" id="INTERVAL_120"></li>
+                                <li class="mdl-menu__item translate" data-val="300" id="INTERVAL_300"></li>
+                                <li class="mdl-menu__item translate" data-val="600" id="INTERVAL_600"></li>
+                            </ul>
+                        </div>
+                        <span style="visibility: visible" class="mdl-textfield__error marginLeft translate" id="CHARGINGERROR_WARNING"></span><br>
                         <!-- Save Button -->
                         <button onclick="event.preventDefault(); saveSettings()" style="width: 100%; margin-top: 5%"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect translate" id="SAVE_SETTINGS">

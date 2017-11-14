@@ -19,6 +19,8 @@ function loadSettings() {
         pollingDiv = document.getElementById('pollingDiv'),
         sync = document.getElementById('sync'),
         syncDiv = document.getElementById('syncDiv'),
+        errorDetection = document.getElementById('chargingerror'),
+        errorDetectionDiv = document.getElementById('errorDetectionDiv'),
         language = document.getElementById('language'),
         languageDiv = document.getElementById('languageDiv');
 
@@ -48,6 +50,11 @@ function loadSettings() {
         syncDiv.className += ' is-dirty is-focused';
         sync.value = config.syncObj.title;
         sync.setAttribute('data-val', config.syncObj.val);
+    }
+    if(config.chargingerrorObj) {
+        errorDetectionDiv.className += ' is-dirty is-focused';
+        errorDetection.value = config.chargingerrorObj.title;
+        errorDetection.setAttribute('data-val', config.chargingerrorObj.val);
     }
     if(config.lngObj) {
         languageDiv.className += ' is-dirty is-focused';
@@ -95,7 +102,12 @@ function saveSettings() {
                 val: parseInt(document.getElementById('sync').getAttribute('data-val')),
                 title: document.getElementById('sync').value
             },
-            autoSync: parseInt(document.getElementById('sync').getAttribute('data-val'))
+            autoSync: parseInt(document.getElementById('sync').getAttribute('data-val')),
+            chargingerrorObj: {
+                val: parseInt(document.getElementById('chargingerror').getAttribute('data-val')),
+                title: document.getElementById('chargingerror').value
+            },
+            errorDetection: parseInt(document.getElementById('chargingerror').getAttribute('data-val')),
         });
 
     translatePage(lng);

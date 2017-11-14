@@ -58,6 +58,9 @@
 .charging-info-list .material-icons.mdl-list__item-icon {
     float: left;
 }
+.mdl-layout__drawer {
+    overflow: hidden;
+}
 .navigation-icon {
     position: absolute;
     right: 16px;
@@ -73,7 +76,8 @@
 }
 .navigation-element {
     position: absolute;
-    width: 160px;
+    width: 100%;
+    box-sizing: border-box;
     z-index: 1;
 }
 .navigation-element.dashboard {

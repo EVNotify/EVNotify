@@ -113,6 +113,7 @@ en = JSON.parse('{\
     "SETTINGS_DEVICES": "Bluetooth-Device",\
     "SETTINGS_POLLING": "Polling-Interval",\
     "SETTINGS_SYNC": "Automatic syncronization",\
+    "SETTINGS_CHARGINGERROR_DETECTION": "Charging error detection",\
     "INTERVAL_0": "deactivated",\
     "INTERVAL_2": "every 2 seconds",\
     "INTERVAL_5": "every 5 seconds",\
@@ -121,12 +122,14 @@ en = JSON.parse('{\
     "INTERVAL_20": "every 20 seconds",\
     "INTERVAL_30": "every 30 seconds",\
     "INTERVAL_60": "every minute",\
+    "INTERVAL_120": "every 2 minutes",\
     "INTERVAL_300": "every 5 minutes",\
     "INTERVAL_600": "every 10 minutes",\
     "INTERVAL_1800": "every half an hour",\
     "INTERVAL_3600": "every hour",\
     "POLLING_WARNING": "Short polling intervals lead to increased battery consumption, but they have a higher accuracy.",\
     "SYNC_WARNING": "Short syncronization intervals leads to increased data usage",\
+    "CHARGINGERROR_WARNING": "Short misrecognition intervals can possibly lead to false alarms, but inform the fastest about a possible aborted loading.",\
     "SWITCH_ACCOUNT": "Change account",\
     "SWITCH_ACCOUNT_TEXT": "Connect as many devices as you want. Just register with an existing account here. Specify the AKey of the account to be used.",\
     "SYNC_SETTINGS_FAILED": "Syncronization failed.",\
