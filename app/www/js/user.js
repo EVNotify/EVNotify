@@ -271,3 +271,30 @@ function changePW(lng) {
         swal.resetDefaults()
     });
 }
+
+/**
+ * Function which shows consumption dialog to set consumption for estimated range calculation
+ * @return {void}
+ */
+function consumption() {
+    swal({
+        title: translate('CONSUMPTION', getValue('lng', 'en')),
+        text: translate('CONSUMPTION_TEXT', getValue('lng', 'en')),
+        preConfirm: function(consumption) {
+            return new Promise(function (resolve, reject) {
+                setValue('consumption', consumption);
+                resolve();
+            });
+        },
+        type: 'question',
+        input: 'range',
+        inputAttributes: {
+            min: 8,
+            max: 25,
+            step: 0.1
+        },
+        inputValue: getValue('consumption', 13)
+    }, function() {
+        console.log(arguments);
+    });
+}

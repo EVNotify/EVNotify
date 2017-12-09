@@ -36,6 +36,11 @@
     position: absolute;
     right: 10%;
 }
+.mdl-button--icon.consumption-settings-icon {
+    position: absolute;
+    right: 5%;
+    padding-top: 16px;
+}
 .mdl-list__item-avatar.material-icons.operational {
     background-color: #39dc64;
 }

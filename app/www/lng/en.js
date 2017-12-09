@@ -97,6 +97,8 @@ en = JSON.parse('{\
     "SETTINGS_AKEY": "AKey",\
     "CHANGE_PASSWORD": "Change password",\
     "LANGUAGE": "Language",\
+    "CONSUMPTION": "Consumption",\
+    "CONSUMPTION_TEXT": "Enter your avaerage consumption (kWh/100km)",\
     "NOTIFICATIONS": "Notifications",\
     "EMAIL_NOTIFICATION": "Mail-Adress",\
     "PUSH_NOTIFICATION": "Push-Notification",\

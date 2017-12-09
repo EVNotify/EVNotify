@@ -98,6 +98,8 @@ de = JSON.parse('{\
     "SETTINGS_AKEY": "AKey",\
     "CHANGE_PASSWORD": "Passwort ändern",\
     "LANGUAGE": "Sprache",\
+    "CONSUMPTION": "Verbrauch",\
+    "CONSUMPTION_TEXT": "Gib Deinen durchschnittlichen Verbrauch an (kWh/100km)",\
     "NOTIFICATIONS": "Benachrichtigungen",\
     "EMAIL_NOTIFICATION": "E-Mail-Adresse",\
     "PUSH_NOTIFICATION": "Push-Benachrichtigung",\
