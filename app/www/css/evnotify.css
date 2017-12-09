@@ -112,3 +112,13 @@ header.mdl-layout__header.is-casting-shadow,
 .mdl-snackbar.mdl-js-snackbar.mdl-snackbar--active {
     position: fixed;
 }
+/*Dark Mode (StandBy Mode)*/
+.mdl-layout__content.dark {
+    background-color: #252525;
+}
+.mdl-layout__content.dark .progressbar-text {
+    color: #FFF !important; /* uncool, I know.. */
+}
+.mdl-layout__content.dark .charging-info-list.mdl-list .mdl-list__item .mdl-list__item-primary-content p {
+    color: #FFF;
+}

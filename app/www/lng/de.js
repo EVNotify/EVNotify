@@ -86,6 +86,8 @@ de = JSON.parse('{\
     "RESET_SUCCESSFULL": "OBD2-Dongle erfolgreich konfiguriert.",\
     "BLUETOOTH_CONNECTION_ERROR": "Es konnte keine Bluetooth-Verbindung mit dem Gerät hergestellt werden.",\
     "BLUETOOTH_DISABLED": "Bluetooth ist nicht aktiviert. Bitte Bluetooth einschalten!",\
+    "STANDBY_MODE_ENABLED": "Überwachung beendet. OBD2-Dongle ist jetzt im StandBy-Modus. 12V-Batterie kann dennoch unter Umständen leer werden.",\
+    "STANDBY_MODE_FAILED": "Etwas ist falsch gelaufen beim Stand-By-Modus.",\
     "UNSUPPORTED_CAR": "Nicht unterstützes Auto. Weitere Autos werden in Zukunft unterstützt werden.",\
     "UNSUPPORTED_DEVICE": "Das Gerät bzw. die Plattform wird nicht unterstützt. Eine Web-Version kommt in Zukunft.",\
     "SETTINGS_PASSWORD": "Passwort",\

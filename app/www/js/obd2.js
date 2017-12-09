@@ -7,7 +7,12 @@ function startWatch() {
     watchSoC(config.device, config.car, config.soc, config.polling, config.errorDetection);
 }
 
-function stopWatch() {
+/**
+ * Function to stop the state of charge monitoring
+ * @param  {Function} callback  callback function
+ * @return {void}
+ */
+function stopWatch(callback) {
     if(RUNNING_INTERVAL) clearInterval(RUNNING_INTERVAL);
 
     // try to unsubscribe to prevent multiple listeners
@@ -15,8 +20,42 @@ function stopWatch() {
         bluetoothSerial.unsubscribeRawData();
         bluetooth.disconnect(function(disconnected) {
             console.log('Disconnected: ' + disconnected);
+            if(typeof callback === 'function') callback(true);
         });
-    } catch (e) {}
+    } catch (e) {if(typeof callback === 'function') callback(false);}
+}
+
+/**
+ * Enables standBy mode which stops monitoring and turns the obd2 dongle in low power mode
+ * @return {void}
+ */
+function standBy() {
+    /**
+     * Function which shows message on the snackbar
+     * @param  {String} text The text to show
+     */
+    var showMessage = function(text) {
+        var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
+            message: text,
+            duration: 2222
+        });
+    };
+
+    // ensure that required variables are available
+    if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'undefined' && typeof bluetooth !== 'undefined') {
+        // stop watch
+        stopWatch(function(disconnected) {
+            if(disconnected) {
+                bluetooth.sendCommand('ATLP');  // turn dongle in stand by mode
+                showMessage(translate('STANDBY_MODE_ENABLED', getValue('lng', 'en')));
+                // dark mode
+                darkMode(true, 'index');
+                // reset values
+                socCycle.animate(0);
+                updateChargingInfo(0);
+            } else showMessage(translate('STANDBY_MODE_FAILED', getValue('lng', 'en')));
+        });
+    }
 }
 
 /**
