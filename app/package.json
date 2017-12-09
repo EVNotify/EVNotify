@@ -1,6 +1,6 @@
 {
   "name": "com.evnotify.app",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "displayName": "EVNotify",
   "cordova": {
     "platforms": [
