@@ -99,7 +99,7 @@ function watchSoC(device, car, soc, interval, errorinterval) {
                                         // save soc locally
                                         setValue('lastSoC', converted);
                                         // animate the soc in the cycle
-                                        socCycle.animate(((converted === 100)? 1 : '0.' + converted));
+                                        socCycle.animate(((converted === 100)? 1 : '0.' + ((converted < 10)? '0' + converted : converted)));
                                         // update charging information list
                                         updateChargingInfo(converted);
                                         // check if the desired soc value was achieved
