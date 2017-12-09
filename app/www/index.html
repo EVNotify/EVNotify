@@ -41,6 +41,8 @@
         <script src="./js/user.js"></script>
         <!-- sync JS -->
         <script src="./js/sync.js"></script>
+        <!-- ui JS -->
+        <script src="./js/ui.js"></script>
         <!-- german translation -->
         <script src="./lng/de.js"></script>
         <!-- english translation -->
@@ -129,11 +131,14 @@
                     <span class="mdl-layout-title translate" id="HEADER_OVERVIEW" style="position: absolute; top: 16px"></span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 80px">
                         <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
                     </label>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
                         <img class="material-icons" onclick="toggleDebug()" src="./icons/debug.svg"></img>
+                    </label>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
+                        <img class="material-icons" onclick="standBy()" src="./icons/power.svg"></img>
                     </label>
                 </div>
             </header>
@@ -155,7 +160,7 @@
                 </nav>
                 <p class="navigation-version-info">v.1.1.7</p>
             </div>
-            <main class="mdl-layout__content">
+            <main class="mdl-layout__content" id="pageContent">
                 <div class="page-content">
                     <label class="mdl-button--icon connection-info-icon">
                         <img class="material-icons" id="connectionInfo" src="./icons/bluetooth_searching.svg"></img>
@@ -166,19 +171,19 @@
                     <ul class="charging-info-list mdl-list">
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/last_update.svg"></img>
+                                <img class="material-icons mdl-list__item-icon" src="./icons/last_update.svg" id="timestamp_icon"></img>
                                 <p id="charginginfo_timestamp">?</p>
                             </span>
                         </li>
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/ev_station.svg"></img>
+                                <img class="material-icons mdl-list__item-icon" src="./icons/ev_station.svg" id="range_icon"></img>
                                 <p id="charginginfo_range">?</p>
                             </span>
                         </li>
                         <li class="mdl-list__item">
                             <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/clock.svg"></img>
+                                <img class="material-icons mdl-list__item-icon" src="./icons/clock.svg" id="duration_icon"></img>
                                 <p id="charginginfo_duration">?</p>
                             </span>
                         </li>
