@@ -1,0 +1,25 @@
+{
+  "name": "com.evnotify.app",
+  "version": "1.1.7",
+  "displayName": "EVNotify",
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-bluetooth-serial": {},
+      "cordova-plugin-geolocation": {},
+      "uk.co.workingedge.phonegap.plugin.launchnavigator": {},
+      "cordova-plugin-autostart": {}
+    }
+  },
+  "dependencies": {
+    "cordova-android": "~6.3.0",
+    "cordova-plugin-whitelist": "1",
+    "cordova-plugin-bluetooth-serial": "~0.4.7",
+    "cordova-plugin-geolocation": "~2.4.3",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "~4.0.7",
+    "cordova-plugin-autostart": "~2.0.1"
+  }
+}
