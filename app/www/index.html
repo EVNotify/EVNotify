@@ -91,30 +91,7 @@
             if(!getValue('setupCompleted')) setup(lng);
             else if(!getValue('token')) login(lng);
             else if(config.device && config.car) {
-                /**
-                 * NOTE: Connection still seems to be called directly from index.html -
-                 * all the other obd2 handling will be done from obd2.js
-                 */
-                bluetooth.setInfoState('searching');
-                bluetooth.isEnabled(function(enabled) {
-                    if(enabled) {
-                        // check if connection already established
-                        bluetooth.isConnected(function(connected) {
-                            if(!connected) {
-                                // connect to device
-                                bluetooth.connect(config.device, function(err, connected) {
-                                    if(!err && connected) {
-                                        showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
-                                        startWatch();
-                                    } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
-                                });
-                            } else {
-                                showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
-                                startWatch();
-                            }
-                        });
-                    } else showMessage(translate('BLUETOOTH_DISABLED', lng)).bluetooth.setInfoState('disabled');
-                });
+                bluetooth.establishConnection(config.device);
             } else showMessage(translate('MISSING_CONFIGURATION', lng));
 
             // start sync
