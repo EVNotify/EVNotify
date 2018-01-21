@@ -83,7 +83,7 @@ function saveSettings() {
                 name: document.getElementById('language').value
             },
             lng: lng,
-            car: 'IONIQ',   // later it will supports more cars
+            car: 'IONIQ_BEV',   // later it will supports more cars
             telegram: getValue('telegram'),
             email: document.getElementById('email').value,
             push: false,

@@ -363,7 +363,8 @@ function calculateEstimatedRange(soc) {
     if(typeof soc !== 'number') return '?';
     // TODO calulcation based on car
     if(soc < 10) soc = '0' + soc.toString();    // correct low values
-    return parseInt((28 / getValue('consumption', 13)) * 100 * ((soc === 100)? 1 : '0.' + soc)) + 'km';
+    return parseInt((28 / getValue('consumption', 13)) * 100 * ((soc === 100)? 1 : '0.' + soc)) + 'km / ' + // current
+        parseInt((28 / getValue('consumption', 13)) * 100) + 'km';  // total
     // TODO automate this later..
 }
 
