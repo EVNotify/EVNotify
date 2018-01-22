@@ -238,7 +238,9 @@ function convertSoC(data, callback) {
         // cut out eventually spaces before or after BLOCKDATA
         BLOCKDATA = BLOCKDATA.trim();
         // 4: - last byte before 5: (new calculation removes spaces and concats them in pairs together to avoid wrong calculation)
-        callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:') +2, BLOCKDATA.lastIndexOf(':') ).replace(/\s/g, '').match(/.{1,2}/g)[6], 16)/ 2);
+        try {
+            callback(parseInt(BLOCKDATA.substr(BLOCKDATA.indexOf('4:') +2, BLOCKDATA.lastIndexOf(':') ).replace(/\s/g, '').match(/.{1,2}/g)[6], 16)/ 2);
+        } catch (e) { callback(-1);}
     } else callback(-1);
 
     // trim and cut out spaces of raw data

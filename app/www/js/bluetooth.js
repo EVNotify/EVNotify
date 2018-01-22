@@ -10,9 +10,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         isEnabled: function(callback) {
             bluetoothSerial.isEnabled(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -21,9 +21,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         isConnected: function(callback) {
             bluetoothSerial.isConnected(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -35,9 +35,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         unsubscribe: function(callback) {
             bluetoothSerial.unsubscribeRawData(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -46,9 +46,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         list: function(callback) {
             bluetoothSerial.list(function(devices) {
-                callback(null, devices);
+                if(typeof callback === 'function') callback(null, devices);
             }, function(err) {
-                callback(err, null);
+                if(typeof callback === 'function') callback(err, null);
             });
         },
         /**
@@ -58,9 +58,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         connect: function(device, callback) {
             bluetoothSerial.connect(device, function() {
-                callback(null, true);
+                if(typeof callback === 'function') callback(null, true);
             }, function(err) {
-                callback(err, false);
+                if(typeof callback === 'function') callback(err, false);
             });
         },
         /**
@@ -74,9 +74,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         sendCommand: function(command, callback) {
             bluetoothSerial.write(command + '\r', function() {
-                callback(null, true);
+                if(typeof callback === 'function') callback(null, true);
             }, function(err) {
-                callback(err, false);
+                if(typeof callback === 'function') callback(err, false);
             });
         },
         /**
@@ -98,9 +98,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         disconnect: function(callback) {
             bluetoothSerial.disconnect(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
