@@ -142,7 +142,7 @@ function setup(lng) {
             });
         }, function () {
             swal.resetDefaults();
-        });
+        }).catch(function() {});
     },
     function(dismiss) {
 
@@ -188,7 +188,7 @@ function login(lng) {
             type: 'success',
             title: translate('LOGIN_SUCCESSFUL', lng)
         });
-    });
+    }).catch(function() {});
 }
 
 /**
@@ -266,10 +266,10 @@ function changePW(lng) {
             confirmButtonText: 'OK',
             type: 'success',
             showCancelButton: false
-        });
+        }).catch(function() {});
     }, function () {
         swal.resetDefaults()
-    });
+    }).catch(function() {});
 }
 
 /**
@@ -296,5 +296,5 @@ function consumption() {
         inputValue: getValue('consumption', 13)
     }, function() {
         console.log(arguments);
-    });
+    }).catch(function() {});
 }

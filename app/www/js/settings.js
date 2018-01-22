@@ -160,8 +160,8 @@ function saveSettings() {
         swal({
             type: 'success',
             title: translate('SET_SETTINGS_SUCCESSFUL', lng)
-        });
-    });
+        }).catch(function() {});
+    }).catch(function() {});
 }
 
 /**
@@ -210,16 +210,16 @@ function manageTelegram(lng) {
                 type: 'info',
                 title: translate('TELEGRAM_UNSUBSCRIBE', lng),
                 html: translate('TELEGRAM_UNSUBSCRIBE_TEXT', lng)
-            });
+            }).catch(function() {});
         } else {
             // instruction of how to subscribe
             swal({
                 type: 'info',
                 title: translate('TELEGRAM_SUBSCRIBE', lng),
                 html: translate('TELEGRAM_SUBSCRIBE_TEXT', lng) + '<br>Token: ' + getValue('token')
-            });
+            }).catch(function() {});
         }
-    });
+    }).catch(function() {});
 }
 
 /**
@@ -281,8 +281,8 @@ function switchAccount(lng) {
         swal({
             type: 'success',
             title: translate('SWITCH_ACCOUNT_SUCCESSFUL', lng)
-        });
-    });
+        }).catch(function() {});
+    }).catch(function() {});
 }
 
 /**
@@ -361,8 +361,8 @@ function syncSettings(type, callback) {
             swal({
                 type: 'success',
                 title: translate('SYNC_SETTINGS_SUCCESSFUL', lng)
-            });
-        });
+            }).catch(function() {});
+        }).catch(function() {});
     }
 }
 

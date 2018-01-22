@@ -85,7 +85,7 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
-                        <img class="material-icons" id="filterIcon" src="./icons/filter.svg" onclick="swal({text: 'Coming soon...'})"></img>
+                        <img class="material-icons" id="filterIcon" src="./icons/filter.svg" onclick="swal({text: 'Coming soon...'}).catch(function() {})"></img>
                     </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
                         <img class="material-icons" id="refreshIcon" src="./icons/refresh.svg" onclick="buildStations()"></img>
