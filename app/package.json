@@ -15,11 +15,16 @@
     }
   },
   "dependencies": {
+    "chai": "^4.1.2",
     "cordova-android": "~6.3.0",
-    "cordova-plugin-whitelist": "1",
+    "cordova-plugin-autostart": "~2.0.1",
     "cordova-plugin-bluetooth-serial": "~0.4.7",
     "cordova-plugin-geolocation": "~2.4.3",
-    "uk.co.workingedge.phonegap.plugin.launchnavigator": "~4.0.7",
-    "cordova-plugin-autostart": "~2.0.1"
+    "cordova-plugin-whitelist": "1",
+    "mocha": "^5.0.0",
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "~4.0.7"
+  },
+  "scripts": {
+    "test": "mocha ../tests/*"
   }
 }
