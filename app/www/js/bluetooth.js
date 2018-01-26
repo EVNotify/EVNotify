@@ -10,9 +10,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         isEnabled: function(callback) {
             bluetoothSerial.isEnabled(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -21,9 +21,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         isConnected: function(callback) {
             bluetoothSerial.isConnected(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -35,9 +35,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         unsubscribe: function(callback) {
             bluetoothSerial.unsubscribeRawData(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
             });
         },
         /**
@@ -46,9 +46,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         list: function(callback) {
             bluetoothSerial.list(function(devices) {
-                callback(null, devices);
+                if(typeof callback === 'function') callback(null, devices);
             }, function(err) {
-                callback(err, null);
+                if(typeof callback === 'function') callback(err, null);
             });
         },
         /**
@@ -58,9 +58,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         connect: function(device, callback) {
             bluetoothSerial.connect(device, function() {
-                callback(null, true);
+                if(typeof callback === 'function') callback(null, true);
             }, function(err) {
-                callback(err, false);
+                if(typeof callback === 'function') callback(err, false);
             });
         },
         /**
@@ -74,9 +74,9 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         sendCommand: function(command, callback) {
             bluetoothSerial.write(command + '\r', function() {
-                callback(null, true);
+                if(typeof callback === 'function') callback(null, true);
             }, function(err) {
-                callback(err, false);
+                if(typeof callback === 'function') callback(err, false);
             });
         },
         /**
@@ -98,9 +98,58 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         disconnect: function(callback) {
             bluetoothSerial.disconnect(function() {
-                callback(true);
+                if(typeof callback === 'function') callback(true);
             }, function() {
-                callback(false);
+                if(typeof callback === 'function') callback(false);
+            });
+        },
+        /**
+         * Function which establishes bluetooth connection for given device and retries if it failed
+         * @param  {String} device  the device to connect to (MAC adress)
+         * @return {void}
+         */
+        establishConnection: function(device) {
+            var self = this,
+                lng = getValue('lng', 'en');
+
+            /**
+             * Function which shows message on the snackbar
+             * @param  {String} text The text to show
+             * @return {Object}     returns global window
+             */
+            var showMessage = function(text) {
+                var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
+                    message: text,
+                    duration: 2222
+                });
+                return window;
+            };
+
+            self.setInfoState('searching');
+            self.isEnabled(function(enabled) {
+                if(enabled) {
+                    // check if connection already established
+                    self.isConnected(function(connected) {
+                        if(!connected) {
+                            // connect to device
+                            self.connect(device, function(err, connected) {
+                                if(!err && connected) {
+                                    showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
+                                    startWatch();
+                                } else {
+                                    showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
+                                    // retry after 3 seconds
+                                    setTimeout(function () {
+                                        self.establishConnection(device);
+                                    }, 3000);
+                                }
+                            });
+                        } else {
+                            showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
+                            startWatch();
+                        }
+                    });
+                } else showMessage(translate('BLUETOOTH_DISABLED', lng)).bluetooth.setInfoState('disabled');
             });
         }
     };
