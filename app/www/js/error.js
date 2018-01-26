@@ -10,7 +10,6 @@
 * @return {Boolean}             whether or not error should be ignored
 */
 function ignoreError(isUncaught, args, payload) {
-    console.log('HERE', arguments);
      try {
          var filename = payload.body.trace.frames[0].filename;  // try to get the filename
 
