@@ -14,7 +14,7 @@ function ignoreError(isUncaught, args, payload) {
          var filename = payload.body.trace.frames[0].filename;  // try to get the filename
 
          // ignore errors from specific files
-         if (isUncaught && filename.match(/^progressbar\.min\.js/)) return true;
+         if (isUncaught && (filename.indexOf('progressbar.min.js') !== -1 || filename.indexOf('unknown') !== -1)) return true;
      } catch (e) {}
      return false;
 }
