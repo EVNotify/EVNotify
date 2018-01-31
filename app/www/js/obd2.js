@@ -281,42 +281,14 @@ function resetDongle(callback) {
         else callback(message, false);
     };
 
-    //TODO: beautify this......
     bluetooth.isConnected(function(connected) {
         if(connected) {
             // reset dongle
-            bluetooth.sendCommand('ATD', function(err, sent) {
-                if(!err) {
-                    bluetooth.sendCommand('ATZ', function(err, sent) {
-                        if(!err) {
-                            bluetooth.sendCommand('ATE0', function(err, sent) {
-                                if(!err) {
-                                    bluetooth.sendCommand('ATL0', function(err, sent) {
-                                        if(!err) {
-                                            bluetooth.sendCommand('ATS0', function(err, sent) {
-                                                if(!err) {
-                                                    bluetooth.sendCommand('ATH0', function(err, sent) {
-                                                        if(!err) {
-                                                            bluetooth.sendCommand('ATSP0', function(err, sent) {
-                                                                if(!err) {
-                                                                    bluetooth.sendCommand('ATSTFF', function(err, sent) {
-                                                                        if(!err) {
-                                                                            callbackHandler('RESET_SUCCESSFULL');
-                                                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                                    });
-                                                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                            });
-                                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                    });
-                                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                            });
-                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                    });
-                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                            });
-                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                    });
-                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
+            bluetooth.sendCommands([
+                'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH0', 'ATSP0', 'ATSTFF', 'ATFE', 'ATBRD45', 'ATBRD23'
+            ], function(err, sent) {
+                if(!err) callbackHandler('RESET_SUCCESSFULL');
+                else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
             });
         } else callbackHandler('BLUETOOTH_NOT_CONNECTED');
     });

@@ -31,7 +31,7 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          * and informs whether or not the unsubscribtion was successfull
          * NOTE: the subscribtion has to be done with bluetoothSerial directly
          * because the function declarations must be there
-         * @param  {Function} callback callack function
+         * @param  {Function} callback callback function
          */
         unsubscribe: function(callback) {
             bluetoothSerial.unsubscribeRawData(function() {
@@ -78,6 +78,31 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
             }, function(err) {
                 if(typeof callback === 'function') callback(err, false);
             });
+        },
+        /**
+         * Function which sends given commands to device (obd2 dongle)
+         * NOTE: It uses the sendCommand function for every command
+         * It only fires the callback on last command and returns all errors, which occured, if any
+         * @param  {Array}   commands   the commands to send
+         * @param  {Function} callback  callback function
+         * @return {void}
+         */
+        sendCommands: function(commands, callback) {
+            var self = this,
+                cnt = 0,
+                errors = [];
+
+            if(commands && typeof commands.forEach === 'function' && commands.length) {
+                commands.forEach(function(command) {
+                    self.sendCommand(command, function(err, sent) {
+                        if(err) errors.push(err);   // push error if one happend
+                        if(++cnt === commands.length && typeof callback === 'function') {
+                            // last command was sent, inform wheter all commands were successfull or if errors occured
+                            callback(((errors.length)? errors : null), ((errors.length)? false : true));
+                        }
+                    });
+                });
+            } else if(typeof callback === 'function') callback(null, false);
         },
         /**
          * Function which sets icon to inform user about the connection state
