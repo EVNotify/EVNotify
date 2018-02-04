@@ -7,13 +7,10 @@ var startSync = function(interval) {
     var syncData = function() {
         // push or pull data based if car currently communicates or not and sync curMode type
         if((RUNNING_INTERVAL && SYNC_MODE === 'auto') || SYNC_MODE === 'upload') {  // push
-            // check if the state of charge changes
-            if(getValue('lastSoC') >= 0 && getValue('lastSoC') !== LAST_SOC) {
-                // push soc
-                sendRequest('syncSoC', {akey: getValue('akey'), token: getValue('token'), soc: LAST_SOC = parseInt(getValue('lastSoC'))}, function(err, syncRes) {
-                    if(err) console.log(err);   // fail silently
-                });
-            }
+            // push soc
+            sendRequest('syncSoC', {akey: getValue('akey'), token: getValue('token'), soc: LAST_SOC = parseInt(getValue('lastSoC'))}, function(err, syncRes) {
+                if(err) console.log(err);   // fail silently
+            });
         } else if(SYNC_MODE === 'download' || SYNC_MODE === 'auto'){    // pull
             // receive settings and state of charge
             sendRequest('sync', {akey: getValue('akey'), token: getValue('token'), type: 'pull'}, function(err, syncRes) {
