@@ -31,7 +31,7 @@ var startSync = function(interval) {
                     if(settings.lng !== getValue('lng')) translatePage(setValue('lng', settings.lng));
                     if(!settings.autoSync) clearInterval(RUNNING_SYNC);
                     // display the remotly fetched state of charge
-                    if(typeof socCycle !== 'undefined') socCycle.animate(((settings.curSoC === 100)? 1 : '0.' + parseInt(settings.curSoC)));
+                    if(typeof socCycle !== 'undefined' && settings.curSoC != null) socCycle.animate(((settings.curSoC === 100)? 1 : '0.' + parseInt(settings.curSoC)));
                     // update charging information // TODO transfer last timestamp from soc
                     if(typeof updateChargingInfo !== 'undefined') updateChargingInfo(settings.curSoC);
                 } else console.log(err);    // fail silently
