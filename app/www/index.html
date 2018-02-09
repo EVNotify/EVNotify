@@ -97,7 +97,10 @@
             } else showMessage(translate('MISSING_CONFIGURATION', lng));
 
             // start sync
-            if(config.autoSync) startSync(config.autoSync);
+            // if(config.autoSync) startSync(config.autoSync);
+
+            // start (default) sync
+            toggleAutoSyncMode(getValue('syncMode'));
         }
         </script>
     </head>

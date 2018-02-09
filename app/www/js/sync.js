@@ -43,7 +43,7 @@ var startSync = function(interval) {
     if(RUNNING_SYNC) clearInterval(RUNNING_SYNC);
     // start sync
     syncData(); // once before interval
-    toggleAutoSyncMode();
+    // toggleAutoSyncMode();
     RUNNING_SYNC = setInterval(function () {
         syncData();
     }, ((interval)? interval : 60) * 1000);
@@ -59,6 +59,7 @@ var toggleAutoSyncMode = function(curMode) {
         lng = getValue('lng', 'en'),
         skipConnect = ((curMode)? false : true),
         autoSyncOn = JSON.parse(getValue('config', '{}')).autoSync,
+        origMode = curMode,
         curMode = ((autoSyncOn)? ((curMode)? ((curMode === 'download')? SYNC_MODE = 'upload' : SYNC_MODE = 'download') : SYNC_MODE = 'auto') : SYNC_MODE = 'disabled'),   // determine curMode
         /**
          * Function which shows message on the snackbar
@@ -80,30 +81,15 @@ var toggleAutoSyncMode = function(curMode) {
         if(curMode === 'download') {
             stopWatch();    // stop connection
         } else if((curMode === 'upload' || curMode === 'auto') && !skipConnect) {
-            // re-establish connection, maybe directly in startWatch?!
-            if(typeof bluetooth !== 'undefined') {
-                bluetooth.setInfoState('searching');
-                bluetooth.isEnabled(function(enabled) {
-                    if(enabled) {
-                        // check if connection already established
-                        bluetooth.isConnected(function(connected) {
-                            if(!connected) {
-                                // connect to device
-                                bluetooth.connect(JSON.parse(getValue('config', '{}')).device, function(err, connected) {
-                                    if(!err && connected) {
-                                        showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
-                                        startWatch();
-                                    } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
-                                });
-                            } else {
-                                showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
-                                startWatch();
-                            }
-                        });
-                    } else showMessage(translate('BLUETOOTH_DISABLED', lng)).bluetooth.setInfoState('disabled');
-                });
-            }
+            // re-establish connection
+            if(typeof bluetooth !== 'undefined') bluetooth.establishConnection(JSON.parse(getValue('config', '{}')).device);
         }
+        // apply the mode for default sync mode on re-start
+        if(origMode) setValue('syncMode', origMode);
+        else removeValue('syncMode');
+        // directly call sync request again
+        startSync(JSON.parse(getValue('config', '{}')).autoSync);
+
         showMessage(translate('SYNC_MODE_' + curMode.toUpperCase(), lng));
     }
 };
