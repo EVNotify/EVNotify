@@ -285,7 +285,7 @@ function resetDongle(callback) {
         if(connected) {
             // reset dongle
             bluetooth.sendCommands([
-                'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH0', 'ATSP0', 'ATSTFF', 'ATFE', 'ATBRD45', 'ATBRD23', 'ATBRD11', 'ATBRD08'
+                'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH0', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATBRD45', 'ATBRD23', 'ATBRD11', 'ATBRD08'
             ], function(err, sent) {
                 if(!err) callbackHandler('RESET_SUCCESSFULL');
                 else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');

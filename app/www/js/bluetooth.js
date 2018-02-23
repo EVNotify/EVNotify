@@ -89,19 +89,28 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          */
         sendCommands: function(commands, callback) {
             var self = this,
-                cnt = 0,
-                errors = [];
-
-            if(commands && typeof commands.forEach === 'function' && commands.length) {
-                commands.forEach(function(command) {
-                    self.sendCommand(command, function(err, sent) {
-                        if(err) errors.push(err);   // push error if one happend
-                        if(++cnt === commands.length && typeof callback === 'function') {
+                errors = [],
+                /**
+                 * Sends next command from commands array with delay between and fires callback on last command
+                 * @param  {Number} cnt current offset of commands Array
+                 * @return {void}
+                 */
+                sendNextCommand = function(cnt) {
+                    // send one command
+                    self.sendCommand(commands[cnt], function(err, sent) {
+                        if(err) errors.push(err);   // register error
+                    });
+                    setTimeout(function () {
+                        if(cnt + 1 === commands.length && typeof callback === 'function') {
                             // last command was sent, inform wheter all commands were successfull or if errors occured
                             callback(((errors.length)? errors : null), ((errors.length)? false : true));
-                        }
-                    });
-                });
+                        } else sendNextCommand(++cnt);
+                    }, 500);
+                };
+
+            if(commands && typeof commands.forEach === 'function' && commands.length) {
+                // send commands delayed NOTE Maybe we should wait for OK from OBD instead of timeout..
+                sendNextCommand(0);
             } else if(typeof callback === 'function') callback(null, false);
         },
         /**

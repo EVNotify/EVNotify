@@ -27,10 +27,10 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <engine name="android" spec="~6.3.0" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-bluetooth-serial" spec="~0.4.7" />
     <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
     <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="~4.0.7" />
     <plugin name="cordova-plugin-autostart" spec="~2.0.1" />
+    <engine name="android" spec="~6.3.0" />
 </widget>
