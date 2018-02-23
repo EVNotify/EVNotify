@@ -21,19 +21,22 @@ var startSync = function(interval) {
                     settings.email = syncRes.syncRes.email;
                     settings.telegram = syncRes.syncRes.telegram;
                     settings.soc = syncRes.syncRes.soc;
-                    settings.curSoC = syncRes.syncRes.curSoC;
+                    settings.curSoC = parseInt(syncRes.syncRes.curSoC);
                     settings.polling = syncRes.syncRes.polling;
                     settings.autoSync = syncRes.syncRes.autoSync;
                     settings.lng = syncRes.syncRes.lng;
                     settings.push = syncRes.syncRes.push;
                     // save new settings
                     setValue('config', settings);
+                    setValue('consumption', syncRes.syncRes.consumption);
                     if(settings.lng !== getValue('lng')) translatePage(setValue('lng', settings.lng));
                     if(!settings.autoSync) clearInterval(RUNNING_SYNC);
                     // display the remotly fetched state of charge
-                    if(typeof socCycle !== 'undefined' && settings.curSoC != null) socCycle.animate(((settings.curSoC === 100)? 1 : '0.' + parseInt(settings.curSoC)));
-                    // update charging information // TODO transfer last timestamp from soc
-                    if(typeof updateChargingInfo !== 'undefined') updateChargingInfo(settings.curSoC);
+                    if(typeof socCycle !== 'undefined' && settings.curSoC != null) {
+                        socCycle.animate(((settings.curSoC === 100)? 1 : '0.' + ((settings.curSoC < 10)? '0' + settings.curSoC : settings.curSoC)));
+                    }
+                    // update charging information
+                    if(typeof updateChargingInfo !== 'undefined') updateChargingInfo(settings.curSoC, syncRes.syncRes.lastSoC);
                 } else console.log(err);    // fail silently
             });
         }
