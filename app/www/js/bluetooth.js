@@ -100,12 +100,12 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
                     self.sendCommand(commands[cnt], function(err, sent) {
                         if(err) errors.push(err);   // register error
                     });
-                    setTimeout(function () {
+                    // setTimeout(function () {
                         if(cnt + 1 === commands.length && typeof callback === 'function') {
                             // last command was sent, inform wheter all commands were successfull or if errors occured
                             callback(((errors.length)? errors : null), ((errors.length)? false : true));
                         } else sendNextCommand(++cnt);
-                    }, 500);
+                    // }, 1234);
                 };
 
             if(commands && typeof commands.forEach === 'function' && commands.length) {
