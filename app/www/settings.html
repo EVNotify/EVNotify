@@ -37,6 +37,8 @@
         <script src="./js/user.js"></script>
         <!-- settings JS -->
         <script src="./js/settings.js"></script>
+        <!-- ui JS -->
+        <script src="./js/ui.js"></script>
         <!-- german translation -->
         <script src="./lng/de.js"></script>
         <!-- english translation -->
@@ -52,6 +54,7 @@
             translatePage(getValue('lng', 'en'));
             // update selects
             getmdlSelect.init('.getmdl-select');
+            showVersionInfo();
             document.addEventListener("deviceready", onDeviceReady, false);
         }
 
@@ -124,7 +127,7 @@
                         <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
                     </div>
                 </nav>
-                <p class="navigation-version-info">v.1.2.0</p>
+                <p class="navigation-version-info" id="versionInfo"></p>
             </div>
             <main class="mdl-layout__content">
                 <div class="page-content">

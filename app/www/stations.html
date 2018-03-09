@@ -35,6 +35,8 @@
         <script src="./js/server.js"></script>
         <!-- user JS -->
         <script src="./js/user.js"></script>
+        <!-- ui JS -->
+        <script src="./js/ui.js"></script>
         <!-- stations JS -->
         <script src="./js/stations.js"></script>
         <!-- german translation -->
@@ -49,6 +51,7 @@
          */
         function onLoad() {
             document.addEventListener("deviceready", onDeviceReady, false);
+            showVersionInfo();
             // translate the page
             translatePage(getValue('lng', 'en'));
         }
@@ -102,7 +105,7 @@
                         <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
                     </div>
                 </nav>
-                <p class="navigation-version-info">v.1.2.0</p>
+                <p class="navigation-version-info" id="versionInfo"></p>
             </div>
             <main class="mdl-layout__content">
                 <section class="mdl-layout__tab-panel is-active" id="listView">

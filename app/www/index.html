@@ -56,6 +56,7 @@
          * Function which loads several other functions on page load
          */
         function onLoad() {
+            showVersionInfo();
             document.addEventListener("deviceready", onDeviceReady, false);
             // translate the page
             translatePage(getValue('lng', 'en'));
@@ -93,7 +94,7 @@
             if(!getValue('setupCompleted')) setup(lng);
             else if(!getValue('token')) login(lng);
             else if(config.device && config.car) {
-                bluetooth.establishConnection(config.device);
+                if(getValue('syncMode', SYNC_MODE) !== 'download') bluetooth.establishConnection(config.device);
             } else showMessage(translate('MISSING_CONFIGURATION', lng));
 
             // start sync
@@ -140,7 +141,7 @@
                         <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
                     </div>
                 </nav>
-                <p class="navigation-version-info">v.1.2.0</p>
+                <p class="navigation-version-info" id="versionInfo"></p>
             </div>
             <main class="mdl-layout__content" id="pageContent">
                 <div class="page-content">

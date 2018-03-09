@@ -26,3 +26,13 @@ function darkMode(enable, page) {
         }
     }
 }
+
+/**
+ * Shows version string on sidebar
+ * @return {void}
+ */
+function showVersionInfo() {
+    var versionInfo = document.getElementById('versionInfo');
+
+    if(versionInfo) versionInfo.innerText = 'v.' + VERSION;
+}
