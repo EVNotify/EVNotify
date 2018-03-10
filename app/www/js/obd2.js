@@ -161,7 +161,7 @@ function watchSoC(device, car, soc, interval, errorinterval) {
                             // send command to car in the given interval
                             RUNNING_INTERVAL = setInterval(function () {
                                 // prevent check if on fetch only mode
-                                if(getValue('syncMode', SYNC_MODE) === 'download') return;
+                                if(SYNC_MODE === 'download') return;
                                 /**
                                  * determine and check the last car activity to ensure that
                                  * the car response is good - if there was a charging error or a connection error

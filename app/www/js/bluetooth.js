@@ -171,7 +171,7 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
                                     showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
                                     startWatch();
                                 } else {
-                                    showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
+                                    if(SYNC_MODE !== 'download') showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
                                     // retry after 3 seconds
                                     setTimeout(function () {
                                         self.establishConnection(device);
