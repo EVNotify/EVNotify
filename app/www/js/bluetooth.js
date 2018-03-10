@@ -31,7 +31,7 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
          * and informs whether or not the unsubscribtion was successfull
          * NOTE: the subscribtion has to be done with bluetoothSerial directly
          * because the function declarations must be there
-         * @param  {Function} callback callack function
+         * @param  {Function} callback callback function
          */
         unsubscribe: function(callback) {
             bluetoothSerial.unsubscribeRawData(function() {
@@ -78,6 +78,40 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
             }, function(err) {
                 if(typeof callback === 'function') callback(err, false);
             });
+        },
+        /**
+         * Function which sends given commands to device (obd2 dongle)
+         * NOTE: It uses the sendCommand function for every command
+         * It only fires the callback on last command and returns all errors, which occured, if any
+         * @param  {Array}   commands   the commands to send
+         * @param  {Function} callback  callback function
+         * @return {void}
+         */
+        sendCommands: function(commands, callback) {
+            var self = this,
+                errors = [],
+                /**
+                 * Sends next command from commands array with delay between and fires callback on last command
+                 * @param  {Number} cnt current offset of commands Array
+                 * @return {void}
+                 */
+                sendNextCommand = function(cnt) {
+                    // send one command
+                    self.sendCommand(commands[cnt], function(err, sent) {
+                        if(err) errors.push(err);   // register error
+                    });
+                    // setTimeout(function () {
+                        if(cnt + 1 === commands.length && typeof callback === 'function') {
+                            // last command was sent, inform wheter all commands were successfull or if errors occured
+                            callback(((errors.length)? errors : null), ((errors.length)? false : true));
+                        } else sendNextCommand(++cnt);
+                    // }, 1234);
+                };
+
+            if(commands && typeof commands.forEach === 'function' && commands.length) {
+                // send commands delayed NOTE Maybe we should wait for OK from OBD instead of timeout..
+                sendNextCommand(0);
+            } else if(typeof callback === 'function') callback(null, false);
         },
         /**
          * Function which sets icon to inform user about the connection state
@@ -137,7 +171,7 @@ if(typeof window.cordova !== 'undefined' && typeof window.bluetoothSerial !== 'u
                                     showMessage(translate('BLUETOOTH_CONNECTED', lng)).bluetooth.setInfoState('connected');
                                     startWatch();
                                 } else {
-                                    showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
+                                    if(SYNC_MODE !== 'download') showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng)).bluetooth.setInfoState('failed');
                                     // retry after 3 seconds
                                     setTimeout(function () {
                                         self.establishConnection(device);

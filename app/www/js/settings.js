@@ -88,6 +88,7 @@ function saveSettings() {
             email: document.getElementById('email').value,
             push: false,
             soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
+            consumption: getValue('consumption'),
             deviceObj: {
                 id: document.getElementById('device').getAttribute('data-val'),
                 name: document.getElementById('device').value
@@ -310,6 +311,8 @@ function syncSettings(type, callback) {
                     settings.push = syncRes.syncRes.push;
                     // save new settings
                     setValue('config', settings);
+                    // save consumption
+                    setValue('consumption', syncRes.syncRes.consumption);
                     loadSettings();
                 }
                 callback(err, syncRes);

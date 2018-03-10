@@ -160,6 +160,8 @@ function watchSoC(device, car, soc, interval, errorinterval) {
 
                             // send command to car in the given interval
                             RUNNING_INTERVAL = setInterval(function () {
+                                // prevent check if on fetch only mode
+                                if(SYNC_MODE === 'download') return;
                                 /**
                                  * determine and check the last car activity to ensure that
                                  * the car response is good - if there was a charging error or a connection error
@@ -281,42 +283,14 @@ function resetDongle(callback) {
         else callback(message, false);
     };
 
-    //TODO: beautify this......
     bluetooth.isConnected(function(connected) {
         if(connected) {
             // reset dongle
-            bluetooth.sendCommand('ATD', function(err, sent) {
-                if(!err) {
-                    bluetooth.sendCommand('ATZ', function(err, sent) {
-                        if(!err) {
-                            bluetooth.sendCommand('ATE0', function(err, sent) {
-                                if(!err) {
-                                    bluetooth.sendCommand('ATL0', function(err, sent) {
-                                        if(!err) {
-                                            bluetooth.sendCommand('ATS0', function(err, sent) {
-                                                if(!err) {
-                                                    bluetooth.sendCommand('ATH0', function(err, sent) {
-                                                        if(!err) {
-                                                            bluetooth.sendCommand('ATSP0', function(err, sent) {
-                                                                if(!err) {
-                                                                    bluetooth.sendCommand('ATSTFF', function(err, sent) {
-                                                                        if(!err) {
-                                                                            callbackHandler('RESET_SUCCESSFULL');
-                                                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                                    });
-                                                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                            });
-                                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                                    });
-                                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                            });
-                                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                                    });
-                                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                            });
-                        } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
-                    });
-                } else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
+            bluetooth.sendCommands([
+                'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH0', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATBRD45', 'ATBRD23', 'ATBRD11', 'ATBRD08'
+            ], function(err, sent) {
+                if(!err) callbackHandler('RESET_SUCCESSFULL');
+                else callbackHandler('BLUETOOTH_DATA_SENT_ERROR');
             });
         } else callbackHandler('BLUETOOTH_NOT_CONNECTED');
     });
