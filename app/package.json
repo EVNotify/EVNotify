@@ -11,7 +11,8 @@
       "cordova-plugin-bluetooth-serial": {},
       "cordova-plugin-geolocation": {},
       "uk.co.workingedge.phonegap.plugin.launchnavigator": {},
-      "cordova-plugin-autostart": {}
+      "cordova-plugin-autostart": {},
+      "cordova-plugin-insomnia": {}
     }
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "cordova-plugin-autostart": "~2.0.1",
     "cordova-plugin-bluetooth-serial": "~0.4.7",
     "cordova-plugin-geolocation": "~2.4.3",
+    "cordova-plugin-insomnia": "git+https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "cordova-plugin-whitelist": "1",
     "mocha": "^5.0.0",
     "uk.co.workingedge.phonegap.plugin.launchnavigator": "~4.0.7"

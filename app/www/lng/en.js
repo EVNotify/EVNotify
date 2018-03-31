@@ -147,5 +147,18 @@ en = JSON.parse('{\
     "SYNC_MODE_DISABLED": "Auto-Sync is not enabled.",\
     "SYNC_MODE_AUTO": "Auto-Sync active. Mode: Automatic change",\
     "SYNC_MODE_UPLOAD": "Auto-Sync active. Mode: Send state of charge only",\
-    "SYNC_MODE_DOWNLOAD": "Auto-Sync active. Mode: Receive state of charge only"\
+    "SYNC_MODE_DOWNLOAD": "Auto-Sync active. Mode: Receive state of charge only",\
+    "DEVICE_SETTINGS": "Device settings",\
+    "REMOTE_CONTROL_1": "Remote control",\
+    "REMOTE_CONTROL_1_TEXT": "The remote control allows you to pre-air-condition your IONIQ remotely, turn on the lights and turn on the horn. Get close to your IONIQ with the OBD2 dongle plugged in and Bluetooth enabled. The rest happens automatically.",\
+    "REMOTE_CONTROL_2": "Notice",\
+    "REMOTE_CONTROL_2_TEXT": "Please do not abuse the remote control function to scare people. The multiple, meaningless operation of the horn also constitutes a misdemeanor (§117 OWiG).",\
+    "REMOTE_CONTROL_3": "Preparation",\
+    "REMOTE_CONTROL_3_TEXT": "There are some preparations made to allow a remote control. This process can take up to 1 minute.",\
+    "REMOTE_CONTROL_4": "Connection",\
+    "REMOTE_CONTROL_4_TEXT": "It is about time! Now a communication with the car will be established. Once the connection is successful, the hazard warning lights will momentarily turn on to signal a successful connection.",\
+    "REMOTE_CONTROL_END": "That did not work",\
+    "REMOTE_CONTROL_END_TEXT": "Pity! That didn `t work. A connection could not be established. Please make sure you are within range of the IONIQ, have the OBD2 dongle plugged in and have activated Bluetooth. Please try again soon.",\
+    "REMOTE_CONTROL_END_2": "April, April!",\
+    "REMOTE_CONTROL_END_2_TEXT": "The remote control was just an April Fools joke. Even developers may sometimes allow a fun ;-) Thank you for using EVNotify. That pleases me very much. There is a lot more planned - no remote control, but other cool stuff. If you like my work and would like to help me pay the running costs of EVNotify for servers, domains and so on, feel free to visit \<a href=\\\"https://paypal.me/GPlay97\\\"\>Paypal\<\/a\> to donate. I am happy for every single donation! Remember - I do that because I have fun. Not because I want to earn money. Only running costs are incurred anyway. If I get a part back, I would be very grateful :-)"\
 }');

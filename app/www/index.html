@@ -60,6 +60,8 @@
             document.addEventListener("deviceready", onDeviceReady, false);
             // translate the page
             translatePage(getValue('lng', 'en'));
+            // remote control
+            document.getElementById('remoteIcon').hidden = ((new Date().toISOString().slice(0,10) === '2018-04-01')? false : true);
         }
 
         /**
@@ -114,6 +116,9 @@
                     <span class="mdl-layout-title translate" id="HEADER_OVERVIEW" style="position: absolute; top: 16px"></span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
+                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 112px">
+                        <img class="material-icons" id="remoteIcon" onclick="remoteControl()" src="./icons/remote.svg"></img>
+                    </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 80px">
                         <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
                     </label>

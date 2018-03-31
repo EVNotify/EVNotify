@@ -395,3 +395,27 @@ function verifyEmail(emailInput) {
     }, 500);
   }
 }
+
+/**
+ * Allows settings device specific settings (keepAwake and AutoBoot)
+ */
+function deviceSettings() {
+    var lng = getValue('lng', 'en');
+
+    swal({
+        title: translate('DEVICE_SETTINGS', lng),
+        html: '<input id="keepAwake" type="checkbox">KeepAwake</input><br><input id="AutoBoot" type="checkbox">AutoBoot</input>',
+        preConfirm: function() {
+            var keepAwake = document.getElementById('keepAwake').checked,
+                AutoBoot = document.getElementById('AutoBoot').checked;
+            
+            // handle them locally
+            if(typeof window.cordova !== 'undefined' && cordova.plugins && typeof cordova.plugins.autoStart !== 'undefined' && 
+                window.plugins && typeof window.plugins.insomnia !== 'undefined') {
+                cordova.plugins.autoStart[((AutoBoot)? 'enable' : 'disable')]();
+                window.plugins.insomnia[((keepAwake)? 'keepAwake' : 'allowSleepAgain')]();
+            }
+            return new Promise(function (resolve, reject) { resolve() });
+        }
+    }).catch(function() {});
+}
