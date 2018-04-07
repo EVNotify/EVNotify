@@ -82,7 +82,7 @@ function saveSettings(settingsObj) {
             email: document.getElementById('email').value,
             push: false,
             soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
-            consumption: getValue('consumption'),
+            consumption: getValue('consumption') || 0,
             deviceObj: {
                 id: document.getElementById('device').getAttribute('data-val'),
                 name: document.getElementById('device').value

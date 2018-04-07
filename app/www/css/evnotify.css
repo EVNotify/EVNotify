@@ -6,9 +6,7 @@ svg#socSVG path {
 }
 #socCycleDiv {
     position: relative;
-    display: grid;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     margin-top: 1%;
 }
 #socCycle {
