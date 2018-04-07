@@ -32,6 +32,13 @@ en = JSON.parse('{\
     "FAVORITES": "Favorites",\
     "GENERAL_VIEW": "General",\
     "ACCESS_VIEW": "Access",\
+    "MONDAY": "Monday",\
+    "TUESDAY": "Tuesday",\
+    "WEDNESDAY": "Wednesday",\
+    "THURSDAY": "Thursday",\
+    "FRIDAY": "Friday",\
+    "SATURDAY": "Saturday",\
+    "SUNDAY": "Sunday",\
     "LOG_VIEW": "Log",\
     "MENU_CHARGE": "Charging cycles",\
     "MENU_NOTIFYME": "NotifyMe",\
