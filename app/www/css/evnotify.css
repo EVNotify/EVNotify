@@ -1,12 +1,27 @@
-.socCycle {
-    margin: 0 auto;
-    width: 300px;
-    height: 250px;
-    position: relative;
-    margin-top: 5%;
+svg#socSVG path {
+    will-change: auto;
+    stroke-width: 20px;
+    stroke-miterlimit: round;
+    transition: stroke-dashoffset 850ms ease-in-out;
 }
-.socCycle svg {
-    height: 100%;
+#socCycleDiv {
+    position: relative;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+#socCycle {
+    position: absolute;
+    top: 80px;
+    left: calc(50% - 1em);
+    color: #111;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 2em;
+    font-weight: bold;
+    letter-spacing: -1px;
+    line-height: 1;
+    text-align: center;
 }
 .settingsSection {
     font-size: 1.5em;
@@ -35,6 +50,7 @@
 .connection-info-icon {
     position: absolute;
     right: 10%;
+    top: 2%;
 }
 .mdl-button--icon.consumption-settings-icon {
     position: absolute;
@@ -59,9 +75,13 @@
 }
 .charging-info-list {
     border: 1px solid #ddd;
+    margin: 0;
 }
 .charging-info-list .material-icons.mdl-list__item-icon {
     float: left;
+}
+.charging-info-list #charginginfo_duration {
+    margin-left: 56px;
 }
 .mdl-layout__drawer {
     overflow: hidden;

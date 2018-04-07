@@ -8,7 +8,7 @@ function setValue(key, value) {
 function getValue(key, defaultValue) {
     if(key && typeof key === 'string') {
         var value = window.localStorage.getItem(key);
-        if(value) return value;
+        if(value) return ((!isNaN(parseFloat(value)) && isFinite(value))? parseFloat(value) : value);
         else if (defaultValue) return defaultValue;
         else return "";
     }

@@ -4,7 +4,7 @@
 function startWatch() {
     var config = JSON.parse(getValue('config', '{}'));
 
-    watchSoC(config.device, config.car, config.soc, config.polling, config.errorDetection);
+    watchSoC(config.device, config.car, config.soc, config.errorDetection);
 }
 
 /**
@@ -51,7 +51,6 @@ function standBy() {
                 // dark mode
                 darkMode(true, 'index');
                 // reset values
-                socCycle.animate(0);
                 updateChargingInfo(0);
             } else showMessage(translate('STANDBY_MODE_FAILED', getValue('lng', 'en')));
         });
@@ -87,10 +86,9 @@ function toggleDebug() {
  * @param  {String} device      the device uuid/adress of the OBD2-Dongle
  * @param  {String} car         the car (EVNotify will support more cars soon)
  * @param  {Number} soc         the soc value on which the user should be notified
- * @param  {Number} interval    the given interval to check for new soc
  * @param  {Number} errorinterval   the given interal to check for charging errors / interrupts to notify user
  */
-function watchSoC(device, car, soc, interval, errorinterval) {
+function watchSoC(device, car, soc, errorinterval) {
     /**
      * Function which shows message on the snackbar
      * @param  {String} text The text to show
@@ -137,9 +135,7 @@ function watchSoC(device, car, soc, interval, errorinterval) {
                                         LAST_CAR_ACTIVITY = new Date().getTime() / 1000;
                                         // save soc locally
                                         setValue('lastSoC', converted);
-                                        // animate the soc in the cycle
-                                        socCycle.animate(((converted === 100)? 1 : '0.' + ((converted < 10)? '0' + converted : converted)));
-                                        // update charging information list
+                                        // animate the soc in the cycle and update charging information list
                                         updateChargingInfo(converted);
                                         // check if the desired soc value was achieved
                                         if(converted >= soc && !NOTIFICATION_SENT) {
@@ -201,7 +197,7 @@ function watchSoC(device, car, soc, interval, errorinterval) {
                                         });
                                     }
                                 });
-                            }, ((interval)? interval : 60) * 1000);
+                            }, 2000);
                         } else showMessage(translate(err), lng);
                     });
                 } else showMessage(translate('BLUETOOTH_NOT_CONNECTED', lng));
@@ -297,8 +293,8 @@ function resetDongle(callback) {
 }
 
 /**
- * Function which updates charging information based on given state of charge (and timestamp)
- * NOTE: updates timestamp, range and duration
+ * Function which updates charging information based on given state of charge (and timestamp) and animates state of charge within progress bar
+ * NOTE: updates timestamp, range and duration and animates state of charge
  * @param  {Number} soc        the state of charge
  * @param  {Number} timestamp  optional given timestamp (in UNIX time)
  * @return {void}
@@ -307,6 +303,7 @@ function updateChargingInfo(soc, timestamp) {
     var timestampWidget = document.getElementById('charginginfo_timestamp'),
         rangeWidget = document.getElementById('charginginfo_range'),
         durationWidget = document.getElementById('charginginfo_duration'),
+        socCycle = document.getElementById('socCycle'),
         /**
          * Function which formats given date to specific DD.MM.YYYY hh:mm format
          * @param  {Date} date  the date to format
@@ -315,18 +312,24 @@ function updateChargingInfo(soc, timestamp) {
         formatDate = function(date) {
             if(!(date instanceof Date)) return '?';
             var hours = date.getHours(),
-                minutes = date.getMinutes();
+                minutes = date.getMinutes(),
+                day = date.getDate(),
+                month = date.getMonth() + 1;
 
             minutes = ((minutes < 10)? '0' + minutes : minutes); // correct low values
+            hours = ((hours < 10)? '0' + hours : hours); // correct low values
+            day = ((day < 10)? '0' + day : day); // correct low values
+            month = ((month < 10)? '0' + month : month); // correct low values
 
-            return date.getDate() + '.' + parseInt(date.getMonth() + 1) + '.' + date.getFullYear() + ' ' + hours + ':' + minutes;
+            return day + '.' + month + '.' + date.getFullYear() + ' ' + hours + ':' + minutes;
         };
 
     // update information
-    if(timestampWidget && rangeWidget && durationWidget) {
+    if(timestampWidget && rangeWidget && durationWidget && socCycle) {
         timestampWidget.innerText = formatDate(((timestamp)? new Date(timestamp * 1000) : new Date()));
         rangeWidget.innerText = calculateEstimatedRange(soc);
-        durationWidget.innerText = calculateEstimatedDuration(soc);
+        durationWidget.innerHTML = calculateEstimatedDuration(soc);
+        socCycle.setSoC(soc);
     }
 }
 
@@ -336,7 +339,7 @@ function updateChargingInfo(soc, timestamp) {
  * @return {String}         formatted string for estimated range
  */
 function calculateEstimatedRange(soc) {
-    if(typeof soc !== 'number') return '?';
+    if(typeof soc !== 'number' || isNaN(soc)) return '?';
     // TODO calulcation based on car
     if(soc < 10) soc = '0' + soc.toString();    // correct low values
     return parseInt((28 / getValue('consumption', 13)) * 100 * ((soc === 100)? 1 : '0.' + soc)) + 'km / ' + // current
@@ -350,7 +353,32 @@ function calculateEstimatedRange(soc) {
  * @return {String}         formatted string for estimated range
  */
 function calculateEstimatedDuration(soc) {
+    var amountToCharge,
+        /**
+         * Converts the decimal time into hh:mm format (e.g.: 0.5h will be converted to 00:30h)
+         * @param {Number} time the time to convert
+         * @returns {String} the formatted time string
+         */
+        convertDecimalTime = function(time) {
+            var sign = time < 0 ? '-' : '',
+                min = Math.floor(Math.abs(time)),
+                sec = Math.floor((Math.abs(time) * 60) % 60);
+                
+            return sign + (min < 10 ? '0' : '') + min + ':' + (sec < 10 ? '0' : '') + sec;
+        };
+
+    if(typeof soc !== 'number' || isNaN(soc)) return '?';
     // TODO based on car and charging speed
-    return '?'; // TODO
+    if(soc < 10) soc = '0' + soc.toString();    // correct low values
+    /**
+     * currently based on 28kWh battery
+     * slow: AC 2.3kW
+     * normal: AC 4.6kW
+     * fast: DC 50kW
+    */
+    amountToCharge = 28 - parseFloat(28 * ((soc === 100)? 1 : '0.' + soc)).toFixed(2) || 0;
+    return convertDecimalTime(parseFloat((amountToCharge / 2.3).toFixed(2))) + 'h (' + translate('SLOW_CHARGING', getValue('lng', 'en')) + ')<br>' +
+        convertDecimalTime(parseFloat((amountToCharge / 4.6).toFixed(2))) + 'h (' + translate('NORMAL_CHARGING', getValue('lng', 'en')) + ')<br>' +
+        convertDecimalTime(parseFloat((amountToCharge / 50).toFixed(2))) + 'h (' + translate('FAST_CHARGING', getValue('lng', 'en')) + ')';
     // TODO automate this later..
 }

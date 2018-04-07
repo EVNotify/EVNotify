@@ -116,7 +116,6 @@ de = JSON.parse('{\
     "SETTINGS_SOC_HELP": "Der gewünschte Ladezustand, bei dem die Benachrichtigungen verschickt werden sollen.",\
     "SETTINGS_SYSTEM": "System",\
     "SETTINGS_DEVICES": "Bluetooth-Gerät",\
-    "SETTINGS_POLLING": "Abfrage-Intervall",\
     "SETTINGS_SYNC": "Automatische Synchronisierung",\
     "SETTINGS_CHARGINGERROR_DETECTION": "Ladeabbruchs-Erkennung",\
     "INTERVAL_0": "deaktiviert",\
@@ -132,7 +131,6 @@ de = JSON.parse('{\
     "INTERVAL_600": "alle 10 Minuten",\
     "INTERVAL_1800": "jede halbe Stunde",\
     "INTERVAL_3600": "jede Stunde",\
-    "POLLING_WARNING": "Kurze Abfrage-Intervalle führen zu erhöhtem Akkuverbrauch, haben dafür aber eine bessere Genauigkeit.",\
     "SYNC_WARNING": "Kurze Synchronisierungs-Intervalle führen zu erhöhtem Datenverbrauch.",\
     "CHARGINGERROR_WARNING": "Kurze Fehlerkennungs-Intervalle können eventuell zu Falschmeldungen führen, informieren dafür aber am schnellsten über einen eventuellen Ladeabbruch.",\
     "SWITCH_ACCOUNT": "Account wechseln",\
@@ -150,16 +148,7 @@ de = JSON.parse('{\
     "SYNC_MODE_UPLOAD": "Auto-Sync aktiv. Modus: Nur Ladezustand senden",\
     "SYNC_MODE_DOWNLOAD": "Auto-Sync aktiv. Modus: Nur Ladezustand empfangen",\
     "DEVICE_SETTINGS": "Geräte-Einstellungen",\
-    "REMOTE_CONTROL_1": "Fernsteuerung",\
-    "REMOTE_CONTROL_1_TEXT": "Die Fernsteuerung erlaubt es Dir, Deinen IONIQ aus der Ferne vorzuklimatisieren, das Licht einzuschalten und die Hupe zu betätigen. Begib Dich in die Nähe Deines IONIQs bei eingestecktem OBD2-Dongle und aktiviertem Bluetooth. Der Rest geschieht automatisch.",\
-    "REMOTE_CONTROL_2": "Hinweis",\
-    "REMOTE_CONTROL_2_TEXT": "Bitte missbrauche die Fernsteuerungs-Funktion nicht, um Leute zu erschrecken. Das mehrfache, sinnlose Betätigen der Hupe stellt außerdem eine Ordnungswidrigkeit dar (§117 OWiG).",\
-    "REMOTE_CONTROL_3": "Vorbereitung",\
-    "REMOTE_CONTROL_3_TEXT": "Es werden einige Vorbereitungen getroffen, um eine Fernsteuerung zu ermöglichen. Dieser Prozess kann bis zu 1 Minute dauern.",\
-    "REMOTE_CONTROL_4": "Verbindungsaufbau",\
-    "REMOTE_CONTROL_4_TEXT": "Gleich ist es soweit! Es wird nun mit dem Auto kommuniziert. Sobald die Verbindung erfolgreich war, gehen kurzzeitig die Warnblinker an, um eine erfolgreiche Verbindung zu signalisieren.",\
-    "REMOTE_CONTROL_END": "Das hat nicht geklappt",\
-    "REMOTE_CONTROL_END_TEXT": "Schade! Das hat nicht geklappt. Eine Verbindung konnte nicht hergestellt werden. Bitte stell sicher, dass Du in Reichweite des IONIQs bist, den OBD2 Dongle gesteckt hast und Bluetooth aktiviert hast. Versuche es in Kürze erneut.",\
-    "REMOTE_CONTROL_END_2": "April, April!",\
-    "REMOTE_CONTROL_END_2_TEXT": "Die Fernsteuerung war nur ein Aprilscherz. Auch Entwickler dürfen sich manchmal einen Spaß erlauben ;-) Danke, dass Du EVNotify nutzt. Das freut mich sehr. Es ist noch viel geplant - keine Fernsteuerung, aber andere, coole Sachen. Wenn Dir meine Arbeit gefällt und Du mir dabei helfen möchtest, die laufenden Kosten von EVNotify zu zahlen, die für Server, Domains und Co. anfallen, kannst Du gerne auf \<a href=\\\"https://paypal.me/GPlay97\\\"\>Paypal\<\/a\> spenden. Ich freue mich über jede noch so kleine Spende! Denkt dran - ich mache das, weil ich Spaß habe. Nicht weil ich Geld verdienen will. Nur laufende Kosten fallen halt trotzdem an. Wenn ich einen Teil zurückbekomme, wäre ich sehr dankbar :-)"\
+    "SLOW_CHARGING": "langsam",\
+    "NORMAL_CHARGING": "normal",\
+    "FAST_CHARGING": "schnell"\
 }');
