@@ -43,6 +43,8 @@
         <script src="./js/user.js"></script>
         <!-- sync JS -->
         <script src="./js/sync.js"></script>
+        <!-- settings JS -->
+        <script src="./js/settings.js"></script>
         <!-- ui JS -->
         <script src="./js/ui.js"></script>
         <!-- german translation -->
@@ -60,8 +62,6 @@
             document.addEventListener("deviceready", onDeviceReady, false);
             // translate the page
             translatePage(getValue('lng', 'en'));
-            // remote control
-            document.getElementById('remoteIcon').hidden = ((new Date().toISOString().slice(0,10) === '2018-04-01')? false : true);
         }
 
         /**
@@ -116,9 +116,6 @@
                     <span class="mdl-layout-title translate" id="HEADER_OVERVIEW" style="position: absolute; top: 16px"></span>
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 112px">
-                        <img class="material-icons" id="remoteIcon" onclick="remoteControl()" src="./icons/remote.svg"></img>
-                    </label>
                     <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 80px">
                         <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
                     </label>
@@ -154,7 +151,13 @@
                         <img class="material-icons" id="connectionInfo" src="./icons/bluetooth_searching.svg"></img>
                     </label>
                     <!-- State of Charge cycle -->
-                    <div id="socCycle" class="socCycle"></div>
+                    <div id="socCycleDiv">
+                        <svg id="socSVG" xmlns="http://www.w3.org/2000/svg" height="200" width="200" viewBox="0 0 200 200" data-value="40">
+                            <path class="bg" stroke="#ccc" d="M41 149.5a77 77 0 1 1 117.93 0"  fill="none"/>
+                            <path class="meter" stroke="#09c" d="M41 149.5a77 77 0 1 1 117.93 0" fill="none" stroke-dasharray="350" stroke-dashoffset="350"/>
+                        </svg>
+                        <div id="socCycle">0%</div>
+                    </div>                      
                     <!-- Charging information  -->
                     <ul class="charging-info-list mdl-list">
                         <label class="mdl-button--icon consumption-settings-icon">
@@ -191,27 +194,15 @@
         </div>
     </body>
     <script type="text/javascript">
-    socCycle = new ProgressBar.Circle('#socCycle', {
-        color: '#3f51b5',
-        strokeWidth: 4,
-        trailWidth: 1,
-        easing: 'easeInOut',
-        duration: 1234,
-        text: { autoStyleContainer: false },
-        from: { color: '#FA5858', width: 1 },
-        to: { color: '#3ADF00', width: 4 },
-        value: 23,
-        step: function(state, circle) {
-            circle.path.setAttribute('stroke', state.color);
-            circle.path.setAttribute('stroke-width', state.width);
+    // setSoC function on socCycle to apply and animate given state of charge value on progress bar
+    document.getElementById('socCycle').setSoC = function(soc) {
+        var path = document.querySelector('svg#socSVG[data-value] .meter');
 
-            var value = Math.round(circle.value() * 100);
-
-            circle.setText(value + '%');
+        if(path instanceof Node) {
+            path.getBoundingClientRect();   // safari browser workaround
+            path.style.strokeDashoffset = Math.max(0, (path.getTotalLength() * ((100 - parseInt(soc || 0)) / 100)));
+            document.getElementById('socCycle').innerText = parseInt(soc || 0) + '%';
         }
-    });
-
-    socCycle.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-    socCycle.text.style.fontSize = '2rem';
+    };
     </script>
 </html>

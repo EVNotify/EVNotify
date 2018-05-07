@@ -173,7 +173,8 @@ function buildStationRow(stationObj) {
  * @return {Integer}    the extracted id
  */
 function getStationIDFromURL() {
-    return parseInt(decodeURIComponent((new RegExp('[?|&]id=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null);
+    try {return parseInt(decodeURIComponent((new RegExp('[?|&]id=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null) || 0;
+    } catch(e) {return 0;}
 }
 
 /**
@@ -332,8 +333,8 @@ function buildStationPages(stationObj, lng) {
                 var retval = '';
 
                 if(costObj instanceof Object) {
-                    retval += '<li>' + translate('STATION_FREE_CHARGING', lng) + ': ' + translate(((stationObj.freecharging)?  'YES' : 'NO'), lng) + '</li>';
-                    retval += '<li>' + translate('STATION_FREE_PARKING', lng) + ': ' + translate(((stationObj.freeparking)?  'YES' : 'NO'), lng) + '</li>';
+                    retval += '<li>' + translate('STATION_FREE_CHARGING', lng) + ': ' + translate(((costObj.freecharging)?  'YES' : 'NO'), lng) + '</li>';
+                    retval += '<li>' + translate('STATION_FREE_PARKING', lng) + ': ' + translate(((costObj.freeparking)?  'YES' : 'NO'), lng) + '</li>';
                     if(costObj.description_short) retval += '<li>' + costObj.description_short + '</li>';
                     if(costObj.description_long) retval += '<li>' + costObj.description_long + '</li>';
                 }

@@ -294,80 +294,11 @@ function consumption() {
             step: 0.1
         },
         inputValue: getValue('consumption', 13)
-    }, function() {
-        console.log(arguments);
-    }).catch(function() {});
-}
+    }).then(function() {
+        var settingsObj = JSON.parse(getValue('config', '{}'));
 
-/**
- * Function to remotely control the car
- */
-function remoteControl() {
-    var lng = getValue('lng', 'en');
-
-    swal.setDefaults({
-        confirmButtonText: translate('NEXT', lng),
-        cancelButtonText: translate('CANCEL', lng),
-        showCancelButton: true,
-        allowOutsideClick: false,
-        progressSteps: ['1', '2', '3', '4']
-    });
-
-    var steps = [
-        {
-            title: translate('REMOTE_CONTROL_1', lng),
-            type: 'info',
-            text: translate('REMOTE_CONTROL_1_TEXT', lng)
-        },
-        {
-            title: translate('REMOTE_CONTROL_2', lng),
-            type: 'warning',
-            text: translate('REMOTE_CONTROL_2_TEXT', lng)
-        },
-        {
-            title: translate('REMOTE_CONTROL_3', lng),
-            text: translate('REMOTE_CONTROL_3_TEXT', lng),
-            showLoaderOnConfirm: true,
-            preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    setTimeout(function() {
-                        resolve();
-                    }, 6789)
-                });
-            }
-        },
-        {
-            title: translate('REMOTE_CONTROL_4', lng),
-            text: translate('REMOTE_CONTROL_4_TEXT', lng),
-            showLoaderOnConfirm: true,
-            preConfirm: function () {
-                return new Promise(function (resolve, reject) {
-                    setTimeout(function() {
-                        resolve();
-                    }, 4567)
-                });
-            }
-        }
-    ];
-
-    swal.queue(steps).then(function (result) {
-        swal.resetDefaults()
-        swal({
-            title: translate('REMOTE_CONTROL_END', lng),
-            text: translate('REMOTE_CONTROL_END_TEXT', lng),
-            confirmButtonText: 'OK',
-            type: 'error',
-            showCancelButton: false
-        }).then(function() {
-            swal({
-                title: translate('REMOTE_CONTROL_END_2', lng),
-                html: translate('REMOTE_CONTROL_END_2_TEXT', lng),
-                confirmButtonText: 'OK',
-                type: 'info',
-                showCancelButton: false
-            }).catch(function() {});
-        }).catch(function() {});
-    }, function () {
-        swal.resetDefaults()
+        settingsObj.consumption = getValue('consumption', 13);
+        // save settings with whole settings
+        saveSettings(settingsObj);
     }).catch(function() {});
 }

@@ -15,8 +15,6 @@ function loadSettings() {
         notifySlider = document.getElementById('notifySlider'),
         device = document.getElementById('device'),
         deviceDiv = document.getElementById('deviceDiv'),
-        polling = document.getElementById('polling'),
-        pollingDiv = document.getElementById('pollingDiv'),
         sync = document.getElementById('sync'),
         syncDiv = document.getElementById('syncDiv'),
         errorDetection = document.getElementById('chargingerror'),
@@ -40,11 +38,6 @@ function loadSettings() {
         deviceDiv.className += ' is-dirty is-focused';
         device.value = config.deviceObj.name;
         device.setAttribute('data-val', config.deviceObj.id);
-    }
-    if(config.pollingObj) {
-        pollingDiv.className += ' is-dirty is-focused';
-        polling.value = config.pollingObj.title;
-        polling.setAttribute('data-val', config.pollingObj.val);
     }
     if(config.syncObj) {
         syncDiv.className += ' is-dirty is-focused';
@@ -73,11 +66,12 @@ function loadSettings() {
 /**
  * Function which saves the settings and sends the new settings to backend server
  * NOTE: Requires the users account password to authenticate to prevent abuse
+ * @param  {Object} [settingsObj]   optional given settings object - if given, this will be used to save, otherwise settings from settings page will be used
  */
-function saveSettings() {
-    var lngVal = document.getElementById('language').getAttribute('data-val'),
+function saveSettings(settingsObj) {
+    var lngVal = ((settingsObj)? false : document.getElementById('language').getAttribute('data-val')),
         lng = setValue('lng', ((lngVal && lngVal !== 'null')? lngVal : getValue('lng', 'en'))),
-        settingsObj = setValue('config', {
+        settingsObj = settingsObj || setValue('config', {
             lngObj: {
                 lng: lng,
                 name: document.getElementById('language').value
@@ -88,17 +82,12 @@ function saveSettings() {
             email: document.getElementById('email').value,
             push: false,
             soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
-            consumption: getValue('consumption'),
+            consumption: getValue('consumption') || 0,
             deviceObj: {
                 id: document.getElementById('device').getAttribute('data-val'),
                 name: document.getElementById('device').value
             },
             device: document.getElementById('device').getAttribute('data-val'),
-            pollingObj: {
-                val: parseInt(document.getElementById('polling').getAttribute('data-val')),
-                title: document.getElementById('polling').value
-            },
-            polling: parseInt(document.getElementById('polling').getAttribute('data-val')),
             syncObj: {
                 val: parseInt(document.getElementById('sync').getAttribute('data-val')),
                 title: document.getElementById('sync').value
@@ -305,7 +294,6 @@ function syncSettings(type, callback) {
                     settings.telegram = syncRes.syncRes.telegram;
                     settings.soc = syncRes.syncRes.soc;
                     settings.curSoC = syncRes.syncRes.curSoC;
-                    settings.polling = syncRes.syncRes.polling;
                     settings.autoSync = syncRes.syncRes.autoSync;
                     settings.lng = syncRes.syncRes.lng;
                     settings.push = syncRes.syncRes.push;
@@ -404,7 +392,7 @@ function deviceSettings() {
 
     swal({
         title: translate('DEVICE_SETTINGS', lng),
-        html: '<input id="keepAwake" type="checkbox">KeepAwake</input><br><input id="AutoBoot" type="checkbox">AutoBoot</input>',
+        html: '<input id="keepAwake" type="checkbox" ' + ((getValue('keepAwake'))? 'checked' : '') + '>KeepAwake</input><br><input id="AutoBoot" type="checkbox" ' + ((getValue('autoBoot'))? 'checked' : '') + '>AutoBoot</input>',
         preConfirm: function() {
             var keepAwake = document.getElementById('keepAwake').checked,
                 AutoBoot = document.getElementById('AutoBoot').checked;
@@ -415,6 +403,9 @@ function deviceSettings() {
                 cordova.plugins.autoStart[((AutoBoot)? 'enable' : 'disable')]();
                 window.plugins.insomnia[((keepAwake)? 'keepAwake' : 'allowSleepAgain')]();
             }
+            // save value locally (seperated from config)
+            setValue('autoBoot', AutoBoot);
+            setValue('keepAwake', keepAwake);
             return new Promise(function (resolve, reject) { resolve() });
         }
     }).catch(function() {});
