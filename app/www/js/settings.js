@@ -392,7 +392,7 @@ function deviceSettings() {
 
     swal({
         title: translate('DEVICE_SETTINGS', lng),
-        html: '<input id="keepAwake" type="checkbox">KeepAwake</input><br><input id="AutoBoot" type="checkbox">AutoBoot</input>',
+        html: '<input id="keepAwake" type="checkbox" ' + ((getValue('keepAwake'))? 'checked' : '') + '>KeepAwake</input><br><input id="AutoBoot" type="checkbox" ' + ((getValue('autoBoot'))? 'checked' : '') + '>AutoBoot</input>',
         preConfirm: function() {
             var keepAwake = document.getElementById('keepAwake').checked,
                 AutoBoot = document.getElementById('AutoBoot').checked;
@@ -403,6 +403,9 @@ function deviceSettings() {
                 cordova.plugins.autoStart[((AutoBoot)? 'enable' : 'disable')]();
                 window.plugins.insomnia[((keepAwake)? 'keepAwake' : 'allowSleepAgain')]();
             }
+            // save value locally (seperated from config)
+            setValue('autoBoot', AutoBoot);
+            setValue('keepAwake', keepAwake);
             return new Promise(function (resolve, reject) { resolve() });
         }
     }).catch(function() {});
