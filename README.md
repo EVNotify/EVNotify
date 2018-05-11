@@ -48,3 +48,6 @@ The App of EVNotify as well as the Backend has an integrated mechanism to track 
 
 ### Need help?
 Have a look at the Wiki here for EVNotify.
+
+### Additional notes
+The use of the software is at your own risk. I am not liable for damage caused by improper use or cheap, fake OBD2 dongle.
