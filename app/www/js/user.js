@@ -33,7 +33,7 @@ function setup(lng) {
         var steps = [
             {
                 title: translate('WELCOME', lng),
-                text: translate('WELCOME_TEXT', lng),
+                html: translate('WELCOME_TEXT', lng),
                 input: 'select',
                 inputOptions: {register: translate('LOGIN_TYPE_REGISTER', lng), login: translate('LOGIN_TYPE_LOGIN', lng)},
                 preConfirm: function (loginType) {
@@ -300,5 +300,18 @@ function consumption() {
         settingsObj.consumption = getValue('consumption', 13);
         // save settings with whole settings
         saveSettings(settingsObj);
+    }).catch(function() {});
+}
+
+/**
+ * Just some alert to inform user about risk..
+ */
+function ownRisk() {
+    swal({
+        title: translate('OWN_RISK', getValue('lng', 'en')),
+        html: translate('OWN_RISK_TEXT', getValue('lng', 'en')),
+        type: 'warning'
+    }).then(function() {
+        setValue('ownRiskAccepted', true);  
     }).catch(function() {});
 }

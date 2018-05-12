@@ -54,7 +54,10 @@ en = JSON.parse('{\
     "WELCOME": "Welcome to EVNotify",\
     "WELCOME_TEXT": "Before you can be notified, you first have to create an account.\
     It is required to manage your notifications. Ensure that you have an active internet and bluetooth connection.\
-    The app also requires to have a OBD2-Dongle. Please turn bluetooth on every time you use EVNotify.",\
+    The app also requires to have a OBD2-Dongle. Please turn bluetooth on every time you use EVNotify.<br>\
+    \<a href=\\\"https://github.com/GPlay97/EVNotify/blob/master/LICENSE.MD\\\"\>License information</a><br>\
+    \<a href=\\\"https://evnotify.de/privacy.html\\\"\>Privacy</a><br>\
+    <b>By clicking on Next I accept the license information and agree to the linked conditions.</b>",\
     "LOGIN_TYPE_LOGIN": "Use existing account",\
     "LOGIN_TYPE_REGISTER": "Create new account",\
     "REGISTER": "Create account",\
@@ -83,6 +86,8 @@ en = JSON.parse('{\
     "PASSWORD_MISMATCH": "The passwords do not match.",\
     "CHANGE_PASSWORD_FAILED": "Password change failed.",\
     "CHANGE_PASSWORD_SUCCESSFUL": "Password successfully changed.",\
+    "OWN_RISK": "Use at your own risk",\
+    "OWN_RISK_TEXT": "I am not liable for damages resulting from improper use or the use of a counterfeit OBD2 dongle. With the usage of EVNotify you agree to this.",\
     "CHARGING_STATE": "State of charge ",\
     "NOTIFICATION_SENT_ERROR": "An error occured trying to sent the notifications.",\
     "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
