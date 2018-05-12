@@ -9,3 +9,6 @@ but you aren't allowed to use any of the code (even modified code) for commercia
 > NonCommercial means not primarily intended for or directed towards commercial advantage or monetary compensation.
 
 Forks of (partial) code which won't be used for Pull Requests, must be declared with a mention and credit to this repository. Forks are only tolerated for non-commercial use.
+
+
+The use of the software is at your own risk. I am not liable for damage caused by improper use or cheap, fake OBD2 dongle.
