@@ -1,6 +1,6 @@
 EVNotify is licensed under the **Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.
 
-For further information please visit https://creativecommons.org/licenses/by-nc/4.0/deed.de for the human readable version or https://creativecommons.org/licenses/by-nc/4.0/legalcode for the full legal code.
+For further information please visit https://creativecommons.org/licenses/by-nc/4.0/deed.en for the human readable version or https://creativecommons.org/licenses/by-nc/4.0/legalcode for the full legal code.
 
 ### Additional license information and rules
 Feel free to contribute and improve this repository and submit your changes via Pull Requests without any restrictions. 
