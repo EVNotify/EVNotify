@@ -1,3 +1,9 @@
+.page-content {
+    width: 100%;
+}
+svg#socSVG {
+    position: relative;
+}
 svg#socSVG path {
     will-change: auto;
     stroke-width: 20px;
@@ -8,11 +14,12 @@ svg#socSVG path {
     position: relative;
     text-align: center;
     margin-top: 1%;
+    width: 100%;
 }
 #socCycle {
     position: absolute;
     top: 80px;
-    left: calc(50% - 1em);
+    left: 48%;
     color: #111;
     font-family: 'Helvetica Neue', sans-serif;
     font-size: 2em;

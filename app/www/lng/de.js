@@ -55,7 +55,10 @@ de = JSON.parse('{\
     "WELCOME_TEXT": "Bevor Du Dich allerdings über den Ladezustand Deines Elektroautos benachrichtigen lassen kannst,\
     muss zunächst ein Account erstellt werden. Dieser dient zur Verwaltung der Benachrichtigungen.\
     Stelle sicher, dass Du über eine aktive Internet- sowie Bluetooth-Verbindung verfügst.\
-    Die App benötigt zudem einen entsprechenden OBD2-Dongle. Schalte das Bluetooth bei der Nutzung von EVNotify immer ein.",\
+    Die App benötigt zudem einen entsprechenden OBD2-Dongle. Schalte das Bluetooth bei der Nutzung von EVNotify immer ein.<br>\
+    \<a href=\\\"https://github.com/GPlay97/EVNotify/blob/master/LICENSE.MD\\\"\>Lizenz-Informationen</a><br>\
+    \<a href=\\\"https://evnotify.de/datenschutz.html\\\"\>Datenschutz</a><br>\
+    <b>Mit einem Klick auf Weiter akzeptiere ich die Lizenz-Informationen und erkläre mich mit den verlinkten Bedingungen einverstanden.</b>",\
     "LOGIN_TYPE_LOGIN": "Bestehenden Account benutzen",\
     "LOGIN_TYPE_REGISTER": "Neuen Account erstellen",\
     "REGISTER": "Account erstellen",\
@@ -84,6 +87,8 @@ de = JSON.parse('{\
     "PASSWORD_MISMATCH": "Die Passwörter stimmen nicht überein.",\
     "CHANGE_PASSWORD_FAILED": "Fehler beim Ändern des Passworts aufgetreten.",\
     "CHANGE_PASSWORD_SUCCESSFUL": "Das Passwort wurde erfolgreich geändert.",\
+    "OWN_RISK": "Benutzung auf eigene Gefahr",\
+    "OWN_RISK_TEXT": "Ich hafte nicht für Schäden, die durch unsachgemäße Nutzung oder durch Verwendung gefälschter OBD2-Dongle entsteht. Mit der Nutzung von EVNotify erklärst Du Dich damit einverstanden.",\
     "CHARGING_STATE": "Ladezustand ",\
     "NOTIFICATION_SENT_ERROR": "Fehler beim Senden der Benachrichtigungen aufgetreten.",\
     "BLUETOOTH_DATA_SENT_ERROR": "Fehler beim Senden der Daten per Bluetooth aufgetreten.",\

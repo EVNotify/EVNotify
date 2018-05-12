@@ -62,6 +62,8 @@
             document.addEventListener("deviceready", onDeviceReady, false);
             // translate the page
             translatePage(getValue('lng', 'en'));
+            // show own risk message if user not prompted so far
+            if(!getValue('ownRiskAccepted')) ownRisk();
         }
 
         /**
