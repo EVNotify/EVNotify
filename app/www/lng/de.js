@@ -88,7 +88,7 @@ de = JSON.parse('{\
     "CHANGE_PASSWORD_FAILED": "Fehler beim Ändern des Passworts aufgetreten.",\
     "CHANGE_PASSWORD_SUCCESSFUL": "Das Passwort wurde erfolgreich geändert.",\
     "OWN_RISK": "Benutzung auf eigene Gefahr",\
-    "OWN_RISK_TEXT": "Ich hafte nicht für Schäden, die durch unsachgemäße Nutzung oder durch Verwendung gefälschter OBD2-Dongle entsteht. Mit der Nutzung von EVNotify erklärst Du Dich damit einverstanden.",\
+    "OWN_RISK_TEXT": "Ich hafte nicht für Schäden, die durch unsachgemäße Nutzung oder durch Verwendung gefälschter OBD2-Dongle entsteht. Die längere Benutzung von OBD2-Donglen kann die 12V Batterie unter Umständen gegebenenfalls entleeren. Mit der Nutzung von EVNotify bist Du Dich den Risiken bewusst und erklärst Dich damit einverstanden.",\
     "CHARGING_STATE": "Ladezustand ",\
     "NOTIFICATION_SENT_ERROR": "Fehler beim Senden der Benachrichtigungen aufgetreten.",\
     "BLUETOOTH_DATA_SENT_ERROR": "Fehler beim Senden der Daten per Bluetooth aufgetreten.",\

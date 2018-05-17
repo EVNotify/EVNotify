@@ -311,7 +311,5 @@ function ownRisk() {
         title: translate('OWN_RISK', getValue('lng', 'en')),
         html: translate('OWN_RISK_TEXT', getValue('lng', 'en')),
         type: 'warning'
-    }).then(function() {
-        setValue('ownRiskAccepted', true);  
     }).catch(function() {});
 }
