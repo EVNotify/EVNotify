@@ -116,6 +116,7 @@ en = JSON.parse('{\
     "NOTIFICATIONS": "Notifications",\
     "EMAIL_NOTIFICATION": "Mail-Adress",\
     "PUSH_NOTIFICATION": "Push-Notification",\
+    "DAILY_SUMMARY": "Send daily summary",\
     "TELEGRAM_NOTIFICATION": "Telegram-Notification",\
     "TELEGRAM_MANAGE_NOTIFICATION": "Manage Telegram integration",\
     "TELEGRAM_UNSUBSCRIBE": "Deactivate telegram notifications",\
