@@ -11,6 +11,8 @@ function loadSettings() {
         akeyDiv = document.getElementById('akeyDiv'),
         email = document.getElementById('email'),
         emailDiv = document.getElementById('emailDiv'),
+        summaryLabel = document.getElementById('summaryLabel'),
+        summary = document.getElementById('summary'),
         notifyVal = document.getElementById('notifyVal'),
         notifySlider = document.getElementById('notifySlider'),
         device = document.getElementById('device'),
@@ -58,6 +60,10 @@ function loadSettings() {
     if(parseInt(getValue('telegram'), 0) > 0) {
         document.getElementById('telegramCheckbox').className += ' is-upgraded is-checked';
     }
+    if(config.summary) {
+        summary.checked = true;
+        summaryLabel.className += ' is-checked';
+    }
 
     verifyEmail(email);
     translatePage(getValue('lng', 'en'));
@@ -81,6 +87,7 @@ function saveSettings(settingsObj) {
             telegram: getValue('telegram'),
             email: document.getElementById('email').value,
             push: false,
+            summary: document.getElementById('summary').checked,
             soc: parseInt(document.getElementById('notifyVal').innerText.split(' ')[0]),
             consumption: getValue('consumption') || 0,
             deviceObj: {
