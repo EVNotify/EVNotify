@@ -62,8 +62,8 @@
             document.addEventListener("deviceready", onDeviceReady, false);
             // translate the page
             translatePage(getValue('lng', 'en'));
-            // show own risk message if setup was completed
-            if(getValue('setupCompleted')) ownRisk();
+            // show own risk message once if setup was completed
+            if(getValue('setupCompleted') && !getValue('ownRiskAccepted')) ownRisk();
         }
 
         /**

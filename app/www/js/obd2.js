@@ -128,9 +128,10 @@ function watchSoC(device, car, soc, errorinterval) {
                                     // parse and round to integer
                                     converted = parseInt(converted);
                                     if(converted >= 0 && converted <= 100) {
-                                        // reset block data and raw data again
+                                        // reset block data and raw data as well as retries again
                                         BLOCKDATA = '';
                                         RAWDATA = '';
+                                        MAX_RETRIES = 3333;
                                         // set last successfull car response to current time
                                         LAST_CAR_ACTIVITY = new Date().getTime() / 1000;
                                         // save soc locally
@@ -145,7 +146,7 @@ function watchSoC(device, car, soc, errorinterval) {
                                                 else NOTIFICATION_SENT = true;
                                             });
                                         }
-                                    }
+                                    } else if(LAST_CAR_ACTIVITY && --MAX_RETRIES <= 0) standBy(); // too many errors - standby to prevent 12V drain
                                 });
                             });
 
