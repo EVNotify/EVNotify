@@ -1,210 +1,36 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>EVNotify</title>
-        <meta charset="utf-8"></meta>
-    	<!-- Client Variables -->
-    	<script src="./client.js"></script>
-        <!-- Rollbar Error Tracking -->
-        <script src="./js/error.js"></script>
-        <!-- jQuery -->
-        <script src="./js/jquery-3.2.0.min.js"></script>
-        <!-- Cordova -->
-        <script src="cordova.js"></script>
-        <!-- OBD2 -->
-        <script src="./js/obd2.js"></script>
-        <!-- Promise polyfill -->
-        <script src="./js/promise.js"></script>
-        <!-- TextDecoder Polyfill -->
-        <script src="./js/encoding-indexes.js"></script>
-        <!-- TextDecoder non-utf support -->
-        <script src="./js/encoding.js"></script>
-        <!-- Material CSS -->
-        <link rel="stylesheet" href="./css/material.min.css">
-        <!-- EVNotify CSS -->
-        <link rel="stylesheet" href="./css/evnotify.css">
-        <!-- Material JS -->
-        <script src="./js/material.min.js"></script>
-        <!-- Progressbar JS -->
-        <script src="./js/progressbar.min.js"></script>
-        <!-- GetMDL Select CSS -->
-        <link rel="stylesheet" href="./css/getmdl-select.min.css">
-        <!-- GetMDL Select JS -->
-        <script src="./js/getmdl-select.min.js"></script>
-        <!-- SweetAlert2 JS -->
-        <script src="./js/sweetalert2.min.js"></script>
-        <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="./css/sweetalert2.min.css">
-        <!-- storage JS -->
-        <script src="./js/storage.js"></script>
-        <!-- server JS -->
-        <script src="./js/server.js"></script>
-        <!-- user JS -->
-        <script src="./js/user.js"></script>
-        <!-- sync JS -->
-        <script src="./js/sync.js"></script>
-        <!-- settings JS -->
-        <script src="./js/settings.js"></script>
-        <!-- ui JS -->
-        <script src="./js/ui.js"></script>
-        <!-- german translation -->
-        <script src="./lng/de.js"></script>
-        <!-- english translation -->
-        <script src="./lng/en.js"></script>
-        <!-- translation JS -->
-        <script src="./lng/index.js"></script>
-        <script type="text/javascript">
-        /**
-         * Function which loads several other functions on page load
-         */
-        function onLoad() {
-            showVersionInfo();
-            document.addEventListener("deviceready", onDeviceReady, false);
-            // translate the page
-            translatePage(getValue('lng', 'en'));
-            // show own risk message once if setup was completed
-            if(getValue('setupCompleted') && !getValue('ownRiskAccepted')) ownRisk();
-        }
+<html lang="en">
 
-        /**
-         * Function which gets triggered when device is ready and the bluetooth plugin should be usable
-         */
-        function onDeviceReady() {
-            /**
-             * Function which shows message on the snackbar
-             * @param  {String} text The text to show
-             * @return {Object}     returns global window
-             */
-            var showMessage = function(text) {
-                var infoMessage = $('#infoMessage')[0].MaterialSnackbar.showSnackbar({
-                    message: text,
-                    duration: 2222
-                });
-                return this;
-            },
-            config = JSON.parse(getValue('config', '{}')),
-            s = document.createElement('script'),
-            lng = getValue('lng', 'en');
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EVNotify</title>
+    <!-- CSS files have to be added here -->
+    <link rel="stylesheet" href="css/external/vue-material.min.css">
+    <link rel="stylesheet" href="css/external/vue-material-theme-default.min.css">
+    <link rel="stylesheet" href="css/external/vue-material-icons.min.css">
+    <link rel="stylesheet" href="css/evnotify.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
 
-            // append bluetooth file to body
-            s.type = 'text/javascript';
-            s.src = './js/bluetooth.js';
-            $('head').append(s);
+<body>
+    <!-- Main container for Vue JS initialization -->
+    <div id="app"></div>
+    <!-- Client configuration variables -->
+    <script type="text/javascript" src="client.js"></script>
+    <!-- Chart.js -->
+    <script type="text/javascript" src="js/external/Chart.min.js"></script>
+    <!-- VueJS -->
+    <script type="text/javascript" src="js/external/vue.min.js"></script>
+    <!-- Vue Material -->
+    <script type="text/javascript" src="js/external/vue-material.min.js"></script>
+    <!-- Vue router -->
+    <script type="text/javascript" src="js/external/vue-router.min.js"></script>
+    <!-- compiled bundle file -->
+    <script type="text/javascript" src="js/bundle.js"></script>
+    <!-- Cordova -->
+    <script type="text/javascript" src="cordova.js"></script>
+</body>
 
-            // reset last soc
-            removeValue('lastSoC');
-
-            // validate settings to determine what to do
-            if(!getValue('setupCompleted')) setup(lng);
-            else if(!getValue('token')) login(lng);
-            else if(config.device && config.car) {
-                if(getValue('syncMode', SYNC_MODE) !== 'download') bluetooth.establishConnection(config.device);
-            } else showMessage(translate('MISSING_CONFIGURATION', lng));
-
-            // start sync
-            // if(config.autoSync) startSync(config.autoSync);
-
-            // start (default) sync
-            toggleAutoSyncMode(getValue('syncMode'));
-        }
-        </script>
-    </head>
-    <body onload="onLoad()">
-        <!-- Always show a header, even on smaller screens. -->
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <header class="mdl-layout__header">
-                <div class="mdl-layout__header-row">
-                    <!-- Title -->
-                    <span class="mdl-layout-title translate" id="HEADER_OVERVIEW" style="position: absolute; top: 16px"></span>
-                    <!-- Add spacer, to align navigation to the right -->
-                    <div class="mdl-layout-spacer"></div>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 80px">
-                        <img class="material-icons" id="cloudIcon" onclick="toggleAutoSyncMode(((SYNC_MODE === 'upload'? null : SYNC_MODE)))" src="./icons/cloud_disabled.svg"></img>
-                    </label>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 48px">
-                        <img class="material-icons" onclick="toggleDebug()" src="./icons/debug.svg"></img>
-                    </label>
-                    <label class="mdl-button mdl-js-button mdl-button--icon" style="position: absolute; top: 12px; right: 16px">
-                        <img class="material-icons" onclick="standBy()" src="./icons/power.svg"></img>
-                    </label>
-                </div>
-            </header>
-            <div class="mdl-layout__drawer">
-                <span class="mdl-layout-title translate" id="TITLE_EVNOTIFY"></span>
-                <nav class="mdl-navigation">
-                    <div>
-                        <a class="mdl-navigation__link translate navigation-element dashboard" href="index.html" id="MENU_OVERVIEW"></a>
-                        <img class="material-icons navigation-icon dashboard" src="./icons/dashboard.svg"></img>
-                    </div>
-                    <div>
-                        <a class="mdl-navigation__link translate navigation-element stations" href="stations.html" id="MENU_CHARGING_STATIONS"></a>
-                        <img class="material-icons navigation-icon stations" src="./icons/ev_station.svg"></img>
-                    </div>
-                    <div>
-                        <a class="mdl-navigation__link translate navigation-element settings" href="settings.html" id="MENU_SETTINGS"></a>
-                        <img class="material-icons navigation-icon settings" src="./icons/settings.svg"></img>
-                    </div>
-                </nav>
-                <p class="navigation-version-info" id="versionInfo"></p>
-            </div>
-            <main class="mdl-layout__content" id="pageContent">
-                <div class="page-content">
-                    <label class="mdl-button--icon connection-info-icon">
-                        <img class="material-icons" id="connectionInfo" src="./icons/bluetooth_searching.svg"></img>
-                    </label>
-                    <!-- State of Charge cycle -->
-                    <div id="socCycleDiv">
-                        <svg id="socSVG" xmlns="http://www.w3.org/2000/svg" height="200" width="200" viewBox="0 0 200 200" data-value="40">
-                            <path class="bg" stroke="#ccc" d="M41 149.5a77 77 0 1 1 117.93 0"  fill="none"/>
-                            <path class="meter" stroke="#09c" d="M41 149.5a77 77 0 1 1 117.93 0" fill="none" stroke-dasharray="350" stroke-dashoffset="350"/>
-                        </svg>
-                        <div id="socCycle">0%</div>
-                    </div>                      
-                    <!-- Charging information  -->
-                    <ul class="charging-info-list mdl-list">
-                        <label class="mdl-button--icon consumption-settings-icon">
-                            <img class="material-icons" src="./icons/settings.svg" onclick="consumption()" id="consumption_settings_icon"></img>
-                        </label>
-                        <li class="mdl-list__item">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/last_update.svg" id="timestamp_icon"></img>
-                                <p id="charginginfo_timestamp">?</p>
-                            </span>
-                        </li>
-                        <li class="mdl-list__item">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/ev_station.svg" id="range_icon"></img>
-                                <p id="charginginfo_range">?</p>
-                            </span>
-                        </li>
-                        <li class="mdl-list__item">
-                            <span class="mdl-list__item-primary-content">
-                                <img class="material-icons mdl-list__item-icon" src="./icons/clock.svg" id="duration_icon"></img>
-                                <p id="charginginfo_duration">?</p>
-                            </span>
-                        </li>
-                    </ul>
-                    <!-- Debug data -->
-                    <code id="debugData"></code>
-                    <!-- infoMessage -->
-                    <div id="infoMessage" class="mdl-snackbar mdl-js-snackbar">
-                        <div class="mdl-snackbar__text"></div>
-                        <button type="button" class="mdl-snackbar__action"></button>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </body>
-    <script type="text/javascript">
-    // setSoC function on socCycle to apply and animate given state of charge value on progress bar
-    document.getElementById('socCycle').setSoC = function(soc) {
-        var path = document.querySelector('svg#socSVG[data-value] .meter');
-
-        if(path instanceof Node) {
-            path.getBoundingClientRect();   // safari browser workaround
-            path.style.strokeDashoffset = Math.max(0, (path.getTotalLength() * ((100 - parseInt(soc || 0)) / 100)));
-            document.getElementById('socCycle').innerText = parseInt(soc || 0) + '%';
-        }
-    };
-    </script>
 </html>
