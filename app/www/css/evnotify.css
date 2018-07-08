@@ -11,3 +11,9 @@
     align-items: center;
     justify-content: center;
   }
+  .input-field-error {
+    position: absolute;
+    left: 0;
+    top: 50px;
+    color: red;
+  }

@@ -2,7 +2,21 @@ export default {
     SLOGAN: 'Überwache Dein Elektroauto',
     INVALID_CREDENTIALS: 'Ungültige Zugangsdaten. Bitte Eingaben überprüfen.',
     PASSWORD: 'Passwort',
+    PASSWORD_REPEAT: 'Passwort wiederholen',
+    PASSWORD_MISMATCH: 'Passwörter stimmen nicht überein',
     CREATE_ACCOUNT:  'Account erstellen',
     PASSWORD_FORGOT: 'Passwort vergessen',
-    LOGIN: 'Anmelden'
+    LOGIN: 'Anmelden',
+    PROCEED: 'Weiter',
+    DONE: 'Fertig',
+    INTRODUCTION: 'Einführung',
+    SETUP: 'Einrichtung',
+    OWN_RISK: 'Benutzung auf eigene Gefahr. Ich hafte nicht für Schäden, die durch unsachgemäße Nutzung oder die Verwendung gefälschter OBD2-Dongle enstehen können. Mit dem Erstellen eines Accounts erklärst Du Dich damit einverstanden.',
+    INTRODUCTION_TEXT_1: 'EVNotify ermöglicht es Dir, den Ladezustand Deines Elekroautos aus der Ferne zu überwachen.',
+    INTRODUCTION_TEXT_2: 'Behalte den Überblick über Deinen Ladezustand und lass Dich benachrichtigen, sobald Dein gewünscher Ladezustand erreicht ist.',
+    INTRODUCTION_TEXT_3: 'Nützliche Statistiken sowie diverse Funktionen, wie etwa das Auffinden von Ladestationen, vereinfachen Dir den Alltag.',
+    INTRODUCTION_TEXT_4: 'Worauf wartest Du noch? EVNotify ist kostenlos, Open-Source. Du benötigst lediglich ein Android Gerät mit Bluetooth, Internet und einen bluetooth-fähigen OBD2-Dongle.',
+    CREATE_ACCOUNT_TEXT_1: 'Erstelle Dir nun Deinen persönlichen Zugang. Wähle hierfür ein starkes Passwort aus - Du erhältst dann einen zufälligen "AKey" - Deine anonymisierte ID.',
+    CREATE_ACCOUNT_TEXT_2: 'Alles zum Thema Datenschutz findest Du unter: ',
+    PRIVACY_URL: 'https://evnotify.de/datenschutz.html'
 }
