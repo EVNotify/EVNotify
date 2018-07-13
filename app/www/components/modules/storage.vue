@@ -9,8 +9,8 @@
          */
         setValue: function (key, value) {
             if (key && typeof key === 'string' && value != null && window.localStorage) {
-                window.localStorage.setItem(
-                    ((value != null && typeof value === 'object') ? JSON.stringify(value) : value), key
+                window.localStorage.setItem(key,
+                    ((value != null && typeof value === 'object') ? JSON.stringify(value) : value)
                 );
             }
             return value;
