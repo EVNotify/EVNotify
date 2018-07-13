@@ -1,6 +1,9 @@
 export default {
     SLOGAN: 'Überwache Dein Elektroauto',
     INVALID_CREDENTIALS: 'Ungültige Zugangsdaten. Bitte Eingaben überprüfen.',
+    UNEXPECTED_ERROR: 'Unerwarteter Fehler',
+    CHECK_INPUTS: 'Eingaben überprüfen',
+    CHECK_PASSWORD: 'Passwort muss aus mindestens 6 Zeichen bestehen',
     PASSWORD: 'Passwort',
     PASSWORD_REPEAT: 'Passwort wiederholen',
     PASSWORD_MISMATCH: 'Passwörter stimmen nicht überein',

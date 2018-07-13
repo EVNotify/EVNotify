@@ -1,6 +1,9 @@
 export default {
     SLOGAN: 'Control your electric vehicle',
     INVALID_CREDENTIALS: 'Invalid credentials. Please check your input.',
+    UNEXPECTED_ERROR: 'Unexpected error',
+    CHECK_INPUTS: 'Check inputs',
+    CHECK_PASSWORD: 'Password must be at least 6 characters long',
     PASSWORD: 'Password',
     PASSWORD_REPEAT: 'Repeat password',
     PASSWORD_MISMATCH: 'Passwords do not match',
