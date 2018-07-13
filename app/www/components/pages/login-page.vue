@@ -37,37 +37,40 @@
 </template>
 
 <script>
-import translation from './../modules/translation.vue';
+    import translation from './../modules/translation.vue';
+    import storage from './../modules/storage.vue';
 
-export default {
-    data: function() {
-        return {
-            loading: false,
-            akey: '',
-            invalidCredentials: false,
-            password: '',
-            translated: {}
-        };
-    },
-    components: {
-        translation: translation
-    },
-    methods: {
-        login: function() {
-            // TODO
+    export default {
+        data() {
+            return {
+                loading: false,
+                akey: '',
+                invalidCredentials: false,
+                password: '',
+                translated: {}
+            };
+        },
+        components: {
+            translation,
+            storage
+        },
+        methods: {
+            login() {
+                // TODO
+            }
+        },
+        created() {
+            var self = this,
+                toTranslate = [
+                    'SLOGAN', 'INVALID_CREDENTIALS', 'PASSWORD',
+                    'CREATE_ACCOUNT', 'PASSWORD_FORGOT', 'LOGIN'
+                ]; // TODO can we beautify / automate this later?! 
+
+            // determine if we are already logged in - if so, skip login page
+            if (storage.getValue('token') && storage.getValue('akey')) return self.$router.push('/register'); // TODO route to dashboard later
+
+            // translate all labels in correct language
+            toTranslate.forEach(key => self.translated[key] = translation.translate(key));
         }
-    },
-    created: function() {
-        var self = this,
-            toTranslate = [
-                'SLOGAN', 'INVALID_CREDENTIALS', 'PASSWORD', 
-                'CREATE_ACCOUNT', 'PASSWORD_FORGOT', 'LOGIN'
-            ]; // TODO can we beautify / automate this later?! 
-
-        // translate all labels in correct language
-        toTranslate.forEach(function(key) {
-            self.translated[key] = translation.translate(key);
-        });
-    }
-};
+    };
 </script>
