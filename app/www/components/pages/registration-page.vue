@@ -69,10 +69,9 @@
             setDone(id, index) {
                 var self = this,
                     nextPage = () => {
-                        if (index) self.active = index;
+                        if (index) self.active = index; // call the next step
                     };
-
-                self[id] = true;
+                
                 self.secondStepError = self.thirdStepError = null;
 
                 // if on second step we need to create a new account
@@ -93,12 +92,16 @@
                                 if (response.body.token) {
                                     storage.setValue('akey', self.akey);
                                     storage.setValue('token', response.body.token);
+                                    self[id] = true; // mark the current step as valid
                                     nextPage();
                                 } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                             }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                     }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
-                } else nextPage();
+                } else {
+                    self[id] = true; // mark the current step as valid
+                    nextPage();
+                }
             },
             comparePasswords() {
                 if (this.password && this.passwordRepeat) return this.passwordMatches = (this.password === this.passwordRepeat);
