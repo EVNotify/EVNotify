@@ -35,7 +35,7 @@
             </md-step>
 
             <md-step id="third" :md-label="translated.SETUP" :md-error="thirdStepError" :md-done.sync="third" :md-editable="false">
-                <md-button class="md-raised md-primary" @click="setDone('third')">{{ translated.DONE }}</md-button>
+                <settings v-on:savedSettings="settingsObj = $event; setDone('third')"></settings>
             </md-step>
         </md-steppers>
     </div>
@@ -44,6 +44,7 @@
 <script>
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
+    import settings from './../container/settings.vue';
 
     export default {
         data() {
@@ -58,12 +59,14 @@
                 password: '',
                 passwordRepeat: '',
                 akey: '',
-                passwordMatches: true
+                passwordMatches: true,
+                settingsObj: {}
             }
         },
         components: {
             translation,
-            storage
+            storage,
+            settings
         },
         methods: {
             setDone(id, index) {
@@ -98,6 +101,9 @@
                             }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                     }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
+                } else if (id === 'third') {
+                    // settings handling
+                    console.log(self.settingsObj);
                 } else {
                     self[id] = true; // mark the current step as valid
                     nextPage();

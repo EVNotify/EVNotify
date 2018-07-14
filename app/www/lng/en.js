@@ -12,6 +12,7 @@ export default {
     LOGIN: 'Login',
     PROCEED: 'Proceed',
     DONE: 'Done',
+    SAVE: 'Save',
     INTRODUCTION: 'Introduction',
     SETUP: 'Setup',
     OWN_RISK: 'Use at your own risk. I am not liable for damages that may result from improper use or the use of counterfeit OBD2 dongle. By creating an account you agree with it.',
@@ -21,5 +22,12 @@ export default {
     INTRODUCTION_TEXT_4: 'What are you waiting for? EVNotify is free, open source. All you need is an Android device with Bluetooth, Internet and a Bluetooth-enabled OBD2 dongle.',
     CREATE_ACCOUNT_TEXT_1: 'Create your personal access now. Choose a strong password - you will receive a random "AKey" - your anonymized ID.',
     CREATE_ACCOUNT_TEXT_2: 'Everything about privacy can be found at: ',
-    PRIVACY_URL: 'https://evnotify.de/privacy.html'
+    PRIVACY_URL: 'https://evnotify.de/privacy.html',
+    USER: 'User',
+    CAR: 'Car',
+    DEVICE: 'Device',
+    NOTIFICATIONS: 'Notifications',
+    LANGUAGE: 'Language',
+    GERMAN: 'German',
+    ENGLISH: 'English'
 };
