@@ -35,7 +35,10 @@
             </md-step>
 
             <md-step id="third" :md-label="translated.SETUP" :md-error="thirdStepError" :md-done.sync="third" :md-editable="false">
-                <settings v-on:savedSettings="settingsObj = $event; setDone('third')"></settings>
+                <!-- integrate settings container - we need to manipulate third property to force re-render - otherwise it will be ignored -->
+                <!-- Vue set does not work ? reactivity problem? https://vuejs.org/v2/guide/reactivity.html -->
+                <div>{{ translated.INTRODUCTION}}</div>
+                <settings @settingsSaved="settingsObj = $event; setDone('third')" @languageChanged="third=true;translatePage();third=false"></settings>
             </md-step>
         </md-steppers>
     </div>
@@ -74,7 +77,7 @@
                     nextPage = () => {
                         if (index) self.active = index; // call the next step
                     };
-                
+
                 self.secondStepError = self.thirdStepError = null;
 
                 // if on second step we need to create a new account
@@ -113,19 +116,21 @@
                 if (this.password && this.passwordRepeat) return this.passwordMatches = (this.password === this.passwordRepeat);
 
                 return this.passwordMatches = true;
-            }
-        },
-        created() {
-            var self = this,
-                toTranslate = [
+            },
+            translatePage() {
+                var toTranslate = [
                     'INTRODUCTION', 'CREATE_ACCOUNT', 'SETUP', 'PROCEED', 'OWN_RISK', 'DONE',
                     'INTRODUCTION_TEXT_1', 'INTRODUCTION_TEXT_2', 'INTRODUCTION_TEXT_3', 'INTRODUCTION_TEXT_4',
                     'CREATE_ACCOUNT_TEXT_1', 'CREATE_ACCOUNT_TEXT_2', 'PRIVACY_URL', 'PASSWORD', 'PASSWORD_REPEAT',
                     'PASSWORD_MISMATCH', 'CHECK_PASSWORD'
                 ];
 
-            // translate all labels in correct language
-            toTranslate.forEach(key => self.translated[key] = translation.translate(key));
+                // translate all labels in correct language
+                toTranslate.forEach(key => Vue.set(this.translated, key, this.translated[key] = translation.translate(key)));
+            }
+        },
+        created() {
+            this.translatePage();
         }
     }
 </script>

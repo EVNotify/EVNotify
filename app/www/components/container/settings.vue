@@ -21,12 +21,13 @@
             <md-subheader>{{ translated.NOTIFICATIONS }}</md-subheader>
             <md-divider></md-divider>
         </form>
-        <md-button class="md-raised md-primary" @click="$emit('savedSettings', settings)">{{ translated.SAVE }}</md-button>
+        <md-button class="md-raised md-primary" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
     </div>
 </template>
 
 <script>
     import translation from './../modules/translation.vue';
+    import storage from './../modules/storage.vue';
 
     export default {
         data() {
@@ -36,25 +37,30 @@
             };
         },
         components: {
-            translation
+            translation,
+            storage
         },
         watch: {
-            'settings.lng': 'test'
+            'settings.lng': 'setLng'
         },
         methods: {
-            test() {
-                console.log(this);
-            }
-        },
-        created() {
-            var self = this,
-                toTranslate = [
+            setLng() {
+                storage.setValue('lng', this.settings.lng);
+                this.translatePage();
+                this.$emit('languageChanged');
+            },
+            translatePage() {
+                var toTranslate = [
                     'USER', 'CAR', 'DEVICE', 'NOTIFICATIONS',
                     'LANGUAGE', 'GERMAN', 'ENGLISH', 'SAVE'
                 ];
 
-            // translate all labels in correct language
-            toTranslate.forEach(key => self.translated[key] = translation.translate(key));
+                // translate all labels in correct language
+                toTranslate.forEach(key => this.translated[key] = translation.translate(key));
+            }
+        },
+        created() {
+            this.translatePage();
         }
     }
 </script>
