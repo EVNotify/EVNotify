@@ -60,17 +60,11 @@
             }
         },
         created() {
-            var self = this,
-                toTranslate = [
-                    'SLOGAN', 'INVALID_CREDENTIALS', 'PASSWORD',
-                    'CREATE_ACCOUNT', 'PASSWORD_FORGOT', 'LOGIN'
-                ]; // TODO can we beautify / automate this later?! 
-
             // determine if we are already logged in - if so, skip login page
-            if (storage.getValue('token') && storage.getValue('akey')) return self.$router.push('/register'); // TODO route to dashboard later
+            if (storage.getValue('token') && storage.getValue('akey')) return this.$router.push('/register'); // TODO route to dashboard later
 
             // translate all labels in correct language
-            toTranslate.forEach(key => self.translated[key] = translation.translate(key));
+            this.translated = translation.translatePage();
         }
     };
 </script>

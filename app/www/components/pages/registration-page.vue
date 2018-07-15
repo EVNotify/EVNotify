@@ -118,19 +118,11 @@
                 return this.passwordMatches = true;
             },
             translatePage() {
-                var toTranslate = [
-                    'INTRODUCTION', 'CREATE_ACCOUNT', 'SETUP', 'PROCEED', 'OWN_RISK', 'DONE',
-                    'INTRODUCTION_TEXT_1', 'INTRODUCTION_TEXT_2', 'INTRODUCTION_TEXT_3', 'INTRODUCTION_TEXT_4',
-                    'CREATE_ACCOUNT_TEXT_1', 'CREATE_ACCOUNT_TEXT_2', 'PRIVACY_URL', 'PASSWORD', 'PASSWORD_REPEAT',
-                    'PASSWORD_MISMATCH', 'CHECK_PASSWORD'
-                ];
-
-                // translate all labels in correct language
-                toTranslate.forEach(key => Vue.set(this.translated, key, this.translated[key] = translation.translate(key)));
+                this.translated = translation.translatePage();
             }
         },
         created() {
-            this.translatePage();
+            this.translated = translation.translatePage();
         }
     }
 </script>

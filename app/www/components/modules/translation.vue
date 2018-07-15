@@ -9,7 +9,7 @@ export default {
      * Translates given key into it's local translation (either from set language or user preferred language)
      * @returns {String} the translated string
      */
-    translate: function(key) {
+    translate: (key) => {
         var lng = storage.getValue('lng', (navigator.language || navigator.userLanguage));
 
         if(typeof lng === 'string') {
@@ -17,6 +17,15 @@ export default {
             return en[key] || '';
         }
         return '';
+    },
+    /**
+     * Translates each key from language and returns translated object
+     */
+    translatePage() {
+        var translated = {};
+        
+        Object.keys(de).forEach(key => translated[key] = this.translate(key));
+        return translated;
     }
 }
 </script>
