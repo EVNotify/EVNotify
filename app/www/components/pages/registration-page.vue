@@ -37,7 +37,6 @@
             <md-step id="third" :md-label="translated.SETUP" :md-error="thirdStepError" :md-done.sync="third" :md-editable="false">
                 <!-- integrate settings container - we need to manipulate third property to force re-render - otherwise it will be ignored -->
                 <!-- Vue set does not work ? reactivity problem? https://vuejs.org/v2/guide/reactivity.html -->
-                <div>{{ translated.INTRODUCTION}}</div>
                 <settings @settingsSaved="settingsObj = $event; setDone('third')" @languageChanged="third=true;translatePage();third=false"></settings>
             </md-step>
         </md-steppers>
@@ -122,7 +121,7 @@
             }
         },
         created() {
-            this.translated = translation.translatePage();
+            this.translatePage();
         }
     }
 </script>

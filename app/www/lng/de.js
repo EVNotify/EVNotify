@@ -29,5 +29,9 @@ export default {
     NOTIFICATIONS: 'Benachrichtigungen',
     LANGUAGE: 'Sprache',
     GERMAN: 'Deutsch',
-    ENGLISH: 'Englisch'
+    ENGLISH: 'Englisch',
+    IONIQ_BEV: 'Hyundai IONIQ Elektro',
+    SOUL_EV: 'Kia Soul EV',
+    CONSUMPTION: 'Verbrauch',
+    OBD2_DEVICE: 'OBDII-Gerät'
 }
