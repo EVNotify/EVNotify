@@ -26,8 +26,13 @@
 
             if (key && typeof key === 'string' && window.localStorage) {
                 value = window.localStorage.getItem(key);
-                // TODO add parsing for json.parse object
-                if (value) return ((!isNaN(parseFloat(value)) && isFinite(value)) ? parseFloat(value) : 
+                // try to detect JSON object or array to return parsed value
+                if (typeof value === 'string' && (value.substr(0, 2) === '{"' || value.substr(0, 2) === '[{')) {
+                    try {
+                        return JSON.parse(value);
+                    } catch (error) {}
+                }
+                if (value) return ((!isNaN(parseFloat(value)) && isFinite(value)) ? parseFloat(value) :
                     ((value === 'true') ? true : ((value === 'false') ? false : value)));
                 if (defaultValue) return defaultValue;
                 return '';
@@ -39,8 +44,8 @@
          * @param {String} key the key to clear and remove its value
          * @returns {String} empty string
          */
-        removeValue: function(key) {
-            if(key && typeof key === 'string' && window.localStorage) window.localStorage.removeItem(key);
+        removeValue: function (key) {
+            if (key && typeof key === 'string' && window.localStorage) window.localStorage.removeItem(key);
             return '';
         }
     }
