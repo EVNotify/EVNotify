@@ -38,14 +38,27 @@
                     <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{ device.name }}</md-option>
                 </md-select>
             </md-field>
+            <div>
+                <md-switch v-model="autoboot">{{ translated.AUTOBOOT }}</md-switch>
+            </div>
+            <div>
+                <md-switch v-model="keepawake">{{ translated.KEEPAWAKE }}</md-switch>
+            </div>
             <md-subheader class="md-primary">
                 <b>{{ translated.NOTIFICATIONS }}</b>
             </md-subheader>
             <md-divider></md-divider>
             <md-field>
-                <label for="soc">{{ translated.SOC_THRESHOLD }}</label>
-                <input v-model.number="settings.soc" type="range">{{ settings.soc }}%
+                <input v-model.number="settings.soc" type="range" style="width: 100%">{{ settings.soc }}%
+                <span class="md-helper-text">{{ translated.SOC_THRESHOLD }}</span>
             </md-field>
+            <md-field>
+                <label for="email">{{ translated.EMAIL }}</label>
+                <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
+            </md-field>
+            <div>
+                <md-checkbox v-model="settings.summary">{{ translated.SUMMARY }}</md-checkbox>
+            </div>
         </form>
         <md-button class="md-raised md-primary" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
     </div>
@@ -60,9 +73,12 @@
             return {
                 translated: {},
                 settings: {
-                    soc: 70
+                    soc: 70,
+                    summary: false
                 },
-                devices: []
+                devices: [],
+                autoboot: false,
+                keepawake: false
             };
         },
         components: {

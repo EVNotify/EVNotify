@@ -33,5 +33,10 @@ export default {
     IONIQ_BEV: 'Hyundai IONIQ Electric',
     SOUL_EV: 'Kia Soul EV',
     CONSUMPTION: 'Consumption',
-    OBD2_DEVICE: 'OBDII-Device'
+    OBD2_DEVICE: 'OBDII-Device',
+    AUTOBOOT: 'Auto-Boot (automatically starts EVNotify after Android starts)',
+    KEEPAWAKE: 'Keep-Awake (prevents display from turning off while EVNotify is running)',
+    SOC_THRESHOLD: 'State of charge, when to send out notifications',
+    EMAIL: 'Mail',
+    SUMMARY: 'Send daily summary of state of charge'
 };
