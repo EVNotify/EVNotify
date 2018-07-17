@@ -47,6 +47,7 @@
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
     import settings from './../container/settings.vue';
+    import eventBus from './../modules/event.vue';
 
     export default {
         data() {
@@ -68,7 +69,8 @@
         components: {
             translation,
             storage,
-            settings
+            settings,
+            eventBus
         },
         methods: {
             setDone(id, index) {
@@ -98,14 +100,21 @@
                                     storage.setValue('akey', self.akey);
                                     storage.setValue('token', response.body.token);
                                     self[id] = true; // mark the current step as valid
+                                    eventBus.$emit('settings_getSettings', true);
                                     nextPage();
                                 } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                             }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                     }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
                 } else if (id === 'third') {
-                    // settings handling
-                    console.log(self.settingsObj);
+                    // update the settings
+                    self.$http.put(RESTURL + 'settings', {
+                        settings: self.settingsObj,
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token')
+                    }).then(response => {
+                        console.log(response);
+                    }, err => self.thirdStepError = translation.translate('UNEXPECTED_ERROR'));
                 } else {
                     self[id] = true; // mark the current step as valid
                     nextPage();

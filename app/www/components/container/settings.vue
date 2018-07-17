@@ -67,6 +67,7 @@
 <script>
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
+    import eventBus from './../modules/event.vue';
 
     export default {
         data() {
@@ -96,10 +97,36 @@
             },
             translatePage() {
                 this.translated = translation.translatePage();
+            },
+            getSettings(useLocalLng) {
+                var self = this;
+                console.log({
+                    useLocalLng
+                });
+                self.$http.get(RESTURL + 'settings', {
+                    params: {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token')
+                    }
+                }).then(response => {
+                    self.settings = response.body.settings || self.settings;
+                    if (useLocalLng) {
+                        self.settings.lng = translation.getLocalLng();
+                    }
+                    storage.setValue('settings', self.settings);
+                }, err => {
+                    console.error(err);
+                });
             }
         },
         created() {
-            this.translatePage();
+            var self = this;
+
+            self.translatePage();
+            eventBus.$on('settings_getSettings', function (useLocalLng) {
+                self.getSettings(useLocalLng);
+            });
+            self.settings = storage.getValue('settings', self.settings);
         }
     }
 </script>
