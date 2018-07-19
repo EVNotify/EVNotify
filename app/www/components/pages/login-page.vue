@@ -6,6 +6,7 @@
                 <img src="img/logo.png">
                 <div class="md-title">EVNotify</div>
                 <div class="md-body-1">{{ translated.SLOGAN }}</div>
+                <div class="md-body-1 error-message" v-if="unexpectedError">{{ translated.UNEXPECTED_ERROR }}</div>
                 <div class="md-body-1 error-message" v-if="invalidCredentials">{{ translated.INVALID_CREDENTIALS }}</div>
             </div>
             <form class="form">
@@ -47,7 +48,8 @@
                 akey: '',
                 invalidCredentials: false,
                 password: '',
-                translated: {}
+                translated: {},
+                unexpectedError: false
             };
         },
         components: {
@@ -56,7 +58,20 @@
         },
         methods: {
             login() {
-                // TODO
+                var self = this;
+
+                // TODO validate input before login request
+                self.$http.post(RESTURL + 'login', {
+                    akey: self.akey,
+                    password: self.password
+                }).then(response => {
+                    if (response.body.token) {
+                        // save akey and token
+                        storage.setValue('akey', self.akey);
+                        storage.setValue('token', response.body.token);
+                        // route to dashboard
+                    } else self.unexpectedError = true;
+                }, err => self.invalidCredentials = true);
             }
         },
         created() {
