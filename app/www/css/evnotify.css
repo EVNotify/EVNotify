@@ -17,3 +17,11 @@
     top: 50px;
     color: red;
   }
+  .md-bottom-bar.md-theme-default.md-type-shift {
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+  }
+  .md-snackbar.md-position-center.md-theme-default {
+    bottom: 56px;
+  }
