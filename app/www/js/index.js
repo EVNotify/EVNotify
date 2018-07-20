@@ -3,6 +3,7 @@ import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
 import DashboardPage from './../components/pages/dashboard-page.vue';
+import SettingsPage from './../components/pages/settings-page.vue';
 
 Vue.use(VueMaterial.default);
 Vue.use(VueResource);
@@ -24,6 +25,10 @@ var router = new VueRouter({
         {
             path: '/dashboard',
             component: DashboardPage
+        },
+        {
+            path: '/settings',
+            component: SettingsPage
         }
     ]
 });
@@ -35,7 +40,8 @@ var vm = new Vue({
         'app': App,
         'login-page': LoginPage,
         'registration-page': RegistrationPage,
-        'dashboard-page': DashboardPage
+        'dashboard-page': DashboardPage,
+        'settings-page': SettingsPage
     },
     router: router,
     render: function (h) {

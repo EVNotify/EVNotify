@@ -2,7 +2,7 @@
 <template>
     <div>
         <toolbar></toolbar>
-        <div>
+        <div class="content-within-page">
             <div class="md-layout md-gutter md-alignment-center dashboard-card-list">
                 <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
                     <md-card-header>

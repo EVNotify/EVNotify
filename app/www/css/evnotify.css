@@ -17,11 +17,19 @@
     top: 50px;
     color: red;
   }
+  .md-toolbar.md-theme-default.md-primary {
+    position: fixed;
+    z-index: 4;
+  }
   .md-bottom-bar.md-theme-default.md-type-shift {
-    position: absolute;
+    position: fixed;
     bottom: 0;
-    z-index: 2;
+    z-index: 4;
   }
   .md-snackbar.md-position-center.md-theme-default {
     bottom: 56px;
+  }
+  .content-within-page {
+    height: 90%;
+    padding: 56px 0 56px 0;
   }

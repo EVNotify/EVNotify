@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="content-within-page">
         <form class="form">
             <md-subheader class="md-primary">
                 <b>{{ translated.USER }}</b>
