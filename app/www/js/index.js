@@ -1,4 +1,5 @@
 import VueResource from 'vue-resource';
+import EventBus from './../components/modules/event.vue';
 import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
@@ -36,6 +37,11 @@ var router = new VueRouter({
 // the vue instance
 var vm = new Vue({
     el: '#app',
+    data() {
+        return {
+            deviceReady: false
+        };
+    },
     components: {
         'app': App,
         'login-page': LoginPage,
@@ -47,4 +53,10 @@ var vm = new Vue({
     render: function (h) {
         return h(App);
     }
+});
+
+// apply event listener for cordova device
+document.addEventListener('deviceready', function() {
+    vm.deviceReady = true;
+    EventBus.$emit('deviceReady');
 });
