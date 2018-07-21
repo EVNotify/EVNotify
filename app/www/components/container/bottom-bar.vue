@@ -1,22 +1,36 @@
 <template>
     <md-bottom-bar md-type="shift" :md-active-item.sync="currentSelection">
-        <md-bottom-bar-item id="bottom-bar-item-dashboard" md-label="Dashboard" md-icon="dashboard" to="/dashboard"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-logs" md-label="Logs" md-icon="list" to="/logs"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-stations" md-label="Stations" md-icon="ev_station" to="/stations"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-settings" md-label="Settings" md-icon="settings" to="/settings"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-dashboard" :md-label="translated.DASHBOARD" md-icon="dashboard" to="/dashboard"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-logs" :md-label="translated.LOGS" md-icon="list" to="/logs"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-stations" :md-label="translated.STATIONS" md-icon="ev_station" to="/stations"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-settings" :md-label="translated.SETTINGS" md-icon="settings" to="/settings"></md-bottom-bar-item>
     </md-bottom-bar>
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            currentSelection: 'dashboard'
-        };
-    },
-    created() {
-        this.currentSelection = 'bottom-bar-item-' + this.$route.path.substr(1);
-    }
-}
-</script>
+    import translation from './../modules/translation.vue';
+    import eventBus from './../modules/event.vue';
 
+    export default {
+        data() {
+            return {
+                currentSelection: 'dashboard',
+                translated: {}
+            };
+        },
+        methods: {
+            translatePage() {
+                this.translated = translation.translatePage();
+            }
+        },
+        created() {
+            var self = this;
+
+            eventBus.$on('settings_languageChanged', function() {
+                self.translatePage();
+            });
+            self.currentSelection = 'bottom-bar-item-' + self.$route.path.substr(1);
+            self.translatePage();
+        }
+    }
+</script>
