@@ -38,5 +38,9 @@ export default {
     KEEPAWAKE: 'Keep-Awake (prevents display from turning off while EVNotify is running)',
     SOC_THRESHOLD: 'State of charge, when to send out notifications',
     EMAIL: 'Mail',
-    SUMMARY: 'Send daily summary of state of charge'
+    SUMMARY: 'Send daily summary of state of charge',
+    DASHBOARD: 'Dashboard',
+    LOGS: 'Logs',
+    STATIONS: 'Stations',
+    SETTINGS: 'Settings'
 };

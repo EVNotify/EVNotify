@@ -19,12 +19,12 @@
   }
   .md-toolbar.md-theme-default.md-primary {
     position: fixed;
-    z-index: 4;
+    z-index: 5;
   }
   .md-bottom-bar.md-theme-default.md-type-shift {
     position: fixed;
     bottom: 0;
-    z-index: 4;
+    z-index: 5;
   }
   .md-snackbar.md-position-center.md-theme-default {
     bottom: 56px;

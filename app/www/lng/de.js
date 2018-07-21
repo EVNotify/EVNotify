@@ -38,5 +38,9 @@ export default {
     KEEPAWAKE: 'Keep-Awake (verhindert das Ausschalten des Displays während EVNotify läuft)',
     SOC_THRESHOLD: 'Ladezustand, bei dem Benachrichtigung verschickt werden sollen',
     EMAIL: 'E-Mail',
-    SUMMARY: 'Tägliche Zusammenfassung des Ladezustands senden'
+    SUMMARY: 'Tägliche Zusammenfassung des Ladezustands senden',
+    DASHBOARD: 'Dashboard',
+    LOGS: 'Logs',
+    STATIONS: 'Stationen',
+    SETTINGS: 'Einstellungen'
 }
