@@ -39,6 +39,7 @@
 
 <script>
     import translation from './../modules/translation.vue';
+    import settings from './../container/settings.vue';
     import storage from './../modules/storage.vue';
 
     export default {
@@ -54,7 +55,8 @@
         },
         components: {
             translation,
-            storage
+            storage,
+            settings
         },
         methods: {
             login() {
@@ -69,14 +71,18 @@
                         // save akey and token
                         storage.setValue('akey', self.akey);
                         storage.setValue('token', response.body.token);
-                        // route to dashboard
+                        // retrieve and set the settings from account
+                        settings.methods.getSettings(false, (err, settings) => {
+                            if (!err && settings != null) self.$router.push('/dashboard');
+                            else self.unexpectedError = true;
+                        });
                     } else self.unexpectedError = true;
                 }, err => self.invalidCredentials = true);
             }
         },
         created() {
             // determine if we are already logged in - if so, skip login page
-            if (storage.getValue('token') && storage.getValue('akey')) return this.$router.push('/register'); // TODO route to dashboard later
+            if (storage.getValue('token') && storage.getValue('akey')) return this.$router.push('/dashboard');
 
             // translate all labels in correct language
             this.translated = translation.translatePage();

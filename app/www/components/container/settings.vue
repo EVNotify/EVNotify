@@ -98,12 +98,10 @@
             translatePage() {
                 this.translated = translation.translatePage();
             },
-            getSettings(useLocalLng) {
+            getSettings(useLocalLng, callback) {
                 var self = this;
-                console.log({
-                    useLocalLng
-                });
-                self.$http.get(RESTURL + 'settings', {
+                
+                Vue.http.get(RESTURL + 'settings', {
                     params: {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
@@ -114,8 +112,10 @@
                         self.settings.lng = translation.getLocalLng();
                     }
                     storage.setValue('settings', self.settings);
+                    if (typeof callback === 'function') callback(null, self.settings);
                 }, err => {
                     console.error(err);
+                    if (typeof callback === 'function') callback(err);
                 });
             }
         },
