@@ -111,7 +111,7 @@
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
                     }).then(response => {
-                        console.log(response);
+                        self.$router.push('/dashboard');
                     }, err => self.thirdStepError = translation.translate('UNEXPECTED_ERROR'));
                 } else {
                     self[id] = true; // mark the current step as valid

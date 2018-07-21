@@ -33,3 +33,10 @@
     height: 90%;
     padding: 56px 0 56px 0;
   }
+  .form.inner-form {
+    padding: 0 16px;
+  }
+  .form.inner-form .md-field,
+  .form.inner-form label {
+    padding-left: 16px;
+  }

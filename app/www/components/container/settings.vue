@@ -1,6 +1,6 @@
 <template>
     <div class="content-within-page">
-        <form class="form">
+        <form class="form inner-form">
             <md-subheader class="md-primary">
                 <b>{{ translated.USER }}</b>
             </md-subheader>
