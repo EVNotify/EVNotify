@@ -114,12 +114,28 @@
                     
                     storage.setValue('settings', self.settings);
                 }, err => console.error(err));
+            },
+            listDevices() {
+                var self = this;
+
+                bluetoothSerial.enable(enabled => {
+                    bluetoothSerial.list(devices => {
+                        self.devices = devices;
+                    }, err => console.error(err));
+                }, err => console.error(err));
             }
         },
         created() {
             var self = this;
 
             self.translatePage();
+            // wait for cordova device to be ready - apply listener, if not ready yet
+            if(self.$root.deviceReady) self.listDevices();
+            else {
+                eventBus.$on('deviceReady', function() {
+                    self.listDevices();
+                });
+            }
             eventBus.$on('settings_getSettings', function (useLocalLng) {
                 self.getSettings(useLocalLng);
             });
