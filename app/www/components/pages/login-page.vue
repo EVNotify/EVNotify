@@ -72,10 +72,17 @@
                         storage.setValue('akey', self.akey);
                         storage.setValue('token', response.body.token);
                         // retrieve and set the settings from account
-                        settings.methods.getSettings(false, (err, settings) => {
-                            if (!err && settings != null) self.$router.push('/dashboard');
-                            else self.unexpectedError = true;
-                        });
+                        self.$http.get(RESTURL + 'settings', {
+                            params: {
+                                akey: storage.getValue('akey'),
+                                token: storage.getValue('token')
+                            }
+                        }).then(response => {
+                            if (response.body.settings != null) {
+                                storage.setValue('settings', response.body.settings);
+                                self.$router.push('/dashboard');
+                            } else self.unexpectedError = true;
+                        }, err => self.unexpectedError = true);
                     } else self.unexpectedError = true;
                 }, err => self.invalidCredentials = true);
             }
