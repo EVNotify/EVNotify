@@ -42,5 +42,6 @@ export default {
     DASHBOARD: 'Dashboard',
     LOGS: 'Logs',
     STATIONS: 'Stationen',
-    SETTINGS: 'Einstellungen'
+    SETTINGS: 'Einstellungen',
+    SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert'
 }
