@@ -94,29 +94,26 @@
                 storage.setValue('lng', this.settings.lng);
                 this.translatePage();
                 this.$emit('languageChanged');
+                eventBus.$emit('settings_languageChanged');
             },
             translatePage() {
                 this.translated = translation.translatePage();
             },
-            getSettings(useLocalLng, callback) {
+            getSettings(useLocalLng) {
                 var self = this;
                 
-                Vue.http.get(RESTURL + 'settings', {
+                self.$http.get(RESTURL + 'settings', {
                     params: {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
                     }
                 }).then(response => {
                     self.settings = response.body.settings || self.settings;
-                    if (useLocalLng) {
-                        self.settings.lng = translation.getLocalLng();
-                    }
+                    
+                    if (useLocalLng) self.settings.lng = translation.getLocalLng();
+                    
                     storage.setValue('settings', self.settings);
-                    if (typeof callback === 'function') callback(null, self.settings);
-                }, err => {
-                    console.error(err);
-                    if (typeof callback === 'function') callback(err);
-                });
+                }, err => console.error(err));
             }
         },
         created() {
