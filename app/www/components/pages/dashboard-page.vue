@@ -64,17 +64,56 @@
 
 <script>
     import toolbar from './../container/toolbar.vue';
+    import storage from './../modules/storage.vue';
     import bottomBar from './../container/bottom-bar.vue';
 
     export default {
         data() {
             return {
-                showSidebar: true
+                showSidebar: true,
+                interval: 0,
+                device: null,
+                car: null
             };
+        },
+        methods: {
+            startWatch() {
+                var self = this;
+
+                self.interval = setInterval(() => {
+                    bluetoothSerial.enable(enabled =>  {
+                        bluetoothSerial.isConnected(connected => {
+                            // run init process if not already running
+                        }, disconnected => {
+                            bluetoothSerial.connect(self.device, connected => {
+                                // run init process if not already running
+                            }, err => console.error(err));
+                        });
+                    }, err => console.error(err));
+                }, 1000);
+            }
         },
         components: {
             bottomBar,
             toolbar
+        },
+        beforeDestroy() {
+            clearInterval(this.interval);
+        },
+        created() {
+            var self = this;
+
+            self.device = storage.getValue('settings', {}).device;
+            self.car = storage.getValue('settings', {}).car;
+
+            // self.startWatch();
+            // wait for cordova device to be ready - apply listener, if not ready yet
+            // if(self.$root.deviceReady) self.startWatch();
+            // else {
+            //     eventBus.$on('deviceReady', function() {
+            //         self.startWatch();
+            //     });
+            // }
         }
     }
 </script>
