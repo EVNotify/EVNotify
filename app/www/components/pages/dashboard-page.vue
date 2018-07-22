@@ -66,31 +66,49 @@
     import toolbar from './../container/toolbar.vue';
     import storage from './../modules/storage.vue';
     import bottomBar from './../container/bottom-bar.vue';
+    import IONIQ_BEV from './../cars/IONIQ_BEV.vue';
+    import SOUL_EV from './../cars/SOUL_EV.vue';
 
     export default {
         data() {
             return {
-                showSidebar: true,
+                showSidebar: false,
                 interval: 0,
                 device: null,
-                car: null
+                car: null,
+                carModules: {
+                    IONIQ_BEV,
+                    SOUL_EV
+                },
+                initialized: false
             };
         },
         methods: {
             startWatch() {
                 var self = this;
 
-                self.interval = setInterval(() => {
-                    bluetoothSerial.enable(enabled =>  {
-                        bluetoothSerial.isConnected(connected => {
-                            // run init process if not already running
-                        }, disconnected => {
-                            bluetoothSerial.connect(self.device, connected => {
+                // if device set and car supported, start watch
+                if (self.device && carModules[self.car]) {
+                    self.interval = setInterval(() => {
+                        bluetoothSerial.enable(enabled => {
+                            bluetoothSerial.isConnected(connected => {
                                 // run init process if not already running
-                            }, err => console.error(err));
-                        });
-                    }, err => console.error(err));
-                }, 1000);
+                                if (!self.initialized) {
+                                    self.initialized = true;
+                                    carModules[self.car].init();
+                                }
+                            }, disconnected => {
+                                bluetoothSerial.connect(self.device, connected => {
+                                    // run init process if not already running
+                                    if (!self.initialized) {
+                                        self.initialized = true;
+                                        carModules[self.car].init();
+                                    }
+                                }, err => console.error(err));
+                            });
+                        }, err => console.error(err));
+                    }, 1000);
+                } else self.showSidebar = true;
             }
         },
         components: {
@@ -106,14 +124,13 @@
             self.device = storage.getValue('settings', {}).device;
             self.car = storage.getValue('settings', {}).car;
 
-            // self.startWatch();
             // wait for cordova device to be ready - apply listener, if not ready yet
-            // if(self.$root.deviceReady) self.startWatch();
-            // else {
-            //     eventBus.$on('deviceReady', function() {
-            //         self.startWatch();
-            //     });
-            // }
+            if (self.$root.deviceReady) self.startWatch();
+            else {
+                eventBus.$on('deviceReady', function () {
+                    self.startWatch();
+                });
+            }
         }
     }
 </script>
