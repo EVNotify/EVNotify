@@ -1,4 +1,7 @@
+<template></template>
 <script>
+    import eventBus from './../modules/event.vue';
+
     export default {
         data() {
             return {
@@ -24,8 +27,8 @@
                     // TODO error detection (CAN ERROR..)
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
-                        self.parseData(data);
-                        setTimeout(() => bluetoothSerial.write('2105\r'));
+                        eventBus.$emit('obd2Data', self.parseData(data));
+                        setTimeout(() => bluetoothSerial.write('2105\r'), 2000);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
 

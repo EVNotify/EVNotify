@@ -38,6 +38,7 @@
                     token: storage.getValue('token'),
                     settings
                 }).then(response => {
+                    storage.setValue('settings', settings);
                     self.showSidebar = self.saved = true;
                 }, err => self.showSidebar = self.unexpectedError = true);
             }

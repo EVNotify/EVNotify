@@ -10,7 +10,7 @@
                             <img src="icons/battery_unknown.svg">
                         </md-card-media>
                         <md-card-header-text>
-                            <div class="md-title">0%</div>
+                            <div class="md-title">{{ soc }}%</div>
                             <div class="md-subhead">State of charge</div>
                             <md-divider></md-divider>
                             <div>
@@ -55,6 +55,7 @@
                 </md-card>
             </div>
         </div>
+        <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
         <md-snackbar md-position="center" :md-persistent="true" :md-active.sync="showSidebar">
             <span>No OBDII-bluetooth device selected</span>
         </md-snackbar>
@@ -65,21 +66,20 @@
 <script>
     import toolbar from './../container/toolbar.vue';
     import storage from './../modules/storage.vue';
+    import eventBus from './../modules/event.vue';
     import bottomBar from './../container/bottom-bar.vue';
-    import IONIQ_BEV from './../cars/IONIQ_BEV.vue';
-    import SOUL_EV from './../cars/SOUL_EV.vue';
+    import IONIQBEV from './../cars/IONIQ_BEV.vue';
+    import SOULEV from './../cars/SOUL_EV.vue';
 
     export default {
         data() {
             return {
+                soc: 0,
                 showSidebar: false,
                 interval: 0,
                 device: null,
                 car: null,
-                carModules: {
-                    IONIQ_BEV,
-                    SOUL_EV
-                },
+                supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
                 initialized: false
             };
         },
@@ -88,21 +88,21 @@
                 var self = this;
 
                 // if device set and car supported, start watch
-                if (self.device && carModules[self.car]) {
+                if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
                     self.interval = setInterval(() => {
                         bluetoothSerial.enable(enabled => {
                             bluetoothSerial.isConnected(connected => {
                                 // run init process if not already running
                                 if (!self.initialized) {
                                     self.initialized = true;
-                                    carModules[self.car].init();
+                                    self.$refs[self.car].init();
                                 }
                             }, disconnected => {
                                 bluetoothSerial.connect(self.device, connected => {
                                     // run init process if not already running
                                     if (!self.initialized) {
                                         self.initialized = true;
-                                        carModules[self.car].init();
+                                        self.$refs[self.car].init();
                                     }
                                 }, err => console.error(err));
                             });
@@ -113,7 +113,9 @@
         },
         components: {
             bottomBar,
-            toolbar
+            toolbar,
+            IONIQBEV,
+            SOULEV
         },
         beforeDestroy() {
             clearInterval(this.interval);
@@ -131,6 +133,9 @@
                     self.startWatch();
                 });
             }
+            eventBus.$on('obd2Data', function(data) {
+                self.soc = data.SOC_DISPLAY || 0;
+            });
         }
     }
 </script>
