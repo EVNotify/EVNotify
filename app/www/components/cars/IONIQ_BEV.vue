@@ -42,10 +42,22 @@
                 // remove unwanted characters and pair them in bytes again
                 data = data.trim().replace(/\s/g, '');
                 try {
+                    var fourthBlock = '7EC24',
+                        fifthBlock = '7EC25',
+                        extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock));
+
                     parsedData = {
                         SOC_DISPLAY: parseInt(
-                            data.substring(data.indexOf('7EC24'), data.indexOf('7EC25')).slice(-2), 16
-                        ) / 2 // last byte before 5:
+                            extractedFourthBlock.slice(-2), 16
+                        ) / 2, // last byte within 4th block
+                        SOH: ((
+                            parseInt(
+                                extractedFourthBlock.replace(fourthBlock, '').slice(0,2), 16 // first byte within 4th block
+                            ) << 8) +
+                            parseInt(
+                                extractedFourthBlock.replace(fourthBlock, '').slice(2,4), 16 // second byte within 4th block
+                            )
+                        ) / 10
                     }
                 } catch (err) {
                     console.error(err);
