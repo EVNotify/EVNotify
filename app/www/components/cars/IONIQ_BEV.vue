@@ -6,7 +6,7 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH0', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATBRD45',
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATBRD45',
                     'ATBRD23', 'ATBRD11', 'ATBRD08'
                 ],
                 offset: 0
@@ -44,7 +44,7 @@
                 try {
                     parsedData = {
                         SOC_DISPLAY: parseInt(
-                            data.substring(data.indexOf('4:'), data.indexOf('5:')).slice(-2), 16
+                            data.substring(data.indexOf('7EC24'), data.indexOf('7EC25')).slice(-2), 16
                         ) / 2 // last byte before 5:
                     }
                 } catch (err) {
