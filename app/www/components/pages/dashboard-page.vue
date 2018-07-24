@@ -90,7 +90,7 @@
                 // if device set and car supported, start watch
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
                     self.interval = setInterval(() => {
-                        bluetoothSerial.enable(enabled => {
+                        var proceed = () => {
                             bluetoothSerial.isConnected(connected => {
                                 // run init process if not already running
                                 if (!self.initialized) {
@@ -106,7 +106,15 @@
                                     }
                                 }, err => console.error(err));
                             });
-                        }, err => console.error(err));
+                        };
+
+                        bluetoothSerial.isEnabled(enabled => {
+                            proceed();
+                        }, disabled => {
+                            bluetoothSerial.enable(enabled => {
+                                proceed();
+                            }, err => console.error(err));
+                        });
                     }, 1000);
                 } else self.showSidebar = true;
             }
@@ -133,7 +141,7 @@
                     self.startWatch();
                 });
             }
-            eventBus.$on('obd2Data', function(data) {
+            eventBus.$on('obd2Data', function (data) {
                 self.soc = data.SOC_DISPLAY || 0;
             });
         }
