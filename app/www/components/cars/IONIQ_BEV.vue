@@ -41,6 +41,9 @@
 
                 // remove unwanted characters and pair them in bytes again
                 data = data.trim().replace(/\s/g, '');
+
+                // send debug data (currently every time for debugging purposes!)
+                Vue.http.post(RESTURL + 'debug', {data});
                 try {
                     var fourthBlock = '7EC24',
                         fifthBlock = '7EC25',
