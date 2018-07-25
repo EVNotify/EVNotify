@@ -5,3 +5,7 @@
 .dashboard-charging-times {
     margin: -8px 0 0 0;
 }
+.dashboard-soh img {
+    width: 20%;
+    margin-left: 20px;
+}

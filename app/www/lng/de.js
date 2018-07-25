@@ -43,5 +43,15 @@ export default {
     LOGS: 'Logs',
     STATIONS: 'Stationen',
     SETTINGS: 'Einstellungen',
-    SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert'
+    SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert',
+    SOC_DISPLAY: 'Ladezustand (Display)',
+    ESTIMATED_RANGE: 'Geschätzte Reichweite',
+    ESTIMATED_TIME: 'Geschätzte Ladezeit',
+    CHARGING_SPEEDS: '(Langsam, Normal, Schnell)',
+    NO_DEVICE_SELECTED: 'Kein OBDII-Gerät ausgewählt',
+    NO_CAR_SELECTED: 'Kein Auto ausgewählt',
+    DEBUG_MODE_ENABLED: 'Debug-Modus aktiviert. Daten werden nun übermittelt',
+    DEBUG_MODE_DISABLED: 'Debug-Modus deaktiviert',
+    BLUETOOTH_ENABLE_ERROR: 'Bluetooth konnte nicht aktiviert werden',
+    BLUETOOTH_CONNECT_ERROR: 'Bluetooth-Verbindung fehlgeschlagen'
 }
