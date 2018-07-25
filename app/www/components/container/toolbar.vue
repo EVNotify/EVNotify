@@ -8,9 +8,19 @@
             <md-button class="md-icon-button" :disabled="true">
                 <md-icon>sync_problem</md-icon>
             </md-button>
-            <md-button class="md-icon-button">
+            <md-button class="md-icon-button" @click="toggleDebug()">
                 <md-icon>bug_report</md-icon>
             </md-button>
         </div>
     </md-toolbar>
 </template>
+
+<script>
+export default {
+    methods: {
+        toggleDebug() {
+            this.$emit('debugChanged', (DEBUG = !DEBUG));
+        }
+    }
+}
+</script>
