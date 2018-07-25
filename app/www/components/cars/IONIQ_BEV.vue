@@ -21,9 +21,16 @@
 
                 // subscribe to data
                 bluetoothSerial.subscribe('>', data => {
+                    // remove spaces
+                    data = data.trim().replace(/\s/g, '');
                     console.log({
                         data
                     });
+                    // send debug data to backend if debug mode enabled
+                    if (DEBUG) Vue.http.post(RESTURL + 'debug', {
+                        data
+                    });
+
                     // TODO error detection (CAN ERROR..)
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
@@ -39,11 +46,6 @@
                 var self = this,
                     parsedData = {};
 
-                // remove unwanted characters and pair them in bytes again
-                data = data.trim().replace(/\s/g, '');
-
-                // send debug data (currently every time for debugging purposes!)
-                Vue.http.post(RESTURL + 'debug', {data});
                 try {
                     var fourthBlock = '7EC24',
                         fifthBlock = '7EC25',
@@ -54,11 +56,11 @@
                             extractedFourthBlock.slice(-2), 16
                         ) / 2, // last byte within 4th block
                         SOH: ((
+                                parseInt(
+                                    extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
+                                ) << 8) +
                             parseInt(
-                                extractedFourthBlock.replace(fourthBlock, '').slice(0,2), 16 // first byte within 4th block
-                            ) << 8) +
-                            parseInt(
-                                extractedFourthBlock.replace(fourthBlock, '').slice(2,4), 16 // second byte within 4th block
+                                extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
                             )
                         ) / 10
                     }
