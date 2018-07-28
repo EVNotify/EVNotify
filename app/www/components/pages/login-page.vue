@@ -80,6 +80,7 @@
                         }).then(response => {
                             if (response.body.settings != null) {
                                 storage.setValue('settings', response.body.settings);
+                                storage.setValue('lng', response.body.settings.lng);
                                 self.$router.push('/dashboard');
                             } else self.unexpectedError = true;
                         }, err => self.unexpectedError = true);
