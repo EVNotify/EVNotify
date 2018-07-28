@@ -98,7 +98,6 @@
                                     storage.setValue('akey', self.akey);
                                     storage.setValue('token', response.body.token);
                                     self[id] = true; // mark the current step as valid
-                                    eventBus.$emit('settings_getSettings', true);
                                     nextPage();
                                 } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                             }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
@@ -111,7 +110,10 @@
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
                     }).then(response => {
-                        self.$router.push('/dashboard');
+                        if (response.body.settings != null) {
+                            storage.setValue('settings', response.body.settings);
+                            self.$router.push('/dashboard');
+                        } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR');
                     }, err => self.thirdStepError = translation.translate('UNEXPECTED_ERROR'));
                 } else {
                     self[id] = true; // mark the current step as valid

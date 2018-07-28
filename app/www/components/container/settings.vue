@@ -75,7 +75,8 @@
                 translated: {},
                 settings: {
                     soc: 70,
-                    summary: false
+                    summary: false,
+                    lng: translation.getLocalLng()
                 },
                 devices: [],
                 autoboot: false,
@@ -99,22 +100,6 @@
             translatePage() {
                 this.translated = translation.translatePage();
             },
-            getSettings(useLocalLng) {
-                var self = this;
-                
-                self.$http.get(RESTURL + 'settings', {
-                    params: {
-                        akey: storage.getValue('akey'),
-                        token: storage.getValue('token')
-                    }
-                }).then(response => {
-                    self.settings = response.body.settings || self.settings;
-                    
-                    if (useLocalLng) self.settings.lng = translation.getLocalLng();
-                    
-                    storage.setValue('settings', self.settings);
-                }, err => console.error(err));
-            },
             listDevices() {
                 var self = this;
 
@@ -136,9 +121,6 @@
                     self.listDevices();
                 });
             }
-            eventBus.$on('settings_getSettings', function (useLocalLng) {
-                self.getSettings(useLocalLng);
-            });
             self.settings = storage.getValue('settings', self.settings);
         }
     }
