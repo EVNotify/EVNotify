@@ -13,8 +13,8 @@
                             </div>
                         </md-card-media>
                         <md-card-header-text>
-                            <div class="md-title">{{ obd2Data.SOC_DISPLAY || 0 }}%</div>
-                            <div class="md-subhead">{{ translated.SOC_DISPLAY }}</div>
+                            <div class="md-title">{{ obd2Data.SOC_DISPLAY || 0 }}% [{{ obd2Data.SOC_BMS || 0 }}%]</div>
+                            <div class="md-subhead">{{ translated.SOC_DISPLAY }} [{{ translated.SOC_BMS }}]</div>
                             <md-divider></md-divider>
                             <div>
                                 <img src="icons/sync.svg">Updated now

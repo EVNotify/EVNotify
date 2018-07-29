@@ -45,6 +45,7 @@ export default {
     SETTINGS: 'Settings',
     SETTINGS_SAVED: 'Settings saved successfully',
     SOC_DISPLAY: 'State of charge (Display)',
+    SOC_BMS: 'State of charge (BMS)',
     ESTIMATED_RANGE: 'Estimated range',
     ESTIMATED_TIME: 'Estimated charging time',
     CHARGING_SPEEDS: '(Slow, Normal, Fast)',

@@ -9,7 +9,8 @@
                     'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATBRD45',
                     'ATBRD23', 'ATBRD11', 'ATBRD08'
                 ],
-                offset: 0
+                offset: 0,
+                command: '2105'
             };
         },
         methods: {
@@ -32,7 +33,9 @@
                     });
 
                     // error detection to start re-initialization
-                    if (data.indexOf('CANERROR') !== -1 || data.indexOf('STOPPED') !== -1 || data.indexOf('UNABLETOCONNECT') !== -1) {
+                    if (data.indexOf('CANERROR') !== -1 ||
+                        data.indexOf('STOPPED') !== -1 ||
+                        data.indexOf('UNABLETOCONNECT') !== -1) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
                         // emit obd2 error
@@ -53,22 +56,32 @@
                     parsedData = {};
 
                 try {
-                    var fourthBlock = '7EC24',
-                        fifthBlock = '7EC25',
-                        extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock));
+                    if (self.command === '2105') {
+                        var fourthBlock = '7EC24',
+                            fifthBlock = '7EC25',
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock));
 
-                    parsedData = {
-                        SOC_DISPLAY: parseInt(
-                            extractedFourthBlock.slice(-2), 16
-                        ) / 2, // last byte within 4th block
-                        SOH: ((
+                        parsedData = {
+                            SOC_DISPLAY: parseInt(
+                                extractedFourthBlock.slice(-2), 16
+                            ) / 2, // last byte within 4th block
+                            SOH: ((
+                                    parseInt(
+                                        extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
+                                    ) << 8) +
                                 parseInt(
-                                    extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
-                                ) << 8) +
-                            parseInt(
-                                extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
-                            )
-                        ) / 10
+                                    extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
+                                )
+                            ) / 10
+                        };
+                    } else if (self.command === '2101') {
+                        var firstBlock = '7EC21',
+                            extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
+                                19);
+
+                        parsedData = {
+                            SOC_BMS: parseInt(extractedFirstBlock.replace(firstBlock, '').slice(0, 2), 16) / 2 // first byte within 1st block
+                        };
                     }
                 } catch (err) {
                     console.error(err);
