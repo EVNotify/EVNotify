@@ -28,7 +28,7 @@
                             <img src="icons/car.svg">
                         </md-card-media>
                         <md-card-header-text>
-                            <div class="md-title">0km</div>
+                            <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal }}km</div>
                             <div class="md-subhead">{{ translated.ESTIMATED_RANGE }}</div>
                             <md-divider></md-divider>
                             <div>
@@ -88,8 +88,13 @@
                 supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
                 initialized: false,
                 translated: {},
-                isWaitingForEnable: false
+                isWaitingForEnable: false,
+                estimatedRangeCurrent: 0,
+                estimatedRangeTotal: 0
             };
+        },
+        watch: {
+            'obd2Data.SOC_DISPLAY': 'estimate'
         },
         methods: {
             startWatch() {
@@ -113,8 +118,9 @@
                                         self.$refs[self.car].init();
                                     }
                                 }, err => {
-                                   self.showSidebar = true;
-                                   self.sidebarText = translation.translate('BLUETOOTH_CONNECT_ERROR'); 
+                                    self.showSidebar = true;
+                                    self.sidebarText = translation.translate(
+                                        'BLUETOOTH_CONNECT_ERROR');
                                 });
                             });
                         };
@@ -129,7 +135,8 @@
                                 proceed();
                             }, err => {
                                 self.showSidebar = true;
-                                self.sidebarText = translation.translate('BLUETOOTH_ENABLE_ERROR');
+                                self.sidebarText = translation.translate(
+                                    'BLUETOOTH_ENABLE_ERROR');
                             });
                         });
                     }, 1000);
@@ -140,7 +147,19 @@
             },
             debugInfo() {
                 this.showSidebar = true;
-                this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG)? 'ENABLED' : 'DISABLED'));
+                this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
+            },
+            estimate() {
+                console.log('estimate..');
+                if (typeof this.obd2Data.SOC_DISPLAY !== 'number' || isNaN(this.obd2Data.SOC_DISPLAY) ||
+                    typeof this.consumption !== 'number' || isNaN(this.consumption) ||
+                    typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
+                    this.estimatedRangeCurrent = this.estimatedRangeTotal = 0;
+                } else {
+                    this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
+                    this.estimatedRangeCurrent = this.estimatedRangeTotal * ((this.obd2Data.SOC_DISPLAY === 100) ? 1 :
+                        '0.' + parseInt(this.obd2Data.SOC_DISPLAY));
+                }
             }
         },
         components: {
@@ -158,7 +177,7 @@
             self.translated = translation.translatePage();
             self.device = storage.getValue('settings', {}).device;
             self.car = storage.getValue('settings', {}).car;
-            self.consumption = storage.getValue('settings', {}).consumption;
+            self.consumption = parseFloat(storage.getValue('settings', {}).consumption) || 0;
 
             // wait for cordova device to be ready - apply listener, if not ready yet
             if (self.$root.deviceReady) self.startWatch();
@@ -170,10 +189,12 @@
             eventBus.$on('obd2Data', function (data) {
                 self.obd2Data = data;
             });
-            eventBus.$on('obd2Error', function(error) {
+            eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;
                 self.sidebarText = translation.translate('OBD2_ERROR');
             });
+            // fake DEBUG
+            eventBus.$emit('obd2Data', {SOC_DISPLAY: 50, CAPACITY: 28});
         }
     }
 </script>

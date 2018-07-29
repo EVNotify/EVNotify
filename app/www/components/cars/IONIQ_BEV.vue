@@ -86,6 +86,7 @@
                 } catch (err) {
                     console.error(err);
                 }
+                parsedData.CAPACITY = 28;
                 console.log({
                     parsedData
                 });
