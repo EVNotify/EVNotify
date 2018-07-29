@@ -87,7 +87,8 @@
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
                 initialized: false,
-                translated: {}
+                translated: {},
+                isWaitingForEnable: false
             };
         },
         methods: {
@@ -121,7 +122,10 @@
                         bluetoothSerial.isEnabled(enabled => {
                             proceed();
                         }, disabled => {
+                            if (self.isWaitingForEnable) return; // there is already a dialog to wait for acceptance
+                            self.isWaitingForEnable = true;
                             bluetoothSerial.enable(enabled => {
+                                self.isWaitingForEnable = false;
                                 proceed();
                             }, err => {
                                 self.showSidebar = true;
