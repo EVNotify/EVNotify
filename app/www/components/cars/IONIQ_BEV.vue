@@ -31,7 +31,13 @@
                         data
                     });
 
-                    // TODO error detection (CAN ERROR..)
+                    // error detection to start re-initialization
+                    if (data.indexOf('CANERROR') !== -1 || data.indexOf('STOPPED') !== -1 || data.indexOf('UNABLETOCONNECT') !== -1) {
+                        // there was an error - reset offset, to start with first command afterwards
+                        self.offset = -1;
+                        // emit obd2 error
+                        eventBus.$emit('obd2Error', data);
+                    }
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));

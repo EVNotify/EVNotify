@@ -53,5 +53,6 @@ export default {
     DEBUG_MODE_ENABLED: 'Debug mode enabled. Data will be transfered',
     DEBUG_MODE_DISABLED: 'Debug mode disabled',
     BLUETOOTH_ENABLE_ERROR: 'Bluetooth could not be enabled',
-    BLUETOOTH_CONNECT_ERROR: 'Bluetooth connection failed'
+    BLUETOOTH_CONNECT_ERROR: 'Bluetooth connection failed',
+    OBD2_ERROR: 'OBDII error. Re-initialization. Please wait'
 };

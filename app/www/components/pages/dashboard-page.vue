@@ -170,6 +170,10 @@
             eventBus.$on('obd2Data', function (data) {
                 self.obd2Data = data;
             });
+            eventBus.$on('obd2Error', function(error) {
+                self.showSidebar = true;
+                self.sidebarText = translation.translate('OBD2_ERROR');
+            });
         }
     }
 </script>
