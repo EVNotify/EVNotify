@@ -187,14 +187,13 @@
                 });
             }
             eventBus.$on('obd2Data', function (data) {
-                self.obd2Data = data;
+                // update / extend local obd2 data - use Vue.set due to reactivity
+                Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
             });
             eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;
                 self.sidebarText = translation.translate('OBD2_ERROR');
             });
-            // fake DEBUG
-            eventBus.$emit('obd2Data', {SOC_DISPLAY: 50, CAPACITY: 28});
         }
     }
 </script>
