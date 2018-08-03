@@ -17,7 +17,7 @@
                             <div class="md-subhead">{{ translated.SOC_DISPLAY }} [{{ translated.SOC_BMS }}]</div>
                             <md-divider></md-divider>
                             <div>
-                                <img src="icons/sync.svg">Updated now
+                                <img src="icons/sync.svg">{{ formatDate(timestamp) }}
                             </div>
                         </md-card-header-text>
                     </md-card-header>
@@ -67,6 +67,7 @@
 </template>
 
 <script>
+    import helper from './../modules/helper.vue';
     import toolbar from './../container/toolbar.vue';
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
@@ -81,7 +82,9 @@
                 obd2Data: {},
                 showSidebar: false,
                 sidebarText: '',
-                interval: 0,
+                bluetoothInterval: 0,
+                syncInterval: 0,
+                timestamp: '?',
                 device: null,
                 car: null,
                 consumption: 0,
@@ -97,12 +100,15 @@
             'obd2Data.SOC_DISPLAY': 'estimate'
         },
         methods: {
+            formatDate(timestamp) {
+                return helper.formatDate(timestamp);
+            },
             startWatch() {
                 var self = this;
 
                 // if device set and car supported, start watch
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
-                    self.interval = setInterval(() => {
+                    self.bluetoothInterval = setInterval(() => {
                         var proceed = () => {
                             bluetoothSerial.isConnected(connected => {
                                 // run init process if not already running
@@ -140,6 +146,32 @@
                             });
                         });
                     }, 1000);
+                    self.syncInterval = setInterval(() => {
+                        // check if connected or not to determine if we need to push or pull soc
+                        bluetoothSerial.isConnected(connected => {
+                            if (self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS) {
+                                  // push soc
+                                self.$http.post(RESTURL + 'soc', {
+                                    akey: storage.getValue('akey'),
+                                    token: storage.getValue('token'),
+                                    soc: ((self.obd2Data.SOC_DISPLAY)? self.obd2Data.SOC_DISPLAY : self.obd2Data.SOC_BMS)
+                                }).then(response => {
+                                    console.log(response); // TODO icon info dynamic
+                                }, err => console.log(err));
+                            }
+                        }, disconnected => {
+                            // get soc
+                            self.$http.get(RESTURL + 'soc', {
+                                params: {
+                                    akey: storage.getValue('akey'),
+                                    token: storage.getValue('token')
+                                }
+                            }).then(response => {
+                                Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc);
+                                self.timestamp = response.body.timestamp;
+                            }, err => console.log(err));
+                        });
+                    }, 10000);
                 } else {
                     self.showSidebar = true;
                     self.sidebarText = translation.translate(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'));
@@ -169,7 +201,9 @@
             SOULEV
         },
         beforeDestroy() {
-            clearInterval(this.interval);
+            clearInterval(this.bluetoothInterval);
+            clearInterval(this.syncInterval);
+            if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
         },
         created() {
             var self = this;
@@ -189,6 +223,8 @@
             eventBus.$on('obd2Data', function (data) {
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
+                // set current timestamp
+                self.timestamp = parseInt(new Date().getTime()  / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;
