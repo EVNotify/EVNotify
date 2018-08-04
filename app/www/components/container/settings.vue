@@ -60,7 +60,7 @@
                 <md-checkbox v-model="settings.summary">{{ translated.SUMMARY }}</md-checkbox>
             </div>
         </form>
-        <md-button class="md-raised md-primary" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
+        <md-button class="md-raised md-primary" v-if="$route.path === '/register'" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
     </div>
 </template>
 
@@ -122,6 +122,8 @@
                 });
             }
             self.settings = storage.getValue('settings', self.settings);
+            // listen for save btn press (only for settings page) to push event
+            if (self.$route.path === '/settings') eventBus.$on('toolbar_saveBtnClicked', () => self.$emit('settingsSaved', self.settings));
         }
     }
 </script>
