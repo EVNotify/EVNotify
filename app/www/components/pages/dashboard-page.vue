@@ -189,8 +189,8 @@
                     this.estimatedRangeCurrent = this.estimatedRangeTotal = 0;
                 } else {
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
-                    this.estimatedRangeCurrent = this.estimatedRangeTotal * ((this.obd2Data.SOC_DISPLAY === 100) ? 1 :
-                        '0.' + parseInt(this.obd2Data.SOC_DISPLAY));
+                    this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((this.obd2Data.SOC_DISPLAY === 100) ? 1 :
+                        '0.' + parseInt(this.obd2Data.SOC_DISPLAY)));
                 }
             }
         },
