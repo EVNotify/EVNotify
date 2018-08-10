@@ -22,6 +22,18 @@ export default {
             month = ((month < 10)? '0' + month : month); // correct low values
 
             return day + '.' + month + '.' + date.getFullYear() + ' ' + hours + ':' + minutes + ':' + seconds;
+    },
+    /**
+     * Converts the decimal time into hh:mm format (e.g.: 0.5h will be converted to 00:30h)
+     * @param {Number} time the time to convert
+     * @returns {String} the formatted time string
+    */
+    convertDecimalTime: function(time) {
+        var sign = ((time < 0) ? '-' : ''),
+            min = Math.floor(Math.abs(time)),
+            sec = Math.floor((Math.abs(time) * 60) % 60);
+            
+        return sign + (((min < 10) ? '0' : '')) + min + ':' + (((sec < 10) ? '0' : '')) + sec;
     }
 }
 </script>

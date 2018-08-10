@@ -45,9 +45,9 @@
                         <md-card-header-text>
                             <div class="md-title">
                                 <ul class="dashboard-charging-times">
-                                    <li>0m</li>
-                                    <li>0m</li>
-                                    <li>0m</li>
+                                    <li>{{ formatDecimalTime(estimatedSlowTime) }}</li>
+                                    <li>{{ formatDecimalTime(estimatedNormalTime) }}</li>
+                                    <li>{{ formatDecimalTime(estimatedFastTime) }}</li>
                                 </ul>
                             </div>
                             <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
@@ -93,7 +93,10 @@
                 translated: {},
                 isWaitingForEnable: false,
                 estimatedRangeCurrent: 0,
-                estimatedRangeTotal: 0
+                estimatedRangeTotal: 0,
+                estimatedSlowTime: 0,
+                estimatedNormalTime: 0,
+                estimatedFastTime: 0
             };
         },
         watch: {
@@ -102,6 +105,9 @@
         methods: {
             formatDate(timestamp) {
                 return helper.formatDate(timestamp);
+            },
+            formatDecimalTime(time) {
+                return helper.convertDecimalTime(time) + 'h';
             },
             startWatch() {
                 var self = this;
@@ -186,11 +192,21 @@
                 if (typeof this.obd2Data.SOC_DISPLAY !== 'number' || isNaN(this.obd2Data.SOC_DISPLAY) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
                     typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
-                    this.estimatedRangeCurrent = this.estimatedRangeTotal = 0;
+                    this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime = this.estimatedFastTime = 0;
                 } else {
+                    // calculate range
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((this.obd2Data.SOC_DISPLAY === 100) ? 1 :
-                        '0.' + parseInt(this.obd2Data.SOC_DISPLAY)));
+                        '0.' + ((this.obd2Data.SOC_DISPLAY < 10)? ('0' + this.obd2Data.SOC_DISPLAY) : this.obd2Data.SOC_DISPLAY)));
+                    // calculate time
+                    if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
+                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((this.obd2Data.SOC_DISPLAY === 100)? 1 :
+                            '0.' + ((this.obd2Data.SOC_DISPLAY < 10)? ('0' + this.obd2Data.SOC_DISPLAY) : this.obd2Data.SOC_DISPLAY))).toFixed(2) || 0;
+                        
+                        this.estimatedSlowTime = parseFloat((amountToCharge / this.obd2Data.SLOW_SPEED).toFixed(2));
+                        this.estimatedNormalTime = parseFloat((amountToCharge / this.obd2Data.NORMAL_SPEED).toFixed(2));
+                        this.estimatedFastTime = parseFloat((amountToCharge / this.obd2Data.FAST_SPEED).toFixed(2));
+                    }
                 }
             }
         },

@@ -89,6 +89,9 @@
                     console.error(err);
                 }
                 parsedData.CAPACITY = 28;
+                parsedData.SLOW_SPEED = 2.3;
+                parsedData.NORMAL_SPEED = 4.6;
+                parsedData.FAST_SPEED = 50;
                 console.log({
                     parsedData
                 });
