@@ -189,7 +189,9 @@
                 this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
             estimate() {
-                if (typeof this.obd2Data.SOC_DISPLAY !== 'number' || isNaN(this.obd2Data.SOC_DISPLAY) ||
+                var soc = this.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+
+                if (typeof soc !== 'number' || isNaN(soc) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
                     typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
                     this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime = this.estimatedFastTime = 0;
@@ -197,19 +199,19 @@
                 } else {
                     // calculate range
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
-                    this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((this.obd2Data.SOC_DISPLAY === 100) ? 1 :
-                        '0.' + ((this.obd2Data.SOC_DISPLAY < 10)? ('0' + this.obd2Data.SOC_DISPLAY) : this.obd2Data.SOC_DISPLAY)));
+                    this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
+                        '0.' + ((soc < 10)? ('0' + soc) : soc)));
                     // calculate time
                     if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
-                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((this.obd2Data.SOC_DISPLAY === 100)? 1 :
-                            '0.' + ((this.obd2Data.SOC_DISPLAY < 10)? ('0' + this.obd2Data.SOC_DISPLAY) : this.obd2Data.SOC_DISPLAY))).toFixed(2) || 0;
+                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100)? 1 :
+                            '0.' + ((soc < 10)? ('0' + soc) : soc))).toFixed(2) || 0;
                         
                         this.estimatedSlowTime = parseFloat((amountToCharge / this.obd2Data.SLOW_SPEED).toFixed(2));
                         this.estimatedNormalTime = parseFloat((amountToCharge / this.obd2Data.NORMAL_SPEED).toFixed(2));
                         this.estimatedFastTime = parseFloat((amountToCharge / this.obd2Data.FAST_SPEED).toFixed(2));
                     }
                     // set icon based on soc
-                    this.batteryIcon = 'icons/battery_' + (Math.ceil((this.obd2Data.SOC_DISPLAY + 1) / 5) * 5) + '.svg';
+                    this.batteryIcon = 'icons/battery_' + (Math.ceil(( ((soc === 100)? 99 : parseInt(soc)) + 1) / 5) * 5) + '.svg';
                 }
             }
         },
