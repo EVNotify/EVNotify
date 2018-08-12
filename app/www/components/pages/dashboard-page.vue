@@ -7,7 +7,7 @@
                 <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
                     <md-card-header>
                         <md-card-media>
-                            <img src="icons/battery_unknown.svg">
+                            <img :src="batteryIcon">
                             <div class="dashboard-soh">
                                 <img src="icons/favorite.svg">{{ obd2Data.SOH || 0}}%
                             </div>
@@ -96,7 +96,8 @@
                 estimatedRangeTotal: 0,
                 estimatedSlowTime: 0,
                 estimatedNormalTime: 0,
-                estimatedFastTime: 0
+                estimatedFastTime: 0,
+                batteryIcon: 'icons/battery_unknown.svg'
             };
         },
         watch: {
@@ -188,11 +189,11 @@
                 this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
             estimate() {
-                console.log('estimate..');
                 if (typeof this.obd2Data.SOC_DISPLAY !== 'number' || isNaN(this.obd2Data.SOC_DISPLAY) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
                     typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
                     this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime = this.estimatedFastTime = 0;
+                    this.batteryIcon = 'icons/battery_unknown.svg';
                 } else {
                     // calculate range
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
@@ -207,6 +208,8 @@
                         this.estimatedNormalTime = parseFloat((amountToCharge / this.obd2Data.NORMAL_SPEED).toFixed(2));
                         this.estimatedFastTime = parseFloat((amountToCharge / this.obd2Data.FAST_SPEED).toFixed(2));
                     }
+                    // set icon based on soc
+                    this.batteryIcon = 'icons/battery_' + (Math.ceil((this.obd2Data.SOC_DISPLAY + 1) / 5) * 5) + '.svg';
                 }
             }
         },
