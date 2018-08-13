@@ -1,9 +1,9 @@
 <template>
     <md-bottom-bar md-type="shift" :md-active-item.sync="currentSelection">
-        <md-bottom-bar-item id="bottom-bar-item-dashboard" :md-label="translated.DASHBOARD" md-icon="dashboard" to="/dashboard"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-logs" :md-label="translated.LOGS" md-icon="list" to="/logs"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-stations" :md-label="translated.STATIONS" md-icon="ev_station" to="/stations"></md-bottom-bar-item>
-        <md-bottom-bar-item id="bottom-bar-item-settings" :md-label="translated.SETTINGS" md-icon="settings" to="/settings"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-dashboard" :md-label="translated.DASHBOARD" md-icon="icons/dashboard.svg" to="/dashboard"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-logs" :md-label="translated.LOGS" md-icon="icons/list.svg" to="/logs"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-stations" :md-label="translated.STATIONS" md-icon="icons/ev_station.svg" to="/stations"></md-bottom-bar-item>
+        <md-bottom-bar-item id="bottom-bar-item-settings" :md-label="translated.SETTINGS" md-icon="icons/settings.svg" to="/settings"></md-bottom-bar-item>
     </md-bottom-bar>
 </template>
 

@@ -3,21 +3,21 @@
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon>bluetooth_disabled</md-icon>
+                <md-icon md-src="icons/bluetooth_disabled.svg"></md-icon>
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon>sync_problem</md-icon>
+                <md-icon md-src="icons/sync_disabled.svg"></md-icon>
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
-                <md-icon>bug_report</md-icon>
+                <md-icon md-src="icons/bug_report.svg"></md-icon>
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage">
             <md-button class="md-icon-button">
-                <md-icon>account_circle</md-icon>
+                <md-icon md-src="icons/account_circle.svg"></md-icon>
             </md-button>
             <md-button class="md-icon-button" @click="emitSave()">
-                <md-icon>save</md-icon>
+                <md-icon md-src="icons/save.svg"></md-icon>
             </md-button>
         </div>
     </md-toolbar>
