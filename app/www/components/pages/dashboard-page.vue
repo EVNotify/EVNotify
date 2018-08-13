@@ -17,7 +17,7 @@
                             <div class="md-subhead">{{ translated.SOC_DISPLAY }} [{{ translated.SOC_BMS }}]</div>
                             <md-divider></md-divider>
                             <div>
-                                <img src="icons/sync.svg">{{ formatDate(timestamp) }}
+                                <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
                             </div>
                         </md-card-header-text>
                     </md-card-header>
@@ -123,6 +123,7 @@
                                     self.initialized = true;
                                     self.$refs[self.car].init();
                                 }
+                                eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
                                 bluetoothSerial.connect(self.device, connected => {
                                     // run init process if not already running
@@ -130,8 +131,10 @@
                                         self.initialized = true;
                                         self.$refs[self.car].init();
                                     }
+                                    eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
                                     self.showSidebar = true;
+                                    eventBus.$emit('bluetoothChanged', 'disabled');
                                     self.sidebarText = translation.translate(
                                         'BLUETOOTH_CONNECT_ERROR');
                                 });
@@ -143,11 +146,13 @@
                         }, disabled => {
                             if (self.isWaitingForEnable) return; // there is already a dialog to wait for acceptance
                             self.isWaitingForEnable = true;
+                            eventBus.$emit('bluetoothChanged', 'searching');
                             bluetoothSerial.enable(enabled => {
                                 self.isWaitingForEnable = false;
                                 proceed();
                             }, err => {
                                 self.showSidebar = true;
+                                eventBus.$emit('bluetoothChanged', 'disabled');
                                 self.sidebarText = translation.translate(
                                     'BLUETOOTH_ENABLE_ERROR');
                             });
@@ -163,8 +168,8 @@
                                     token: storage.getValue('token'),
                                     soc: ((self.obd2Data.SOC_DISPLAY)? self.obd2Data.SOC_DISPLAY : self.obd2Data.SOC_BMS)
                                 }).then(response => {
-                                    console.log(response); // TODO icon info dynamic
-                                }, err => console.log(err));
+                                    eventBus.$emit('syncChanged', 'enabled');
+                                }, err => eventBus.$emit('syncChanged', 'problem'));
                             }
                         }, disconnected => {
                             // get soc
@@ -176,7 +181,8 @@
                             }).then(response => {
                                 Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc);
                                 self.timestamp = response.body.timestamp;
-                            }, err => console.log(err));
+                                eventBus.$emit('syncChanged', 'enabled');
+                            }, err => eventBus.$emit('syncChanged', 'problem'));
                         });
                     }, 10000);
                 } else {

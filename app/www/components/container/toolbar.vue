@@ -3,10 +3,10 @@
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon md-src="icons/bluetooth_disabled.svg"></md-icon>
+                <md-icon :md-src="bluetoothIcon"></md-icon>
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon md-src="icons/sync_disabled.svg"></md-icon>
+                <md-icon :md-src="syncIcon"></md-icon>
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
                 <md-icon md-src="icons/bug_report.svg"></md-icon>
@@ -30,7 +30,9 @@ export default {
     data() {
         return {
             dashboardPage: false,
-            settingsPage: false
+            settingsPage: false,
+            bluetoothIcon: 'icons/bluetooth_disabled.svg',
+            syncIcon: 'icons/sync_disabled.svg'
         };
     },
     methods: {
@@ -42,10 +44,15 @@ export default {
         }
     },
     created() {
-        var currentPage = this.$route.path;
+        var self = this,
+            currentPage = this.$route.path;
 
-        this.dashboardPage = (currentPage === '/dashboard');
-        this.settingsPage = (currentPage === '/settings');
+        // determine current page
+        self.dashboardPage = (currentPage === '/dashboard');
+        self.settingsPage = (currentPage === '/settings');
+        // listener to dynamically change icons
+        eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
+        eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
     }
 }
 </script>
