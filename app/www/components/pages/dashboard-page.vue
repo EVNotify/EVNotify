@@ -166,7 +166,8 @@
                                 self.$http.post(RESTURL + 'soc', {
                                     akey: storage.getValue('akey'),
                                     token: storage.getValue('token'),
-                                    soc: ((self.obd2Data.SOC_DISPLAY)? self.obd2Data.SOC_DISPLAY : self.obd2Data.SOC_BMS)
+                                    display: self.obd2Data.SOC_DISPLAY,
+                                    bms: self.obd2Data.SOC_BMS
                                 }).then(response => {
                                     eventBus.$emit('syncChanged', 'enabled');
                                 }, err => eventBus.$emit('syncChanged', 'problem'));
@@ -179,8 +180,9 @@
                                     token: storage.getValue('token')
                                 }
                             }).then(response => {
-                                Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc);
-                                self.timestamp = response.body.timestamp;
+                                Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
+                                Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
+                                self.timestamp = response.body.last_soc;
                                 eventBus.$emit('syncChanged', 'enabled');
                             }, err => eventBus.$emit('syncChanged', 'problem'));
                         });
