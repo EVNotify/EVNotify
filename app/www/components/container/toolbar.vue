@@ -13,9 +13,6 @@
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage">
-            <md-button class="md-icon-button">
-                <md-icon md-src="icons/account_circle.svg"></md-icon>
-            </md-button>
             <md-button class="md-icon-button" @click="emitSave()">
                 <md-icon md-src="icons/save.svg"></md-icon>
             </md-button>
