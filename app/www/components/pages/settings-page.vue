@@ -118,7 +118,7 @@
                 </md-list-item>
             </form>
         </md-list>
-        <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSidebar">
+        <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSidebar" :md-persistent="true">
             <span v-if="saved">{{ translated.SETTINGS_SAVED }}</span>
             <span v-if="unexpectedError">{{ translated.UNEXPECTED_ERROR }}</span>
         </md-snackbar>
