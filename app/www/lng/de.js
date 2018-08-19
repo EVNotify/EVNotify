@@ -7,6 +7,8 @@ export default {
     PASSWORD: 'Passwort',
     PASSWORD_REPEAT: 'Passwort wiederholen',
     PASSWORD_MISMATCH: 'Passwörter stimmen nicht überein',
+    PASSWORD_CHANGE: 'Passwort ändern',
+    TOKEN_RESET: 'Token zurücksetzen',
     CREATE_ACCOUNT:  'Account erstellen',
     PASSWORD_FORGOT: 'Passwort vergessen',
     LOGIN: 'Anmelden',
