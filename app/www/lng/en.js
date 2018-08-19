@@ -18,7 +18,7 @@ export default {
     INTRODUCTION: 'Introduction',
     SETUP: 'Setup',
     OWN_RISK: 'Use at your own risk. I am not liable for damages that may result from improper use or the use of counterfeit OBD2 dongle. By creating an account you agree with it.',
-    INTRODUCTION_TEXT_1: 'EVNotify allows you to remotely control your electric vehicle.',
+    INTRODUCTION_TEXT_1: 'EVNotify allows you to remotely monitor your electric vehicle.',
     INTRODUCTION_TEXT_2: 'Keep track of your state of charge and let you notify when your desired state of charge is reached.',
     INTRODUCTION_TEXT_3: 'Useful statistics and various functions, such as finding charging stations, simplify everyday life.',
     INTRODUCTION_TEXT_4: 'What are you waiting for? EVNotify is free, open source. All you need is an Android device with Bluetooth, Internet and a Bluetooth-enabled OBD2 dongle.',

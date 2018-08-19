@@ -18,7 +18,7 @@ export default {
     INTRODUCTION: 'Einführung',
     SETUP: 'Einrichtung',
     OWN_RISK: 'Benutzung auf eigene Gefahr. Ich hafte nicht für Schäden, die durch unsachgemäße Nutzung oder die Verwendung gefälschter OBD2-Dongle enstehen können. Mit dem Erstellen eines Accounts erklärst Du Dich damit einverstanden.',
-    INTRODUCTION_TEXT_1: 'EVNotify ermöglicht es Dir, den Ladezustand Deines Elekroautos aus der Ferne zu überwachen.',
+    INTRODUCTION_TEXT_1: 'EVNotify ermöglicht es Dir, Dein Elekroauto aus der Ferne zu überwachen.',
     INTRODUCTION_TEXT_2: 'Behalte den Überblick über Deinen Ladezustand und lass Dich benachrichtigen, sobald Dein gewünscher Ladezustand erreicht ist.',
     INTRODUCTION_TEXT_3: 'Nützliche Statistiken sowie diverse Funktionen, wie etwa das Auffinden von Ladestationen, vereinfachen Dir den Alltag.',
     INTRODUCTION_TEXT_4: 'Worauf wartest Du noch? EVNotify ist kostenlos, Open-Source. Du benötigst lediglich ein Android Gerät mit Bluetooth, Internet und einen bluetooth-fähigen OBD2-Dongle.',

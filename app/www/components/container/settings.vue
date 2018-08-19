@@ -38,12 +38,6 @@
                     <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{ device.name }}</md-option>
                 </md-select>
             </md-field>
-            <div>
-                <md-switch v-model="autoboot">{{ translated.AUTOBOOT }}</md-switch>
-            </div>
-            <div>
-                <md-switch v-model="keepawake">{{ translated.KEEPAWAKE }}</md-switch>
-            </div>
             <md-subheader class="md-primary">
                 <b>{{ translated.NOTIFICATIONS }}</b>
             </md-subheader>
@@ -56,9 +50,6 @@
                 <label for="email">{{ translated.EMAIL }}</label>
                 <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
             </md-field>
-            <div>
-                <md-checkbox v-model="settings.summary">{{ translated.SUMMARY }}</md-checkbox>
-            </div>
         </form>
         <md-button class="md-raised md-primary" v-if="$route.path === '/register'" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
     </div>
