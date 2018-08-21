@@ -30,12 +30,20 @@
                             <label for="token">Token</label>
                             <md-input v-model="token" disabled type="password"></md-input>
                         </md-field>
+                        <md-dialog-prompt :md-active.sync="showOldPasswordDialog" v-model="dialogOldPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
+                            :md-content="translated.PASSWORD_ENTER" @md-confirm="showPasswordDialog = true"
+                            :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
+                        <md-dialog-prompt :md-active.sync="showPasswordDialog" v-model="dialogPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
+                            :md-content="((nextDialog === 'token')? translated.PASSWORD_ENTER : translated.PASSWORD_NEW)" @md-confirm="((nextDialog === 'token')? showTokenResetDialog = true : changePassword())"
+                            :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
                         <div class="md-layout">
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%">{{ translated.PASSWORD_CHANGE }}</md-button>
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'password'; showOldPasswordDialog = true">{{ translated.PASSWORD_CHANGE }}</md-button>
                             </div>
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%">{{ translated.TOKEN_RESET }}</md-button>
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; showPasswordDialog = true">{{ translated.TOKEN_RESET }}</md-button>
+                                <md-dialog-confirm :md-active.sync="showTokenResetDialog" :md-title="translated.TOKEN_RESET" :md-content="translated.TOKEN_RESET_WARNING"
+                                    :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" @md-confirm="resetToken" />
                             </div>
                         </div>
                     </md-list>
@@ -121,6 +129,9 @@
         <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSidebar" :md-persistent="true">
             <span v-if="saved">{{ translated.SETTINGS_SAVED }}</span>
             <span v-if="unexpectedError">{{ translated.UNEXPECTED_ERROR }}</span>
+            <span v-if="tokenResetted">{{ translated.TOKEN_RESETTED }}</span>
+            <span v-if="passwordWrong">{{ translated.INVALID_CREDENTIALS }}</span>
+            <span v-if="passwordChanged">{{ translated.PASSWORD_CHANGED }}</span>
         </md-snackbar>
         <bottom-bar></bottom-bar>
     </div>
@@ -146,7 +157,16 @@
                 keepawake: false,
                 autoboot: false,
                 akey: '',
-                token: ''
+                token: '',
+                nextDialog: '',
+                dialogOldPassword: '',
+                dialogPassword: '',
+                showOldPasswordDialog: false,
+                showPasswordDialog: false,
+                showTokenResetDialog: false,
+                tokenResetted: false,
+                passwordWrong: false,
+                passwordChanged: false
             };
         },
         watch: {
@@ -180,6 +200,37 @@
                         self.devices = devices;
                     }, err => console.error(err));
                 }, err => console.error(err));
+            },
+            resetToken() {
+                var self = this;
+
+                self.$http.put(RESTURL + 'renewtoken', {
+                    akey: self.akey,
+                    token: self.token,
+                    password: self.dialogPassword
+                }).then(response => {
+                    self.showSidebar = true;
+                    if (response.body.token) {
+                        storage.setValue('token', (self.token = response.body.token));
+                        self.tokenResetted = true;
+                    } else self.unexpectedError = true;
+                }, err => {
+                    // TODO: Check if credentials were invalid or if there was an unexpected error..
+                    self.showSidebar = true;
+                    self.passwordWrong = true;
+                });
+            },
+            changePassword() {
+                var self = this;
+
+                self.$http.post(RESTURL + 'changepw', {
+                    akey: self.akey,
+                    token: self.token,
+                    oldpassword: self.dialogOldPassword,
+                    newpassword: self.dialogPassword
+                }).then(response => {
+                    self.showSidebar = self.passwordChanged = true;
+                }, err => self.showSidebar = self.unexpectedError = true);
             }
         },
         components: {
