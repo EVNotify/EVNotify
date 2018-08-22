@@ -59,7 +59,7 @@
             </div>
         </div>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
-        <md-snackbar md-position="center" :md-persistent="true" :md-active.sync="showSidebar">
+        <md-snackbar md-position="center" :md-persistent="true" :md-active.sync="showSidebar" :md-duration="((persistentSnackbar) ? Infinity : 3000)">
             <span>{{ sidebarText }}</span>
         </md-snackbar>
         <bottom-bar></bottom-bar>
@@ -97,7 +97,8 @@
                 estimatedSlowTime: 0,
                 estimatedNormalTime: 0,
                 estimatedFastTime: 0,
-                batteryIcon: 'icons/battery_unknown.svg'
+                batteryIcon: 'icons/battery_unknown.svg',
+                persistentSnackbar: false
             };
         },
         watch: {
@@ -134,6 +135,7 @@
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
                                     self.showSidebar = true;
+                                    self.persistentSnackbar = true;
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                     self.sidebarText = translation.translate(
                                         'BLUETOOTH_CONNECT_ERROR');
@@ -152,6 +154,7 @@
                                 proceed();
                             }, err => {
                                 self.showSidebar = true;
+                                self.persistentSnackbar = false;
                                 eventBus.$emit('bluetoothChanged', 'disabled');
                                 self.sidebarText = translation.translate(
                                     'BLUETOOTH_ENABLE_ERROR');
@@ -180,6 +183,11 @@
                                     token: storage.getValue('token')
                                 }
                             }).then(response => {
+                                var baseData = self.$refs[self.car].getBaseData();
+
+                                // extend with base data
+                                Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key, baseData[key]));
+                                // update soc info
                                 Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
                                 Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
                                 self.timestamp = response.body.last_soc;
@@ -189,11 +197,13 @@
                     }, 10000);
                 } else {
                     self.showSidebar = true;
+                    self.persistentSnackbar = true;
                     self.sidebarText = translation.translate(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'));
                 }
             },
             debugInfo() {
                 this.showSidebar = true;
+                this.persistentSnackbar = false;
                 this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
             estimate() {
@@ -206,9 +216,9 @@
                     this.batteryIcon = 'icons/battery_unknown.svg';
                 } else {
                     // calculate range
-                    this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100);
+                    this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
-                        '0.' + ((soc < 10)? ('0' + soc) : soc)));
+                        '0.' + ((soc < 10)? ('0' + soc) : soc))) || 0;
                     // calculate time
                     if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
                         var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100)? 1 :
@@ -257,6 +267,7 @@
             });
             eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;
+                self.persistentSnackbar = false;
                 self.sidebarText = translation.translate('OBD2_ERROR');
             });
         }

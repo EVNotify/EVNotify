@@ -55,7 +55,8 @@
             },
             parseData(data) {
                 var self = this,
-                    parsedData = {};
+                    parsedData = {},
+                    baseData = self.getBaseData();
 
                 try {
                     if (self.command === '2105') {
@@ -88,14 +89,20 @@
                 } catch (err) {
                     console.error(err);
                 }
-                parsedData.CAPACITY = 28;
-                parsedData.SLOW_SPEED = 2.3;
-                parsedData.NORMAL_SPEED = 4.6;
-                parsedData.FAST_SPEED = 50;
+                // extend with base data
+                Object.keys(baseData).forEach(key => parsedData[key] = baseData[key]);
                 console.log({
                     parsedData
                 });
                 return parsedData;
+            },
+            getBaseData() {
+                return {
+                    CAPACITY: 28,
+                    SLOW_SPEED: 2.3,
+                    NORMAL_SPEED: 4.6,
+                    FAST_SPEED: 50
+                };
             }
         }
     }
