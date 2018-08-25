@@ -87,6 +87,9 @@
                 timestamp: '?',
                 device: null,
                 car: null,
+                socThreshold: 0,
+                notificationSent: false,
+                lastResponse: 0,
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
                 initialized: false,
@@ -194,6 +197,17 @@
                                 eventBus.$emit('syncChanged', 'enabled');
                             }, err => eventBus.$emit('syncChanged', 'problem'));
                         });
+                        // check if charge interrupted
+                        if (!self.notificationSent && self.lastResponse && parseInt((new Date().getTime () / 1000 + 20)) > self.lastResponse) {
+                            // no succesful response detected
+                            self.$http.post(RESTURL + 'notification', {
+                                akey: storage.getValue('akey'),
+                                token: storage.getValue('token'),
+                                abort: true
+                            }).then(response => {
+                                self.notificationSent = true;
+                            }, err => console.log(err));
+                        }
                     }, 10000);
                 } else {
                     self.showSidebar = true;
@@ -231,6 +245,21 @@
                     // set icon based on soc
                     this.batteryIcon = 'icons/battery_' + (Math.ceil(( ((soc === 100)? 99 : parseInt(soc)) + 1) / 5) * 5) + '.svg';
                 }
+                // soc threshold watcher
+                if (soc >= this.socThreshold && !this.notificationSent) {
+                    // sent notification that soc has reached
+                    this.$http.post(RESTURL + 'notification', {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token')
+                    }).then(response => {
+                        this.notificationSent = true;
+                    }, err => console.log(err));
+                } else if (this.notificationSent && soc < this.socThreshold) {
+                    // reset notification sent
+                    this.notificationSent = true;
+                }
+                // update last car response activity
+                this.lastResponse = parseInt(new Date().getTime()  / 1000);
             }
         },
         components: {
@@ -251,6 +280,7 @@
             self.device = storage.getValue('settings', {}).device;
             self.car = storage.getValue('settings', {}).car;
             self.consumption = parseFloat(storage.getValue('settings', {}).consumption) || 0;
+            self.socThreshold = parseInt(storage.getValue('settings', {}).soc) || 0;
 
             // wait for cordova device to be ready - apply listener, if not ready yet
             if (self.$root.deviceReady) self.startWatch();
