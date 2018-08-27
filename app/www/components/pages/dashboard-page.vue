@@ -3,60 +3,91 @@
     <div>
         <toolbar @debugChanged="debugInfo()"></toolbar>
         <div class="content-within-page">
-            <div class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
-                    <md-card-header>
-                        <md-card-media>
-                            <img :src="batteryIcon">
-                            <div class="dashboard-soh">
-                                <img src="icons/favorite.svg">{{ obd2Data.SOH || 0}}%
-                            </div>
-                        </md-card-media>
-                        <md-card-header-text>
-                            <div class="md-title">{{ obd2Data.SOC_DISPLAY || 0 }}% [{{ obd2Data.SOC_BMS || 0 }}%]</div>
-                            <div class="md-subhead">{{ translated.SOC_DISPLAY }} [{{ translated.SOC_BMS }}]</div>
-                            <md-divider></md-divider>
-                            <div>
-                                <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
-                            </div>
-                        </md-card-header-text>
-                    </md-card-header>
-                </md-card>
-                <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
-                    <md-card-header>
-                        <md-card-media>
-                            <img src="icons/car.svg">
-                        </md-card-media>
-                        <md-card-header-text>
-                            <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal }}km</div>
-                            <div class="md-subhead">{{ translated.ESTIMATED_RANGE }}</div>
-                            <md-divider></md-divider>
-                            <div>
-                                <img src="icons/ev_station.svg">{{ consumption || 0 }}kWh/100km
-                            </div>
-                        </md-card-header-text>
-                    </md-card-header>
-                </md-card>
-                <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
-                    <md-card-header>
-                        <md-card-media>
-                            <img src="icons/schedule.svg">
-                        </md-card-media>
-                        <md-card-header-text>
-                            <div class="md-title">
-                                <ul class="dashboard-charging-times">
-                                    <li>{{ formatDecimalTime(estimatedSlowTime) }}</li>
-                                    <li>{{ formatDecimalTime(estimatedNormalTime) }}</li>
-                                    <li>{{ formatDecimalTime(estimatedFastTime) }}</li>
-                                </ul>
-                            </div>
-                            <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
-                            <md-divider></md-divider>
-                            {{ translated.CHARGING_SPEEDS }}
-                        </md-card-header-text>
-                    </md-card-header>
-                </md-card>
-            </div>
+            <vueper-slides :fixed-height="true">
+                <vueper-slide v-for="i in 2" :key="i">
+                    <div slot="slideContent">
+                        <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img :src="batteryIcon">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.SOC_DISPLAY || 0 }}%</div>
+                                        <div class="md-subhead">{{ translated.SOC_DISPLAY }}</div>
+                                        <md-divider></md-divider>
+                                        <div>
+                                            <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
+                                        </div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/car.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal }}km</div>
+                                        <div class="md-subhead">{{ translated.ESTIMATED_RANGE }}</div>
+                                        <md-divider></md-divider>
+                                        <div>
+                                            <img src="icons/ev_station.svg">{{ consumption || 0 }}kWh/100km
+                                        </div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/schedule.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">
+                                            <ul class="dashboard-charging-times">
+                                                <li>{{ formatDecimalTime(estimatedSlowTime) }}</li>
+                                                <li>{{ formatDecimalTime(estimatedNormalTime) }}</li>
+                                                <li>{{ formatDecimalTime(estimatedFastTime) }}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
+                                        <md-divider></md-divider>
+                                        {{ translated.CHARGING_SPEEDS }}
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                        </div>
+                        <div v-if="i === 2" class="md-layout md-gutter md-alignment-center dashboard-card-list">
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img :src="batteryIcon">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.SOC_BMS || 0 }}%</div>
+                                        <div class="md-subhead">{{ translated.SOC_BMS }}</div>
+                                        <md-divider></md-divider>
+                                        <div>
+                                            <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
+                                        </div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/favorite.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.SOH || 0 }}%</div>
+                                        <div class="md-subhead">{{ translated.SOH }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                        </div>
+                    </div>
+                </vueper-slide>
+            </vueper-slides>
         </div>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
         <md-snackbar md-position="center" :md-persistent="true" :md-active.sync="showSidebar" :md-duration="((persistentSnackbar) ? Infinity : 3000)">
@@ -168,7 +199,7 @@
                         // check if connected or not to determine if we need to push or pull soc
                         bluetoothSerial.isConnected(connected => {
                             if (self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS) {
-                                  // push soc
+                                // push soc
                                 self.$http.post(RESTURL + 'soc', {
                                     akey: storage.getValue('akey'),
                                     token: storage.getValue('token'),
@@ -189,7 +220,8 @@
                                 var baseData = self.$refs[self.car].getBaseData();
 
                                 // extend with base data
-                                Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key, baseData[key]));
+                                Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key,
+                                    baseData[key]));
                                 // update soc info
                                 Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
                                 Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
@@ -198,7 +230,8 @@
                             }, err => eventBus.$emit('syncChanged', 'problem'));
                         });
                         // check if charge interrupted
-                        if (!self.notificationSent && self.lastResponse && parseInt((new Date().getTime () / 1000 + 20)) > self.lastResponse) {
+                        if (!self.notificationSent && self.lastResponse && parseInt((new Date().getTime() /
+                                1000 + 20)) > self.lastResponse) {
                             // no succesful response detected
                             self.$http.post(RESTURL + 'notification', {
                                 akey: storage.getValue('akey'),
@@ -226,24 +259,28 @@
                 if (typeof soc !== 'number' || isNaN(soc) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
                     typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
-                    this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime = this.estimatedFastTime = 0;
+                    this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime =
+                        this.estimatedFastTime = 0;
                     this.batteryIcon = 'icons/battery_unknown.svg';
                 } else {
                     // calculate range
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
-                        '0.' + ((soc < 10)? ('0' + soc) : soc))) || 0;
+                        '0.' + ((soc < 10) ? ('0' + soc) : soc))) || 0;
                     // calculate time
                     if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
-                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100)? 1 :
-                            '0.' + ((soc < 10)? ('0' + soc) : soc))).toFixed(2) || 0;
-                        
+                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100) ?
+                            1 :
+                            '0.' + ((soc < 10) ? ('0' + soc) : soc))).toFixed(2) || 0;
+
                         this.estimatedSlowTime = parseFloat((amountToCharge / this.obd2Data.SLOW_SPEED).toFixed(2));
                         this.estimatedNormalTime = parseFloat((amountToCharge / this.obd2Data.NORMAL_SPEED).toFixed(2));
                         this.estimatedFastTime = parseFloat((amountToCharge / this.obd2Data.FAST_SPEED).toFixed(2));
                     }
                     // set icon based on soc
-                    this.batteryIcon = 'icons/battery_' + (Math.ceil(( ((soc === 100)? 99 : parseInt(soc)) + 1) / 5) * 5) + '.svg';
+                    this.batteryIcon = 'icons/battery_' + (
+                        Math.ceil((((soc === 100) ? 99 : parseInt(soc)) + 1) / 5) * 5
+                    ) + '.svg';
                 }
                 // soc threshold watcher
                 if (soc >= this.socThreshold && !this.notificationSent) {
@@ -259,7 +296,7 @@
                     this.notificationSent = true;
                 }
                 // update last car response activity
-                this.lastResponse = parseInt(new Date().getTime()  / 1000);
+                this.lastResponse = parseInt(new Date().getTime() / 1000);
             }
         },
         components: {
@@ -293,7 +330,7 @@
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 // set current timestamp
-                self.timestamp = parseInt(new Date().getTime()  / 1000);
+                self.timestamp = parseInt(new Date().getTime() / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;

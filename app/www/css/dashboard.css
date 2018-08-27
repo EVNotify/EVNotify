@@ -2,10 +2,29 @@
     width: 100%;
     margin: 0;
 }
+
 .dashboard-charging-times {
     margin: -8px 0 0 0;
 }
+
 .dashboard-soh img {
     width: 20%;
     margin-left: 20px;
+}
+
+.vueperslide__content-wrapper {
+    width: 100%;
+}
+
+.vueperslides__bullet {
+    border: 1px solid #74787b;
+    background-color: #448aff;
+}
+
+.vueperslides__bullet--active {
+    background-color: #bbe9ff;
+}
+
+.vueperslides--fixed-height {
+    height: calc(100vh - 112px);
 }

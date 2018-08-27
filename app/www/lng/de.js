@@ -74,6 +74,7 @@ export default {
     SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert',
     SOC_DISPLAY: 'Ladezustand (Display)',
     SOC_BMS: 'Ladezustand (BMS)',
+    SOH: 'Akkugesundheit (SOH)',
     ESTIMATED_RANGE: 'Geschätzte Reichweite',
     ESTIMATED_TIME: 'Geschätzte Ladezeit',
     CHARGING_SPEEDS: '(Langsam, Normal, Schnell)',
