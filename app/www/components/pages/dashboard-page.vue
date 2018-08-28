@@ -326,6 +326,13 @@
                     self.startWatch();
                 });
             }
+            // apply backbuttonPressed listener to handle exit or back
+            eventBus.$on('backbuttonPressed', function(e) {
+                if (self.$route.path === '/dashboard' || self.$route.path === '/') {
+                    e.preventDefault();
+                    navigator.app.exitApp();
+                } else navigator.app.backHistory();
+            });
             eventBus.$on('obd2Data', function (data) {
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));

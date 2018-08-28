@@ -41,6 +41,7 @@
     import translation from './../modules/translation.vue';
     import settings from './../container/settings.vue';
     import storage from './../modules/storage.vue';
+    import eventBus from './../modules/event.vue';
 
     export default {
         data() {
@@ -89,11 +90,20 @@
             }
         },
         created() {
+            var self = this;
+
             // determine if we are already logged in - if so, skip login page
-            if (storage.getValue('token') && storage.getValue('akey')) return this.$router.push('/dashboard');
+            if (storage.getValue('token') && storage.getValue('akey')) return self.$router.push('/dashboard');
 
             // translate all labels in correct language
-            this.translated = translation.translatePage();
+            self.translated = translation.translatePage();
+            // apply backbuttonPressed listener to handle exit or back
+            eventBus.$on('backbuttonPressed', function(e) {
+                if (self.$route.path === '/') {
+                    e.preventDefault();
+                    navigator.app.exitApp();
+                }
+            });
         }
     };
 </script>

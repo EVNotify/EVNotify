@@ -71,6 +71,10 @@ var vm = new Vue({
 document.addEventListener('deviceready', function() {
     vm.deviceReady = true;
     EventBus.$emit('deviceReady');
+    // event listener for back button
+    document.addEventListener('backbutton', function(e) {
+        EventBus.$emit('backbuttonPressed', e);
+    });
 });
 
 if (typeof ROLLBAR_TOKEN === 'string') {

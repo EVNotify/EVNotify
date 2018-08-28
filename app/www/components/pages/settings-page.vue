@@ -17,6 +17,11 @@
                         </md-field>
                     </md-list>
                 </md-list-item>
+                <md-list-item>
+                    <md-icon md-src="icons/bug_report.svg"></md-icon>
+                    <span class="md-list-item-text">{{ translated.ERROR_TRACKING }}</span>
+                    <md-switch v-model="errortracking"></md-switch>
+                </md-list-item>
                 <md-subheader>{{ translated.USER }}</md-subheader>
                 <md-list-item md-expand>
                     <md-icon md-src="icons/account_circle.svg"></md-icon>
@@ -31,8 +36,8 @@
                             <md-input v-model="token" disabled type="password"></md-input>
                         </md-field>
                         <md-dialog-prompt :md-active.sync="showOldPasswordDialog" v-model="dialogOldPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
-                            :md-content="translated.PASSWORD_ENTER" @md-confirm="showPasswordDialog = true"
-                            :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
+                            :md-content="translated.PASSWORD_ENTER" @md-confirm="showPasswordDialog = true" :md-confirm-text="translated.NEXT"
+                            :md-cancel-text="translated.CANCEL" />
                         <md-dialog-prompt :md-active.sync="showPasswordDialog" v-model="dialogPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
                             :md-content="((nextDialog === 'token')? translated.PASSWORD_ENTER : translated.PASSWORD_NEW)" @md-confirm="((nextDialog === 'token')? showTokenResetDialog = true : changePassword())"
                             :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
@@ -43,7 +48,13 @@
                             <div class="md-layout-item">
                                 <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; showPasswordDialog = true">{{ translated.TOKEN_RESET }}</md-button>
                                 <md-dialog-confirm :md-active.sync="showTokenResetDialog" :md-title="translated.TOKEN_RESET" :md-content="translated.TOKEN_RESET_WARNING"
-                                    :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" @md-confirm="resetToken" />
+                                    :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" @md-confirm="resetToken"
+                                />
+                            </div>
+                        </div>
+                        <div class="md-layout">
+                            <div class="md-layout-item">
+                                <md-button style="width: 95%" class="md-accent" @click="logout()">{{ translated.LOGOUT }}</md-button>
                             </div>
                         </div>
                     </md-list>
@@ -154,6 +165,7 @@
                 translated: {},
                 settings: {},
                 devices: [],
+                errortracking: false,
                 keepawake: false,
                 autoboot: false,
                 akey: '',
@@ -231,6 +243,11 @@
                 }).then(response => {
                     self.showSidebar = self.passwordChanged = true;
                 }, err => self.showSidebar = self.unexpectedError = true);
+            },
+            logout() {
+                storage.removeValue('akey');
+                storage.removeValue('token');
+                this.$router.push('/');
             }
         },
         components: {
