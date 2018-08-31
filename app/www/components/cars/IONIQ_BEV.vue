@@ -64,27 +64,31 @@
                             fifthBlock = '7EC25',
                             extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock));
 
-                        parsedData = {
-                            SOC_DISPLAY: parseInt(
-                                extractedFourthBlock.slice(-2), 16
-                            ) / 2, // last byte within 4th block
-                            SOH: ((
+                        if (extractedFourthBlock) {
+                            parsedData = {
+                                SOC_DISPLAY: parseInt(
+                                    extractedFourthBlock.slice(-2), 16
+                                ) / 2, // last byte within 4th block
+                                SOH: ((
+                                        parseInt(
+                                            extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
+                                        ) << 8) +
                                     parseInt(
-                                        extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
-                                    ) << 8) +
-                                parseInt(
-                                    extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
-                                )
-                            ) / 10
-                        };
+                                        extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
+                                    )
+                                ) / 10
+                            };
+                        }
                     } else if (self.command === '2101') {
                         var firstBlock = '7EC21',
                             extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
                                 19);
 
-                        parsedData = {
-                            SOC_BMS: parseInt(extractedFirstBlock.replace(firstBlock, '').slice(0, 2), 16) / 2 // first byte within 1st block
-                        };
+                        if (extractedFirstBlock) {
+                            parsedData = {
+                                SOC_BMS: parseInt(extractedFirstBlock.replace(firstBlock, '').slice(0, 2), 16) / 2 // first byte within 1st block
+                            };
+                        }
                     }
                 } catch (err) {
                     console.error(err);
