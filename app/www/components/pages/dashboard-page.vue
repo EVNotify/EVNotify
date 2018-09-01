@@ -28,7 +28,8 @@
                                         <img src="icons/car.svg">
                                     </md-card-media>
                                     <md-card-header-text>
-                                        <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal }}km</div>
+                                        <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal
+                                            }}km</div>
                                         <div class="md-subhead">{{ translated.ESTIMATED_RANGE }}</div>
                                         <md-divider></md-divider>
                                         <div>
@@ -115,6 +116,7 @@
                 sidebarText: '',
                 bluetoothInterval: 0,
                 syncInterval: 0,
+                locationWatcher: 0,
                 timestamp: '?',
                 device: null,
                 car: null,
@@ -242,6 +244,18 @@
                             }, err => console.log(err));
                         }
                     }, 10000);
+                    // listener for location changes to push location to server
+                    self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
+                        self.$http.post(RESTURL + 'location', {
+                            akey: storage.getValue('akey'),
+                            token: storage.getValue('token'),
+                            location: {
+                                latitude: pos.coords.latitude,
+                                longitude: pos.coords.longitude,
+                                speed: pos.coords.speed
+                            }
+                        }).then(response => console.log(response), err => console.error(err));
+                    }, (err) => console.error(err));
                 } else {
                     self.showSidebar = true;
                     self.persistentSnackbar = true;
@@ -309,6 +323,7 @@
             clearInterval(this.bluetoothInterval);
             clearInterval(this.syncInterval);
             if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
+            navigator.geolocation.clearWatch(this.locationWatcher);
         },
         created() {
             var self = this;
@@ -327,7 +342,7 @@
                 });
             }
             // apply backbuttonPressed listener to handle exit or back
-            eventBus.$on('backbuttonPressed', function(e) {
+            eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
                     navigator.app.exitApp();
