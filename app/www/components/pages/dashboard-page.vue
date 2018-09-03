@@ -280,12 +280,12 @@
                     // calculate range
                     this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
-                        '0.' + ((soc < 10) ? ('0' + soc) : soc))) || 0;
+                        '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))) || 0;
                     // calculate time
                     if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
                         var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100) ?
                             1 :
-                            '0.' + ((soc < 10) ? ('0' + soc) : soc))).toFixed(2) || 0;
+                            '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0;
 
                         this.estimatedSlowTime = parseFloat((amountToCharge / this.obd2Data.SLOW_SPEED).toFixed(2));
                         this.estimatedNormalTime = parseFloat((amountToCharge / this.obd2Data.NORMAL_SPEED).toFixed(2));
