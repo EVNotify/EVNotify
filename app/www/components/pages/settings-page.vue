@@ -182,13 +182,21 @@
             };
         },
         watch: {
-            'settings.lng': 'setLng'
+            'settings.lng': 'setLng',
+            'keepawake': 'setKeepAwake',
+            'autoboot': 'setAutoBoot'
         },
         methods: {
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
                 eventBus.$emit('settings_languageChanged');
+            },
+            setKeepAwake() {
+                storage.setValue('keepawake', this.keepawake);
+            },
+            setAutoBoot() {
+                storage.setValue('autoboot', this.autoboot);
             },
             saveSettings() {
                 var self = this;
@@ -262,6 +270,8 @@
             self.akey = storage.getValue('akey');
             self.token = storage.getValue('token');
             self.settings = storage.getValue('settings', self.settings);
+            self.autoboot = storage.getValue('autoboot');
+            self.keepawake = storage.getValue('keepawake');
             // wait for cordova device to be ready - apply listener, if not ready yet
             if (self.$root.deviceReady) self.listDevices();
             else eventBus.$on('deviceReady', () => self.listDevices());

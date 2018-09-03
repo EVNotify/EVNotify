@@ -261,6 +261,9 @@
                     self.persistentSnackbar = true;
                     self.sidebarText = translation.translate(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'));
                 }
+                // plugin handling based on local device settings
+                window.plugins.insomnia[((storage.getValue('keepawake') ? 'keepAwake' : 'allowSleepAgain'))]();
+                cordova.plugins.autoStart[((storage.getValue('autoboot') ? 'enable' : 'disable'))]();
             },
             debugInfo() {
                 this.showSidebar = true;
@@ -308,7 +311,7 @@
             clearInterval(this.bluetoothInterval);
             clearInterval(this.syncInterval);
             if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
-            navigator.geolocation.clearWatch(this.locationWatcher);
+            if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
         },
         created() {
             var self = this;
