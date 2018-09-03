@@ -296,21 +296,6 @@
                         Math.ceil((((soc === 100) ? 99 : parseInt(soc)) + 1) / 5) * 5
                     ) + '.svg';
                 }
-                // soc threshold watcher
-                if (soc >= this.socThreshold && !this.notificationSent) {
-                    // sent notification that soc has reached
-                    this.$http.post(RESTURL + 'notification', {
-                        akey: storage.getValue('akey'),
-                        token: storage.getValue('token')
-                    }).then(response => {
-                        this.notificationSent = true;
-                    }, err => console.log(err));
-                } else if (this.notificationSent && soc < this.socThreshold) {
-                    // reset notification sent
-                    this.notificationSent = true;
-                }
-                // update last car response activity
-                this.lastResponse = parseInt(new Date().getTime() / 1000);
             }
         },
         components: {
@@ -353,6 +338,22 @@
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 // set current timestamp
                 self.timestamp = parseInt(new Date().getTime() / 1000);
+                var soc = self.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+                // soc threshold watcher
+                if (soc >= self.socThreshold && !self.notificationSent) {
+                    // sent notification that soc has reached
+                    self.$http.post(RESTURL + 'notification', {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token')
+                    }).then(response => {
+                        self.notificationSent = true;
+                    }, err => console.log(err));
+                } else if (self.notificationSent && soc < self.socThreshold) {
+                    // reset notification sent
+                    self.notificationSent = true;
+                }
+                // update last car response activity
+                self.lastResponse = parseInt(new Date().getTime() / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
                 self.showSidebar = true;
