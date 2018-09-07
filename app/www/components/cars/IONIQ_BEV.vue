@@ -62,7 +62,8 @@
                     if (self.command === '2105') {
                         var fourthBlock = '7EC24',
                             fifthBlock = '7EC25',
-                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock));
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
                         if (extractedFourthBlock) {
                             parsedData = {
@@ -71,10 +72,10 @@
                                 ) / 2, // last byte within 4th block
                                 SOH: ((
                                         parseInt(
-                                            extractedFourthBlock.replace(fourthBlock, '').slice(0, 2), 16 // first byte within 4th block
+                                            extractedFourthData.slice(0, 2), 16 // first byte within 4th block
                                         ) << 8) +
                                     parseInt(
-                                        extractedFourthBlock.replace(fourthBlock, '').slice(2, 4), 16 // second byte within 4th block
+                                        extractedFourthData.slice(2, 4), 16 // second byte within 4th block
                                     )
                                 ) / 10
                             };
@@ -82,11 +83,18 @@
                     } else if (self.command === '2101') {
                         var firstBlock = '7EC21',
                             extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
-                                19);
+                                19),
+                            extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
+                            chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2); // before last byte within 1st block in binary
 
                         if (extractedFirstBlock) {
+                            // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
+                            chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
                             parsedData = {
-                                SOC_BMS: parseInt(extractedFirstBlock.replace(firstBlock, '').slice(0, 2), 16) / 2 // first byte within 1st block
+                                SOC_BMS: parseInt(extractedFirstData.slice(0, 2), 16) / 2, // first byte within 1st block
+                                CHARGING: parseInt(chargingBits.slice(0, 1)), // 7th bit of charging bits
+                                RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
+                                NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)) // 5th bit of charging bits
                             };
                         }
                     }
