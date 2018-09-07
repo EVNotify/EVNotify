@@ -254,8 +254,8 @@
                                 longitude: pos.coords.longitude,
                                 speed: pos.coords.speed
                             }
-                        }).then(response => console.log(response), err => console.error(err));
-                    }, (err) => console.error(err));
+                        }).then(response => console.log(response), err => console.log(err));
+                    }, err => console.log(err), {enableHighAccuracy: true});
                 } else {
                     self.showSidebar = true;
                     self.persistentSnackbar = true;
