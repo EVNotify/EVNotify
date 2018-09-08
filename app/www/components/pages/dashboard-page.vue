@@ -46,14 +46,21 @@
                                     <md-card-header-text>
                                         <div class="md-title">
                                             <ul class="dashboard-charging-times">
-                                                <li>{{ formatDecimalTime(estimatedSlowTime) }}</li>
-                                                <li>{{ formatDecimalTime(estimatedNormalTime) }}</li>
-                                                <li>{{ formatDecimalTime(estimatedFastTime) }}</li>
+                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.SLOW_CHARGE_PORT">
+                                                    {{ formatDecimalTime(estimatedSlowTime) }}
+                                                </li>
+                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.NORMAL_CHARGE_PORT">
+                                                    {{ formatDecimalTime(estimatedNormalTime) }}
+                                                </li>
+                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.RAPID_CHARGE_PORT">
+                                                    {{ formatDecimalTime(estimatedFastTime) }}
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
                                         <md-divider></md-divider>
-                                        {{ translated.CHARGING_SPEEDS }}
+                                        <div v-if="!obd2Data.CHARGING">{{ translated.CHARGING_SPEEDS }}</div>
+                                        <div v-if="obd2Data.CHARGING">{{ translated.IS_CHARGING }}</div>
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
@@ -255,7 +262,9 @@
                                 speed: pos.coords.speed
                             }
                         }).then(response => console.log(response), err => console.log(err));
-                    }, err => console.log(err), {enableHighAccuracy: true});
+                    }, err => console.log(err), {
+                        enableHighAccuracy: true
+                    });
                 } else {
                     self.showSidebar = true;
                     self.persistentSnackbar = true;
@@ -295,7 +304,7 @@
                         this.estimatedFastTime = parseFloat((amountToCharge / this.obd2Data.FAST_SPEED).toFixed(2));
                     }
                     // set icon based on soc
-                    this.batteryIcon = 'icons/battery_' + (
+                    this.batteryIcon = 'icons/battery_' + ((this.obd2Data.CHARGING) ? 'charging_' : '') + (
                         Math.ceil((((soc === 100) ? 99 : parseInt(soc)) + 1) / 5) * 5
                     ) + '.svg';
                 }

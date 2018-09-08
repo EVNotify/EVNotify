@@ -79,6 +79,7 @@ export default {
     SOH: 'Battery health (SOH)',
     ESTIMATED_RANGE: 'Estimated range',
     ESTIMATED_TIME: 'Estimated charging time',
+    IS_CHARGING: '(Charging)',
     CHARGING_SPEEDS: '(Slow, Normal, Fast)',
     NO_DEVICE_SELECTED: 'No OBDII-Device selected',
     NO_CAR_SELECTED: 'No car selected',

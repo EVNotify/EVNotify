@@ -79,6 +79,7 @@ export default {
     SOH: 'Akkugesundheit (SOH)',
     ESTIMATED_RANGE: 'Geschätzte Reichweite',
     ESTIMATED_TIME: 'Geschätzte Ladezeit',
+    IS_CHARGING: '(Ladevorgang gestartet)',
     CHARGING_SPEEDS: '(Langsam, Normal, Schnell)',
     NO_DEVICE_SELECTED: 'Kein OBDII-Gerät ausgewählt',
     NO_CAR_SELECTED: 'Kein Auto ausgewählt',
