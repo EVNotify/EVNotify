@@ -77,6 +77,7 @@ export default {
     SOC_DISPLAY: 'State of charge (Display)',
     SOC_BMS: 'State of charge (BMS)',
     SOH: 'Battery health (SOH)',
+    AUX_BATTERY_VOLTAGE: '12V Car Battery',
     ESTIMATED_RANGE: 'Estimated range',
     ESTIMATED_TIME: 'Estimated charging time',
     IS_CHARGING: '(Charging)',

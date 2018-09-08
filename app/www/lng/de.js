@@ -77,6 +77,7 @@ export default {
     SOC_DISPLAY: 'Ladezustand (Display)',
     SOC_BMS: 'Ladezustand (BMS)',
     SOH: 'Akkugesundheit (SOH)',
+    AUX_BATTERY_VOLTAGE: '12V Batterie',
     ESTIMATED_RANGE: 'Geschätzte Reichweite',
     ESTIMATED_TIME: 'Geschätzte Ladezeit',
     IS_CHARGING: '(Ladevorgang gestartet)',

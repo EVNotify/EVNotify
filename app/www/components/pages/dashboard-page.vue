@@ -92,6 +92,17 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/flash.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }}V</div>
+                                        <div class="md-subhead">{{ translated.AUX_BATTERY_VOLTAGE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
                         </div>
                     </div>
                 </vueper-slide>
@@ -372,6 +383,20 @@
                 self.persistentSnackbar = false;
                 self.sidebarText = translation.translate('OBD2_ERROR');
             });
+
+            // DEBUG DO NOT COMMIT THIS LOL WHY ARE YOU WRITING STOP DOING IT LOL
+            eventBus.$emit('obd2Data', {
+                    CAPACITY: 28,
+                    SLOW_SPEED: 2.3,
+                    NORMAL_SPEED: 4.6,
+                    FAST_SPEED: 50,
+                    SOC_DISPLAY: 53.5,
+                    SOC_BMS: 52.5,
+                    SOH: 100,
+                    CHARGING: 1,
+                    RAPID_CHARGE_PORT: 1,
+                    AUX_BATTERY_VOLTAGE: 13.4
+                });
         }
     }
 </script>

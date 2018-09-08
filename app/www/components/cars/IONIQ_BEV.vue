@@ -85,7 +85,10 @@
                             extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
                                 19),
                             extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
-                            chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2); // before last byte within 1st block in binary
+                            chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2), // before last byte within 1st block in binary
+                            fourthBlock = '7EC24',
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) + 19),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
                         if (extractedFirstBlock) {
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
@@ -94,7 +97,8 @@
                                 SOC_BMS: parseInt(extractedFirstData.slice(0, 2), 16) / 2, // first byte within 1st block
                                 CHARGING: parseInt(chargingBits.slice(0, 1)), // 7th bit of charging bits
                                 RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
-                                NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)) // 5th bit of charging bits
+                                NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)), // 5th bit of charging bits,
+                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10 // 9th + 10th byte within fourth block divided by 10  
                             };
                         }
                     }
