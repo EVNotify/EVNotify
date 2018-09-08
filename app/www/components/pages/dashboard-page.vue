@@ -383,20 +383,6 @@
                 self.persistentSnackbar = false;
                 self.sidebarText = translation.translate('OBD2_ERROR');
             });
-
-            // DEBUG DO NOT COMMIT THIS LOL WHY ARE YOU WRITING STOP DOING IT LOL
-            eventBus.$emit('obd2Data', {
-                    CAPACITY: 28,
-                    SLOW_SPEED: 2.3,
-                    NORMAL_SPEED: 4.6,
-                    FAST_SPEED: 50,
-                    SOC_DISPLAY: 53.5,
-                    SOC_BMS: 52.5,
-                    SOH: 100,
-                    CHARGING: 1,
-                    RAPID_CHARGE_PORT: 1,
-                    AUX_BATTERY_VOLTAGE: 13.4
-                });
         }
     }
 </script>
