@@ -109,9 +109,7 @@
             </vueper-slides>
         </div>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
-        <md-snackbar md-position="center" :md-persistent="true" :md-active.sync="showSidebar" :md-duration="((persistentSnackbar) ? Infinity : 3000)">
-            <span>{{ sidebarText }}</span>
-        </md-snackbar>
+        <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
     </div>
 </template>
@@ -122,6 +120,7 @@
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
+    import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
     import IONIQBEV from './../cars/IONIQ_BEV.vue';
     import SOULEV from './../cars/SOUL_EV.vue';
@@ -130,8 +129,6 @@
         data() {
             return {
                 obd2Data: {},
-                showSidebar: false,
-                sidebarText: '',
                 bluetoothInterval: 0,
                 syncInterval: 0,
                 locationWatcher: 0,
@@ -151,8 +148,7 @@
                 estimatedSlowTime: 0,
                 estimatedNormalTime: 0,
                 estimatedFastTime: 0,
-                batteryIcon: 'icons/battery_unknown.svg',
-                persistentSnackbar: false
+                batteryIcon: 'icons/battery_unknown.svg'
             };
         },
         watch: {
@@ -188,11 +184,8 @@
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
-                                    self.showSidebar = true;
-                                    self.persistentSnackbar = true;
+                                    self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
-                                    self.sidebarText = translation.translate(
-                                        'BLUETOOTH_CONNECT_ERROR');
                                 });
                             });
                         };
@@ -207,11 +200,8 @@
                                 self.isWaitingForEnable = false;
                                 proceed();
                             }, err => {
-                                self.showSidebar = true;
-                                self.persistentSnackbar = false;
+                                self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
                                 eventBus.$emit('bluetoothChanged', 'disabled');
-                                self.sidebarText = translation.translate(
-                                    'BLUETOOTH_ENABLE_ERROR');
                             });
                         });
                     }, 1000);
@@ -272,23 +262,18 @@
                                 longitude: pos.coords.longitude,
                                 speed: pos.coords.speed
                             }
-                        }).then(response => console.log(response), err => console.log(err));
+                        }).then(() => {}, err => console.log(err));
                     }, err => console.log(err), {
                         enableHighAccuracy: true
                     });
-                } else {
-                    self.showSidebar = true;
-                    self.persistentSnackbar = true;
-                    self.sidebarText = translation.translate(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'));
-                }
+                } else self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), true, 'warning');
+                
                 // plugin handling based on local device settings
                 window.plugins.insomnia[((storage.getValue('keepawake') ? 'keepAwake' : 'allowSleepAgain'))]();
                 cordova.plugins.autoStart[((storage.getValue('autoboot') ? 'enable' : 'disable'))]();
             },
             debugInfo() {
-                this.showSidebar = true;
-                this.persistentSnackbar = false;
-                this.sidebarText = translation.translate('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
+                this.$refs.snackbar.setMessage('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
             estimate() {
                 var soc = this.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
@@ -323,6 +308,7 @@
         },
         components: {
             bottomBar,
+            snackbar,
             toolbar,
             IONIQBEV,
             SOULEV
@@ -379,9 +365,7 @@
                 self.lastResponse = parseInt(new Date().getTime() / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
-                self.showSidebar = true;
-                self.persistentSnackbar = false;
-                self.sidebarText = translation.translate('OBD2_ERROR');
+                self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
             });
         }
     }
