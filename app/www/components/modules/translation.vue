@@ -21,8 +21,9 @@ export default {
      * @returns {String} the translated string
      */
     translate(key) {
-        if(this.getLocalLng() === 'de') return de[key] || '';
-        return en[key] || '';
+        if (typeof key !== 'string') return '';
+        if(this.getLocalLng() === 'de') return de[key] || key;
+        return en[key] || key;
     },
     /**
      * Translates each key from language and returns translated object
