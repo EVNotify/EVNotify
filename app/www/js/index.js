@@ -77,6 +77,16 @@ document.addEventListener('deviceready', function() {
     });
 });
 
+EventBus.$on('unauthorized', () => {
+    console.log('Unauthorized');
+    localStorage.clear();
+    vm.$router.push('/');
+});
+
+EventBus.$on('internalerror', () => {
+    console.log('Internal error'); // TODO
+});
+
 if (typeof ROLLBAR_TOKEN === 'string') {
     // rollbar error tracking
     var _rollbarConfig = {
