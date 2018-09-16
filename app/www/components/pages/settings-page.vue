@@ -137,13 +137,7 @@
                 </md-list-item>
             </form>
         </md-list>
-        <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSidebar" :md-persistent="true">
-            <span v-if="saved">{{ translated.SETTINGS_SAVED }}</span>
-            <span v-if="unexpectedError">{{ translated.UNEXPECTED_ERROR }}</span>
-            <span v-if="tokenResetted">{{ translated.TOKEN_RESETTED }}</span>
-            <span v-if="passwordWrong">{{ translated.INVALID_CREDENTIALS }}</span>
-            <span v-if="passwordChanged">{{ translated.PASSWORD_CHANGED }}</span>
-        </md-snackbar>
+        <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
     </div>
 </template>
@@ -153,15 +147,13 @@
     import translation from './../modules/translation.vue';
     import eventBus from './../modules/event.vue';
     import toolbar from './../container/toolbar.vue';
+    import snackbar from './../modules/snackbar.vue';
     import settings from './../container/settings.vue';
     import bottomBar from './../container/bottom-bar.vue';
 
     export default {
         data() {
             return {
-                showSidebar: false,
-                saved: false,
-                unexpectedError: false,
                 translated: {},
                 settings: {},
                 devices: [],
@@ -175,10 +167,7 @@
                 dialogPassword: '',
                 showOldPasswordDialog: false,
                 showPasswordDialog: false,
-                showTokenResetDialog: false,
-                tokenResetted: false,
-                passwordWrong: false,
-                passwordChanged: false
+                showTokenResetDialog: false
             };
         },
         watch: {
@@ -201,16 +190,14 @@
             saveSettings() {
                 var self = this;
 
-                self.unexpectedError = self.saved = false;
-
                 self.$http.put(RESTURL + 'settings', {
                     akey: self.akey,
                     token: self.token,
                     settings: self.settings
                 }).then(response => {
+                    self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
                     storage.setValue('settings', self.settings);
-                    self.showSidebar = self.saved = true;
-                }, err => self.showSidebar = self.unexpectedError = true);
+                }, err => self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error'));
             },
             listDevices() {
                 var self = this;
@@ -218,8 +205,8 @@
                 bluetoothSerial.enable(enabled => {
                     bluetoothSerial.list(devices => {
                         self.devices = devices;
-                    }, err => console.error(err));
-                }, err => console.error(err));
+                    }, err => console.log(err));
+                }, err => console.log(err));
             },
             resetToken() {
                 var self = this;
@@ -229,15 +216,13 @@
                     token: self.token,
                     password: self.dialogPassword
                 }).then(response => {
-                    self.showSidebar = true;
                     if (response.body.token) {
                         storage.setValue('token', (self.token = response.body.token));
-                        self.tokenResetted = true;
-                    } else self.unexpectedError = true;
+                        self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
+                    } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
                 }, err => {
                     // TODO: Check if credentials were invalid or if there was an unexpected error..
-                    self.showSidebar = true;
-                    self.passwordWrong = true;
+                    self.$refs.snackbar.setMessage('INVALID_CREDENTIALS', false, 'error');
                 });
             },
             changePassword() {
@@ -249,8 +234,8 @@
                     oldpassword: self.dialogOldPassword,
                     newpassword: self.dialogPassword
                 }).then(response => {
-                    self.showSidebar = self.passwordChanged = true;
-                }, err => self.showSidebar = self.unexpectedError = true);
+                    self.$refs.snackbar.setMessage('PASSWORD_CHANGED', false, 'success');
+                }, err => self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error'));
             },
             logout() {
                 storage.removeValue('akey');
@@ -260,6 +245,7 @@
         },
         components: {
             toolbar,
+            snackbar,
             settings,
             bottomBar
         },
