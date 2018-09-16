@@ -88,5 +88,7 @@ export default {
     DEBUG_MODE_DISABLED: 'Debug-Modus deaktiviert',
     BLUETOOTH_ENABLE_ERROR: 'Bluetooth konnte nicht aktiviert werden',
     BLUETOOTH_CONNECT_ERROR: 'Bluetooth-Verbindung fehlgeschlagen',
+    INITIALIZATION: 'Initializierung. Bitte warten.',
+    ESTABLISHED: 'Verbindung erfolgreich.',
     OBD2_ERROR: 'OBDII Fehler. Re-Initializierung. Bitte warten'
 }

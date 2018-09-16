@@ -148,11 +148,14 @@
                 estimatedSlowTime: 0,
                 estimatedNormalTime: 0,
                 estimatedFastTime: 0,
+                communicationEstablished: false,
                 batteryIcon: 'icons/battery_unknown.svg'
             };
         },
         watch: {
-            'obd2Data.SOC_DISPLAY': 'estimate'
+            'obd2Data.SOC_DISPLAY': 'estimate',
+            'initialized': 'initMessage',
+            'communicationEstablished': 'communicationMessage'
         },
         methods: {
             formatDate(timestamp) {
@@ -184,6 +187,7 @@
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
+                                    self.initialized = false;
                                     self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                 });
@@ -200,6 +204,7 @@
                                 self.isWaitingForEnable = false;
                                 proceed();
                             }, err => {
+                                self.initialized = false;
                                 self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
                                 eventBus.$emit('bluetoothChanged', 'disabled');
                             });
@@ -304,6 +309,12 @@
                         Math.ceil((((soc === 100) ? 99 : parseInt(soc)) + 1) / 5) * 5
                     ) + '.svg';
                 }
+            },
+            initMessage() {
+                if (this.initialized) this.$refs.snackbar.setMessage('INITIALIZATION');
+            },
+            communicationMessage() {
+                if (this.communicationEstablished) this.$refs.snackbar.setMessage('ESTABLISHED', false, 'success');
             }
         },
         components: {
@@ -343,6 +354,7 @@
                 } else navigator.app.backHistory();
             });
             eventBus.$on('obd2Data', function (data) {
+                self.communicationEstablished = true;
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 // set current timestamp
@@ -365,6 +377,7 @@
                 self.lastResponse = parseInt(new Date().getTime() / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
+                self.communicationEstablished = false;
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
             });
         }
