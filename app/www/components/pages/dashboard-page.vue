@@ -222,6 +222,18 @@
                                     bms: self.obd2Data.SOC_BMS
                                 }).then(response => {
                                     eventBus.$emit('syncChanged', 'enabled');
+                                    // push extended data
+                                    self.$http.post(RESTURL + 'extended', {
+                                        akey: storage.getValue('akey'),
+                                        token: storage.getValue('token'),
+                                        soh: self.obd2Data.SOH,
+                                        charging: self.obd2Data.CHARGING,
+                                        rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
+                                        normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
+                                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE
+                                    }).then(response => {
+                                        eventBus.$emit('syncChanged', 'enabled');
+                                    }, err => eventBus.$emit('syncChanged', 'problem'));
                                 }, err => eventBus.$emit('syncChanged', 'problem'));
                             }
                         }, disconnected => {
@@ -242,6 +254,20 @@
                                 Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
                                 self.timestamp = response.body.last_soc;
                                 eventBus.$emit('syncChanged', 'enabled');
+                                self.$http.get(RESTURL + 'extended', {
+                                    params: {
+                                        akey: storage.getValue('akey'),
+                                        token: storage.getValue('token')
+                                    }
+                                }).then(response => {
+                                    // update extended data
+                                    Vue.set(self.obd2Data, 'SOH', response.body.soh);
+                                    Vue.set(self.obd2Data, 'CHARGING', response.body.charging);
+                                    Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', response.body.rapid_charge_port);
+                                    Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', response.body.normal_charge_port);
+                                    Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', response.body.aux_battery_voltage);
+                                    eventBus.$emit('syncChanged', 'enabled');
+                                }, err => eventBus.$emit('syncChanged', 'problem'));
                             }, err => eventBus.$emit('syncChanged', 'problem'));
                         });
                         // check if charge interrupted
