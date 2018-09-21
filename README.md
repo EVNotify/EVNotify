@@ -1,3 +1,6 @@
+## Note:
+[V2](https://github.com/GPlay97/EVNotify/tree/v2) is currently in development and will replace current version, once it's stable. Until then, development on V1 will be paused - only hot fixes will be applied, if necessary.
+
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/GPlay97/EVNotify.png?columns=all)](https://waffle.io/GPlay97/EVNotify?utm_source=badge)
 # EVNotify
 EVNotify allows you to control your electric vehicle and let you notify when the specified preset state of charge has been achieved.
