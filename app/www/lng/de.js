@@ -54,6 +54,7 @@ export default {
     NOTIFICATION_THRESHOLD: 'Benachrichtigungs-Schwellwert',
     SOC_THRESHOLD: 'Ladezustand, bei dem Benachrichtigung verschickt werden sollen',
     EMAIL: 'E-Mail',
+    PUSH: 'Push-Benachrichtigungen',
     SUMMARY: 'Tägliche Zusammenfassung des Ladezustands senden',
     DASHBOARD: 'Dashboard',
     LOGS: 'Logs',

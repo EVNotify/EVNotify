@@ -116,6 +116,11 @@
                             <label for="email">{{ translated.EMAIL }}</label>
                             <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
                         </md-field>
+                        <md-list-item>
+                            <md-icon md-src="icons/notifications_active.svg"></md-icon>
+                            <span class="md-list-item">{{ translated.PUSH }}</span>
+                            <md-switch v-model="settings.push"></md-switch>
+                        </md-list-item>
                     </md-list>
                 </md-list-item>
                 <md-list-item md-expand>
@@ -173,13 +178,20 @@
         watch: {
             'settings.lng': 'setLng',
             'keepawake': 'setKeepAwake',
-            'autoboot': 'setAutoBoot'
+            'autoboot': 'setAutoBoot',
+            'settings.push': 'setPush'
         },
         methods: {
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
                 eventBus.$emit('settings_languageChanged');
+            },
+            setPush() {
+                if (window.cordova && window.FCMPlugin) {
+                    if (this.settings.lng) FCMPlugin.subscribeToTopic(this.token);
+                    else FCMPlugin.unsubscribeFromTopic(this.token);
+                }
             },
             setKeepAwake() {
                 storage.setValue('keepawake', this.keepawake);

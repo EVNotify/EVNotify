@@ -54,6 +54,7 @@ export default {
     NOTIFICATION_THRESHOLD: 'Notification threshold',
     SOC_THRESHOLD: 'State of charge, when to send out notifications',
     EMAIL: 'Mail',
+    PUSH: 'Push-Notifications',
     SUMMARY: 'Send daily summary of state of charge',
     DASHBOARD: 'Dashboard',
     LOGS: 'Logs',

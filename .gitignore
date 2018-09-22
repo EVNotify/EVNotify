@@ -6,3 +6,4 @@ app/www/js/bundle.js
 node_modules/
 app/package-lock.json
 .vscode/
+app/google-services.json
