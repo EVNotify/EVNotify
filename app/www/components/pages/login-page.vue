@@ -69,6 +69,13 @@
                     password: self.password
                 }).then(response => {
                     if (response.body.token) {
+                        // push notifications handling
+                        if (window.cordova && window.FCMPlugin) {
+                            // check if there was another token linked before
+                            if (storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                            // subscribe to own messages
+                            FCMPlugin.subscribeToTopic(response.body.token);
+                        }
                         // save akey and token
                         storage.setValue('akey', self.akey);
                         storage.setValue('token', response.body.token);
