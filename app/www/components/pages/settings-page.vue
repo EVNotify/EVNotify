@@ -188,6 +188,9 @@
                 eventBus.$emit('settings_languageChanged');
             },
             setPush() {
+                // fix for md-switch accepting only booleans instead of numbers that equal boolean values
+                if (this.settings.push) this.settings.push = true;
+                else this.settings.push = false;
                 if (window.cordova && window.FCMPlugin) {
                     if (this.settings.push) FCMPlugin.subscribeToTopic(this.token);
                     else FCMPlugin.unsubscribeFromTopic(this.token);
@@ -275,6 +278,15 @@
             else eventBus.$on('deviceReady', () => self.listDevices());
             // listener for save
             eventBus.$on('toolbar_saveBtnClicked', () => self.saveSettings());
+            // retrieve settings from server to sync latest settings
+            self.$http.get(RESTURL + 'settings', {
+                params: {
+                    akey: self.akey,
+                    token: self.token
+                }
+            }).then(response => {
+                if (response.body.settings != null) self.settings = storage.setValue('settings', response.body.settings);
+            }, err => console.log(err));
         }
     }
 </script>
