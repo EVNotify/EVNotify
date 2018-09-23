@@ -189,7 +189,7 @@
             },
             setPush() {
                 if (window.cordova && window.FCMPlugin) {
-                    if (this.settings.lng) FCMPlugin.subscribeToTopic(this.token);
+                    if (this.settings.push) FCMPlugin.subscribeToTopic(this.token);
                     else FCMPlugin.unsubscribeFromTopic(this.token);
                 }
             },
