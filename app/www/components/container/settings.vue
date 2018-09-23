@@ -46,9 +46,15 @@
                 <input v-model.number="settings.soc" type="range" style="width: 100%">{{ settings.soc }}%
                 <span class="md-helper-text">{{ translated.SOC_THRESHOLD }}</span>
             </md-field>
+            <br>
             <md-field>
                 <label for="email">{{ translated.EMAIL }}</label>
                 <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
+            </md-field>
+            <md-field>
+                <md-icon md-src="icons/notifications_active.svg"></md-icon>
+            <span>{{ translated.PUSH }}</span>
+            <md-switch v-model="settings.push"></md-switch>
             </md-field>
         </form>
         <md-button class="md-raised md-primary" v-if="$route.path === '/register'" @click="$emit('settingsSaved', settings)">{{ translated.SAVE }}</md-button>
@@ -79,7 +85,8 @@
             storage
         },
         watch: {
-            'settings.lng': 'setLng'
+            'settings.lng': 'setLng',
+            'settings.push': 'setPush'
         },
         methods: {
             setLng() {
@@ -87,6 +94,12 @@
                 this.translatePage();
                 this.$emit('languageChanged');
                 eventBus.$emit('settings_languageChanged');
+            },
+            setPush() {
+                if (window.cordova && window.FCMPlugin) {
+                    if (this.settings.push) FCMPlugin.subscribeToTopic(storage.getValue('token'));
+                    else FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                }
             },
             translatePage() {
                 this.translated = translation.translatePage();
