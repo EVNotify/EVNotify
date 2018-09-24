@@ -24,7 +24,7 @@
                     }; // special handling for GET requests
                 }
                 Vue.http[method](RESTURL + fnc, params).then(response => {
-                    if (typeof callback === 'function') callback(null, response);
+                    if (typeof callback === 'function') callback(null, response.body || response);
                 }, err => {
                     // global events for critical errors
                     if (err && err.status === 401) EventBus.$emit('unauthorized');
