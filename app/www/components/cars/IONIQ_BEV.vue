@@ -84,9 +84,14 @@
                             extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
                                 19),
                             extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
+                            secondBlock = '7EC22',
+                            extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(secondBlock) +
+                                19),
+                            extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
                             chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2), // before last byte within 1st block in binary
                             fourthBlock = '7EC24',
-                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) + 19),
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) +
+                                19),
                             extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
                         if (extractedFirstBlock) {
@@ -97,8 +102,21 @@
                                 CHARGING: parseInt(chargingBits.slice(0, 1)), // 7th bit of charging bits
                                 RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
                                 NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)), // 5th bit of charging bits,
-                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10 // 9th + 10th byte within fourth block divided by 10  
+                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10, // 9th + 10th byte within fourth block divided by 10
+                                DC_BATTERY_VOLTAGE: ((
+                                        parseInt(
+                                            extractedSecondData.slice(2, 4), 16 // second byte within 2nd block
+                                        ) << 8) +
+                                    parseInt(
+                                        extractedSecondData.slice(4, 6), 16 // third byte within 2nd block
+                                    )
+                                ) / 10,
+                                DC_BATTERY_CURRENT: (((parseInt(
+                                    (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
+                                )+2**15)%(2**16))-2**15)*0.1 // some binary conversion to get signed int from value,
                             };
+                            // add battery power
+                            parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
                         }
                     }
                 } catch (err) {
