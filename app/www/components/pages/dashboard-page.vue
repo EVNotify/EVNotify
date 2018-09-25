@@ -4,7 +4,7 @@
         <toolbar @debugChanged="debugInfo()"></toolbar>
         <div class="content-within-page">
             <vueper-slides :fixed-height="true">
-                <vueper-slide v-for="i in 2" :key="i">
+                <vueper-slide v-for="i in 3" :key="i">
                     <div slot="slideContent">
                         <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
                             <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
@@ -100,6 +100,41 @@
                                     <md-card-header-text>
                                         <div class="md-title">{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }}V</div>
                                         <div class="md-subhead">{{ translated.AUX_BATTERY_VOLTAGE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                        </div>
+                        <div v-if="i === 3" class="md-layout md-gutter md-alignment-center dashboard-card-list">
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/battery_charging_100.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.DC_BATTERY_VOLTAGE || 0 }}V</div>
+                                        <div class="md-subhead">{{ translated.DC_BATTERY_VOLTAGE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/flash_auto.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.DC_BATTERY_CURRENT || 0 }}A</div>
+                                        <div class="md-subhead">{{ translated.DC_BATTERY_CURRENT }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/power.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.DC_BATTERY_POWER || 0 }}kW</div>
+                                        <div class="md-subhead">{{ translated.DC_BATTERY_POWER }}</div>
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
@@ -230,7 +265,10 @@
                                         charging: self.obd2Data.CHARGING,
                                         rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
                                         normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
-                                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE
+                                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
+                                        dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
+                                        dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
+                                        dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
                                     }).then(response => {
                                         eventBus.$emit('syncChanged', 'enabled');
                                     }, err => eventBus.$emit('syncChanged', 'problem'));
@@ -268,6 +306,9 @@
                                         Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', response.body.rapid_charge_port);
                                         Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', response.body.normal_charge_port);
                                         Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', response.body.aux_battery_voltage);
+                                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', response.body.dc_battery_voltage);
+                                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', response.body.dc_battery_current);
+                                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', response.body.dc_battery_power);
                                         eventBus.$emit('syncChanged', 'enabled');
                                     }, err => eventBus.$emit('syncChanged', 'problem'));
                                 }, err => eventBus.$emit('syncChanged', 'problem'));
