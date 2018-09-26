@@ -81,20 +81,24 @@
                         }
                     } else if (self.command === '2101') {
                         var firstBlock = '7EC21',
-                            extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
-                                19),
+                            extractedFirstBlock = ((data.indexOf(firstBlock) !== -1) ? data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
+                                19) : ''),
                             extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
                             secondBlock = '7EC22',
-                            extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(secondBlock) +
-                                19),
+                            extractedSecondBlock = ((data.indexOf(secondBlock) !== -1) ? data.substring(data.indexOf(secondBlock), data.indexOf(secondBlock) +
+                                19) : ''),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
                             chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2), // before last byte within 1st block in binary
                             fourthBlock = '7EC24',
-                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) +
-                                19),
-                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
+                            extractedFourthBlock = ((data.indexOf(fourthBlock) !== -1) ? data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) +
+                                19) : ''),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
+                            sixthBlock = '7EC26',
+                            extractedSixthBlock = ((data.indexOf(sixthBlock) !== -1) ? data.substring(data.indexOf(sixthBlock), data.indexOf(sixthBlock) +
+                                19) : ''),
+                            extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
-                        if (extractedFirstBlock) {
+                        if (extractedSixthData && extractedSixthData !== '00000000000000') {
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
                             parsedData = {
