@@ -167,11 +167,14 @@
                 bluetoothInterval: 0,
                 syncInterval: 0,
                 locationWatcher: 0,
+                chargingWatcher: 0,
                 timestamp: '?',
                 device: null,
                 car: null,
                 socThreshold: 0,
                 notificationSent: false,
+                errorNotificationSent: false,
+                chargingStarted: false,
                 lastResponse: 0,
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
@@ -341,6 +344,26 @@
                     }, err => console.log(err), {
                         enableHighAccuracy: true
                     });
+                    // watch for charging interrupted
+                    self.chargingWatcher = setInterval(() => {
+                        // validate if there was at least one successful response and charging started earlier
+                        if (self.lastResponse && self.chargingStarted && !self.errorNotificationSent) {
+                            if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 20) {
+                                // no response.. check if still connected and not charging normally ended
+                                if ((self.obd2Data.NORMAL_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 100) || 
+                                    (self.obd2Data.RAPID_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 94)) {
+                                    // still plugged in.. sent out error notificaiton
+                                    self.$http.post(RESTURL + 'notification', {
+                                        akey: storage.getValue('akey'),
+                                        token: storage.getValue('token'),
+                                        abort: true
+                                    }).then(response => {
+                                        self.errorNotificationSent = true;
+                                    }, err => console.log(err));
+                                }
+                            }
+                        }
+                    }, 10000);
                 } else self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), true, 'warning');
                 
                 // plugin handling based on local device settings
@@ -397,6 +420,7 @@
         beforeDestroy() {
             clearInterval(this.bluetoothInterval);
             clearInterval(this.syncInterval);
+            clearInterval(this.chargingWatcher);
             if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
             if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
         },
@@ -424,14 +448,17 @@
                 } else navigator.app.backHistory();
             });
             eventBus.$on('obd2Data', function (data) {
-                self.communicationEstablished = true;
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
-                // set current timestamp
-                self.timestamp = parseInt(new Date().getTime() / 1000);
                 var soc = self.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+                // set current timestamp and update last car response activity
+                if (soc != null) {
+                    self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
+                }
+                // track charging started
+                if (self.obd2Data.CHARGING) self.chargingStarted = true;
                 // soc threshold watcher
-                if (soc >= self.socThreshold && !self.notificationSent) {
+                if (self.obd2Data.CHARGING && soc >= self.socThreshold && !self.notificationSent) {
                     // sent notification that soc has reached
                     self.$http.post(RESTURL + 'notification', {
                         akey: storage.getValue('akey'),
@@ -441,10 +468,8 @@
                     }, err => console.log(err));
                 } else if (self.notificationSent && soc < self.socThreshold) {
                     // reset notification sent
-                    self.notificationSent = true;
+                    self.notificationSent = false;
                 }
-                // update last car response activity
-                self.lastResponse = parseInt(new Date().getTime() / 1000);
             });
             eventBus.$on('obd2Error', function (error) {
                 self.communicationEstablished = false;
