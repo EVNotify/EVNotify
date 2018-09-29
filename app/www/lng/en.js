@@ -72,6 +72,7 @@ export default {
     STATIONS_EMPTY: 'No charging stations',
     STATIONS_EMPTY_DESCRIPTION_1: 'No charging stations matching the search criteria were found.',
     STATIONS_EMPTY_DESCRIPTION_2: 'If necessary, adjust the filter and try again.',
+    LINEAR_DISTANCE: 'Linear distance',
     SETTINGS: 'Settings',
     DEVELOPER_OPTIONS: 'Developer options',
     SETTINGS_SAVED: 'Settings saved successfully',

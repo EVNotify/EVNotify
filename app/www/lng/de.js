@@ -72,6 +72,7 @@ export default {
     STATIONS_EMPTY: 'Keine Ladestationen',
     STATIONS_EMPTY_DESCRIPTION_1: 'Es wurden keine Ladestationen gefunden, die den Suchkriterien entsprechen.',
     STATIONS_EMPTY_DESCRIPTION_2: 'Passe den Filter gegebenenfalls an und versuche es erneut.',
+    LINEAR_DISTANCE: 'Luftlinie',
     SETTINGS: 'Einstellungen',
     DEVELOPER_OPTIONS: 'Entwickleroptionen',
     SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert',

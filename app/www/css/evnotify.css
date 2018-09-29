@@ -19,7 +19,7 @@
   }
   .md-toolbar.md-theme-default.md-primary {
     position: fixed;
-    z-index: 5;
+    z-index: 6;
   }
   .md-bottom-bar.md-theme-default.md-type-shift {
     position: fixed;
