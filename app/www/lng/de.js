@@ -81,7 +81,7 @@ export default {
     AUX_BATTERY_VOLTAGE: '12V Batterie',
     DC_BATTERY_VOLTAGE: 'Akku-Spannung',
     DC_BATTERY_CURRENT: 'Akku-Strom',
-    DC_BATTERY_POWER: 'Lade-/Entladestrom',
+    DC_BATTERY_POWER: 'Lade-/Entladeleistung',
     ESTIMATED_RANGE: 'Geschätzte Reichweite',
     ESTIMATED_TIME: 'Geschätzte Ladezeit',
     IS_CHARGING: '(Ladevorgang gestartet)',

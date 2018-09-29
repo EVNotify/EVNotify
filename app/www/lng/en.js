@@ -81,7 +81,7 @@ export default {
     AUX_BATTERY_VOLTAGE: '12V Car Battery',
     DC_BATTERY_VOLTAGE: 'Battery voltage',
     DC_BATTERY_CURRENT: 'Battery current',
-    DC_BATTERY_POWER: 'Charge-/Discharge current',
+    DC_BATTERY_POWER: 'Charge-/Discharge power',
     ESTIMATED_RANGE: 'Estimated range',
     ESTIMATED_TIME: 'Estimated charging time',
     IS_CHARGING: '(Charging)',
