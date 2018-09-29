@@ -317,18 +317,6 @@
                                 }, err => eventBus.$emit('syncChanged', 'problem'));
                             }
                         });
-                        // check if charge interrupted
-                        if (!self.notificationSent && self.lastResponse && parseInt((new Date().getTime() /
-                                1000 + 20)) > self.lastResponse) {
-                            // no succesful response detected
-                            self.$http.post(RESTURL + 'notification', {
-                                akey: storage.getValue('akey'),
-                                token: storage.getValue('token'),
-                                abort: true
-                            }).then(response => {
-                                self.notificationSent = true;
-                            }, err => console.log(err));
-                        }
                     }, 10000);
                     // listener for location changes to push location to server
                     self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
