@@ -192,6 +192,7 @@
         },
         watch: {
             'obd2Data.SOC_DISPLAY': 'estimate',
+            'obd2Data.CHARGING': 'estimate',
             'initialized': 'initMessage',
             'communicationEstablished': 'communicationMessage'
         },
