@@ -111,7 +111,7 @@
                                         <img src="icons/battery_charging_100.svg">
                                     </md-card-media>
                                     <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.DC_BATTERY_VOLTAGE || 0 }}V</div>
+                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_VOLTAGE) || 0 }}V</div>
                                         <div class="md-subhead">{{ translated.DC_BATTERY_VOLTAGE }}</div>
                                     </md-card-header-text>
                                 </md-card-header>
@@ -122,7 +122,7 @@
                                         <img src="icons/flash_auto.svg">
                                     </md-card-media>
                                     <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.DC_BATTERY_CURRENT || 0 }}A</div>
+                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_CURRENT) || 0 }}A</div>
                                         <div class="md-subhead">{{ translated.DC_BATTERY_CURRENT }}</div>
                                     </md-card-header-text>
                                 </md-card-header>
@@ -133,7 +133,7 @@
                                         <img src="icons/power.svg">
                                     </md-card-media>
                                     <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.DC_BATTERY_POWER || 0 }}kW</div>
+                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_POWER) || 0 }}kW</div>
                                         <div class="md-subhead">{{ translated.DC_BATTERY_POWER }}</div>
                                     </md-card-header-text>
                                 </md-card-header>
@@ -202,6 +202,9 @@
             },
             formatDecimalTime(time) {
                 return helper.convertDecimalTime(time) + 'h';
+            },
+            roundTo2Digits(num) {
+                return parseFloat(num).toFixed(2) || 0;
             },
             startWatch() {
                 var self = this;
@@ -464,6 +467,16 @@
                 self.communicationEstablished = false;
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
             });
+
+            eventBus.$emit('obd2Data', {
+                CAPACITY: 28,
+                SLOW_SPEED: 2.3,
+                NORMAL_SPEED: 4.6,
+                FAST_SPEED: 50,
+                DC_BATTERY_VOLTAGE: 45.12312123,
+                DC_BATTERY_CURRENT: 78.13312312312,
+                DC_BATTERY_POWER: 0.1212
+            })
         }
     }
 </script>
