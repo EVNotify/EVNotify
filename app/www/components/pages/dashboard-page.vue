@@ -204,7 +204,8 @@
                 return helper.convertDecimalTime(time) + 'h';
             },
             roundTo2Digits(num) {
-                return parseFloat(num).toFixed(2) || 0;
+                if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(2);
+                return 0;
             },
             startWatch() {
                 var self = this;
