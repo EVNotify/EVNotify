@@ -126,7 +126,7 @@
                 }, (err, station) => {
                     if (!err && station) {
                         self.station = station;
-                        console.log(self.station);
+                        setTimeout(() => window.scrollTo(0,0), 200);
                     } else {
                         // TODO
                     }
