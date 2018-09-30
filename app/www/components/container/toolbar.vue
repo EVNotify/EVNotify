@@ -24,7 +24,7 @@
             <md-button class="md-icon-button" @click="openInNew()">
                 <md-icon md-src="icons/open_in_new.svg"></md-icon>
             </md-button>
-            <md-button class="md-icon-button">
+            <md-button class="md-icon-button" @click="navigate()">
                 <md-icon md-src="icons/directions.svg"></md-icon>
             </md-button>
         </div>
@@ -50,6 +50,9 @@ export default {
         },
         openInNew() {
             eventBus.$emit('station_openInNew');
+        },
+        navigate() {
+            eventBus.$emit('station_navigate');
         },
         emitSave() {
             eventBus.$emit('toolbar_saveBtnClicked');

@@ -82,6 +82,7 @@
             },
             navigate(station, event) {
                 event.stopPropagation();
+                if (window.cordova && window.launchnavigator) launchnavigator.navigate([station.coordinates.lat, station.coordinates.lng]);
             },
             favorite(station, event) {
                 event.stopPropagation();

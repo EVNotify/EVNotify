@@ -120,6 +120,11 @@
                 eventBus.$on('station_openInNew', () => {
                     if (self.station.url) window.open(self.station.url, '_blank');     
                 });
+                eventBus.$on('station_navigate', () => {
+                    if (self.station.coordinates && window.cordova && window.launchnavigator) {
+                        launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
+                    }
+                });
                 // get station details
                 http.sendRequest('get', 'station', {
                     id: self.$route.query.id
