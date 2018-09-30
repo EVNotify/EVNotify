@@ -6,6 +6,7 @@ import RegistrationPage from './../components/pages/registration-page.vue';
 import DashboardPage from './../components/pages/dashboard-page.vue';
 import LogsPage from './../components/pages/logs-page.vue';
 import StationsPage from './../components/pages/stations-page.vue';
+import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
 
 Vue.use(VueMaterial.default);
@@ -38,6 +39,10 @@ var router = new VueRouter({
             component: StationsPage
         },
         {
+            path: '/station',
+            component: StationPage
+        },
+        {
             path: '/settings',
             component: SettingsPage
         }
@@ -59,6 +64,7 @@ var vm = new Vue({
         'dashboard-page': DashboardPage,
         'logs-page': LogsPage,
         'stations-page': StationsPage,
+        'station-page': StationPage,
         'settings-page': SettingsPage
     },
     router: router,

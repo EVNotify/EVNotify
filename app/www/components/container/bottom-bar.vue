@@ -30,6 +30,7 @@
                 self.translatePage();
             });
             self.currentSelection = 'bottom-bar-item-' + self.$route.path.substr(1);
+            if (self.currentSelection === 'bottom-bar-item-station') self.currentSelection = 'bottom-bar-item-stations';
             self.translatePage();
         }
     }
