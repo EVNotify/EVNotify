@@ -97,6 +97,7 @@ export default {
     CLOSED: 'Geschlossen',
     PLUGS: 'Anschlüsse',
     SOURCE: 'Quelle',
+    CHARGE_CARDS: 'Ladekarten',
     SETTINGS: 'Einstellungen',
     DEVELOPER_OPTIONS: 'Entwickleroptionen',
     SETTINGS_SAVED: 'Einstellungen erfolgreich gespeichert',

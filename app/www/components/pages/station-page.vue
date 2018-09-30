@@ -66,6 +66,15 @@
                     <b>{{ translated.DESCRIPTION }}:</b><br>{{ station.cost.description_long || '-' }}<br>
                 </md-card-content>
                 <md-card-content>
+                    <h3 class="md-subheading">{{ translated.CHARGE_CARDS }}</h3>
+                    <span v-if="!station.chargecards.length">-</span>
+                    <ul>
+                        <li v-for="(card, index) in station.chargecards" :key="index">
+                            {{ getCard(card.id) }}
+                        </li>
+                    </ul>
+                </md-card-content>
+                <md-card-content>
                     <h3 class="md-subheading">{{ translated.OPENING_HOURS }}</h3>
                     <b>{{ translated.DESCRIPTION }}:</b><br>{{ station.openinghours.description || '-' }}<br>
                     <div v-if="station.openinghours['24/7']">
@@ -90,7 +99,7 @@
 
 <script>
     import http from './../modules/http.vue';
-    import eventBus from './../modules/event.vue';
+    import EventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
@@ -106,6 +115,28 @@
             formatOpeningTime(time) {
                 if (time === 'closed') return this.translated.CLOSED;
                 return time.replace('from', '').replace('till', '').replace('  ', '-');
+            },
+            getStation() {
+                var self = this;
+
+                // get station details
+                http.sendRequest('get', 'station', {
+                    id: self.$route.query.id
+                }, (err, station) => {
+                    if (!err && station) {
+                        self.station = station;
+                        setTimeout(() => window.scrollTo(0, 0), 200);
+                    } else {
+                        // TODO
+                    }
+                });
+            },
+            getCard(id) {
+                try {
+                    return this.$root.stationcards.filter(card => card.card_id === id)[0].name;
+                } catch (e) {
+                    return '?';
+                }
             }
         },
         components: {
@@ -117,25 +148,17 @@
 
             self.translated = translation.translatePage();
             if (self.$route.query.id) {
-                eventBus.$on('station_openInNew', () => {
-                    if (self.station.url) window.open(self.station.url, '_blank');     
+                EventBus.$on('station_openInNew', () => {
+                    if (self.station.url) window.open(self.station.url, '_blank');
                 });
-                eventBus.$on('station_navigate', () => {
+                EventBus.$on('station_navigate', () => {
                     if (self.station.coordinates && window.cordova && window.launchnavigator) {
                         launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
                     }
                 });
-                // get station details
-                http.sendRequest('get', 'station', {
-                    id: self.$route.query.id
-                }, (err, station) => {
-                    if (!err && station) {
-                        self.station = station;
-                        setTimeout(() => window.scrollTo(0,0), 200);
-                    } else {
-                        // TODO
-                    }
-                });
+                // retrieve station after cards has been cached
+                if (self.$root.stationcards.length) self.getStation();
+                else EventBus.$on('stationcardsCached', () => self.getStation());
             }
         }
     }

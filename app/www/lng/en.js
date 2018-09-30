@@ -97,6 +97,7 @@ export default {
     CLOSED: 'Closed',
     PLUGS: 'Plugs',
     SOURCE: 'Source',
+    CHARGE_CARDS: 'Charge cards',
     SETTINGS: 'Settings',
     DEVELOPER_OPTIONS: 'Developer options',
     SETTINGS_SAVED: 'Settings saved successfully',

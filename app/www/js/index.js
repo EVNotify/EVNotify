@@ -1,4 +1,5 @@
 import VueResource from 'vue-resource';
+import http from './../components/modules/http.vue';
 import EventBus from './../components/modules/event.vue';
 import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
@@ -54,7 +55,8 @@ var vm = new Vue({
     el: '#app',
     data() {
         return {
-            deviceReady: false
+            deviceReady: false,
+            stationcards: []
         };
     },
     components: {
@@ -91,6 +93,14 @@ EventBus.$on('unauthorized', () => {
 
 EventBus.$on('internalerror', () => {
     console.log('Internal error'); // TODO
+});
+
+// cache station cards on every start
+http.sendRequest('get', 'stationcards', null, (err, cards) => {
+    if (!err && cards) {
+        vm.stationcards = cards;
+        EventBus.$emit('stationcardsCached');
+    }
 });
 
 if (typeof ROLLBAR_TOKEN === 'string') {

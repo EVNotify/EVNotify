@@ -60,6 +60,7 @@
 <script>
     import http from './../modules/http.vue';
     import toolbar from './../container/toolbar.vue';
+    import EventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
     import bottomBar from './../container/bottom-bar.vue';
 
@@ -82,10 +83,34 @@
             },
             navigate(station, event) {
                 event.stopPropagation();
-                if (window.cordova && window.launchnavigator) launchnavigator.navigate([station.coordinates.lat, station.coordinates.lng]);
+                if (window.cordova && window.launchnavigator) {
+                    launchnavigator.navigate([
+                        station.coordinates.lat, station.coordinates.lng
+                    ]);
+                }
             },
             favorite(station, event) {
                 event.stopPropagation();
+            },
+            getStations() {
+                var self = this;
+
+                navigator.geolocation.getCurrentPosition(posObj => {
+                    self.coords = posObj.coords;
+                    // retrieve stations
+                    http.sendRequest('get', 'stations', {
+                        lat: self.coords.latitude,
+                        lng: self.coords.longitude
+                    }, (err, stations) => {
+                        if (!err && Array.isArray(stations)) {
+                            self.stations = stations;
+                        } else {
+                            // TODO
+                        }
+                    });
+                }, err => {
+                    // TODO
+                });
             }
         },
         components: {
@@ -96,22 +121,9 @@
             var self = this;
 
             this.translated = translation.translatePage();
-            navigator.geolocation.getCurrentPosition(posObj => {
-                self.coords = posObj.coords;
-                // retrieve stations
-                http.sendRequest('get', 'stations', {
-                    lat: self.coords.latitude,
-                    lng: self.coords.longitude
-                }, (err, stations) => {
-                    if (!err && Array.isArray(stations)) {
-                        self.stations = stations;
-                    } else {
-                        // TODO
-                    }
-                });
-            }, err => {
-                // TODO
-            });
+            // retrieve stations after cards has been cached
+            if (self.$root.stationcards.length) self.getStations();
+            else EventBus.$on('stationcardsCached', () => self.getStations());
         }
     }
 </script>
