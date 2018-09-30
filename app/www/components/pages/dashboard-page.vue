@@ -467,16 +467,6 @@
                 self.communicationEstablished = false;
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
             });
-
-            eventBus.$emit('obd2Data', {
-                CAPACITY: 28,
-                SLOW_SPEED: 2.3,
-                NORMAL_SPEED: 4.6,
-                FAST_SPEED: 50,
-                DC_BATTERY_VOLTAGE: 45.12312123,
-                DC_BATTERY_CURRENT: 78.13312312312,
-                DC_BATTERY_POWER: 0.1212
-            })
         }
     }
 </script>
