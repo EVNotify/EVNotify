@@ -25,14 +25,12 @@
                                         class="status-icon">
                                 </div>
                                 <div class="md-subhead">
-                                    <div class="address"> {{ station.address.street }} <br> {{ station.address.postcode
-                                        }}
-                                        {{ station.address.city }} </div>
+                                    {{ station.address.street }}, {{ station.address.city }}
                                 </div>
                             </md-card-header>
 
                             <md-card-content>
-                                <ul>
+                                <ul class="plugs-list">
                                     <li v-for="(chargepoint, index) in station.chargepoints" :key="index">
                                         {{ chargepoint.count }}x {{ chargepoint.type }} [{{ chargepoint.power }}kW]
                                     </li>
@@ -43,10 +41,10 @@
                                 <div class="linear-distance">{{ translated.LINEAR_DISTANCE }}: <b>{{
                                         parseFloat(station.distance).toFixed(2)}}km</b>
                                 </div>
-                                <md-button class="md-icon-button">
+                                <md-button class="md-icon-button" @click="favorite(station, $event)">
                                     <img src="icons/favorite_border.svg">
                                 </md-button>
-                                <md-button class="md-icon-button">
+                                <md-button class="md-icon-button" @click="navigate(station, $event)">
                                     <img src="icons/directions.svg">
                                 </md-button>
                             </md-card-actions>
@@ -81,6 +79,12 @@
                         id
                     }
                 });
+            },
+            navigate(station, event) {
+                event.stopPropagation();
+            },
+            favorite(station, event) {
+                event.stopPropagation();
             }
         },
         components: {
@@ -116,8 +120,25 @@
         border-bottom: 1px solid #898989;
     }
 
+    .station-card .md-card-header,
+    .station-card .md-card-content,
+    .station-card .md-card-actions {
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
     .station-card .md-title {
         width: calc(100% - 24px);
+        font-size: 20px;
+    }
+
+    .station-card .md-card-header {
+        margin-top: 8px;
+    }
+
+    .station-card .md-subhead {
+        font-style: italic;
+        font-weight: bold;
     }
 
     .station-card .status-icon {
@@ -126,12 +147,12 @@
         top: 20px;
     }
 
-    .station-card .address {
-        margin-left: 24px;
-    }
-
     .station-card .linear-distance {
         position: absolute;
         left: 16px;
+    }
+
+    .plugs-list {
+        margin: 0;
     }
 </style>
