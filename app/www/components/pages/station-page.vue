@@ -3,16 +3,14 @@
         <toolbar></toolbar>
         <div class="content-within-page">
             <md-card v-if="station.ge_id">
+                <vueper-slides v-if="loadedPhotos" autoplay>
+                    <vueper-slide v-for="(photo, index) in station.photos" :key="index">
+                        <div slot="slideContent">
+                            <img class="station-photo" :style="{backgroundImage: convertPhoto(photos[photo.id])}">
+                        </div>
+                    </vueper-slide>
+                </vueper-slides>
                 <md-card-media-cover md-solid>
-                    <md-card-media>
-                        <vueper-slides v-if="loadedPhotos" autoplay :arrows="false">
-                            <vueper-slide v-for="(photo, index) in station.photos" :key="index">
-                                <div slot="slideContent">
-                                    <img class="station-photo" :style="{backgroundImage: convertPhoto(photos[photo.id])}">
-                                </div>
-                            </vueper-slide>
-                        </vueper-slides>
-                    </md-card-media>
                     <md-card-area>
                         <md-card-header>
                             <span class="md-title">{{ station.name }}</span>
@@ -171,7 +169,7 @@
 
                 // convert the binary
                 for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-                return 'url("data:image/png;base64,' + btoa(binary)+ '")';
+                return 'url("data:image/png;base64,' + btoa(binary) + '")';
             }
         },
         components: {
@@ -184,7 +182,7 @@
             self.translated = translation.translatePage();
             if (self.$route.query.id) {
                 EventBus.$on('station_openInNew', () => {
-                    if (self.station.url) window.open(self.station.url, '_blank');
+                    if (self.station.url) window.open('https:' + self.station.url, '_blank');
                 });
                 EventBus.$on('station_navigate', () => {
                     if (self.station.coordinates && window.cordova && window.launchnavigator) {
@@ -200,6 +198,14 @@
 </script>
 
 <style scoped>
+    .vueperslides {
+        background-color: #4b4b4b;
+    }
+
+    .md-card-media-cover {
+        margin-top: 140px;
+    }
+
     .station-network-operator {
         position: absolute;
         left: 16px;
@@ -222,5 +228,13 @@
         min-height: 140px;
         background-repeat: no-repeat;
         background-size: contain;
+        width: 100vw;
+        background-position: center center;
     }
+</style>
+
+<style>
+.vueperslides__arrows .vueperslides__arrow {
+    fill: #fff;
+}
 </style>
