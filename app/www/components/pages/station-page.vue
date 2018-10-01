@@ -4,8 +4,14 @@
         <div class="content-within-page">
             <md-card v-if="station.ge_id">
                 <md-card-media-cover md-solid>
-                    <md-card-media md-ratio="16:9">
-                        <img src="img/card-sky.jpg" alt="Skyscraper">
+                    <md-card-media>
+                        <vueper-slides v-if="loadedPhotos" autoplay :arrows="false">
+                            <vueper-slide v-for="(photo, index) in station.photos" :key="index">
+                                <div slot="slideContent">
+                                    <img class="station-photo" :style="{backgroundImage: convertPhoto(photos[photo.id])}">
+                                </div>
+                            </vueper-slide>
+                        </vueper-slides>
                     </md-card-media>
                     <md-card-area>
                         <md-card-header>
@@ -108,8 +114,13 @@
         data() {
             return {
                 station: {},
-                translated: {}
+                translated: {},
+                photos: {},
+                loadedPhotos: false
             };
+        },
+        watch: {
+            'station.photos': 'getPhotos'
         },
         methods: {
             formatOpeningTime(time) {
@@ -137,6 +148,30 @@
                 } catch (e) {
                     return '?';
                 }
+            },
+            getPhotos() {
+                var self = this,
+                    cnt = 0;
+
+                self.station.photos.forEach(photo => {
+                    self.$http.get(RESTURL + 'stationphoto', {
+                        params: {
+                            id: photo.id
+                        },
+                        responseType: 'arraybuffer'
+                    }).then(response => {
+                        self.photos[photo.id] = response.body;
+                        if (++cnt === self.station.photos.length) self.loadedPhotos = true;
+                    }).catch(); // TODO
+                });
+            },
+            convertPhoto(photo) {
+                var binary = '',
+                    bytes = new Uint8Array(photo);
+
+                // convert the binary
+                for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+                return 'url("data:image/png;base64,' + btoa(binary)+ '")';
             }
         },
         components: {
@@ -181,5 +216,11 @@
 
     .status-overview-icon {
         float: left;
+    }
+
+    .station-photo {
+        min-height: 140px;
+        background-repeat: no-repeat;
+        background-size: contain;
     }
 </style>
