@@ -3,7 +3,7 @@
         <toolbar></toolbar>
         <div class="content-within-page">
             <md-card v-if="station.ge_id">
-                <vueper-slides v-if="loadedPhotos" autoplay>
+                <vueper-slides v-if="loadedPhotos" autoplay :infinite="false">
                     <vueper-slide v-for="(photo, index) in station.photos" :key="index">
                         <div slot="slideContent">
                             <img class="station-photo" :style="{backgroundImage: convertPhoto(photos[photo.id])}">
