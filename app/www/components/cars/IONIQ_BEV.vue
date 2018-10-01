@@ -34,7 +34,8 @@
                     // error detection to start re-initialization
                     if (data.indexOf('CANERROR') !== -1 ||
                         data.indexOf('STOPPED') !== -1 ||
-                        data.indexOf('UNABLETOCONNECT') !== -1) {
+                        data.indexOf('UNABLETOCONNECT') !== -1 ||
+                        data.indexOf('BUFFERFULL') !== -1) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
                         // emit obd2 error
