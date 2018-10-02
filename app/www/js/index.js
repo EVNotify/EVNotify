@@ -6,6 +6,7 @@ import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
 import DashboardPage from './../components/pages/dashboard-page.vue';
 import LogsPage from './../components/pages/logs-page.vue';
+import LogPage from './../components/pages/log-page.vue';
 import StationsPage from './../components/pages/stations-page.vue';
 import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
@@ -34,6 +35,10 @@ var router = new VueRouter({
         {
             path: '/logs',
             component: LogsPage
+        },
+        {
+            path: '/log',
+            component: LogPage
         },
         {
             path: '/stations',
@@ -65,6 +70,7 @@ var vm = new Vue({
         'registration-page': RegistrationPage,
         'dashboard-page': DashboardPage,
         'logs-page': LogsPage,
+        'log-page': LogPage,
         'stations-page': StationsPage,
         'station-page': StationPage,
         'settings-page': SettingsPage

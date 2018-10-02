@@ -62,6 +62,8 @@ export default {
     LOGS_EMPTY_DESCRIPTION_1: 'Starte eine Ladung und/oder fahre ein wenig herum.',
     LOGS_EMPTY_DESCRIPTION_2: 'Alternativ kannst Du auch ein Log manuell erstellen.',
     LOGS_CREATE: 'Log erstellen',
+    DETAILS: 'Details',
+    TITLE: 'Bezeichnung',
     CHARGES: 'Ladungen',
     DRIVES: 'Fahrten',
     STATISTICS: 'Statistiken',

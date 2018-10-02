@@ -62,6 +62,8 @@ export default {
     LOGS_EMPTY_DESCRIPTION_1: 'Start a charge and/or drive around.',
     LOGS_EMPTY_DESCRIPTION_2: 'Alternatively create an manual entry.',
     LOGS_CREATE: 'Create log',
+    DETAILS: 'Details',
+    TITLE: 'Title',
     CHARGES: 'Charges',
     DRIVES: 'Drives',
     STATISTICS: 'Statistics',
