@@ -35,26 +35,30 @@
                             <label for="token">Token</label>
                             <md-input v-model="token" disabled type="password"></md-input>
                         </md-field>
-                        <md-dialog-prompt :md-active.sync="showOldPasswordDialog" v-model="dialogOldPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
-                            :md-content="translated.PASSWORD_ENTER" @md-confirm="showPasswordDialog = true" :md-confirm-text="translated.NEXT"
-                            :md-cancel-text="translated.CANCEL" />
-                        <md-dialog-prompt :md-active.sync="showPasswordDialog" v-model="dialogPassword" :md-title="translated.PASSWORD" :md-input-placeholder="translated.PASSWORD"
-                            :md-content="((nextDialog === 'token')? translated.PASSWORD_ENTER : translated.PASSWORD_NEW)" @md-confirm="((nextDialog === 'token')? showTokenResetDialog = true : changePassword())"
+                        <md-dialog-prompt :md-active.sync="showOldPasswordDialog" v-model="dialogOldPassword" :md-title="translated.PASSWORD"
+                            :md-input-placeholder="translated.PASSWORD" :md-content="translated.PASSWORD_ENTER"
+                            @md-confirm="showPasswordDialog = true" :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
+                        <md-dialog-prompt :md-active.sync="showPasswordDialog" v-model="dialogPassword" :md-title="translated.PASSWORD"
+                            :md-input-placeholder="translated.PASSWORD" :md-content="((nextDialog === 'token')? translated.PASSWORD_ENTER : translated.PASSWORD_NEW)"
+                            @md-confirm="((nextDialog === 'token')? showTokenResetDialog = true : changePassword())"
                             :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
                         <div class="md-layout">
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'password'; showOldPasswordDialog = true">{{ translated.PASSWORD_CHANGE }}</md-button>
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'password'; showOldPasswordDialog = true">{{
+                                    translated.PASSWORD_CHANGE }}</md-button>
                             </div>
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; showPasswordDialog = true">{{ translated.TOKEN_RESET }}</md-button>
-                                <md-dialog-confirm :md-active.sync="showTokenResetDialog" :md-title="translated.TOKEN_RESET" :md-content="translated.TOKEN_RESET_WARNING"
-                                    :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" @md-confirm="resetToken"
-                                />
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; showPasswordDialog = true">{{
+                                    translated.TOKEN_RESET }}</md-button>
+                                <md-dialog-confirm :md-active.sync="showTokenResetDialog" :md-title="translated.TOKEN_RESET"
+                                    :md-content="translated.TOKEN_RESET_WARNING" :md-confirm-text="translated.NEXT"
+                                    :md-cancel-text="translated.CANCEL" @md-confirm="resetToken" />
                             </div>
                         </div>
                         <div class="md-layout">
                             <div class="md-layout-item">
-                                <md-button style="width: 95%" class="md-accent" @click="logout()">{{ translated.LOGOUT }}</md-button>
+                                <md-button style="width: 95%" class="md-accent" @click="logout()">{{ translated.LOGOUT
+                                    }}</md-button>
                             </div>
                         </div>
                     </md-list>
@@ -92,7 +96,8 @@
                         <md-field>
                             <label for="devices">{{ translated.OBD2_DEVICE }}</label>
                             <md-select v-model="settings.device" required>
-                                <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{ device.name }}</md-option>
+                                <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{
+                                    device.name }}</md-option>
                             </md-select>
                         </md-field>
                     </md-list>
@@ -140,6 +145,7 @@
                 <md-list-item>
                     <small>Bug or feature?</small>
                 </md-list-item>
+                <p class="version">v.{{ version }}</p>
             </form>
         </md-list>
         <snackbar ref="snackbar"></snackbar>
@@ -172,7 +178,8 @@
                 dialogPassword: '',
                 showOldPasswordDialog: false,
                 showPasswordDialog: false,
-                showTokenResetDialog: false
+                showTokenResetDialog: false,
+                version: window.VERSION
             };
         },
         watch: {
@@ -290,3 +297,11 @@
         }
     }
 </script>
+
+<style scoped>
+    .version {
+        text-align: right;
+        font-style: italic;
+        color: grey;
+    }
+</style>

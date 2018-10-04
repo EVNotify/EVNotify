@@ -471,3 +471,9 @@
         }
     }
 </script>
+
+<style>
+.vueperslides__arrows .vueperslides__arrow {
+    fill: #448aff;
+}
+</style>
