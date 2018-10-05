@@ -6,7 +6,7 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'ATSP0', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6'
                 ],
                 offset: 0,
                 command: '2105'
@@ -31,11 +31,12 @@
                         data
                     });
 
-                    // error detection to start re-initialization
+                    // error and empty response detection to start re-initialization
                     if (data.indexOf('CANERROR') !== -1 ||
                         data.indexOf('STOPPED') !== -1 ||
                         data.indexOf('UNABLETOCONNECT') !== -1 ||
-                        data.indexOf('BUFFERFULL') !== -1) {
+                        data.indexOf('BUFFERFULL') !== -1 ||
+                        data.indexOf('7EC2600000000000000') !== -1) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
                         // emit obd2 error
