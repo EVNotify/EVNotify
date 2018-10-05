@@ -50,16 +50,18 @@
             loadLogs() {
                 var self = this;
 
-                http.sendRequest('get', 'logs', {
-                    akey: storage.getValue('akey'),
-                    token: storage.getValue('token'),
-                    charge: ((self.$refs.tabs.activeTab !== 'tab-drives') ? 1 : 0)
-                }, (err, logs) => {
-                    if (!err && logs) self.logs = logs;
-                    else {
-                        // TODO
-                    }
-                });
+                if (self.$refs.tabs.activeTab !== 'tab-statistics') {
+                    http.sendRequest('get', 'logs', {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token'),
+                        charge: ((self.$refs.tabs.activeTab !== 'tab-drives') ? 1 : 0)
+                    }, (err, logs) => {
+                        if (!err && logs) self.logs = logs;
+                        else {
+                            // TODO
+                        }
+                    });
+                }
             },
             createLog() {
                 this.$router.push('/log');
