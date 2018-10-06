@@ -177,7 +177,7 @@
                 chargingStarted: false,
                 lastResponse: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'SOUL_EV'],
+                supportedCars: ['IONIQ_BEV', 'SOUL_EV', 'AMPERA_E'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,

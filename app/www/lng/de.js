@@ -44,6 +44,7 @@ export default {
     LANGUAGE: 'Sprache',
     GERMAN: 'Deutsch',
     ENGLISH: 'Englisch',
+    AMPERA_E: 'Opel Ampera E',
     IONIQ_BEV: 'Hyundai IONIQ Elektro',
     SOUL_EV: 'Kia Soul EV',
     CONSUMPTION: 'Verbrauch',
