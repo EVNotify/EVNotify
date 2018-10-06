@@ -99,7 +99,7 @@
 </style>
 
 <style>
-    .md-icon.md-theme-default.md-icon-image svg {
+    .md-button.md-fab .md-ripple .md-icon.md-theme-default.md-icon-image svg {
         fill: #fff;
     }
 </style>
