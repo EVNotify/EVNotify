@@ -96,7 +96,6 @@
                 var log = this.log;
 
                 this.formatDateTime(false);
-                console.log(new Date(this.log.start * 1000), new Date(this.log.end * 1000));
                 delete log.stats;
                 http.sendRequest('put', 'logdetail', {
                     akey: storage.getValue('akey'),
@@ -119,14 +118,14 @@
 
                     // build the timestamp
                     tmpStart.setFullYear(dateStart[0]);
-                    tmpStart.setMonth(dateStart[1]);
-                    tmpStart.setDate(dateStart[2]);
+                    tmpStart.setMonth(dateStart[1] - 1);
+                    tmpStart.setDate(('0' + dateStart[2].slice(-2)));
                     tmpStart.setHours(timeStart[0]);
                     tmpStart.setMinutes(timeStart[1]);
                     tmpStart.setSeconds(origStart.getSeconds() || 0);
                     tmpEnd.setFullYear(dateEnd[0]);
-                    tmpEnd.setMonth(dateEnd[1]);
-                    tmpEnd.setDate(dateEnd[2]);
+                    tmpEnd.setMonth(dateEnd[1] - 1);
+                    tmpEnd.setDate(('0' + dateEnd[2].slice(-2)));
                     tmpEnd.setHours(timeEnd[0]);
                     tmpEnd.setMinutes(timeEnd[1]);
                     tmpEnd.setSeconds(origEnd.getSeconds() || 0);
@@ -135,7 +134,7 @@
                 } else if (fromDb && this.log.start && this.log.end) {
                     var tmpStart = new Date(this.log.start * 1000),
                         tmpEnd = new Date(this.log.end * 1000);
-                    console.log(tmpStart, tmpEnd);
+                    
                     // build the date and time string
                     this.startDate = tmpStart.getFullYear() + '-' + ('0' + (tmpStart.getMonth() + 1)).slice(-2) + '-' +
                         ('0' + tmpStart.getDate()).slice(-2);
