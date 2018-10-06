@@ -64,6 +64,9 @@
 </template>
 
 <script>
+    import http from './../modules/http.vue';
+    import storage from './../modules/storage.vue';
+    import eventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
@@ -77,8 +80,6 @@
                 endDate: '',
                 startTime: '',
                 endTime: '',
-                start: '',
-                end: '',
                 startDateModal: false,
                 endDateModal: false,
                 startTimeModal: false,
@@ -86,14 +87,93 @@
             };
         },
         methods: {
+            convertCharge() {
+                // boolean conversion for toggle
+                if (this.log.charge) this.log.charge = true;
+                else this.log.charge = false;
+            },
+            saveLog() {
+                var log = this.log;
 
+                this.formatDateTime(false);
+                console.log(new Date(this.log.start * 1000), new Date(this.log.end * 1000));
+                delete log.stats;
+                http.sendRequest('put', 'logdetail', {
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token'),
+                    log: log
+                }, err => {
+                    // TODO: Show snackbar..
+                });
+            },
+            formatDateTime(fromDb) {
+                if (!fromDb && this.startDate.length && this.startTime.length && this.endDate.length && this.endTime.length) {
+                    var tmpStart = new Date(),
+                        dateStart = this.startDate.split('-'),
+                        timeStart = this.startTime.split(':'),
+                        tmpEnd = new Date(),
+                        dateEnd = this.endDate.split('-'),
+                        timeEnd = this.endTime.split(':'),
+                        origStart = new Date(this.log.start * 1000),
+                        origEnd = new Date(this.log.end * 1000);
+
+                    // build the timestamp
+                    tmpStart.setFullYear(dateStart[0]);
+                    tmpStart.setMonth(dateStart[1]);
+                    tmpStart.setDate(dateStart[2]);
+                    tmpStart.setHours(timeStart[0]);
+                    tmpStart.setMinutes(timeStart[1]);
+                    tmpStart.setSeconds(origStart.getSeconds() || 0);
+                    tmpEnd.setFullYear(dateEnd[0]);
+                    tmpEnd.setMonth(dateEnd[1]);
+                    tmpEnd.setDate(dateEnd[2]);
+                    tmpEnd.setHours(timeEnd[0]);
+                    tmpEnd.setMinutes(timeEnd[1]);
+                    tmpEnd.setSeconds(origEnd.getSeconds() || 0);
+                    this.log.start = parseInt(tmpStart.getTime() / 1000);
+                    this.log.end = parseInt(tmpEnd.getTime() / 1000);
+                } else if (fromDb && this.log.start && this.log.end) {
+                    var tmpStart = new Date(this.log.start * 1000),
+                        tmpEnd = new Date(this.log.end * 1000);
+                    console.log(tmpStart, tmpEnd);
+                    // build the date and time string
+                    this.startDate = tmpStart.getFullYear() + '-' + ('0' + (tmpStart.getMonth() + 1)).slice(-2) + '-' +
+                        ('0' + tmpStart.getDate()).slice(-2);
+                    this.endDate = tmpEnd.getFullYear() + '-' + ('0' + (tmpEnd.getMonth() + 1)).slice(-2) + '-' + ('0' +
+                        tmpEnd.getDate()).slice(-2);
+                    this.startTime = ('0' + tmpStart.getHours()).slice(-2) + ':' + ('0' + tmpStart.getMinutes()).slice(-2);
+                    this.endTime = ('0' + tmpEnd.getHours()).slice(-2) + ':' + ('0' + tmpEnd.getMinutes()).slice(-2);
+                } else {
+                    // TODO
+                }
+            }
+        },
+        watch: {
+            'log.charge': 'convertCharge'
         },
         components: {
             toolbar,
             bottomBar
         },
         created() {
-            this.translated = translation.translatePage();
+            var self = this;
+
+            self.translated = translation.translatePage();
+            eventBus.$on('log_save', () => self.saveLog());
+            if (self.$route.query.id) {
+                http.sendRequest('get', 'logdetail', {
+                    id: self.$route.query.id,
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token')
+                }, (err, log) => {
+                    if (!err && log != null) {
+                        self.log = log;
+                        self.formatDateTime(true);
+                    } else {
+                        // TODO
+                    }
+                });
+            }
         }
     }
 </script>

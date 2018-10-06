@@ -14,7 +14,7 @@
             </md-empty-state>
             <md-list v-if="logs.length" class="md-double-line">
                 <md-list-item v-for="(log, index) in logs" :key="index">
-                    <div class="md-list-item-text">
+                    <div class="md-list-item-text" @click="openLog(log.id)">
                         <span>{{ log.title || '-' }}</span>
                         <span>{{ formatDate(log.start) }} - {{ formatDate(log.end) }}</span>
                     </div>
@@ -62,6 +62,14 @@
                         }
                     });
                 }
+            },
+            openLog(id) {
+                this.$router.push({
+                    path: '/log',
+                    query: {
+                        id
+                    }
+                });
             },
             createLog() {
                 this.$router.push('/log');

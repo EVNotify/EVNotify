@@ -17,6 +17,11 @@
                 <md-icon md-src="icons/save.svg"></md-icon>
             </md-button>
         </div>
+        <div class="md-toolbar-section-end" v-if="logPage">
+            <md-button class="md-icon-button" @click="emitSave()">
+                <md-icon md-src="icons/save.svg"></md-icon>
+            </md-button>
+        </div>
         <div class="md-toolbar-section-end" v-if="stationPage">
             <md-button class="md-icon-button">
                 <md-icon md-src="icons/favorite_border.svg"></md-icon>
@@ -40,6 +45,7 @@ export default {
             dashboardPage: false,
             settingsPage: false,
             stationPage: false,
+            logPage: false,
             bluetoothIcon: 'icons/bluetooth_disabled.svg',
             syncIcon: 'icons/sync_disabled.svg'
         };
@@ -55,7 +61,8 @@ export default {
             eventBus.$emit('station_navigate');
         },
         emitSave() {
-            eventBus.$emit('toolbar_saveBtnClicked');
+            if (this.settingsPage) eventBus.$emit('settings_save');
+            else if (this.logPage) eventBus.$emit('log_save');
         }
     },
     created() {
@@ -66,6 +73,7 @@ export default {
         self.dashboardPage = (currentPage === '/dashboard');
         self.settingsPage = (currentPage === '/settings');
         self.stationPage = (currentPage === '/station');
+        self.logPage = (currentPage === '/log');
         // listener to dynamically change icons
         eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
         eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');

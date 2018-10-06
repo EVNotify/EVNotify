@@ -284,7 +284,7 @@
             if (self.$root.deviceReady) self.listDevices();
             else eventBus.$on('deviceReady', () => self.listDevices());
             // listener for save
-            eventBus.$on('toolbar_saveBtnClicked', () => self.saveSettings());
+            eventBus.$on('settings_save', () => self.saveSettings());
             // retrieve settings from server to sync latest settings
             self.$http.get(RESTURL + 'settings', {
                 params: {

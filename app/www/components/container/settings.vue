@@ -127,7 +127,7 @@
             }
             self.settings = storage.getValue('settings', self.settings);
             // listen for save btn press (only for settings page) to push event
-            if (self.$route.path === '/settings') eventBus.$on('toolbar_saveBtnClicked', () => self.$emit('settingsSaved', self.settings));
+            if (self.$route.path === '/settings') eventBus.$on('settings_save', () => self.$emit('settingsSaved', self.settings));
         }
     }
 </script>
