@@ -103,7 +103,7 @@
 
 <script>
     import http from './../modules/http.vue';
-    import EventBus from './../modules/event.vue';
+    import eventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
@@ -181,17 +181,17 @@
 
             self.translated = translation.translatePage();
             if (self.$route.query.id) {
-                EventBus.$on('station_openInNew', () => {
+                eventBus.$once('station_openInNew', () => {
                     if (self.station.url) window.open('https:' + self.station.url, '_blank');
                 });
-                EventBus.$on('station_navigate', () => {
+                eventBus.$once('station_navigate', () => {
                     if (self.station.coordinates && window.cordova && window.launchnavigator) {
                         launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
                     }
                 });
                 // retrieve station after cards has been cached
                 if (self.$root.stationcards.length) self.getStation();
-                else EventBus.$on('stationcardsCached', () => self.getStation());
+                else eventBus.$once('stationcardsCached', () => self.getStation());
             }
         }
     }

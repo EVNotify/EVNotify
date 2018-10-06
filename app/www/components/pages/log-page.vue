@@ -158,7 +158,7 @@
             var self = this;
 
             self.translated = translation.translatePage();
-            eventBus.$on('log_save', () => self.saveLog());
+            eventBus.$once('log_save', () => self.saveLog());
             if (self.$route.query.id) {
                 http.sendRequest('get', 'logdetail', {
                     id: self.$route.query.id,

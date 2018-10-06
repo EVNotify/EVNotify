@@ -26,7 +26,7 @@
         created() {
             var self = this;
 
-            eventBus.$on('settings_languageChanged', function() {
+            eventBus.$once('settings_languageChanged', function() {
                 self.translatePage();
             });
             self.currentSelection = 'bottom-bar-item-' + self.$route.path.substr(1);

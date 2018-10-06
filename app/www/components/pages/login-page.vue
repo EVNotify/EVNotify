@@ -105,7 +105,7 @@
             // translate all labels in correct language
             self.translated = translation.translatePage();
             // apply backbuttonPressed listener to handle exit or back
-            eventBus.$on('backbuttonPressed', function(e) {
+            eventBus.$once('backbuttonPressed', function(e) {
                 if (self.$route.path === '/') {
                     e.preventDefault();
                     navigator.app.exitApp();

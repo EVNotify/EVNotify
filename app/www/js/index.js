@@ -1,6 +1,6 @@
 import VueResource from 'vue-resource';
 import http from './../components/modules/http.vue';
-import EventBus from './../components/modules/event.vue';
+import eventBus from './../components/modules/event.vue';
 import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
@@ -84,20 +84,20 @@ var vm = new Vue({
 // apply event listener for cordova device
 document.addEventListener('deviceready', function() {
     vm.deviceReady = true;
-    EventBus.$emit('deviceReady');
+    eventBus.$emit('deviceReady');
     // event listener for back button
     document.addEventListener('backbutton', function(e) {
-        EventBus.$emit('backbuttonPressed', e);
+        eventBus.$emit('backbuttonPressed', e);
     });
 });
 
-EventBus.$on('unauthorized', () => {
+eventBus.$once('unauthorized', () => {
     console.log('Unauthorized');
     localStorage.clear();
     vm.$router.push('/');
 });
 
-EventBus.$on('internalerror', () => {
+eventBus.$once('internalerror', () => {
     console.log('Internal error'); // TODO
 });
 
@@ -105,7 +105,7 @@ EventBus.$on('internalerror', () => {
 http.sendRequest('get', 'stationcards', null, (err, cards) => {
     if (!err && cards) {
         vm.stationcards = cards;
-        EventBus.$emit('stationcardsCached');
+        eventBus.$emit('stationcardsCached');
     }
 });
 
