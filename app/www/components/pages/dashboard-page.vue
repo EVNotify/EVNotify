@@ -145,6 +145,7 @@
         </div>
         <AMPERAE ref="AMPERA_E"></AMPERAE>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
+        <SOULEV ref="SOUL_EV"></SOULEV>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
     </div>
