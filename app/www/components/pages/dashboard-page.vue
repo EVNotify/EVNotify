@@ -143,6 +143,7 @@
                 </vueper-slide>
             </vueper-slides>
         </div>
+        <AMPERAE ref="AMPERA_E"></AMPERAE>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
@@ -157,6 +158,7 @@
     import eventBus from './../modules/event.vue';
     import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
+    import AMPERAE from './../cars/AMPERA_E.vue';
     import IONIQBEV from './../cars/IONIQ_BEV.vue';
     import SOULEV from './../cars/SOUL_EV.vue';
 
@@ -407,6 +409,7 @@
             bottomBar,
             snackbar,
             toolbar,
+            AMPERAE,
             IONIQBEV,
             SOULEV
         },

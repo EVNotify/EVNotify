@@ -52,7 +52,7 @@
                 try {
                     if (data.indexOf('415B') !== -1) {
                         parseData = {
-                            SOC_DISPLAY: data.substr(data.indexOf('415B'), 6).slice(-2) // following 2 bytes from response after 415B
+                            SOC_DISPLAY: (parseInt(data.substr(data.indexOf('415B'), 6).slice(-2), 16) * 100 / 255).toFixed(2) // following 2 bytes from response after 415B
                         }
                     }
                 } catch (err) {
