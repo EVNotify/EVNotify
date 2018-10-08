@@ -1,6 +1,7 @@
 <template></template>
 <script>
     import eventBus from './../modules/event.vue';
+    import utils from './../../js/utils.js';
 
     export default {
         data() {
@@ -117,9 +118,9 @@
                                         extractedSecondData.slice(4, 6), 16 // third byte within 2nd block
                                     )
                                 ) / 10,
-                                DC_BATTERY_CURRENT: (((parseInt(
-                                    (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
-                                )+2**15)%(2**16))-2**15)*0.1 // some binary conversion to get signed int from value,
+                                DC_BATTERY_CURRENT: utils.parseSigned(
+                                  (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
+                                ) * 0.1
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
