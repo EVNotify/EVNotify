@@ -73,7 +73,7 @@
                             <md-select v-model="settings.car" required>
                                 <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                                 <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
-                                <md-option value="IONIQ_BEV">{{ translated.AMPERA_EV }}</md-option>
+                                <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
                             </md-select>
                         </md-field>
                     </md-list>
