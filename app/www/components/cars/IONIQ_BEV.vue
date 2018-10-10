@@ -9,6 +9,7 @@
                     'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6'
                 ],
                 offset: 0,
+                emptyResponses: 0,
                 command: '2105'
             };
         },
@@ -36,9 +37,10 @@
                         data.indexOf('STOPPED') !== -1 ||
                         data.indexOf('UNABLETOCONNECT') !== -1 ||
                         data.indexOf('BUFFERFULL') !== -1 ||
-                        data.indexOf('7EC2600000000000000') !== -1) {
+                        (data.indexOf('7EC2600000000000000') !== -1 && self.emptyResponses > 5)) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
+                        self.emptyResponses = 0;
                         // emit obd2 error
                         eventBus.$emit('obd2Error', data);
                     }
@@ -101,6 +103,7 @@
                             extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
                         if (extractedSixthData && extractedSixthData !== '00000000000000') {
+                            self.emptyResponses = 0;
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
                             parsedData = {
@@ -123,7 +126,7 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
-                        }
+                        } else self.emptyResponses++;
                     }
                 } catch (err) {
                     console.error(err);
