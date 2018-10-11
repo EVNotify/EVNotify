@@ -444,7 +444,8 @@
                     navigator.app.exitApp();
                 } else navigator.app.backHistory();
             });
-            eventBus.$once('obd2Data', function (data) {
+            // listen to obd2Data (we can not use once here)
+            eventBus.$on('obd2Data', function (data) {
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 var soc = self.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
