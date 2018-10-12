@@ -93,6 +93,9 @@
                     </div>
                 </md-card-content>
                 <md-card-content>
+                    <div id="station-map" ref="map"></div>
+                </md-card-content>
+                <md-card-content>
                     {{ translated.SOURCE }}: <a href="https://goingelectric.de">GoingElectric.de</a>
                 </md-card-content>
             </md-card>
@@ -135,6 +138,13 @@
                     if (!err && station) {
                         self.station = station;
                         setTimeout(() => window.scrollTo(0, 0), 200);
+                        // wait for cordova device to be ready - apply listener, if not ready yet
+                        if (self.$root.deviceReady) self.buildMap();
+                        else {
+                            eventBus.$on('deviceReady', function () {
+                                self.buildMap();
+                            });
+                        }
                     } else {
                         // TODO
                     }
@@ -170,6 +180,31 @@
                 // convert the binary
                 for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
                 return 'url("data:image/png;base64,' + btoa(binary) + '")';
+            },
+            buildMap() {
+                var self = this,
+                    map = plugin.google.maps.Map.getMap(document.getElementById('station-map'));
+
+                if (self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
+                    map.moveCamera({
+                        target: {
+                            lat: self.station.coordinates.lat,
+                            lng: self.station.coordinates.lng
+                        },
+                        zoom: 17
+                    });
+                    // Add a maker
+                    var marker = map.addMarker({
+                        position: {
+                            lat: self.station.coordinates.lat,
+                            lng: self.station.coordinates.lng
+                        },
+                        title: self.station.name,
+                        snippet: self.station.address.street + '<br>' + self.station.address.postcode + ' ' +
+                            self.station.address.city + '<br>' + self.station.address.country,
+                        animation: plugin.google.maps.Animation.BOUNCE
+                    });
+                }
             }
         },
         components: {
@@ -234,7 +269,12 @@
 </style>
 
 <style>
-.vueperslides__arrows .vueperslides__arrow {
-    fill: #448aff;
-}
+    .vueperslides__arrows .vueperslides__arrow {
+        fill: #448aff;
+    }
+
+    #station-map {
+        width: 100%;
+        height: 500px;
+    }
 </style>
