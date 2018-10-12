@@ -334,7 +334,9 @@
                             location: {
                                 latitude: pos.coords.latitude,
                                 longitude: pos.coords.longitude,
-                                speed: pos.coords.speed
+                                speed: pos.coords.speed,
+                                timestamp: pos.timestamp,
+                                accuracy: pos.coords.accuracy
                             }
                         }).then(() => {}, err => console.log(err));
                     }, err => console.log(err), {
