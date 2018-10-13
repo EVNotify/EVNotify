@@ -63,6 +63,8 @@ export default {
     LOGS_EMPTY_DESCRIPTION_1: 'Start a charge and/or drive around.',
     LOGS_EMPTY_DESCRIPTION_2: 'Alternatively create an manual entry.',
     LOGS_CREATE: 'Create log',
+    LOG_SAVED: 'Log saved successfully',
+    LOG_SAVE_ERROR: 'An error occured while saving the logs',
     DETAILS: 'Details',
     TITLE: 'Title',
     START_DATE: 'Start date',

@@ -59,6 +59,7 @@
                 </md-card>
             </form>
         </div>
+        <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
     </div>
 </template>
@@ -69,6 +70,7 @@
     import eventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
+    import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
 
     export default {
@@ -93,16 +95,22 @@
                 else this.log.charge = false;
             },
             saveLog() {
-                var log = this.log;
+                var self = this,
+                    log = self.log;
 
-                this.formatDateTime(false);
+                self.formatDateTime(false);
                 delete log.stats;
-                http.sendRequest('put', 'logdetail', {
+                http.sendRequest(((self.$route.query.id) ? 'put' : 'post'), 'logdetail', {
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token'),
                     log: log
                 }, err => {
-                    // TODO: Show snackbar..
+                    if (!err) {
+                        self.$refs.snackbar.setMessage('LOG_SAVED', false, 'success');
+                        self.$router.push('/logs');
+                    } else {
+                        self.$refs.snackbar.setMessage('LOG_SAVE_ERROR', false, 'error');
+                    }
                 });
             },
             formatDateTime(fromDb) {
@@ -152,6 +160,7 @@
         },
         components: {
             toolbar,
+            snackbar,
             bottomBar
         },
         created() {
