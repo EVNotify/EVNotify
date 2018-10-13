@@ -183,27 +183,31 @@
                 return 'url("data:image/png;base64,' + btoa(binary) + '")';
             },
             buildMap() {
-                var self = this,
-                    map = plugin.google.maps.Map.getMap(document.getElementById('station-map'));
+                var self = this;
 
                 if (self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
-                    map.moveCamera({
-                        target: {
-                            lat: self.station.coordinates.lat,
-                            lng: self.station.coordinates.lng
-                        },
-                        zoom: 17
-                    });
-                    // Add a maker
-                    var marker = map.addMarker({
-                        position: {
-                            lat: self.station.coordinates.lat,
-                            lng: self.station.coordinates.lng
-                        },
-                        title: self.station.name,
-                        snippet: self.station.address.street + '<br>' + self.station.address.postcode + ' ' +
-                            self.station.address.city + '<br>' + self.station.address.country,
-                        animation: plugin.google.maps.Animation.BOUNCE
+                    Vue.nextTick(() => {
+                        var map = plugin.google.maps.Map.getMap(document.getElementById('station-map'));
+
+                        map.moveCamera({
+                            target: {
+                                lat: self.station.coordinates.lat,
+                                lng: self.station.coordinates.lng
+                            },
+                            zoom: 17
+                        });
+                        // Add a maker
+                        var marker = map.addMarker({
+                            position: {
+                                lat: self.station.coordinates.lat,
+                                lng: self.station.coordinates.lng
+                            },
+                            title: self.station.name,
+                            snippet: self.station.address.street + '<br>' + self.station.address.postcode +
+                                ' ' +
+                                self.station.address.city + '<br>' + self.station.address.country,
+                            animation: plugin.google.maps.Animation.BOUNCE
+                        });
                     });
                 }
             }
@@ -212,7 +216,7 @@
             toolbar,
             bottomBar
         },
-        created() {
+        mounted() {
             var self = this;
 
             self.translated = translation.translatePage();
