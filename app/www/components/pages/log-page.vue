@@ -56,6 +56,9 @@
                             </v-dialog>
                         </div>
                     </md-card-content>
+                    <md-card-content>
+                        <canvas id="chart" ref="chart" width="400" height="400"></canvas>
+                    </md-card-content>
                 </md-card>
             </form>
         </div>
@@ -66,6 +69,7 @@
 
 <script>
     import http from './../modules/http.vue';
+    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
@@ -142,17 +146,69 @@
                 } else if (fromDb && this.log.start && this.log.end) {
                     var tmpStart = new Date(this.log.start * 1000),
                         tmpEnd = new Date(this.log.end * 1000);
-                    
+
                     // build the date and time string
                     this.startDate = tmpStart.getFullYear() + '-' + ('0' + (tmpStart.getMonth() + 1)).slice(-2) + '-' +
                         ('0' + tmpStart.getDate()).slice(-2);
                     this.endDate = tmpEnd.getFullYear() + '-' + ('0' + (tmpEnd.getMonth() + 1)).slice(-2) + '-' + ('0' +
                         tmpEnd.getDate()).slice(-2);
-                    this.startTime = ('0' + tmpStart.getHours()).slice(-2) + ':' + ('0' + tmpStart.getMinutes()).slice(-2);
+                    this.startTime = ('0' + tmpStart.getHours()).slice(-2) + ':' + ('0' + tmpStart.getMinutes()).slice(
+                        -2);
                     this.endTime = ('0' + tmpEnd.getHours()).slice(-2) + ':' + ('0' + tmpEnd.getMinutes()).slice(-2);
                 } else {
                     // TODO
                 }
+            },
+            createChart() {
+                var self = this;
+                var charging = parseInt(self.log.charge);
+                var ctx = document.getElementById("chart").getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: self.log.stats.sort((a, b) => a.timestamp - b.timestamp).map(stat => helper.formatDate(
+                            stat.timestamp)),
+                        datasets: [{
+                            label: 'SOC_DISPLAY',
+                            lineTension: 0,
+                            spanGaps: true,
+                            fill: false,
+                            borderColor: '#50f84f',
+                            data: self.log.stats.map(stat => stat.soc_display)
+                        }, {
+                            label: 'SOC_BMS',
+                            lineTension: 0,
+                            spanGaps: true,
+                            fill: false,
+                            borderColor: '#f83be1',
+                            data: self.log.stats.map(stat => stat.soc_bms)
+                        }, {
+                            label: 'DC_BATTERY_POWER',
+                            lineTension: 0,
+                            spanGaps: true,
+                            fill: false,
+                            borderColor: '#324df8',
+                            data: self.log.stats.map(stat => stat.dc_battery_power ? stat.dc_battery_power *
+                                ((charging) ? -1 : 1) : stat.dc_battery_power)
+                        }].concat(((charging) ? [] : [{
+                            label: 'GPS_SPEED',
+                            borderColor: '#f81d28',
+                            fill: false,
+                            lineTension: 0,
+                            spanGaps: true,
+                            data: self.log.stats.map(stats => stats.gps_speed ? stats.gps_speed * 3.6 : stats.gps_speed)
+                        }]))
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
             }
         },
         watch: {
@@ -178,6 +234,7 @@
                     if (!err && log != null) {
                         self.log = log;
                         self.formatDateTime(true);
+                        if (Array.isArray(self.log.stats)) self.createChart();
                     } else {
                         // TODO
                     }
