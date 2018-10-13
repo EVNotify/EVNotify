@@ -433,20 +433,23 @@
             self.socThreshold = parseInt(storage.getValue('settings', {}).soc) || 0;
 
             // wait for cordova device to be ready - apply listener, if not ready yet
+            eventBus.$off('deviceReady');
             if (self.$root.deviceReady) self.startWatch();
             else {
-                eventBus.$once('deviceReady', function () {
+                eventBus.$on('deviceReady', function () {
                     self.startWatch();
                 });
             }
             // apply backbuttonPressed listener to handle exit or back
-            eventBus.$once('backbuttonPressed', function (e) {
+            eventBus.$off('backbuttonPressed');
+            eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
                     navigator.app.exitApp();
                 } else navigator.app.backHistory();
             });
             // listen to obd2Data (we can not use once here)
+            eventBus.$off('obd2Data');
             eventBus.$on('obd2Data', function (data) {
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
@@ -471,7 +474,8 @@
                     self.notificationSent = false;
                 }
             });
-            eventBus.$once('obd2Error', function (error) {
+            eventBus.$off('obd2Error');
+            eventBus.$on('obd2Error', function (error) {
                 self.communicationEstablished = false;
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
             });

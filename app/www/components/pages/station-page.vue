@@ -139,6 +139,7 @@
                         self.station = station;
                         setTimeout(() => window.scrollTo(0, 0), 200);
                         // wait for cordova device to be ready - apply listener, if not ready yet
+                        eventBus.$off('deviceReady');
                         if (self.$root.deviceReady) self.buildMap();
                         else {
                             eventBus.$on('deviceReady', function () {
@@ -216,17 +217,20 @@
 
             self.translated = translation.translatePage();
             if (self.$route.query.id) {
-                eventBus.$once('station_openInNew', () => {
+                eventBus.$off('station_openInNew');
+                eventBus.$on('station_openInNew', () => {
                     if (self.station.url) window.open('https:' + self.station.url, '_blank');
                 });
-                eventBus.$once('station_navigate', () => {
+                eventBus.$off('station_navigate');
+                eventBus.$on('station_navigate', () => {
                     if (self.station.coordinates && window.cordova && window.launchnavigator) {
                         launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
                     }
                 });
+                eventBus.$off('stationcardsCached');
                 // retrieve station after cards has been cached
                 if (self.$root.stationcards.length) self.getStation();
-                else eventBus.$once('stationcardsCached', () => self.getStation());
+                else eventBus.$on('stationcardsCached', () => self.getStation());
             }
         }
     }

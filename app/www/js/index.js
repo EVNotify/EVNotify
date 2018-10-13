@@ -91,13 +91,13 @@ document.addEventListener('deviceready', function() {
     });
 });
 
-eventBus.$once('unauthorized', () => {
+eventBus.$on('unauthorized', () => {
     console.log('Unauthorized');
     localStorage.clear();
     vm.$router.push('/');
 });
 
-eventBus.$once('internalerror', () => {
+eventBus.$on('internalerror', () => {
     console.log('Internal error'); // TODO
 });
 

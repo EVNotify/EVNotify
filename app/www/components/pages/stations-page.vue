@@ -123,7 +123,7 @@
             this.translated = translation.translatePage();
             // retrieve stations after cards has been cached
             if (self.$root.stationcards.length) self.getStations();
-            else EventBus.$once('stationcardsCached', () => self.getStations());
+            else EventBus.$on('stationcardsCached', () => self.getStations());
         }
     }
 </script>

@@ -282,10 +282,12 @@
             self.autoboot = storage.getValue('autoboot');
             self.keepawake = storage.getValue('keepawake');
             // wait for cordova device to be ready - apply listener, if not ready yet
+            eventBus.$off('deviceReady');
             if (self.$root.deviceReady) self.listDevices();
-            else eventBus.$once('deviceReady', () => self.listDevices());
+            else eventBus.$on('deviceReady', () => self.listDevices());
             // listener for save
-            eventBus.$once('settings_save', () => self.saveSettings());
+            eventBus.$off('settings_save');
+            eventBus.$on('settings_save', () => self.saveSettings());
             // retrieve settings from server to sync latest settings
             self.$http.get(RESTURL + 'settings', {
                 params: {

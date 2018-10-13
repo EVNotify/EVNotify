@@ -75,8 +75,10 @@ export default {
         self.stationPage = (currentPage === '/station');
         self.logPage = (currentPage === '/log');
         // listener to dynamically change icons
-        eventBus.$once('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
-        eventBus.$once('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
+        eventBus.$off('bluetoothChanged');
+        eventBus.$off('syncChanged');
+        eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
+        eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
     }
 }
 </script>

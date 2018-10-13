@@ -118,16 +118,18 @@
             var self = this;
 
             self.translatePage();
+            eventBus.$off('deviceReady');
             // wait for cordova device to be ready - apply listener, if not ready yet
             if(self.$root.deviceReady) self.listDevices();
             else {
-                eventBus.$once('deviceReady', function() {
+                eventBus.$on('deviceReady', function() {
                     self.listDevices();
                 });
             }
             self.settings = storage.getValue('settings', self.settings);
             // listen for save btn press (only for settings page) to push event
-            if (self.$route.path === '/settings') eventBus.$once('settings_save', () => self.$emit('settingsSaved', self.settings));
+            eventBus.$off('settings_save');
+            if (self.$route.path === '/settings') eventBus.$on('settings_save', () => self.$emit('settingsSaved', self.settings));
         }
     }
 </script>
