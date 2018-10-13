@@ -187,7 +187,9 @@
 
                 if (self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
                     Vue.nextTick(() => {
-                        var map = plugin.google.maps.Map.getMap(document.getElementById('station-map'));
+                        var map = plugin.google.maps.Map.getMap(document.getElementById('station-map')),
+                            maxPower = Math.max.apply(Math, (self.station.chargepoints.map(chargepoint => chargepoint.power))),
+                            icon = ((maxPower >= 50) ? 'fast' : ((maxPower >= 11)? 'normal' : 'slow'));
 
                         map.moveCamera({
                             target: {
@@ -196,12 +198,13 @@
                             },
                             zoom: 17
                         });
-                        // Add a maker
-                        var marker = map.addMarker({
+                        // build the marker for the station
+                        map.addMarker({
                             position: {
                                 lat: self.station.coordinates.lat,
                                 lng: self.station.coordinates.lng
                             },
+                            icon: 'icons/ev_station_' + icon + '.svg', // determine speed to set color
                             title: self.station.name,
                             snippet: self.station.address.street + '<br>' + self.station.address.postcode +
                                 ' ' +

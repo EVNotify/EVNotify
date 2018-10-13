@@ -109,7 +109,12 @@
                         }
                     });
                 }, err => {
+                    console.warn('could not resolve position');
                     // TODO
+                }, {
+                    maximumAge: 2000,
+                    timeout: 5000,
+                    enableHighAccuracy: true
                 });
             }
         },

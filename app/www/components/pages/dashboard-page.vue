@@ -340,6 +340,8 @@
                             }
                         }).then(() => {}, err => console.log(err));
                     }, err => console.log(err), {
+                        maximumAge: 2000,
+                        timeout: 5000,
                         enableHighAccuracy: true
                     });
                     // watch for charging interrupted
