@@ -327,23 +327,25 @@
                         });
                     }, 10000);
                     // listener for location changes to push location to server
-                    self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
-                        self.$http.post(RESTURL + 'location', {
-                            akey: storage.getValue('akey'),
-                            token: storage.getValue('token'),
-                            location: {
-                                latitude: pos.coords.latitude,
-                                longitude: pos.coords.longitude,
-                                speed: pos.coords.speed,
-                                timestamp: parseInt(pos.timestamp / 1000),
-                                accuracy: pos.coords.accuracy
-                            }
-                        }).then(() => {}, err => console.log(err));
-                    }, err => console.log(err), {
-                        maximumAge: 2000,
-                        timeout: 5000,
-                        enableHighAccuracy: true
-                    });
+                    if (storage.getValue('locationsync')) {
+                        self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
+                            self.$http.post(RESTURL + 'location', {
+                                akey: storage.getValue('akey'),
+                                token: storage.getValue('token'),
+                                location: {
+                                    latitude: pos.coords.latitude,
+                                    longitude: pos.coords.longitude,
+                                    speed: pos.coords.speed,
+                                    timestamp: parseInt(pos.timestamp / 1000),
+                                    accuracy: pos.coords.accuracy
+                                }
+                            }).then(() => {}, err => console.log(err));
+                        }, err => console.log(err), {
+                            maximumAge: 2000,
+                            timeout: 5000,
+                            enableHighAccuracy: true
+                        });
+                    }
                     // watch for charging interrupted
                     self.chargingWatcher = setInterval(() => {
                         // validate if there was at least one successful response and charging started earlier

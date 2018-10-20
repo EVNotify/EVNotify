@@ -89,6 +89,12 @@
                         </md-field>
                     </md-list>
                 </md-list-item>
+                <md-subheader>{{ translated.SYNC }}</md-subheader>
+                <md-list-item>
+                    <md-icon md-src="icons/location_on.svg"></md-icon>
+                    <span class="md-list-item-text">{{ translated.SYNC_LOCATION }}</span>
+                    <md-switch v-model="locationsync"></md-switch>
+                </md-list-item>
                 <md-subheader>{{ translated.DEVICES }}</md-subheader>
                 <md-list-item md-expand>
                     <md-icon md-src="icons/bluetooth_connected.svg"></md-icon>
@@ -170,6 +176,7 @@
                 settings: {},
                 devices: [],
                 errortracking: false,
+                locationsync: false,
                 keepawake: false,
                 autoboot: false,
                 akey: '',
@@ -185,6 +192,7 @@
         },
         watch: {
             'settings.lng': 'setLng',
+            'locationsync': 'setLocationSync',
             'keepawake': 'setKeepAwake',
             'autoboot': 'setAutoBoot',
             'settings.push': 'setPush'
@@ -194,6 +202,18 @@
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
                 eventBus.$emit('settings_languageChanged');
+            },
+            setLocationSync() {
+                var self = this,
+                    enabled = storage.setValue('locationsync', self.locationsync);
+
+                // check permission access
+                if (enabled) {
+                    navigator.geolocation.getCurrentPosition(() => {}, () => {
+                        self.$refs.snackbar.setMessage('LOCATION_ACCESS_DENIED', false, 'error');
+                        self.locationsync = false;
+                    });
+                }
             },
             setPush() {
                 // fix for md-switch accepting only booleans instead of numbers that equal boolean values
@@ -281,6 +301,7 @@
             self.settings = storage.getValue('settings', self.settings);
             self.autoboot = storage.getValue('autoboot');
             self.keepawake = storage.getValue('keepawake');
+            self.locationsync = storage.getValue('locationsync');
             // wait for cordova device to be ready - apply listener, if not ready yet
             eventBus.$off('deviceReady');
             if (self.$root.deviceReady) self.listDevices();
