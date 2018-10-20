@@ -102,7 +102,7 @@
                                 19) : ''),
                             extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
-                        if (extractedSixthData && extractedSixthData !== '00000000000000') {
+                        if (extractedFirstData && extractedSecondData && extractedFourthData && extractedSixthData && extractedSixthData !== '00000000000000') {
                             self.emptyResponses = 0;
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
