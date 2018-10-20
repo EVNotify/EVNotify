@@ -59,6 +59,9 @@
                     <md-card-content>
                         <canvas id="chart" ref="chart" width="400" height="400"></canvas>
                     </md-card-content>
+                    <md-card-content>
+                        <div id="log-map" ref="map"></div>
+                    </md-card-content>
                 </md-card>
             </form>
         </div>
@@ -209,6 +212,30 @@
                         }
                     }
                 });
+            },
+            buildMap() {
+                var self = this,
+                    coords = self.log.stats.filter(stat => stat.latitude && stat.longitude).map(stat => {
+                        return {
+                            lat: stat.latitude,
+                            lng: stat.longitude
+                        };
+                    });
+
+                Vue.nextTick(() => {
+                    var map = plugin.google.maps.Map.getMap(document.getElementById('log-map'), {
+                        camera: {
+                            target: coords
+                        }
+                    });
+
+                    map.addPolyline({
+                        points: coords,
+                        color: '#324df8',
+                        width: 5,
+                        geodesic: true
+                    })
+                });
             }
         },
         watch: {
@@ -219,7 +246,7 @@
             snackbar,
             bottomBar
         },
-        created() {
+        mounted() {
             var self = this;
 
             self.translated = translation.translatePage();
@@ -234,7 +261,16 @@
                     if (!err && log != null) {
                         self.log = log;
                         self.formatDateTime(true);
-                        if (Array.isArray(self.log.stats)) self.createChart();
+                        if (Array.isArray(self.log.stats)) {
+                            self.createChart();
+                            eventBus.$off('deviceReady');
+                            if (self.$root.deviceReady) self.buildMap();
+                            else {
+                                eventBus.$on('deviceReady', function () {
+                                    self.buildMap();
+                                });
+                            }
+                        }
                     } else {
                         // TODO
                     }
@@ -256,5 +292,9 @@
 <style>
     .v-picker__body.theme--dark {
         width: auto !important;
+    }
+     #log-map {
+        width: 100%;
+        height: 500px;
     }
 </style>
