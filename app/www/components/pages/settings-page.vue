@@ -3,6 +3,68 @@
         <toolbar></toolbar>
         <md-list class="content-within-page" md-expand-single="true">
             <form class="form inner-form">
+                <v-layout row justify-center>
+                    <!-- current password dialog -->
+                    <v-dialog v-model="passwordDialog" persistent max-width="500px">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                                <span class="headline">{{ translated.PASSWORD}}</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-container grid-list-md>
+                                    {{ translated.PASSWORD_ENTER }}
+                                    <v-layout wrap>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field :label="translated.PASSWORD" required type="password" v-model="password"></v-text-field>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; password =''">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; ((nextDialog === 'token')? tokenResetDialog = true : passwordChangeDialog = true)">{{ translated.NEXT }}</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <!-- Token reset dialog -->
+                    <v-dialog v-model="tokenResetDialog" persistent max-width="500px">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                                <span class="headline">{{ translated.TOKEN_RESET}}</span>
+                            </v-card-title>
+                            <v-card-text>{{ translated.TOKEN_RESET_WARNING }}</v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click.native="tokenResetDialog = false; password =''">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="tokenResetDialog = false; resetToken()">{{ translated.NEXT }}</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <!-- password change dialog -->
+                    <v-dialog v-model="passwordChangeDialog" persistent max-width="500px">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                                <span class="headline">{{ translated.PASSWORD}}</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-container grid-list-md>
+                                    {{ translated.PASSWORD_NEW }}
+                                    <v-layout wrap>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field :label="translated.PASSWORD" required type="password" v-model="newPassword"></v-text-field>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-container>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; password=newPassword = ''">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; changePassword()">{{ translated.NEXT }}</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-layout>
                 <md-subheader>{{ translated.GENERAL }}</md-subheader>
                 <md-list-item md-expand>
                     <md-icon md-src="icons/language.svg"></md-icon>
@@ -35,24 +97,14 @@
                             <label for="token">Token</label>
                             <md-input v-model="token" disabled type="password"></md-input>
                         </md-field>
-                        <md-dialog-prompt :md-active.sync="showOldPasswordDialog" v-model="dialogOldPassword" :md-title="translated.PASSWORD"
-                            :md-input-placeholder="translated.PASSWORD" :md-content="translated.PASSWORD_ENTER"
-                            @md-confirm="showPasswordDialog = true" :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
-                        <md-dialog-prompt :md-active.sync="showPasswordDialog" v-model="dialogPassword" :md-title="translated.PASSWORD"
-                            :md-input-placeholder="translated.PASSWORD" :md-content="((nextDialog === 'token')? translated.PASSWORD_ENTER : translated.PASSWORD_NEW)"
-                            @md-confirm="((nextDialog === 'token')? showTokenResetDialog = true : changePassword())"
-                            :md-confirm-text="translated.NEXT" :md-cancel-text="translated.CANCEL" />
                         <div class="md-layout">
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'password'; showOldPasswordDialog = true">{{
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'password'; passwordDialog = true">{{
                                     translated.PASSWORD_CHANGE }}</md-button>
                             </div>
                             <div class="md-layout-item">
-                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; showPasswordDialog = true">{{
+                                <md-button class="md-accent" style="width: 95%" @click="nextDialog = 'token'; passwordDialog = true">{{
                                     translated.TOKEN_RESET }}</md-button>
-                                <md-dialog-confirm :md-active.sync="showTokenResetDialog" :md-title="translated.TOKEN_RESET"
-                                    :md-content="translated.TOKEN_RESET_WARNING" :md-confirm-text="translated.NEXT"
-                                    :md-cancel-text="translated.CANCEL" @md-confirm="resetToken" />
                             </div>
                         </div>
                         <div class="md-layout">
@@ -181,12 +233,12 @@
                 autoboot: false,
                 akey: '',
                 token: '',
+                passwordDialog: false,
+                password: '',
+                newPassword: '',
+                tokenResetDialog: false,
+                passwordChangeDialog: false,
                 nextDialog: '',
-                dialogOldPassword: '',
-                dialogPassword: '',
-                showOldPasswordDialog: false,
-                showPasswordDialog: false,
-                showTokenResetDialog: false,
                 version: window.VERSION
             };
         },
@@ -257,16 +309,16 @@
                 self.$http.put(RESTURL + 'renewtoken', {
                     akey: self.akey,
                     token: self.token,
-                    password: self.dialogPassword
+                    password: self.password
                 }).then(response => {
                     if (response.body.token) {
                         storage.setValue('token', (self.token = response.body.token));
                         self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
                     } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
                 }, err => {
-                    // TODO: Check if credentials were invalid or if there was an unexpected error..
-                    self.$refs.snackbar.setMessage('INVALID_CREDENTIALS', false, 'error');
+                    self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });
+                self.password = '';
             },
             changePassword() {
                 var self = this;
@@ -274,11 +326,14 @@
                 self.$http.post(RESTURL + 'changepw', {
                     akey: self.akey,
                     token: self.token,
-                    oldpassword: self.dialogOldPassword,
-                    newpassword: self.dialogPassword
+                    oldpassword: self.password,
+                    newpassword: self.newPassword
                 }).then(response => {
                     self.$refs.snackbar.setMessage('PASSWORD_CHANGED', false, 'success');
-                }, err => self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error'));
+                }, err => {
+                    self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
+                });
+                self.password = self.newPassword = '';
             },
             logout() {
                 storage.removeValue('akey');
