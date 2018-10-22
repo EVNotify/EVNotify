@@ -396,9 +396,9 @@
                             '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0,
                             realChargingSpeed = ((this.obd2Data.CHARGING && this.obd2Data.DC_BATTERY_POWER) ? this.obd2Data.DC_BATTERY_POWER : false);
 
-                        this.estimatedSlowTime = parseFloat((amountToCharge / realChargingSpeed || this.obd2Data.SLOW_SPEED).toFixed(2));
-                        this.estimatedNormalTime = parseFloat((amountToCharge / realChargingSpeed || this.obd2Data.NORMAL_SPEED).toFixed(2));
-                        this.estimatedFastTime = parseFloat((amountToCharge / realChargingSpeed || this.obd2Data.FAST_SPEED).toFixed(2));
+                        this.estimatedSlowTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.SLOW_SPEED)).toFixed(2));
+                        this.estimatedNormalTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.NORMAL_SPEED)).toFixed(2));
+                        this.estimatedFastTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.FAST_SPEED)).toFixed(2));
                     }
                     // set icon based on soc
                     this.batteryIcon = 'icons/battery_' + ((this.obd2Data.CHARGING) ? 'charging_' : '') + (
