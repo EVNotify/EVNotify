@@ -222,6 +222,7 @@
                         };
                     });
 
+                if (!window.plugin || !plugin.google || !plugin.google.maps) return;
                 Vue.nextTick(() => {
                     var map = plugin.google.maps.Map.getMap(document.getElementById('log-map'), {
                         camera: {
