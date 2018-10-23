@@ -394,7 +394,7 @@
                         var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100) ?
                             1 :
                             '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0,
-                            realChargingSpeed = ((this.obd2Data.CHARGING && this.obd2Data.DC_BATTERY_POWER) ? this.obd2Data.DC_BATTERY_POWER : false);
+                            realChargingSpeed = ((this.obd2Data.CHARGING && this.obd2Data.DC_BATTERY_POWER) ? (this.obd2Data.DC_BATTERY_POWER * -1) : false);
 
                         this.estimatedSlowTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.SLOW_SPEED)).toFixed(2));
                         this.estimatedNormalTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.NORMAL_SPEED)).toFixed(2));
