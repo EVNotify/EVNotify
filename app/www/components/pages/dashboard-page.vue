@@ -481,8 +481,11 @@
             });
             eventBus.$off('obd2Error');
             eventBus.$on('obd2Error', function (error) {
-                self.communicationEstablished = false;
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
+                // disconnect from obd2 device - this seems to probably solve the issue when buffer is full (to force full re-init)
+                bluetoothSerial.disconnect(() => {
+                    self.communicationEstablished = false
+                }, () => self.communicationEstablished = false);
             });
         }
     }
