@@ -358,7 +358,12 @@
                                     self.$http.post(RESTURL + 'notification', {
                                         akey: storage.getValue('akey'),
                                         token: storage.getValue('token'),
-                                        abort: true
+                                        abort: true,
+                                        debug: {
+                                            lastResponse: self.lastResponse,
+                                            now: parseInt(new Date().getTime() / 1000),
+                                            obd2Data: self.obd2Data
+                                        }
                                     }).then(response => {
                                         self.errorNotificationSent = true;
                                     }, err => console.log(err));
