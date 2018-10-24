@@ -1,6 +1,7 @@
 import VueResource from 'vue-resource';
 import http from './../components/modules/http.vue';
 import eventBus from './../components/modules/event.vue';
+import storage from './../components/modules/storage.vue';
 import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
@@ -86,6 +87,9 @@ var vm = new Vue({
         return h(App);
     }
 });
+
+// overwrite RESTURL if specified within debug settings
+RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL;
 
 // apply event listener for cordova device
 document.addEventListener('deviceready', function() {
