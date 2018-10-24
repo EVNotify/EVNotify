@@ -13,7 +13,7 @@
                 <md-list-item>
                     <md-icon md-src="icons/cloud.svg"></md-icon>
                     <span class="md-list-item-text">{{ translated.FORCE_SYNC_MODES }}</span>
-                    <md-switch v-model="debug.syncmodes"></md-switch>
+                    <md-switch v-model="debug.forceSyncModes"></md-switch>
                 </md-list-item>
             </form>
         </md-list>

@@ -190,7 +190,8 @@
                 estimatedNormalTime: 0,
                 estimatedFastTime: 0,
                 communicationEstablished: false,
-                batteryIcon: 'icons/battery_unknown.svg'
+                batteryIcon: 'icons/battery_unknown.svg',
+                debugSettings: {}
             };
         },
         watch: {
@@ -441,6 +442,7 @@
             self.car = storage.getValue('settings', {}).car;
             self.consumption = parseFloat(storage.getValue('settings', {}).consumption) || 0;
             self.socThreshold = parseInt(storage.getValue('settings', {}).soc) || 0;
+            self.debugSettings = storage.getValue('debugSettings', {});
 
             // wait for cordova device to be ready - apply listener, if not ready yet
             eventBus.$off('deviceReady');

@@ -2,6 +2,9 @@
     <md-toolbar class="md-primary">
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
+            <md-button class="md-icon-button" v-if="forceSyncModes" @click="switchSyncMode()">
+                <md-icon :md-src="syncModeIcon"></md-icon>
+            </md-button>
             <md-button class="md-icon-button" :disabled="true">
                 <md-icon :md-src="bluetoothIcon"></md-icon>
             </md-button>
@@ -33,6 +36,7 @@
 
 <script>
 import eventBus from './../modules/event.vue';
+import storage from './../modules/storage.vue';
 
 export default {
     data() {
@@ -42,8 +46,10 @@ export default {
             debugSettingsPage: false,
             stationPage: false,
             logPage: false,
+            forceSyncModes: false,
             bluetoothIcon: 'icons/bluetooth_disabled.svg',
-            syncIcon: 'icons/sync_disabled.svg'
+            syncIcon: 'icons/sync_disabled.svg',
+            syncModeIcon: 'icons/cloud_upload.svg'
         };
     },
     methods: {
@@ -60,6 +66,11 @@ export default {
             if (this.settingsPage) eventBus.$emit('settings_save');
             else if (this.logPage) eventBus.$emit('log_save');
             else if (this.debugSettingsPage) eventBus.$emit('debugsettings_save');
+        },
+        switchSyncMode() {
+            if (this.syncModeIcon.indexOf('upload') !== -1) {
+                this.syncModeIcon = 'icons/cloud_download.svg';
+            } else this.syncModeIcon = 'icons/cloud_upload.svg';
         }
     },
     created() {
@@ -72,6 +83,8 @@ export default {
         self.debugSettingsPage = (currentPage === '/debugsettings');
         self.stationPage = (currentPage === '/station');
         self.logPage = (currentPage === '/log');
+        // check if force sync modes enabled
+        self.forceSyncModes = storage.getValue('debugSettings', {}).forceSyncModes;
         // listener to dynamically change icons
         eventBus.$off('bluetoothChanged');
         eventBus.$off('syncChanged');
