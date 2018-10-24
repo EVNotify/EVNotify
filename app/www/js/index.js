@@ -10,6 +10,7 @@ import LogPage from './../components/pages/log-page.vue';
 import StationsPage from './../components/pages/stations-page.vue';
 import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
+import DebugSettingsPage from './../components/pages/debug-settings-page.vue';
 
 Vue.use(VueMaterial.default);
 Vue.use(VueResource);
@@ -51,6 +52,10 @@ var router = new VueRouter({
         {
             path: '/settings',
             component: SettingsPage
+        },
+        {
+            path: '/debugsettings',
+            component: DebugSettingsPage
         }
     ]
 });
@@ -73,7 +78,8 @@ var vm = new Vue({
         'log-page': LogPage,
         'stations-page': StationsPage,
         'station-page': StationPage,
-        'settings-page': SettingsPage
+        'settings-page': SettingsPage,
+        'debug-settings-page': DebugSettingsPage
     },
     router: router,
     render: function (h) {

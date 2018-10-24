@@ -33,6 +33,7 @@
             self.currentSelection = 'bottom-bar-item-' + self.$route.path.substr(1);
             if (self.currentSelection === 'bottom-bar-item-station') self.currentSelection = 'bottom-bar-item-stations';
             else if (self.currentSelection === 'bottom-bar-item-log') self.currentSelection = 'bottom-bar-item-logs';
+            else if (self.currentSelection === 'bottom-bar-item-debugsettings') self.currentSelection = 'bottom-bar-item-settings';
             self.translatePage();
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <toolbar></toolbar>
-        <md-list class="content-within-page" md-expand-single="true">
+        <md-list class="content-within-page" :md-expand-single="true">
             <form class="form inner-form">
                 <v-layout row justify-center>
                     <!-- current password dialog -->

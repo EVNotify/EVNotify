@@ -12,12 +12,7 @@
                 <md-icon md-src="icons/bug_report.svg"></md-icon>
             </md-button>
         </div>
-        <div class="md-toolbar-section-end" v-if="settingsPage">
-            <md-button class="md-icon-button" @click="emitSave()">
-                <md-icon md-src="icons/save.svg"></md-icon>
-            </md-button>
-        </div>
-        <div class="md-toolbar-section-end" v-if="logPage">
+        <div class="md-toolbar-section-end" v-if="settingsPage || logPage || debugSettingsPage">
             <md-button class="md-icon-button" @click="emitSave()">
                 <md-icon md-src="icons/save.svg"></md-icon>
             </md-button>
@@ -44,6 +39,7 @@ export default {
         return {
             dashboardPage: false,
             settingsPage: false,
+            debugSettingsPage: false,
             stationPage: false,
             logPage: false,
             bluetoothIcon: 'icons/bluetooth_disabled.svg',
@@ -63,6 +59,7 @@ export default {
         emitSave() {
             if (this.settingsPage) eventBus.$emit('settings_save');
             else if (this.logPage) eventBus.$emit('log_save');
+            else if (this.debugSettingsPage) eventBus.$emit('debugsettings_save');
         }
     },
     created() {
@@ -72,6 +69,7 @@ export default {
         // determine current page
         self.dashboardPage = (currentPage === '/dashboard');
         self.settingsPage = (currentPage === '/settings');
+        self.debugSettingsPage = (currentPage === '/debugsettings');
         self.stationPage = (currentPage === '/station');
         self.logPage = (currentPage === '/log');
         // listener to dynamically change icons
