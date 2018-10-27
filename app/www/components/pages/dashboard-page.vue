@@ -184,6 +184,7 @@
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
+                isWaitingForConnect: false,
                 estimatedRangeCurrent: 0,
                 estimatedRangeTotal: 0,
                 estimatedSlowTime: 0,
@@ -218,7 +219,11 @@
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
                     self.bluetoothInterval = setInterval(() => {
                         var proceed = () => {
+                            // wait, until currenct connect process finished
+                            if (self.isWaitingForConnect) return;
+                            self.isWaitingForConnect = true;
                             bluetoothSerial.isConnected(connected => {
+                                self.isWaitingForConnect = false;
                                 // run init process if not already running
                                 if (!self.initialized) {
                                     self.initialized = true;
@@ -227,6 +232,7 @@
                                 eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
                                 bluetoothSerial.connect(self.device, connected => {
+                                    self.isWaitingForConnect = false;
                                     // run init process if not already running
                                     if (!self.initialized) {
                                         self.initialized = true;
@@ -234,7 +240,7 @@
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
-                                    self.initialized = false;
+                                    self.initialized = self.isWaitingForConnect = false;
                                     self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                 });
@@ -330,6 +336,8 @@
                     // listener for location changes to push location to server
                     if (storage.getValue('locationsync')) {
                         self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
+                            // send location if communication is established
+                            if (!self.communicationEstablished) return;
                             self.$http.post(RESTURL + 'location', {
                                 akey: storage.getValue('akey'),
                                 token: storage.getValue('token'),
@@ -466,10 +474,12 @@
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 var soc = self.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+
+                if (soc == null) return; // no valid data
                 // set current timestamp and update last car response activity
-                if (soc != null) {
-                    self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
-                }
+                self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
+                // inform user once about success
+                if (!self.communicationEstablished) self.communicationEstablished = true;
                 // track charging started
                 if (self.obd2Data.CHARGING) self.chargingStarted = true;
                 // soc threshold watcher
