@@ -263,7 +263,8 @@
                             });
                         });
                     }, 1000);
-                    self.syncInterval = setInterval(() => {
+                    // apply the sync interval handler to be able to call directly on start and on each interval
+                    self.syncIntervalHandler = () => {
                         // check if connected or not to determine if we need to push or pull soc
                         bluetoothSerial.isConnected(connected => {
                             if (self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS) {
@@ -275,6 +276,7 @@
                                     bms: self.obd2Data.SOC_BMS
                                 }).then(response => {
                                     eventBus.$emit('syncChanged', 'enabled');
+                                    eventBus.$emit('syncModeChanged', 'upload');
                                     // push extended data
                                     self.$http.post(RESTURL + 'extended', {
                                         akey: storage.getValue('akey'),
@@ -289,8 +291,15 @@
                                         dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
                                     }).then(response => {
                                         eventBus.$emit('syncChanged', 'enabled');
-                                    }, err => eventBus.$emit('syncChanged', 'problem'));
-                                }, err => eventBus.$emit('syncChanged', 'problem'));
+                                        eventBus.$emit('syncModeChanged', 'upload');
+                                    }, err => {
+                                        eventBus.$emit('syncChanged', 'problem');
+                                        eventBus.$emit('syncModeChanged', 'off');
+                                    });
+                                }, err => {
+                                    eventBus.$emit('syncChanged', 'problem');
+                                    eventBus.$emit('syncModeChanged', 'off');
+                                });
                             }
                         }, disconnected => {
                             // retrieve state of charge from sync only, if no obd2Data received or if data is too old
@@ -312,6 +321,7 @@
                                     Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
                                     self.timestamp = response.body.last_soc;
                                     eventBus.$emit('syncChanged', 'enabled');
+                                    eventBus.$emit('syncModeChanged', 'download');
                                     self.$http.get(RESTURL + 'extended', {
                                         params: {
                                             akey: storage.getValue('akey'),
@@ -328,11 +338,24 @@
                                         Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', response.body.dc_battery_current);
                                         Vue.set(self.obd2Data, 'DC_BATTERY_POWER', response.body.dc_battery_power);
                                         eventBus.$emit('syncChanged', 'enabled');
-                                    }, err => eventBus.$emit('syncChanged', 'problem'));
-                                }, err => eventBus.$emit('syncChanged', 'problem'));
+                                        eventBus.$emit('syncModeChanged', 'download');
+                                    }, err => {
+                                        eventBus.$emit('syncChanged', 'problem');
+                                        eventBus.$emit('syncModeChanged', 'off');
+                                    });
+                                }, err => {
+                                    eventBus.$emit('syncChanged', 'problem');
+                                    eventBus.$emit('syncModeChanged', 'off');
+                                });
                             }
                         });
+                    };
+                    // the sync interval
+                    self.syncInterval = setInterval(() => {
+                        self.syncIntervalHandler
                     }, 10000);
+                    // start up sync once
+                    self.syncIntervalHandler();
                     // listener for location changes to push location to server
                     if (storage.getValue('locationsync')) {
                         self.locationWatcher = navigator.geolocation.watchPosition((pos) => {

@@ -2,7 +2,7 @@
     <md-toolbar class="md-primary">
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
-            <md-button class="md-icon-button" v-if="forceSyncModes" @click="switchSyncMode()">
+            <md-button class="md-icon-button" :disabled="!forceSyncModes" @click="switchSyncMode()">
                 <md-icon :md-src="syncModeIcon"></md-icon>
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
@@ -49,7 +49,7 @@ export default {
             forceSyncModes: false,
             bluetoothIcon: 'icons/bluetooth_disabled.svg',
             syncIcon: 'icons/sync_disabled.svg',
-            syncModeIcon: 'icons/cloud_upload.svg'
+            syncModeIcon: 'icons/cloud_off.svg'
         };
     },
     methods: {
@@ -88,8 +88,10 @@ export default {
         // listener to dynamically change icons
         eventBus.$off('bluetoothChanged');
         eventBus.$off('syncChanged');
+        eventBus.$off('syncModeChanged');
         eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
         eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
+        eventBus.$on('syncModeChanged', state => self.syncModeIcon = 'icons/cloud_' + state + '.svg');
     }
 }
 </script>
