@@ -250,6 +250,8 @@
                         bluetoothSerial.isEnabled(enabled => {
                             proceed();
                         }, disabled => {
+                            // ensure if bluetooth auto enable is activated by user
+                            if (!storage.getValue('autobluetooth', true)) return;
                             if (self.isWaitingForEnable) return; // there is already a dialog to wait for acceptance
                             self.isWaitingForEnable = true;
                             eventBus.$emit('bluetoothChanged', 'searching');
@@ -257,6 +259,8 @@
                                 self.isWaitingForEnable = false;
                                 proceed();
                             }, err => {
+                                // user has not allowed to enable bluetooth, save it for future
+                                storage.setValue('autoboot', false);
                                 self.initialized = false;
                                 self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
                                 eventBus.$emit('bluetoothChanged', 'disabled');

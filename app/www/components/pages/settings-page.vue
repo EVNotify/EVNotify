@@ -162,6 +162,11 @@
                     </md-list>
                 </md-list-item>
                 <md-list-item>
+                    <md-icon md-src="icons/location_on.svg"></md-icon>
+                    <span class="md-list-item-text">{{ translated.BLUETOOTH_AUTO_ENABLE }}</span>
+                    <md-switch v-model="autobluetooth"></md-switch>
+                </md-list-item>
+                <md-list-item>
                     <md-icon md-src="icons/settings_brightness.svg"></md-icon>
                     <span class="md-list-item-text">{{ translated.KEEPAWAKE }}</span>
                     <md-switch v-model="keepawake"></md-switch>
@@ -231,6 +236,7 @@
                 locationsync: false,
                 keepawake: false,
                 autoboot: false,
+                autobluetooth: true,
                 akey: '',
                 token: '',
                 passwordDialog: false,
@@ -247,6 +253,7 @@
             'locationsync': 'setLocationSync',
             'keepawake': 'setKeepAwake',
             'autoboot': 'setAutoBoot',
+            'autobluetooth': 'setAutoBluetooth',
             'settings.push': 'setPush'
         },
         methods: {
@@ -281,6 +288,9 @@
             },
             setAutoBoot() {
                 storage.setValue('autoboot', this.autoboot);
+            },
+            setAutoBluetooth() {
+                storage.setValue('autobluetooth', this.autobluetooth);
             },
             saveSettings() {
                 var self = this;
@@ -357,6 +367,7 @@
             self.autoboot = storage.getValue('autoboot');
             self.keepawake = storage.getValue('keepawake');
             self.locationsync = storage.getValue('locationsync');
+            self.autobluetooth = storage.getValue('autobluetooth', true);
             // wait for cordova device to be ready - apply listener, if not ready yet
             eventBus.$off('deviceReady');
             if (self.$root.deviceReady) self.listDevices();

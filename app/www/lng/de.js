@@ -53,6 +53,7 @@ export default {
     SOUL_EV: 'Kia Soul EV',
     CONSUMPTION: 'Verbrauch',
     OBD2_DEVICE: 'OBDII-Gerät',
+    BLUETOOTH_AUTO_ENABLE: 'Bluetooth automatisch aktivieren',
     AUTOBOOT: 'Beim Systemstart öffnen',
     KEEPAWAKE: 'Bildschirm aktiv lassen',
     NOTIFICATION_TYPES: 'Benachrichtigungs-Typen',
