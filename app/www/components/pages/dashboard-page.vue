@@ -356,7 +356,7 @@
                     };
                     // the sync interval
                     self.syncInterval = setInterval(() => {
-                        self.syncIntervalHandler
+                        self.syncIntervalHandler();
                     }, 10000);
                     // start up sync once
                     self.syncIntervalHandler();
