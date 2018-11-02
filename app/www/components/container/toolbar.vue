@@ -70,7 +70,11 @@ export default {
         switchSyncMode() {
             if (this.syncModeIcon.indexOf('upload') !== -1) {
                 this.syncModeIcon = 'icons/cloud_download.svg';
-            } else this.syncModeIcon = 'icons/cloud_upload.svg';
+                eventBus.$emit('forcedSyncMode', storage.setValue('lstSyncMode', 'download'));
+            } else {
+                this.syncModeIcon = 'icons/cloud_upload.svg';
+                eventBus.$emit('forcedSyncMode', storage.setValue('lstSyncMode', 'upload'));
+            }
         }
     },
     created() {

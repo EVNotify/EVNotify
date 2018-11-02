@@ -192,7 +192,8 @@
                 estimatedFastTime: 0,
                 communicationEstablished: false,
                 batteryIcon: 'icons/battery_unknown.svg',
-                debugSettings: {}
+                debugSettings: {},
+                syncMode: ''
             };
         },
         watch: {
@@ -211,6 +212,87 @@
             roundTo2Digits(num) {
                 if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(2);
                 return 0;
+            },
+            pushData() {
+                var self = this;
+
+                self.$http.post(RESTURL + 'soc', {
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token'),
+                    display: self.obd2Data.SOC_DISPLAY,
+                    bms: self.obd2Data.SOC_BMS
+                }).then(response => {
+                    eventBus.$emit('syncChanged', 'enabled');
+                    eventBus.$emit('syncModeChanged', 'upload');
+                    // push extended data
+                    self.$http.post(RESTURL + 'extended', {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token'),
+                        soh: self.obd2Data.SOH,
+                        charging: self.obd2Data.CHARGING,
+                        rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
+                        normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
+                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
+                        dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
+                        dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
+                        dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
+                    }).then(response => {
+                        eventBus.$emit('syncChanged', 'enabled');
+                        eventBus.$emit('syncModeChanged', 'upload');
+                    }, err => {
+                        eventBus.$emit('syncChanged', 'problem');
+                        eventBus.$emit('syncModeChanged', 'off');
+                    });
+                }, err => {
+                    eventBus.$emit('syncChanged', 'problem');
+                    eventBus.$emit('syncModeChanged', 'off');
+                });
+            },
+            pullData() {
+                var self = this;
+
+                self.$http.get(RESTURL + 'soc', {
+                    params: {
+                        akey: storage.getValue('akey'),
+                        token: storage.getValue('token')
+                    }
+                }).then(response => {
+                    var baseData = self.$refs[self.car].getBaseData();
+
+                    // extend with base data
+                    Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key,
+                        baseData[key]));
+                    // update soc info
+                    Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
+                    Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
+                    self.timestamp = response.body.last_soc;
+                    eventBus.$emit('syncChanged', 'enabled');
+                    eventBus.$emit('syncModeChanged', 'download');
+                    self.$http.get(RESTURL + 'extended', {
+                        params: {
+                            akey: storage.getValue('akey'),
+                            token: storage.getValue('token')
+                        }
+                    }).then(response => {
+                        // update extended data
+                        Vue.set(self.obd2Data, 'SOH', response.body.soh);
+                        Vue.set(self.obd2Data, 'CHARGING', response.body.charging);
+                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', response.body.rapid_charge_port);
+                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', response.body.normal_charge_port);
+                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', response.body.aux_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', response.body.dc_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', response.body.dc_battery_current);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', response.body.dc_battery_power);
+                        eventBus.$emit('syncChanged', 'enabled');
+                        eventBus.$emit('syncModeChanged', 'download');
+                    }, err => {
+                        eventBus.$emit('syncChanged', 'problem');
+                        eventBus.$emit('syncModeChanged', 'off');
+                    });
+                }, err => {
+                    eventBus.$emit('syncChanged', 'problem');
+                    eventBus.$emit('syncModeChanged', 'off');
+                });
             },
             startWatch() {
                 var self = this;
@@ -247,6 +329,8 @@
                             });
                         };
 
+                        // prevent bluetooth connection if download syncMode forced
+                        if (self.syncMode === 'download') return;
                         bluetoothSerial.isEnabled(enabled => {
                             proceed();
                         }, disabled => {
@@ -269,97 +353,30 @@
                     }, 1000);
                     // apply the sync interval handler to be able to call directly on start and on each interval
                     self.syncIntervalHandler = () => {
-                        // check if connected or not to determine if we need to push or pull soc
-                        bluetoothSerial.isConnected(connected => {
-                            if (self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS) {
-                                // push soc
-                                self.$http.post(RESTURL + 'soc', {
-                                    akey: storage.getValue('akey'),
-                                    token: storage.getValue('token'),
-                                    display: self.obd2Data.SOC_DISPLAY,
-                                    bms: self.obd2Data.SOC_BMS
-                                }).then(response => {
-                                    eventBus.$emit('syncChanged', 'enabled');
-                                    eventBus.$emit('syncModeChanged', 'upload');
-                                    // push extended data
-                                    self.$http.post(RESTURL + 'extended', {
-                                        akey: storage.getValue('akey'),
-                                        token: storage.getValue('token'),
-                                        soh: self.obd2Data.SOH,
-                                        charging: self.obd2Data.CHARGING,
-                                        rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
-                                        normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
-                                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
-                                        dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
-                                        dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
-                                        dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
-                                    }).then(response => {
-                                        eventBus.$emit('syncChanged', 'enabled');
-                                        eventBus.$emit('syncModeChanged', 'upload');
-                                    }, err => {
-                                        eventBus.$emit('syncChanged', 'problem');
-                                        eventBus.$emit('syncModeChanged', 'off');
-                                    });
-                                }, err => {
-                                    eventBus.$emit('syncChanged', 'problem');
-                                    eventBus.$emit('syncModeChanged', 'off');
-                                });
-                            }
-                        }, disconnected => {
-                            // retrieve state of charge from sync only, if no obd2Data received or if data is too old
-                            if (!self.lastResponse || self.lastResponse + 15 < parseInt(new Date().getTime() / 1000)) {
-                                // get soc
-                                self.$http.get(RESTURL + 'soc', {
-                                    params: {
-                                        akey: storage.getValue('akey'),
-                                        token: storage.getValue('token')
-                                    }
-                                }).then(response => {
-                                    var baseData = self.$refs[self.car].getBaseData();
-
-                                    // extend with base data
-                                    Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key,
-                                        baseData[key]));
-                                    // update soc info
-                                    Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
-                                    Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
-                                    self.timestamp = response.body.last_soc;
-                                    eventBus.$emit('syncChanged', 'enabled');
-                                    eventBus.$emit('syncModeChanged', 'download');
-                                    self.$http.get(RESTURL + 'extended', {
-                                        params: {
-                                            akey: storage.getValue('akey'),
-                                            token: storage.getValue('token')
-                                        }
-                                    }).then(response => {
-                                        // update extended data
-                                        Vue.set(self.obd2Data, 'SOH', response.body.soh);
-                                        Vue.set(self.obd2Data, 'CHARGING', response.body.charging);
-                                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', response.body.rapid_charge_port);
-                                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', response.body.normal_charge_port);
-                                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', response.body.aux_battery_voltage);
-                                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', response.body.dc_battery_voltage);
-                                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', response.body.dc_battery_current);
-                                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', response.body.dc_battery_power);
-                                        eventBus.$emit('syncChanged', 'enabled');
-                                        eventBus.$emit('syncModeChanged', 'download');
-                                    }, err => {
-                                        eventBus.$emit('syncChanged', 'problem');
-                                        eventBus.$emit('syncModeChanged', 'off');
-                                    });
-                                }, err => {
-                                    eventBus.$emit('syncChanged', 'problem');
-                                    eventBus.$emit('syncModeChanged', 'off');
-                                });
-                            }
-                        });
+                        // check if sync modes has been forced
+                        if (self.syncMode === 'download') {
+                            // simply retrieve the data
+                            self.pullData();
+                        } else {
+                            // check if connected or not to determine if we need to push or pull soc
+                            bluetoothSerial.isConnected(connected => {
+                                if (self.communicationEstablished && (self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS)) {
+                                    // push soc
+                                    self.pushData();
+                                }
+                            }, disconnected => {
+                                // retrieve state of charge from sync only, if no obd2Data received or if data is too old
+                                if (!self.lastResponse || self.lastResponse + 15 < parseInt(new Date().getTime() / 1000)) {
+                                    // get data if not in upload
+                                    if (self.syncMode !== 'upload') self.pullData();
+                                }
+                            });
+                        }
                     };
                     // the sync interval
                     self.syncInterval = setInterval(() => {
                         self.syncIntervalHandler();
                     }, 10000);
-                    // start up sync once
-                    self.syncIntervalHandler();
                     // listener for location changes to push location to server
                     if (storage.getValue('locationsync')) {
                         self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
@@ -407,6 +424,30 @@
                             }
                         }
                     }, 10000);
+
+                    // listen for sync mode changes (on debug settings forceSyncModes enabled)
+                    eventBus.$off('forcedSyncMode');
+                    if (self.debugSettings.forceSyncModes) {
+                        eventBus.$on('forcedSyncMode', function(type) {
+                            self.syncMode = type;
+                            self.$emit('syncModeChanged', type);
+                            // reset all keys
+                            for (var key in self.obd2Data) {
+                                if (self.obd2Data.hasOwnProperty(key)) {
+                                    Vue.set(self.obd2Data, key, 0);
+                                }
+                            }
+                            if (self.syncMode === 'download') {
+                                // disconnect from obd2 device
+                                bluetoothSerial.disconnect(() => {
+                                    self.communicationEstablished = self.initialized = false;
+                                }, () => self.communicationEstablished = self.initialized = false);
+                            }
+                            self.syncIntervalHandler(); // force new sync
+                        });
+                        eventBus.$emit('forcedSyncMode', (self.syncMode = storage.getValue('lstSyncMode', 'download')));
+                        eventBus.$emit('syncModeChanged', self.syncMode);
+                    } else self.syncIntervalHandler(); // start sync on beginning
                 } else self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), true, 'warning');
                 
                 // plugin handling based on local device settings
