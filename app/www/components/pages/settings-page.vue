@@ -23,7 +23,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; password =''">{{ translated.CANCEL }}</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; ((nextDialog === 'token')? tokenResetDialog = true : passwordChangeDialog = true)">{{ translated.NEXT }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; ((nextDialog === 'token')? tokenResetDialog = true : passwordChangeDialog = true)" :disabled="password.length < 6">{{ translated.NEXT }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -53,6 +53,7 @@
                                     <v-layout wrap>
                                         <v-flex xs12 sm6 md4>
                                             <v-text-field :label="translated.PASSWORD" required type="password" v-model="newPassword"></v-text-field>
+                                            <p class="field-error-message" v-if="newPassword.length && newPassword !== password">{{ translated.PASSWORD_MISMATCH }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
@@ -60,7 +61,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; password=newPassword = ''">{{ translated.CANCEL }}</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; changePassword()">{{ translated.NEXT }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; changePassword()" :disabled="newPassword !== password">{{ translated.NEXT }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -400,5 +401,9 @@
         text-align: right;
         font-style: italic;
         color: grey;
+    }
+    .field-error-message {
+        color: red;
+        font-weight: bold;
     }
 </style>
