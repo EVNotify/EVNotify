@@ -205,11 +205,7 @@
                         </div>
                     </md-list>
                 </md-list-item>
-                <md-subheader>{{ translated.DEVELOPER_OPTIONS }}</md-subheader>
-                <md-list-item>
-                    <small>Bug or feature?</small>
-                </md-list-item>
-                <p class="version">v.{{ version }}</p>
+                <p class="version" @click="countDevClick()">v.{{ version }}</p>
             </form>
         </md-list>
         <snackbar ref="snackbar"></snackbar>
@@ -245,6 +241,7 @@
                 tokenResetDialog: false,
                 passwordChangeDialog: false,
                 nextDialog: '',
+                devClick: 0,
                 version: window.VERSION
             };
         },
@@ -349,6 +346,16 @@
                 storage.removeValue('akey');
                 storage.removeValue('token');
                 this.$router.push('/');
+            },
+            countDevClick() {
+                var self = this;
+
+                if (!self.devClick++) {
+                    setTimeout(() => {
+                        self.devClick = 0;
+                    }, 2000);
+                }
+                if (self.devClick === 5) self.$router.push('/debugsettings');
             }
         },
         components: {

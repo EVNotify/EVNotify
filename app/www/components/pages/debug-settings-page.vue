@@ -2,8 +2,8 @@
     <div>
         <toolbar></toolbar>
         <md-list class="content-within-page" :md-expand-single="true">
-            {{ translated.DEBUG_SETTINGS_WARNING }}
             <form class="form inner-form">
+                <p class="debug-settings-warning">{{ translated.DEBUG_SETTINGS_WARNING }}</p>
                 <md-subheader>{{ translated.CONNECTION }}</md-subheader>
                 <md-field>
                     <label for="resturl">RESTURL</label>
@@ -54,6 +54,16 @@
                 storage.setValue('debugSettings', self.debug);
                 self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
             });
+        },
+        mounted() {
+            this.$refs.snackbar.setMessage('DEBUG_SETTINGS_WELCOME', false);
         }
     }
 </script>
+
+<style scoped>
+.debug-settings-warning {
+    text-align: justify;
+    margin: 16px;
+}
+</style>
