@@ -322,8 +322,12 @@
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
+                                    if (self.syncMode === 'upload' || !self.communicationEstablished) {
+                                        self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
+                                    } else if (self.initialized) {
+                                        self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', false, 'error');
+                                    }
                                     self.initialized = self.isWaitingForConnect = false;
-                                    self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                 });
                             });
