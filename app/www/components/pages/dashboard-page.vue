@@ -497,6 +497,13 @@
             },
             communicationMessage() {
                 if (this.communicationEstablished) this.$refs.snackbar.setMessage('ESTABLISHED', false, 'success');
+            },
+            clear() {
+                clearInterval(this.bluetoothInterval);
+                clearInterval(this.syncInterval);
+                clearInterval(this.chargingWatcher);
+                if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
+                if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
             }
         },
         components: {
@@ -508,11 +515,7 @@
             SOULEV
         },
         beforeDestroy() {
-            clearInterval(this.bluetoothInterval);
-            clearInterval(this.syncInterval);
-            clearInterval(this.chargingWatcher);
-            if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
-            if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
+            this.clear();
         },
         created() {
             var self = this;
@@ -537,7 +540,22 @@
             eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
-                    navigator.app.exitApp();
+                    // end bluetooth connection, force standby mode
+                    self.clear();
+                    if (typeof self.bluetoothSerial === 'undefined') return navigator.app.exitApp();
+                    bluetoothSerial.isConnected(connected => {
+                        // emit forceStandby - on finish, close app
+                        try {
+                            eventBus.$off('standby');
+                            eventBus.$on('standby', err => {
+                                // TODO we should inform the user, that standby mode was not successful
+                                navigator.app.exitApp();    
+                            });
+                            self.$refs[self.car].standbyMode();
+                        } catch (err) {
+                            navigator.app.exitApp();
+                        }
+                    }, disconnected => navigator.app.exitApp());
                 } else navigator.app.backHistory();
             });
             // listen to obd2Data (we can not use once here)

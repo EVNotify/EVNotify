@@ -9,6 +9,7 @@
                     'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6'
                 ],
                 offset: 0,
+                inStandbyMode: false,
                 emptyResponses: 0,
                 command: '2105'
             };
@@ -22,6 +23,7 @@
 
                 // subscribe to data
                 bluetoothSerial.subscribe('>', data => {
+                    if (self.inStandbyMode) return;
                     // remove spaces
                     data = data.trim().replace(/\s/g, '');
                     console.log({
@@ -145,6 +147,16 @@
                     NORMAL_SPEED: 4.6,
                     FAST_SPEED: 50
                 };
+            },
+            standbyMode() {
+                var self = this;
+
+                self.inStandbyMode = true;
+                // unsubscribe, and emit low power mode command
+                bluetoothSerial.unsubscribe();
+                bluetoothSerial.write('ATLP\r', () => {
+                    eventBus.$emit('standby');
+                }, err => eventBus.$emit('standby', err));
             }
         }
     }
