@@ -16,14 +16,15 @@
                                     <v-layout wrap>
                                         <v-flex xs12 sm6 md4>
                                             <v-text-field :label="translated.PASSWORD" required type="password" v-model="password"></v-text-field>
+                                            <p class="field-error-message" v-if="invalidPassword">{{ translated.INVALID_CREDENTIALS }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; password =''">{{ translated.CANCEL }}</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = false; ((nextDialog === 'token')? tokenResetDialog = true : passwordChangeDialog = true)" :disabled="password.length < 6">{{ translated.NEXT }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordDialog = invalidPassword = false; password =''">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="verifyPassword()" :disabled="password.length < 6">{{ translated.NEXT }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -53,15 +54,19 @@
                                     <v-layout wrap>
                                         <v-flex xs12 sm6 md4>
                                             <v-text-field :label="translated.PASSWORD" required type="password" v-model="newPassword"></v-text-field>
-                                            <p class="field-error-message" v-if="newPassword.length && newPassword !== password">{{ translated.PASSWORD_MISMATCH }}</p>
+                                            <p class="field-error-message" v-if="newPassword.length && newPassword.length < 6">{{ translated.CHECK_PASSWORD }}</p>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field :label="translated.PASSWORD_REPEAT" required type="password" v-model="newPassword2"></v-text-field>
+                                            <p class="field-error-message" v-if="newPassword2.length && newPassword2 !== newPassword">{{ translated.PASSWORD_MISMATCH }}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; password=newPassword = ''">{{ translated.CANCEL }}</v-btn>
-                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; changePassword()" :disabled="newPassword !== password">{{ translated.NEXT }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; password = newPassword = newPassword2 = ''">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="passwordChangeDialog = false; changePassword()" :disabled="newPassword2 !== newPassword || newPassword.length < 6">{{ translated.NEXT }}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -237,8 +242,10 @@
                 akey: '',
                 token: '',
                 passwordDialog: false,
+                invalidPassword: false,
                 password: '',
                 newPassword: '',
+                newPassword2: '',
                 tokenResetDialog: false,
                 passwordChangeDialog: false,
                 nextDialog: '',
@@ -328,6 +335,21 @@
                 });
                 self.password = '';
             },
+            verifyPassword() {
+                var self = this;
+
+
+                self.$http.post(RESTURL + 'login', {
+                    akey: self.akey,
+                    password: self.password
+                }).then(response => {
+                    self.passwordDialog = self.invalidPassword = false;
+                    if (self.nextDialog === 'token') self.tokenResetDialog = true;
+                    else self.passwordChangeDialog = true;
+                }, err => {
+                    self.invalidPassword = true;
+                });
+            },
             changePassword() {
                 var self = this;
 
@@ -341,7 +363,7 @@
                 }, err => {
                     self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });
-                self.password = self.newPassword = '';
+                self.password = self.newPassword = self.newPassword2 = '';
             },
             logout() {
                 storage.removeValue('akey');
