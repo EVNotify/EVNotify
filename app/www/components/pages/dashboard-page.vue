@@ -177,6 +177,7 @@
                 socThreshold: 0,
                 notificationSent: false,
                 errorNotificationSent: false,
+                showedBluetoothError: false,
                 chargingStarted: false,
                 lastResponse: 0,
                 consumption: 0,
@@ -305,7 +306,7 @@
                             if (self.isWaitingForConnect) return;
                             self.isWaitingForConnect = true;
                             bluetoothSerial.isConnected(connected => {
-                                self.isWaitingForConnect = false;
+                                self.isWaitingForConnect = self.showedBluetoothError = false;
                                 // run init process if not already running
                                 if (!self.initialized) {
                                     self.initialized = true;
@@ -314,7 +315,7 @@
                                 eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
                                 bluetoothSerial.connect(self.device, connected => {
-                                    self.isWaitingForConnect = false;
+                                    self.isWaitingForConnect = self.showedBluetoothError = false;
                                     // run init process if not already running
                                     if (!self.initialized) {
                                         self.initialized = true;
@@ -322,8 +323,9 @@
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
-                                    if (self.syncMode === 'upload' || !self.communicationEstablished) {
-                                        self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', true, 'error');
+                                    if (self.syncMode === 'upload' || (!self.communicationEstablished && !self.showedBluetoothError)) {
+                                        self.showedBluetoothError = true;
+                                        self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', (self.syncMode === 'upload'), 'error');
                                     } else if (self.initialized) {
                                         self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', false, 'error');
                                     }
