@@ -529,14 +529,6 @@
             self.socThreshold = parseInt(storage.getValue('settings', {}).soc) || 0;
             self.debugSettings = storage.getValue('debugSettings', {});
 
-            // wait for cordova device to be ready - apply listener, if not ready yet
-            eventBus.$off('deviceReady');
-            if (self.$root.deviceReady) self.startWatch();
-            else {
-                eventBus.$on('deviceReady', function () {
-                    self.startWatch();
-                });
-            }
             // apply backbuttonPressed listener to handle exit or back
             eventBus.$off('backbuttonPressed');
             eventBus.$on('backbuttonPressed', function (e) {
@@ -596,6 +588,18 @@
                     self.communicationEstablished = self.initialized = false;
                 }, () => self.communicationEstablished = self.initialized = false);
             });
+        },
+        mounted() {
+            var self = this;
+
+            // wait for cordova device to be ready - apply listener, if not ready yet
+            eventBus.$off('deviceReady');
+            if (self.$root.deviceReady) self.startWatch();
+            else {
+                eventBus.$on('deviceReady', function () {
+                    self.startWatch();
+                });
+            }
         }
     }
 </script>
