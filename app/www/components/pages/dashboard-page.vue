@@ -409,22 +409,24 @@
                         if (self.lastResponse && self.chargingStarted && !self.errorNotificationSent) {
                             if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 20) {
                                 // no response.. check if still connected and not charging normally ended
-                                if ((self.obd2Data.NORMAL_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 100) || 
-                                    (self.obd2Data.RAPID_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 94)) {
-                                    // still plugged in.. sent out error notificaiton
-                                    self.$http.post(RESTURL + 'notification', {
-                                        akey: storage.getValue('akey'),
-                                        token: storage.getValue('token'),
-                                        abort: true,
-                                        debug: {
-                                            lastResponse: self.lastResponse,
-                                            now: parseInt(new Date().getTime() / 1000),
-                                            obd2Data: self.obd2Data
-                                        }
-                                    }).then(response => {
-                                        self.errorNotificationSent = true;
-                                    }, err => console.log(err));
-                                }
+                                bluetoothSerial.isConnected(connected => {
+                                    if ((self.obd2Data.NORMAL_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 100) || 
+                                        (self.obd2Data.RAPID_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 94)) {
+                                        // still plugged in.. sent out error notificaiton
+                                        self.$http.post(RESTURL + 'notification', {
+                                            akey: storage.getValue('akey'),
+                                            token: storage.getValue('token'),
+                                            abort: true,
+                                            debug: {
+                                                lastResponse: self.lastResponse,
+                                                now: parseInt(new Date().getTime() / 1000),
+                                                obd2Data: self.obd2Data
+                                            }
+                                        }).then(response => {
+                                            self.errorNotificationSent = true;
+                                        }, err => console.log(err));
+                                    }
+                                }, err => console.log(err));
                             }
                         }
                     }, 10000);
