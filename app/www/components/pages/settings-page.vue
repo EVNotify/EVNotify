@@ -165,6 +165,7 @@
                                     device.name }}</md-option>
                             </md-select>
                         </md-field>
+                        <a href="#" @click="showBluetoothSettings()">{{ translated.OBD2_DEVICE_PAIR }}</a>
                     </md-list>
                 </md-list-item>
                 <md-list-item>
@@ -379,6 +380,9 @@
                     }, 2000);
                 }
                 if (self.devClick === 5) self.$router.push('/debugsettings');
+            },
+            showBluetoothSettings() {
+                if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.showBluetoothSettings();
             }
         },
         components: {

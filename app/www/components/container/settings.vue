@@ -38,6 +38,7 @@
                     <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{ device.name }}</md-option>
                 </md-select>
             </md-field>
+            <a href="#" @click="showBluetoothSettings()">{{ translated.OBD2_DEVICE_PAIR }}</a>
             <md-subheader class="md-primary">
                 <b>{{ translated.NOTIFICATIONS }}</b>
             </md-subheader>
@@ -112,6 +113,9 @@
                         self.devices = devices;
                     }, err => console.error(err));
                 }, err => console.error(err));
+            },
+            showBluetoothSettings() {
+                if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.showBluetoothSettings();
             }
         },
         created() {
