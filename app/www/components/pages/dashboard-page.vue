@@ -395,7 +395,7 @@
                                     latitude: pos.coords.latitude,
                                     longitude: pos.coords.longitude,
                                     speed: pos.coords.speed,
-                                    timestamp: parseInt(pos.timestamp / 1000),
+                                    timestamp: pos.timestamp,
                                     accuracy: pos.coords.accuracy
                                 }
                             }).then(() => {}, err => console.log(err));
