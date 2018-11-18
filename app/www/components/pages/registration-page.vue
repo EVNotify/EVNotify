@@ -42,6 +42,7 @@
 </template>
 
 <script>
+    import http from './../modules/http.vue';
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
     import settings from './../container/settings.vue';
@@ -86,35 +87,41 @@
                         return self.secondStepError = translation.translate('CHECK_INPUTS');
                     }
                     // get an available key
-                    self.$http.get(RESTURL + 'key', {}).then(response => {
-                        if (response.body.akey) {
-                            self.akey = response.body.akey;
-                            // register account with password
-                            self.$http.post(RESTURL + 'register', {
-                                akey: self.akey,
-                                password: self.password
-                            }).then(response => {
-                                if (response.body.token) {
-                                    storage.setValue('akey', self.akey);
-                                    storage.setValue('token', response.body.token);
-                                    self[id] = true; // mark the current step as valid
-                                    nextPage();
-                                } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
-                            }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
+                    http.sendRequest('GET', 'key', {}, true, (err, res) => {
+                        if (!err && res) {
+                            if (res.body.akey) {
+                                self.akey = res.body.akey;
+                                // register account with password
+                                http.sendRequest('POST', 'register', {
+                                    akey: self.akey,
+                                    password: self.password
+                                }, true, (err, res) => {
+                                    if (!err && res) {
+                                        if (res.body.token) {
+                                            storage.setValue('akey', self.akey);
+                                        storage.setValue('token', res.body.token);
+                                        self[id] = true; // mark the current step as valid
+                                        nextPage();
+                                        } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
+                                    } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
+                                });
+                            } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
-                    }, err => self.secondStepError = translation.translate('UNEXPECTED_ERROR'));
+                    });
                 } else if (id === 'third') {
                     // update the settings
-                    self.$http.put(RESTURL + 'settings', {
-                        settings: self.settingsObj,
+                    http.sendRequest('PUT', 'settings', {
                         akey: storage.getValue('akey'),
-                        token: storage.getValue('token')
-                    }).then(response => {
-                        if (response.body.settings != null) {
-                            storage.setValue('settings', response.body.settings);
-                            self.$router.push('/dashboard');
-                        } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR');
-                    }, err => self.thirdStepError = translation.translate('UNEXPECTED_ERROR'));
+                        token: storage.getValue('token'),
+                        settings: self.settingsObj
+                    }, true, (err, res) => {
+                        if (!err && res) {
+                            if (res.body.settings != null) {
+                                storage.setValue('settings', res.body.settings);
+                                self.$router.push('/dashboard');
+                            } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR');
+                        } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR'); 
+                    });
                 } else {
                     self[id] = true; // mark the current step as valid
                     nextPage();
