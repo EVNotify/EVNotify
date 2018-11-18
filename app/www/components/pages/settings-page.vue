@@ -221,6 +221,7 @@
 </template>
 
 <script>
+    import http from './../modules/http.vue';
     import storage from './../modules/storage.vue';
     import translation from './../modules/translation.vue';
     import eventBus from './../modules/event.vue';
@@ -301,14 +302,17 @@
             saveSettings() {
                 var self = this;
 
-                self.$http.put(RESTURL + 'settings', {
+                // save and store settings
+                http.sendRequest('PUT', 'settings', {
                     akey: self.akey,
                     token: self.token,
                     settings: self.settings
-                }).then(response => {
-                    self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
-                    storage.setValue('settings', self.settings);
-                }, err => self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error'));
+                }, true, err => {
+                    if (!err) {
+                        storage.setValue('settings', self.settings);
+                        self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
+                    } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
+                });
             },
             listDevices() {
                 var self = this;
@@ -322,47 +326,48 @@
             resetToken() {
                 var self = this;
 
-                self.$http.put(RESTURL + 'renewtoken', {
+                // reset token and store new generated token
+                http.sendRequest('PUT', 'renewtoken', {
                     akey: self.akey,
                     token: self.token,
                     password: self.password
-                }).then(response => {
-                    if (response.body.token) {
-                        storage.setValue('token', (self.token = response.body.token));
-                        self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
-                    } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
-                }, err => {
-                    self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
+                }, true, (err, res) => {
+                    if (!err && res) {
+                        if (res.body.token) {
+                            storage.setValue('token', (self.token = res.body.token));
+                            self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
+                        } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
+                    } else self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });
                 self.password = '';
             },
             verifyPassword() {
                 var self = this;
 
-
-                self.$http.post(RESTURL + 'login', {
+                // send login request to validate if password is valid
+                http.sendRequest('POST', 'login', {
                     akey: self.akey,
                     password: self.password
-                }).then(response => {
-                    self.passwordDialog = self.invalidPassword = false;
-                    if (self.nextDialog === 'token') self.tokenResetDialog = true;
-                    else self.passwordChangeDialog = true;
-                }, err => {
-                    self.invalidPassword = true;
+                }, true, err => {
+                    if (!err) {
+                        self.passwordDialog = self.invalidPassword = false;
+                        if (self.nextDialog === 'token') self.tokenResetDialog = true;
+                        else self.passwordChangeDialog = true;
+                    } else self.invalidPassword = true;
                 });
             },
             changePassword() {
                 var self = this;
 
-                self.$http.post(RESTURL + 'changepw', {
+                // send password change request
+                http.sendRequest('POST', 'changepw', {
                     akey: self.akey,
                     token: self.token,
                     oldpassword: self.password,
                     newpassword: self.newPassword
-                }).then(response => {
-                    self.$refs.snackbar.setMessage('PASSWORD_CHANGED', false, 'success');
-                }, err => {
-                    self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
+                }, true, err => {
+                    if (!err) self.$refs.snackbar.setMessage('PASSWORD_CHANGED', false, 'success');
+                    else self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');                    
                 });
                 self.password = self.newPassword = self.newPassword2 = '';
             },
@@ -410,14 +415,14 @@
             eventBus.$off('settings_save');
             eventBus.$on('settings_save', () => self.saveSettings());
             // retrieve settings from server to sync latest settings
-            self.$http.get(RESTURL + 'settings', {
-                params: {
-                    akey: self.akey,
-                    token: self.token
+            http.sendRequest('GET', 'settings', {
+                akey: self.akey,
+                token: self.token
+            }, true, (err, res) => {
+                if (!err && res && res.body.settings != null) {
+                    self.settings = storage.setValue('settings', response.body.settings);
                 }
-            }).then(response => {
-                if (response.body.settings != null) self.settings = storage.setValue('settings', response.body.settings);
-            }, err => console.log(err));
+            });
         }
     }
 </script>
