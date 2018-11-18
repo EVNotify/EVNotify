@@ -153,6 +153,7 @@
 
 <script>
     import helper from './../modules/helper.vue';
+    import http from './../modules/http.vue';
     import toolbar from './../container/toolbar.vue';
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
@@ -214,85 +215,73 @@
                 if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(2);
                 return 0;
             },
+            syncEventEmitter(err) {
+                eventBus.$emit('syncChanged', ((!err) ? 'enabled' : 'problem'));
+                eventBus.$emit('syncModeChanged', ((!err) ? 'upload' : 'off'));
+            },
             pushData() {
                 var self = this;
 
-                self.$http.post(RESTURL + 'soc', {
+                http.sendRequest('POST', 'soc', {
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token'),
                     display: self.obd2Data.SOC_DISPLAY,
                     bms: self.obd2Data.SOC_BMS
-                }).then(response => {
-                    eventBus.$emit('syncChanged', 'enabled');
-                    eventBus.$emit('syncModeChanged', 'upload');
-                    // push extended data
-                    self.$http.post(RESTURL + 'extended', {
-                        akey: storage.getValue('akey'),
-                        token: storage.getValue('token'),
-                        soh: self.obd2Data.SOH,
-                        charging: self.obd2Data.CHARGING,
-                        rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
-                        normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
-                        auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
-                        dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
-                        dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
-                        dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
-                    }).then(response => {
-                        eventBus.$emit('syncChanged', 'enabled');
-                        eventBus.$emit('syncModeChanged', 'upload');
-                    }, err => {
-                        eventBus.$emit('syncChanged', 'problem');
-                        eventBus.$emit('syncModeChanged', 'off');
-                    });
-                }, err => {
-                    eventBus.$emit('syncChanged', 'problem');
-                    eventBus.$emit('syncModeChanged', 'off');
+                }, false, (err, res) => {
+                    self.syncEventEmitter(err);
+                    if (!err) {
+                        // push extended data
+                        http.sendRequest('POST', 'extended', {
+                            akey: storage.getValue('akey'),
+                            token: storage.getValue('token'),
+                            soh: self.obd2Data.SOH,
+                            charging: self.obd2Data.CHARGING,
+                            rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
+                            normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
+                            auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
+                            dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
+                            dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
+                            dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
+                        }, false, err => self.syncEventEmitter(err));
+                    }
                 });
             },
             pullData() {
                 var self = this;
 
-                self.$http.get(RESTURL + 'soc', {
-                    params: {
+                // get soc data
+                http.sendRequest('GET', 'soc', {
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token')
+                }, false, (err, res) => {
+                    var baseData = self.$refs[self.car].getBseData();
+
+                    self.syncEventEmitter(err);
+
+                    if (err || !res) return;
+                    // extend with base data
+                    Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key, baseData[key]));
+                    // update soc info
+                    Vue.set(self.obd2Data, 'SOC_DISPLAY', res.body.soc_display);
+                    Vue.set(self.obd2Data, 'SOC_BMS', res.body.soc_bms);
+                    self.timestamp = res.body.last_soc;
+                    // get extended data
+                    http.sendRequest('GET', 'extended', {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
-                    }
-                }).then(response => {
-                    var baseData = self.$refs[self.car].getBaseData();
-
-                    // extend with base data
-                    Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key,
-                        baseData[key]));
-                    // update soc info
-                    Vue.set(self.obd2Data, 'SOC_DISPLAY', response.body.soc_display);
-                    Vue.set(self.obd2Data, 'SOC_BMS', response.body.soc_bms);
-                    self.timestamp = response.body.last_soc;
-                    eventBus.$emit('syncChanged', 'enabled');
-                    eventBus.$emit('syncModeChanged', 'download');
-                    self.$http.get(RESTURL + 'extended', {
-                        params: {
-                            akey: storage.getValue('akey'),
-                            token: storage.getValue('token')
-                        }
-                    }).then(response => {
+                    }, true, (err, res) => {
+                        self.syncEventEmitter(err);
+                        if (err || !res) return;
                         // update extended data
-                        Vue.set(self.obd2Data, 'SOH', response.body.soh);
-                        Vue.set(self.obd2Data, 'CHARGING', response.body.charging);
-                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', response.body.rapid_charge_port);
-                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', response.body.normal_charge_port);
-                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', response.body.aux_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', response.body.dc_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', response.body.dc_battery_current);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', response.body.dc_battery_power);
-                        eventBus.$emit('syncChanged', 'enabled');
-                        eventBus.$emit('syncModeChanged', 'download');
-                    }, err => {
-                        eventBus.$emit('syncChanged', 'problem');
-                        eventBus.$emit('syncModeChanged', 'off');
+                        Vue.set(self.obd2Data, 'SOH', res.body.soh);
+                        Vue.set(self.obd2Data, 'CHARGING', res.body.charging);
+                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', res.body.rapid_charge_port);
+                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', res.body.normal_charge_port);
+                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', res.body.aux_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.body.dc_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.body.dc_battery_current);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.body.dc_battery_power);
                     });
-                }, err => {
-                    eventBus.$emit('syncChanged', 'problem');
-                    eventBus.$emit('syncModeChanged', 'off');
                 });
             },
             startWatch() {
@@ -388,7 +377,7 @@
                         self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
                             // send location if communication is established
                             if (!self.communicationEstablished) return;
-                            self.$http.post(RESTURL + 'location', {
+                            http.sendRequest('POST', 'location', {
                                 akey: storage.getValue('akey'),
                                 token: storage.getValue('token'),
                                 location: {
@@ -398,7 +387,7 @@
                                     timestamp: pos.timestamp,
                                     accuracy: pos.coords.accuracy
                                 }
-                            }).then(() => {}, err => console.log(err));
+                            });
                         }, err => console.log(err), {
                             maximumAge: 2000,
                             timeout: 5000,
@@ -415,7 +404,7 @@
                                     if ((self.obd2Data.NORMAL_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 100) || 
                                         (self.obd2Data.RAPID_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 94)) {
                                         // still plugged in.. sent out error notificaiton
-                                        self.$http.post(RESTURL + 'notification', {
+                                        http.sendRequest('POST', 'notification', {
                                             akey: storage.getValue('akey'),
                                             token: storage.getValue('token'),
                                             abort: true,
@@ -424,9 +413,9 @@
                                                 now: parseInt(new Date().getTime() / 1000),
                                                 obd2Data: self.obd2Data
                                             }
-                                        }).then(response => {
-                                            self.errorNotificationSent = true;
-                                        }, err => console.log(err));
+                                        }, false, err => {
+                                            if (!err) self.errorNotificationSent = true;
+                                        });
                                     }
                                 }, err => console.log(err));
                             }
@@ -571,12 +560,12 @@
                 // soc threshold watcher
                 if (self.obd2Data.CHARGING && soc >= self.socThreshold && !self.notificationSent) {
                     // sent notification that soc has reached
-                    self.$http.post(RESTURL + 'notification', {
+                    http.sendRequest('POST', 'notification', {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
-                    }).then(response => {
-                        self.notificationSent = true;
-                    }, err => console.log(err));
+                    }, false, err => {
+                        if (!err) self.notificationSent = true;
+                    });
                 } else if (self.notificationSent && soc < self.socThreshold) {
                     // reset notification sent
                     self.notificationSent = false;
