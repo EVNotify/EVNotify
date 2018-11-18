@@ -67,6 +67,7 @@ var vm = new Vue({
     data() {
         return {
             deviceReady: false,
+            loading: false,
             stationcards: []
         };
     },
@@ -107,12 +108,14 @@ eventBus.$on('unauthorized', () => {
     vm.$router.push('/');
 });
 
+eventBus.$on('loading', loading => vm.loading = loading);
+
 eventBus.$on('internalerror', () => {
     console.log('Internal error'); // TODO
 });
 
 // cache station cards on every start
-http.sendRequest('get', 'stationcards', null, (err, cards) => {
+http.sendRequest('get', 'stationcards', null, true, (err, cards) => {
     if (!err && cards) {
         vm.stationcards = cards;
         eventBus.$emit('stationcardsCached');
