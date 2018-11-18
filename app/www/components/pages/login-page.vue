@@ -65,26 +65,26 @@
                     password: self.password
                 }, true, (err, res) => {
                     if (!err && res) {
-                        if (res.body.token) {
+                        if (res.token) {
                             // push notifications handling
                             if (window.cordova && window.FCMPlugin) {
                                 // check if there was another token linked before
                                 if (storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
                                 // subscribe to own messages
-                                FCMPlugin.subscribeToTopic(res.body.token);
+                                FCMPlugin.subscribeToTopic(res.token);
                             }
                             // save akey and token
                             storage.setValue('akey', self.akey);
-                            storage.setValue('token', res.body.token);
+                            storage.setValue('token', res.token);
                             // retrieve and set the settings from account
                             http.sendRequest('GET', 'settings', {
                                 akey: storage.getValue('akey'),
                                 token: storage.getValue('token')
                             }, true, (err, res) => {
                                 if (!err && res) {
-                                    if (res.body.settings != null) {
-                                        storage.setValue('settings', res.body.settings);
-                                        storage.setValue('lng', res.body.settings.lng);
+                                    if (res.settings != null) {
+                                        storage.setValue('settings', res.settings);
+                                        storage.setValue('lng', res.settings.lng);
                                         self.$router.push('/dashboard');
                                     } else self.unexpectedError = true;
                                 } else self.unexpectedError = true;

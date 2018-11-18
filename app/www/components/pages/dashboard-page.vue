@@ -227,7 +227,7 @@
                     token: storage.getValue('token'),
                     display: self.obd2Data.SOC_DISPLAY,
                     bms: self.obd2Data.SOC_BMS
-                }, false, (err, res) => {
+                }, false, err => {
                     self.syncEventEmitter(err);
                     if (!err) {
                         // push extended data
@@ -262,9 +262,9 @@
                     // extend with base data
                     Object.keys(baseData).forEach(key => Vue.set(self.obd2Data, key, baseData[key]));
                     // update soc info
-                    Vue.set(self.obd2Data, 'SOC_DISPLAY', res.body.soc_display);
-                    Vue.set(self.obd2Data, 'SOC_BMS', res.body.soc_bms);
-                    self.timestamp = res.body.last_soc;
+                    Vue.set(self.obd2Data, 'SOC_DISPLAY', res.soc_display);
+                    Vue.set(self.obd2Data, 'SOC_BMS', res.soc_bms);
+                    self.timestamp = res.last_soc;
                     // get extended data
                     http.sendRequest('GET', 'extended', {
                         akey: storage.getValue('akey'),
@@ -273,14 +273,14 @@
                         self.syncEventEmitter(err);
                         if (err || !res) return;
                         // update extended data
-                        Vue.set(self.obd2Data, 'SOH', res.body.soh);
-                        Vue.set(self.obd2Data, 'CHARGING', res.body.charging);
-                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', res.body.rapid_charge_port);
-                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', res.body.normal_charge_port);
-                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', res.body.aux_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.body.dc_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.body.dc_battery_current);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.body.dc_battery_power);
+                        Vue.set(self.obd2Data, 'SOH', res.soh);
+                        Vue.set(self.obd2Data, 'CHARGING', res.charging);
+                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', res.rapid_charge_port);
+                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', res.normal_charge_port);
+                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', res.aux_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.dc_battery_voltage);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
+                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.dc_battery_power);
                     });
                 });
             },

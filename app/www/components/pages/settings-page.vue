@@ -332,11 +332,9 @@
                     token: self.token,
                     password: self.password
                 }, true, (err, res) => {
-                    if (!err && res) {
-                        if (res.body.token) {
-                            storage.setValue('token', (self.token = res.body.token));
-                            self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
-                        } else self.$refs.snackbar.setMessage('UNEXPECTED_ERROR', false, 'error');
+                    if (!err && res && res.token) {
+                        storage.setValue('token', (self.token = res.token));
+                        self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
                     } else self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });
                 self.password = '';
@@ -419,8 +417,8 @@
                 akey: self.akey,
                 token: self.token
             }, true, (err, res) => {
-                if (!err && res && res.body.settings != null) {
-                    self.settings = storage.setValue('settings', response.body.settings);
+                if (!err && res && res.settings != null) {
+                    self.settings = storage.setValue('settings', res.settings);
                 }
             });
         }

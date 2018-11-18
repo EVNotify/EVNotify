@@ -88,24 +88,20 @@
                     }
                     // get an available key
                     http.sendRequest('GET', 'key', {}, true, (err, res) => {
-                        if (!err && res) {
-                            if (res.body.akey) {
-                                self.akey = res.body.akey;
-                                // register account with password
-                                http.sendRequest('POST', 'register', {
-                                    akey: self.akey,
-                                    password: self.password
-                                }, true, (err, res) => {
-                                    if (!err && res) {
-                                        if (res.body.token) {
-                                            storage.setValue('akey', self.akey);
-                                        storage.setValue('token', res.body.token);
-                                        self[id] = true; // mark the current step as valid
-                                        nextPage();
-                                        } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
-                                    } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
-                                });
-                            } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
+                        if (!err && res && res.akey) {
+                            self.akey = res.akey;
+                            // register account with password
+                            http.sendRequest('POST', 'register', {
+                                akey: self.akey,
+                                password: self.password
+                            }, true, (err, res) => {
+                                if (!err && res && res.token) {
+                                    storage.setValue('akey', self.akey);
+                                    storage.setValue('token', res.token);
+                                    self[id] = true; // mark the current step as valid
+                                    nextPage();
+                                } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
+                            });
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                     });
                 } else if (id === 'third') {
@@ -115,11 +111,9 @@
                         token: storage.getValue('token'),
                         settings: self.settingsObj
                     }, true, (err, res) => {
-                        if (!err && res) {
-                            if (res.body.settings != null) {
-                                storage.setValue('settings', res.body.settings);
-                                self.$router.push('/dashboard');
-                            } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR');
+                        if (!err && res && res.settings != null) {
+                            storage.setValue('settings', res.settings);
+                            self.$router.push('/dashboard');
                         } else self.thirdStepError = translation.translate('UNEXPECTED_ERROR'); 
                     });
                 } else {
