@@ -35,6 +35,7 @@
 </template>
 
 <script>
+    import http from './../modules/http.vue';
     import translation from './../modules/translation.vue';
     import settings from './../container/settings.vue';
     import storage from './../modules/storage.vue';
@@ -59,37 +60,41 @@
             login() {
                 var self = this;
 
-                // TODO validate input before login request
-                self.$http.post(RESTURL + 'login', {
+                http.sendRequest('POST', 'login', {
                     akey: self.akey,
                     password: self.password
-                }).then(response => {
-                    if (response.body.token) {
-                        // push notifications handling
-                        if (window.cordova && window.FCMPlugin) {
-                            // check if there was another token linked before
-                            if (storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
-                            // subscribe to own messages
-                            FCMPlugin.subscribeToTopic(response.body.token);
-                        }
-                        // save akey and token
-                        storage.setValue('akey', self.akey);
-                        storage.setValue('token', response.body.token);
-                        // retrieve and set the settings from account
-                        self.$http.get(RESTURL + 'settings', {
-                            params: {
+                }, true, (err, res) => {
+                    if (!err && res) {
+                        if (res.body.token) {
+                            // push notifications handling
+                            if (window.cordova && window.FCMPlugin) {
+                                // check if there was another token linked before
+                                if (storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                                // subscribe to own messages
+                                FCMPlugin.subscribeToTopic(res.body.token);
+                            }
+                            // save akey and token
+                            storage.setValue('akey', self.akey);
+                            storage.setValue('token', res.body.token);
+                            // retrieve and set the settings from account
+                            http.sendRequest('GET', 'settings', {
                                 akey: storage.getValue('akey'),
                                 token: storage.getValue('token')
-                            }
-                        }).then(response => {
-                            if (response.body.settings != null) {
-                                storage.setValue('settings', response.body.settings);
-                                storage.setValue('lng', response.body.settings.lng);
-                                self.$router.push('/dashboard');
-                            } else self.unexpectedError = true;
-                        }, err => self.unexpectedError = true);
-                    } else self.unexpectedError = true;
-                }, err => self.invalidCredentials = true);
+                            }, true, (err, res) => {
+                                if (!err && res) {
+                                    if (res.body.settings != null) {
+                                        storage.setValue('settings', res.body.settings);
+                                        storage.setValue('lng', res.body.settings.lng);
+                                        self.$router.push('/dashboard');
+                                    } else self.unexpectedError = true;
+                                } else self.unexpectedError = true;
+                            });
+                        } else self.unexpectedError = true;
+                    } else {
+                        // TODO check error code?
+                        self.invalidCredentials = true;
+                    }
+                });
             }
         },
         created() {
