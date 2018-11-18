@@ -111,7 +111,7 @@
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token'),
                     log: log
-                }, err => {
+                }, true, err => {
                     if (!err) {
                         self.$refs.snackbar.setMessage('LOG_SAVED', false, 'success');
                         self.$router.push('/logs');
@@ -258,7 +258,7 @@
                     id: self.$route.query.id,
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token')
-                }, (err, log) => {
+                }, true, (err, log) => {
                     if (!err && log != null) {
                         self.log = log;
                         self.formatDateTime(true);

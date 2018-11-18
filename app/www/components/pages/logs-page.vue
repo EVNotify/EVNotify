@@ -55,7 +55,7 @@
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token'),
                         charge: ((self.$refs.tabs.activeTab !== 'tab-drives') ? 1 : 0)
-                    }, (err, logs) => {
+                    }, true, (err, logs) => {
                         if (!err && logs) self.logs = logs;
                         else {
                             // TODO

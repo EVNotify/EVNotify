@@ -101,7 +101,7 @@
                     http.sendRequest('get', 'stations', {
                         lat: self.coords.latitude,
                         lng: self.coords.longitude
-                    }, (err, stations) => {
+                    }, true, (err, stations) => {
                         if (!err && Array.isArray(stations)) {
                             self.stations = stations;
                         } else {

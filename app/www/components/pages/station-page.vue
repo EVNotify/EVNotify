@@ -134,7 +134,7 @@
                 // get station details
                 http.sendRequest('get', 'station', {
                     id: self.$route.query.id
-                }, (err, station) => {
+                }, true, (err, station) => {
                     if (!err && station) {
                         self.station = station;
                         setTimeout(() => window.scrollTo(0, 0), 200);

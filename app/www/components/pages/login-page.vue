@@ -26,9 +26,6 @@
                 <router-link to="/passwordForgot">{{ translated.PASSWORD_FORGOT }}</router-link>
                 <md-button class="md-raised md-primary" @click="login" id="loginBtn">{{ translated.LOGIN }}</md-button>
             </div>
-            <div class="loading-overlay" v-if="loading">
-                <md-progress-spinner md-mode="indeterminate" :md-stroke="2"></md-progress-spinner>
-            </div>
         </md-content>
         <div class="background"></div>
         <transition name="fade">
@@ -46,7 +43,6 @@
     export default {
         data() {
             return {
-                loading: false,
                 akey: '',
                 invalidCredentials: false,
                 password: '',
