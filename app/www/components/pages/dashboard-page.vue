@@ -215,9 +215,9 @@
                 if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(2);
                 return 0;
             },
-            syncEventEmitter(err) {
+            syncEventEmitter(err, mode) {
                 eventBus.$emit('syncChanged', ((!err) ? 'enabled' : 'problem'));
-                eventBus.$emit('syncModeChanged', ((!err) ? 'upload' : 'off'));
+                eventBus.$emit('syncModeChanged', ((!err && mode) ? mode : 'off'));
             },
             pushData() {
                 var self = this;
@@ -228,7 +228,7 @@
                     display: self.obd2Data.SOC_DISPLAY,
                     bms: self.obd2Data.SOC_BMS
                 }, false, err => {
-                    self.syncEventEmitter(err);
+                    self.syncEventEmitter(err, 'upload');
                     if (!err) {
                         // push extended data
                         http.sendRequest('POST', 'extended', {
@@ -242,7 +242,7 @@
                             dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
                             dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
-                        }, false, err => self.syncEventEmitter(err));
+                        }, false, err => self.syncEventEmitter(err, 'upload'));
                     }
                 });
             },
@@ -254,9 +254,9 @@
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token')
                 }, false, (err, res) => {
-                    var baseData = self.$refs[self.car].getBseData();
+                    var baseData = self.$refs[self.car].getBaseData();
 
-                    self.syncEventEmitter(err);
+                    self.syncEventEmitter(err, 'download');
 
                     if (err || !res) return;
                     // extend with base data
@@ -269,8 +269,8 @@
                     http.sendRequest('GET', 'extended', {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
-                    }, true, (err, res) => {
-                        self.syncEventEmitter(err);
+                    }, false, (err, res) => {
+                        self.syncEventEmitter(err, 'download');
                         if (err || !res) return;
                         // update extended data
                         Vue.set(self.obd2Data, 'SOH', res.soh);
