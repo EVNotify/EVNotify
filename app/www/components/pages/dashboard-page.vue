@@ -201,6 +201,7 @@
         watch: {
             'obd2Data.SOC_DISPLAY': 'estimate',
             'obd2Data.CHARGING': 'estimate',
+            'obd2Data.DC_BATTERY_POWER': 'estimate',
             'initialized': 'initMessage',
             'communicationEstablished': 'communicationMessage'
         },
