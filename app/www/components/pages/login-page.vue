@@ -13,17 +13,20 @@
                 <md-field>
                     <label>AKey</label>
                     <md-input v-model="akey" autofocus v-on:input="invalidCredentials=false" required></md-input>
+                    <span class="md-helper-text">{{ translated.V1_MIGRATION_NOTE }}</span>
                 </md-field>
+                <br>
                 <md-field md-has-password>
                     <label>{{ translated.PASSWORD }}</label>
                     <md-input v-model="password" type="password" v-on:input="invalidCredentials=false" required></md-input>
                 </md-field>
             </form>
-            <div class="actions md-layout md-alignment-center-space-between">
+            <div class="actions md-layout md-alignment-center-space-between" style="float: left">
                 <router-link to="/register">{{ translated.CREATE_ACCOUNT }}</router-link>
             </div>
-            <div class="actions md-layout md-alignment-center-space-between">
-                <router-link to="/passwordForgot">{{ translated.PASSWORD_FORGOT }}</router-link>
+            <div class="actions md-layout md-alignment-center-space-between" style="float: right">
+                <!-- TODO -->
+                <!-- <router-link to="/passwordForgot">{{ translated.PASSWORD_FORGOT }}</router-link> -->
                 <md-button class="md-raised md-primary" @click="login" id="loginBtn">{{ translated.LOGIN }}</md-button>
             </div>
         </md-content>

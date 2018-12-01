@@ -1,4 +1,5 @@
 export default {
+    V1_MIGRATION_NOTE: 'If you have previously used V1, you need to create a new account.',
     SLOGAN: 'Control your electric vehicle',
     NEXT: 'Next',
     CANCEL: 'Cancel',

@@ -1,4 +1,5 @@
 export default {
+    V1_MIGRATION_NOTE: 'Falls Du zuvor V1 genutzt hast, musst Du einen neuen Account erstellen.',
     SLOGAN: 'Überwache Dein Elektroauto',
     NEXT: 'Weiter',
     CANCEL: 'Abbruch',
