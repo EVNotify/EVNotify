@@ -399,13 +399,15 @@
                     }
                     // watch for charging interrupted
                     self.chargingWatcher = setInterval(() => {
+                        var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
+
                         // validate if there was at least one successful response and charging started earlier
                         if (self.lastResponse && self.chargingStarted && !self.errorNotificationSent) {
                             if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 20) {
                                 // no response.. check if still connected and not charging normally ended
                                 bluetoothSerial.isConnected(connected => {
-                                    if ((self.obd2Data.NORMAL_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 100) || 
-                                        (self.obd2Data.RAPID_CHARGE_PORT && self.obd2Data.SOC_DISPLAY !== 94)) {
+                                    if ((self.obd2Data.NORMAL_CHARGE_PORT && soc !== 100) || 
+                                        (self.obd2Data.RAPID_CHARGE_PORT && soc !== 94)) {
                                         // still plugged in.. sent out error notificaiton
                                         http.sendRequest('POST', 'notification', {
                                             akey: storage.getValue('akey'),
@@ -458,7 +460,7 @@
                 this.$refs.snackbar.setMessage('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
             estimate() {
-                var soc = this.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+                var soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
 
                 if (typeof soc !== 'number' || isNaN(soc) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
@@ -551,7 +553,7 @@
             eventBus.$on('obd2Data', function (data) {
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
-                var soc = self.obd2Data.SOC_DISPLAY; // TODO: Change dynamically later to bms if required
+                var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
 
                 if (soc == null) return; // no valid data
                 // set current timestamp and update last car response activity
