@@ -29,7 +29,7 @@ export default {
      * @returns {String} the formatted time string
     */
     convertDecimalTime: function(time) {
-        if (!parseInt(time)) return '?';
+        if (!parseInt(time)) return '00:00';
 
         var sign = ((time < 0) ? '-' : ''),
             min = Math.floor(Math.abs(time)),
