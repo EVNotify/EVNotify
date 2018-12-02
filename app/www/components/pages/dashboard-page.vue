@@ -145,6 +145,8 @@
         </div>
         <AMPERAE ref="AMPERA_E"></AMPERAE>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
+        <IONIQHEV ref="IONIQ_HEV"></IONIQHEV>
+        <IONIQPHEV ref="IONIQ_PHEV"></IONIQPHEV>
         <SOULEV ref="SOUL_EV"></SOULEV>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
@@ -162,6 +164,8 @@
     import bottomBar from './../container/bottom-bar.vue';
     import AMPERAE from './../cars/AMPERA_E.vue';
     import IONIQBEV from './../cars/IONIQ_BEV.vue';
+    import IONIQHEV from './../cars/IONIQ_HEV.vue';
+    import IONIQPHEV from './../cars/IONIQ_PHEV.vue';
     import SOULEV from './../cars/SOUL_EV.vue';
 
     export default {
@@ -182,7 +186,7 @@
                 chargingStarted: false,
                 lastResponse: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'SOUL_EV', 'AMPERA_E'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -474,7 +478,7 @@
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
                         '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))) || 0;
                     // calculate time
-                    if (this.obd2Data.SLOW_SPEED && this.obd2Data.NORMAL_SPEED && this.obd2Data.FAST_SPEED) {
+                    if (this.obd2Data.SLOW_SPEED >= 0 && this.obd2Data.NORMAL_SPEED >= 0 && this.obd2Data.FAST_SPEED >= 0) {
                         var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100) ?
                             1 :
                             '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0,
@@ -510,6 +514,8 @@
             toolbar,
             AMPERAE,
             IONIQBEV,
+            IONIQHEV,
+            IONIQPHEV,
             SOULEV
         },
         beforeDestroy() {

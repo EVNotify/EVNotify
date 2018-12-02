@@ -51,6 +51,8 @@ export default {
     ENGLISH: 'English',
     AMPERA_E: 'Opel Ampera E',
     IONIQ_BEV: 'Hyundai IONIQ Electric',
+    IONIQ_HEV: 'Hyundai IONIQ Hybrid',
+    IONIQ_PHEV: 'Hyundai IONIQ PlugIn-Hybrid',
     SOUL_EV: 'Kia Soul EV',
     CONSUMPTION: 'Consumption',
     OBD2_DEVICE: 'OBDII-Device',

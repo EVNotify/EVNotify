@@ -20,7 +20,10 @@
                 <label for="car">{{ translated.CAR }}</label>
                 <md-select v-model="settings.car" required>
                     <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
+                    <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
+                    <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
                     <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
+                    <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
                 </md-select>
             </md-field>
             <md-field>

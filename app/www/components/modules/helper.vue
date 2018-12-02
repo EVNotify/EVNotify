@@ -29,6 +29,8 @@ export default {
      * @returns {String} the formatted time string
     */
     convertDecimalTime: function(time) {
+        if (!parseInt(time)) return '?';
+
         var sign = ((time < 0) ? '-' : ''),
             min = Math.floor(Math.abs(time)),
             sec = Math.floor((Math.abs(time) * 60) % 60);
