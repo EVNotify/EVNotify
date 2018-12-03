@@ -53,6 +53,7 @@ export default {
     IONIQ_BEV: 'Hyundai IONIQ Electric',
     IONIQ_HEV: 'Hyundai IONIQ Hybrid',
     IONIQ_PHEV: 'Hyundai IONIQ PlugIn-Hybrid',
+    KONA_EV: 'Hyundai KONA EV',
     SOUL_EV: 'Kia Soul EV',
     CONSUMPTION: 'Consumption',
     OBD2_DEVICE: 'OBDII-Device',

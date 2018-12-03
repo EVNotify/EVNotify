@@ -134,6 +134,7 @@
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
                                 <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
                                 <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
+                                <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                             </md-select>
                         </md-field>
                     </md-list>
