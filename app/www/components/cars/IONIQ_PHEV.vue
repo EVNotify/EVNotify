@@ -1,6 +1,8 @@
 <template></template>
 
 <script>
+    import eventBus from './../modules/event.vue';
+
     export default {
         data() {
             return {
