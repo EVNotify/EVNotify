@@ -70,6 +70,24 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    <!-- Telegram reset dialog -->
+                    <v-dialog v-model="telegramDialog" persistent max-width="500px">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                                <span class="headline">{{ translated.TELEGRAM_LINKING}}</span>
+                            </v-card-title>
+                            <v-card-text>{{ translated.TELEGRAM_LINKING_TEXT }}</v-card-text>
+                            <md-field>
+                                <label for="token">Token</label>
+                                <md-input v-model="token" disabled type="password"></md-input>
+                            </md-field>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click.native="telegramDialog = false">{{ translated.CANCEL }}</v-btn>
+                                <v-btn color="blue darken-1" flat @click.native="telegramDialog = false; openTelegramBot()">{{ translated.NEXT }}</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-layout>
                 <md-subheader>{{ translated.GENERAL }}</md-subheader>
                 <md-list-item md-expand>
@@ -192,6 +210,7 @@
                     <span class="md-list-item-text">{{ translated.NOTIFICATION_TYPES }}</span>
                     <md-list slot="md-expand">
                         <md-field>
+                            <md-icon md-src="icons/mail.svg"></md-icon>
                             <label for="email">{{ translated.EMAIL }}</label>
                             <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
                         </md-field>
@@ -199,6 +218,10 @@
                             <md-icon md-src="icons/notifications_active.svg"></md-icon>
                             <span class="md-list-item">{{ translated.PUSH }}</span>
                             <md-switch v-model="settings.push"></md-switch>
+                        </md-list-item>
+                        <md-list-item>
+                            <md-icon md-src="icons/message.svg"></md-icon>
+                            <span class="md-list-item telegram-linking-text" @click="telegramDialog = true">{{ translated.TELEGRAM_LINKING }}</span>
                         </md-list-item>
                     </md-list>
                 </md-list-item>
@@ -253,6 +276,7 @@
                 newPassword2: '',
                 tokenResetDialog: false,
                 passwordChangeDialog: false,
+                telegramDialog: false,
                 nextDialog: '',
                 devClick: 0,
                 version: window.VERSION
@@ -271,6 +295,13 @@
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
                 eventBus.$emit('settings_languageChanged');
+            },
+            openTelegramBot() {
+                var a = document.createElement("a");
+                
+                a.target = "_blank";
+                a.href = 'https://t.me/evnotify2bot';
+                a.click();
             },
             setLocationSync() {
                 var self = this,
@@ -437,5 +468,9 @@
     .field-error-message {
         color: red;
         font-weight: bold;
+    }
+    .telegram-linking-text {
+        color: #4589fc;
+        text-decoration: underline;
     }
 </style>

@@ -66,6 +66,8 @@ export default {
     SOC_THRESHOLD: 'State of charge, when to send out notifications',
     EMAIL: 'Mail',
     PUSH: 'Push-Notifications',
+    TELEGRAM_LINKING: 'Telegram linking management',
+    TELEGRAM_LINKING_TEXT: 'In order to be informed about the state of charge and to query it via telegram, the account must be linked. Enter the token below - never share it with people you do not trust. You can copy the token and write it to the bot after typing / subscribe. Just as well, you can also unsubscribe with / unsubscribe with telegram.',
     SUMMARY: 'Send daily summary of state of charge',
     DASHBOARD: 'Dashboard',
     LOGS: 'Logs',

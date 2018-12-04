@@ -66,6 +66,8 @@ export default {
     SOC_THRESHOLD: 'Ladezustand, bei dem Benachrichtigung verschickt werden sollen',
     EMAIL: 'E-Mail',
     PUSH: 'Push-Benachrichtigungen',
+    TELEGRAM_LINKING: 'Telegram-Account Verknüpfung verwalten',
+    TELEGRAM_LINKING_TEXT: 'Um über den Ladezustand informiert werden zu können und diesen abzufragen über Telegram, muss der Account verknüpft werden. Gib hierzu den untenstehenden Token ein - teile diesen niemals mit Personen, denen Du nicht vertraust. Den Token kannst Du kopieren und dem Bot schreiben, nachdem Du /subscribe eingegeben hast. Genauso gut kannst Du mit /unsubscribe auch wieder die Verknüpfung mit Telegram aufheben.',
     SUMMARY: 'Tägliche Zusammenfassung des Ladezustands senden',
     DASHBOARD: 'Dashboard',
     LOGS: 'Logs',
