@@ -61,16 +61,27 @@
                     baseData = self.getBaseData();
 
                 try {
-                    var fifthBlock = '7EC25',
+                    var fourthBlock = '7EC24',
+                        fifthBlock = '7EC25',
+                        extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
+                        extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
                         sixthBlock = '7EC26',
                         extractedFifthBlock = data.substring(data.indexOf(fifthBlock), data.indexOf(sixthBlock)),
                         extractedFifthData = extractedFifthBlock.replace(fifthBlock, '');
                         
-                    if (extractedFifthData) {
+                    if (extractedFourthData && extractedFifthData) {
                         parsedData = {
                             SOC_DISPLAY: parseInt(
                                 extractedFifthData.substr(0, 2), 16
-                            ) / 2 // first byte within 5th block
+                            ) / 2, // first byte within 5th block
+                            SOH: ((
+                                    parseInt(
+                                        extractedFourthData.slice(2, 4), 16 // second byte within 4th block
+                                    ) << 8) +
+                                parseInt(
+                                    extractedFourthData.slice(4, 6), 16 // third byte within 4th block
+                                )
+                            ) / 10
                         };
                     }
                 } catch (err) {
