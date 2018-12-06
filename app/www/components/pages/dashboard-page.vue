@@ -186,6 +186,7 @@
                 errorNotificationSent: false,
                 showedBluetoothError: false,
                 chargingStarted: false,
+                chargingStartSOC: 0,
                 lastResponse: 0,
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV'],
@@ -569,10 +570,18 @@
                 self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
+                // reset charging started info if no longer charging
+                if (self.chargingStarted && !self.obd2Data.CHARGING) {
+                    self.chargingStarted = false;
+                    self.chargingStartSOC = 0;
+                }
                 // track charging started
-                if (self.obd2Data.CHARGING) self.chargingStarted = true;
+                if (self.obd2Data.CHARGING) {
+                    self.chargingStarted = true;
+                    if (!self.chargingStartSOC) self.chargingStartSOC = soc;
+                }
                 // soc threshold watcher
-                if (self.obd2Data.CHARGING && soc >= self.socThreshold && !self.notificationSent) {
+                if (self.obd2Data.CHARGING && self.chargingStartSOC < soc && soc >= self.socThreshold && !self.notificationSent) {
                     // sent notification that soc has reached
                     http.sendRequest('POST', 'notification', {
                         akey: storage.getValue('akey'),
