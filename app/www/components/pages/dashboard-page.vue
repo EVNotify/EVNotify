@@ -412,7 +412,7 @@
                             if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 20) {
                                 // no response.. check if still connected and not charging normally ended
                                 bluetoothSerial.isConnected(connected => {
-                                    if ((self.obd2Data.NORMAL_CHARGE_PORT && soc !== 100) || 
+                                    if (((self.obd2Data.SLOW_CHARGE_PORT || self.obd2Data.NORMAL_CHARGE_PORT) && soc !== 100) || 
                                         (self.obd2Data.RAPID_CHARGE_PORT && soc !== 94)) {
                                         // still plugged in.. sent out error notificaiton
                                         http.sendRequest('POST', 'notification', {
