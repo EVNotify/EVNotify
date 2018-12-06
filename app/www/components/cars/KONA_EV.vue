@@ -81,7 +81,11 @@
                                 parseInt(
                                     extractedFourthData.slice(4, 6), 16 // third byte within 4th block
                                 )
-                            ) / 10
+                            ) / 10,
+                            CHARGING: 1, // TODO
+                            SLOW_CHARGE_PORT: 1, // TODO
+                            NORMAL_CHARGE_PORT: 1, // TODO
+                            RAPID_CHARGE_PORT: 1 // TODO
                         };
                     }
                 } catch (err) {

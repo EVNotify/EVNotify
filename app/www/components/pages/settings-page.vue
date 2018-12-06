@@ -317,8 +317,7 @@
             },
             setPush() {
                 // fix for md-switch accepting only booleans instead of numbers that equal boolean values
-                if (this.settings.push) this.settings.push = true;
-                else this.settings.push = false;
+                this.settings.push = (this.settings.push == true);
                 if (window.cordova && window.FCMPlugin) {
                     if (this.settings.push) FCMPlugin.subscribeToTopic(this.token);
                     else FCMPlugin.unsubscribeFromTopic(this.token);

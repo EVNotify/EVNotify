@@ -72,7 +72,11 @@
                     if (extractedFirstData) {
                         self.emptyResponses = 0;
                         parsedData = {
-                            SOC_BMS: parseInt(extractedFirstData.slice(0, 2), 16) / 2 // first byte within 1st block
+                            SOC_BMS: parseInt(extractedFirstData.slice(0, 2), 16) / 2, // first byte within 1st block
+                            CHARGING: 1, // TODO
+                            SLOW_CHARGE_PORT: 1, // TODO
+                            NORMAL_CHARGE_PORT: 1, // TODO
+                            RAPID_CHARGE_PORT: 1 // TODO
                         };
                     } else self.emptyResponses++;
                 } catch (err) {
