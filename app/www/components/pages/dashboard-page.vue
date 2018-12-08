@@ -246,6 +246,7 @@
                             charging: self.obd2Data.CHARGING,
                             rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
                             normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
+                            slowChargePort: self.obd2Data.SLOW_CHARGE_PORT,
                             auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
                             dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
@@ -285,6 +286,7 @@
                         Vue.set(self.obd2Data, 'CHARGING', res.charging);
                         Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', res.rapid_charge_port);
                         Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', res.normal_charge_port);
+                        Vue.set(self.obd2Data, 'SLOW_CHARGE_PORT', res.slow_charge_port);
                         Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', res.aux_battery_voltage);
                         Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.dc_battery_voltage);
                         Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
