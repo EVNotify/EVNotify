@@ -64,7 +64,7 @@
                     var fourthBlock = '7EC24',
                         fifthBlock = '7EC25',
                         extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
-                        extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
+                        extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
                         sixthBlock = '7EC26',
                         extractedFifthBlock = data.substring(data.indexOf(fifthBlock), data.indexOf(sixthBlock)),
                         extractedFifthData = extractedFifthBlock.replace(fifthBlock, '');
