@@ -98,9 +98,13 @@
                             extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
                             thirdBlock = '7EC23',
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
-                            extractedSecondData = extractedSecondBlock.replace(secondBlock, '');
+                            extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
+                            fourthBlock = '7EC24',
+                            fifthBlock = '7EC25',
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
-                        if (extractedFirstData && extractedSecondData) {
+                        if (extractedFirstData && extractedSecondData && extractedFourthData) {
                             parsedData = {
                                 SOC_BMS: parseInt(
                                     extractedFirstData.slice(2, 4), 16
@@ -112,7 +116,8 @@
                                     parseInt(
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
-                                ) / 10
+                                ) / 10,
+                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(10, 12), 16) / 10 // fifth byte within fourth block
                             };
                         }
                     }
