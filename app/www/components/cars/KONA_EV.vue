@@ -48,6 +48,8 @@
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
+                        // toggle between commands each time
+                        self.command = ((self.command === '220105') ? '220101' : '220105');
                         setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
@@ -61,32 +63,58 @@
                     baseData = self.getBaseData();
 
                 try {
-                    var fourthBlock = '7EC24',
-                        fifthBlock = '7EC25',
-                        extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
-                        extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
-                        sixthBlock = '7EC26',
-                        extractedFifthBlock = data.substring(data.indexOf(fifthBlock), data.indexOf(sixthBlock)),
-                        extractedFifthData = extractedFifthBlock.replace(fifthBlock, '');
-                        
-                    if (extractedFourthData && extractedFifthData) {
-                        parsedData = {
-                            SOC_DISPLAY: parseInt(
-                                extractedFifthData.substr(0, 2), 16
-                            ) / 2, // first byte within 5th block
-                            SOH: ((
+                    if (self.command === '220105') {
+                        var fourthBlock = '7EC24',
+                            fifthBlock = '7EC25',
+                            extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
+                            sixthBlock = '7EC26',
+                            extractedFifthBlock = data.substring(data.indexOf(fifthBlock), data.indexOf(sixthBlock)),
+                            extractedFifthData = extractedFifthBlock.replace(fifthBlock, '');
+
+                        if (extractedFourthData && extractedFifthData) {
+                            parsedData = {
+                                SOC_DISPLAY: parseInt(
+                                    extractedFifthData.substr(0, 2), 16
+                                ) / 2, // first byte within 5th block
+                                SOH: ((
+                                        parseInt(
+                                            extractedFourthData.slice(2, 4), 16 // second byte within 4th block
+                                        ) << 8) +
                                     parseInt(
-                                        extractedFourthData.slice(2, 4), 16 // second byte within 4th block
-                                    ) << 8) +
-                                parseInt(
-                                    extractedFourthData.slice(4, 6), 16 // third byte within 4th block
-                                )
-                            ) / 10,
-                            CHARGING: 1, // TODO
-                            SLOW_CHARGE_PORT: 1, // TODO
-                            NORMAL_CHARGE_PORT: 1, // TODO
-                            RAPID_CHARGE_PORT: 1 // TODO
-                        };
+                                        extractedFourthData.slice(4, 6), 16 // third byte within 4th block
+                                    )
+                                ) / 10,
+                                CHARGING: 1, // TODO
+                                SLOW_CHARGE_PORT: 1, // TODO
+                                NORMAL_CHARGE_PORT: 1, // TODO
+                                RAPID_CHARGE_PORT: 1 // TODO
+                            };
+                        }
+                    } else if (self.command === '220101') {
+                        var firstBlock = '7EC21',
+                            secondBlock = '7EC22',
+                            extractedFirstBlock = data.substring(data.indexOf(firstBlock), data.indexOf(secondBlock)),
+                            extractedFirstData = extractedFirstBlock.replace(firstBlock, ''),
+                            thirdBlock = '7EC23',
+                            extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
+                            extractedSecondData = extractedSecondBlock.replace(secondBlock, '');
+
+                        if (extractedFirstData && extractedSecondData) {
+                            parsedData = {
+                                SOC_BMS: parseInt(
+                                    extractedFirstData.slice(2, 4), 16
+                                ) / 2, // second byte within 1st block
+                                DC_BATTERY_VOLTAGE: ((
+                                        parseInt(
+                                            extractedSecondData.slice(4, 6), 16 // third byte within 2nd block
+                                        ) << 8) +
+                                    parseInt(
+                                        extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
+                                    )
+                                ) / 10
+                            };
+                        }
                     }
                 } catch (err) {
                     console.error(err);
