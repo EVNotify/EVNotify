@@ -178,6 +178,7 @@
                 syncInterval: 0,
                 locationWatcher: 0,
                 chargingWatcher: 0,
+                standbyWatcher: 0,
                 timestamp: '?',
                 device: null,
                 car: null,
@@ -436,6 +437,15 @@
                         }
                     }, 10000);
 
+                    // Watch lastResponse to force standy mode on no valid data after a specific time
+                    self.standbyWatcher = setInterval(() => {
+                        if (typeof bluetoothSerial !== 'undefined' && self.lastResponse && parseInt(new Date().getTime() / 1000) > self.lastResponse + 600) {
+                            // no valid response in 10 minutes detected, force standby
+                            self.clear();
+                            self.$refs[self.car].standbyMode();
+                        }
+                    }, 60000);
+
                     // listen for sync mode changes (on debug settings forceSyncModes enabled)
                     eventBus.$off('forcedSyncMode');
                     if (self.debugSettings.forceSyncModes) {
@@ -509,8 +519,10 @@
                 clearInterval(this.bluetoothInterval);
                 clearInterval(this.syncInterval);
                 clearInterval(this.chargingWatcher);
+                clearInterval(this.standbyWatcher);
                 if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
                 if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
+                this.$refs.snackbar.setMessage('STANDBY_MODE_ACTIVATED', false, 'warning');
             }
         },
         components: {
@@ -544,7 +556,7 @@
                     e.preventDefault();
                     // end bluetooth connection, force standby mode
                     self.clear();
-                    if (typeof self.bluetoothSerial === 'undefined') return navigator.app.exitApp();
+                    if (typeof bluetoothSerial === 'undefined') return navigator.app.exitApp();
                     bluetoothSerial.isConnected(connected => {
                         // emit forceStandby - on finish, close app
                         try {
@@ -603,6 +615,12 @@
                 bluetoothSerial.disconnect(() => {
                     self.communicationEstablished = self.initialized = false;
                 }, () => self.communicationEstablished = self.initialized = false);
+            });
+            // wakeup listener
+            eventBus.$off('wakeup');
+            eventBus.$on('wakeup', () => {
+                self.$refs.snackbar.setMessage('STANDBY_MODE_DEACTIVATED', false, 'success');
+                self.startWatch();
             });
         },
         mounted() {

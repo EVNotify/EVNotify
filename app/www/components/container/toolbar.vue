@@ -2,6 +2,9 @@
     <md-toolbar class="md-primary">
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
+            <md-button class="md-icon-button" v-if="inStandbyMode" @click="disableStandbyMode()">
+                <md-icon md-src="icons/power_off.svg"></md-icon>
+            </md-button>
             <md-button class="md-icon-button" :disabled="!forceSyncModes" @click="switchSyncMode()">
                 <md-icon :md-src="syncModeIcon"></md-icon>
             </md-button>
@@ -47,6 +50,7 @@ export default {
             stationPage: false,
             logPage: false,
             forceSyncModes: false,
+            inStandbyMode: false,
             bluetoothIcon: 'icons/bluetooth_disabled.svg',
             syncIcon: 'icons/sync_disabled.svg',
             syncModeIcon: 'icons/cloud_off.svg'
@@ -75,6 +79,10 @@ export default {
                 this.syncModeIcon = 'icons/cloud_upload.svg';
                 eventBus.$emit('forcedSyncMode', storage.setValue('lstSyncMode', 'upload'));
             }
+        },
+        disableStandbyMode() {
+            this.inStandbyMode = false;
+            eventBus.$emit('wakeup');
         }
     },
     created() {
@@ -93,9 +101,11 @@ export default {
         eventBus.$off('bluetoothChanged');
         eventBus.$off('syncChanged');
         eventBus.$off('syncModeChanged');
+        eventBus.$off('standby');
         eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
         eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
         eventBus.$on('syncModeChanged', state => self.syncModeIcon = 'icons/cloud_' + state + '.svg');
+        eventBus.$on('standby', () => self.inStandbyMode = true);
     }
 }
 </script>

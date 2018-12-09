@@ -146,5 +146,7 @@ export default {
     BLUETOOTH_CONNECT_ERROR: 'Bluetooth connection failed',
     INITIALIZATION: 'Initialization. Please wait.',
     ESTABLISHED: 'Connection established',
-    OBD2_ERROR: 'OBDII error. Re-initialization. Please wait'
+    OBD2_ERROR: 'OBDII error. Re-initialization. Please wait',
+    STANDBY_MODE_ACTIVATED: 'No activity detected. Entering standby mode',
+    STANDBY_MODE_DEACTIVATED: 'Leaving standby mode'
 };
