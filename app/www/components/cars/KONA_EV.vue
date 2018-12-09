@@ -117,8 +117,13 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(10, 12), 16) / 10 // fifth byte within fourth block
+                                DC_BATTERY_CURRENT: (((parseInt(
+                                    (extractedSecondData.slice(0, 2) + extractedSecondData.slice(2, 4)), 16 // concat first and second byte of second block
+                                )+2**15)%(2**16))-2**15)*0.1, // some binary conversion to get signed int from value
+                                AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(10, 12), 16) / 10 // sixth byte within fourth block
                             };
+                            // add battery power
+                            parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
                         }
                     }
                 } catch (err) {
