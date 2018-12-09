@@ -620,6 +620,7 @@
             eventBus.$off('wakeup');
             eventBus.$on('wakeup', () => {
                 self.$refs.snackbar.setMessage('STANDBY_MODE_DEACTIVATED', false, 'success');
+                self.communicationEstablished = self.initialized = false;
                 self.startWatch();
             });
         },

@@ -18,6 +18,10 @@
             init() {
                 var self = this;
 
+                // listener to wakeup after standby mode
+                eventBus.$off('wakeup');
+                eventBus.$on('wakeup', () => self.inStandbyMode = false);
+
                 // unsubscribe from prior existing listener
                 bluetoothSerial.unsubscribe();
 
