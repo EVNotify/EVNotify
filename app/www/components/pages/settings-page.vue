@@ -238,6 +238,13 @@
                         </div>
                     </md-list>
                 </md-list-item>
+                <md-list-item md-expand>
+                    <md-icon md-src="icons/linked_camera.svg"></md-icon>
+                    <span class="md-list-item-text">QRNotify</span>
+                    <md-list slot="md-expand">
+                        Say cheese! Soon.
+                    </md-list>
+                </md-list-item>
                 <p class="version" @click="countDevClick()">v.{{ version }}</p>
             </form>
         </md-list>
