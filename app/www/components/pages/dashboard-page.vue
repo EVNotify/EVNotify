@@ -599,11 +599,17 @@
                     // sent notification that soc has reached
                     http.sendRequest('POST', 'notification', {
                         akey: storage.getValue('akey'),
-                        token: storage.getValue('token')
+                        token: storage.getValue('token'),
+                        debug: {
+                            lastResponse: self.chargingStartSOC,
+                            threshold: self.socThreshold,
+                            now: parseInt(new Date().getTime() / 1000),
+                            obd2Data: self.obd2Data
+                        }
                     }, false, err => {
                         if (!err) self.notificationSent = true;
                     });
-                } else if (self.notificationSent && soc < self.socThreshold) {
+                } else if (self.notificationSent && soc && soc < self.socThreshold) {
                     // reset notification sent
                     self.notificationSent = false;
                 }
