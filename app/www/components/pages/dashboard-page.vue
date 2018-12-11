@@ -412,12 +412,12 @@
                         var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
 
                         // validate if there was at least one successful response and charging started earlier
-                        if (self.lastResponse && self.chargingStarted && !self.errorNotificationSent) {
-                            if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 20) {
+                        if (self.lastResponse && self.chargingStarted && soc && !self.errorNotificationSent) {
+                            if (parseInt(new Date().getTime() / 1000) > self.lastResponse + 300) {
                                 // no response.. check if still connected and not charging normally ended
                                 bluetoothSerial.isConnected(connected => {
-                                    if (((self.obd2Data.SLOW_CHARGE_PORT || self.obd2Data.NORMAL_CHARGE_PORT) && soc !== 100) || 
-                                        (self.obd2Data.RAPID_CHARGE_PORT && soc !== 94)) {
+                                    if (((self.obd2Data.SLOW_CHARGE_PORT || self.obd2Data.NORMAL_CHARGE_PORT) && Math.ceil(soc) !== 100) || 
+                                        (self.obd2Data.RAPID_CHARGE_PORT && Math.ceil(soc) !== 94)) {
                                         // still plugged in.. sent out error notificaiton
                                         http.sendRequest('POST', 'notification', {
                                             akey: storage.getValue('akey'),
