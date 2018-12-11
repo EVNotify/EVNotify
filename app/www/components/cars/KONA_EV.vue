@@ -88,11 +88,7 @@
                                     parseInt(
                                         extractedFourthData.slice(4, 6), 16 // third byte within 4th block
                                     )
-                                ) / 10,
-                                CHARGING: 1, // TODO
-                                SLOW_CHARGE_PORT: 1, // TODO
-                                NORMAL_CHARGE_PORT: 1, // TODO
-                                RAPID_CHARGE_PORT: 1 // TODO
+                                ) / 10
                             };
                         }
                     } else if (self.command === '220101') {
@@ -103,6 +99,10 @@
                             thirdBlock = '7EC23',
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
+                            chargingByte = extractedSecondData.slice(0, 2),
+                            notChargingIndicators = ['00', '01', '02', '03'],
+                            rapidPortIndicators = ['FB', 'FD', 'FE'],
+                            normalPortIndicators = ['FF'],
                             fourthBlock = '7EC24',
                             fifthBlock = '7EC25',
                             extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
@@ -121,6 +121,9 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
+                                CHARGING: notChargingIndicators.indexOf(chargingByte) === -1 ? 1 : 0,
+                                NORMAL_CHARGE_PORT: normalPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
+                                RAPID_CHARGE_PORT: rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
                                 DC_BATTERY_CURRENT: (((parseInt(
                                     (extractedSecondData.slice(0, 2) + extractedSecondData.slice(2, 4)), 16 // concat first and second byte of second block
                                 )+2**15)%(2**16))-2**15)*0.1, // some binary conversion to get signed int from value
