@@ -104,6 +104,8 @@ document.addEventListener('deviceready', function() {
 
 eventBus.$on('unauthorized', () => {
     console.log('Unauthorized');
+    // unsubscribe from push notifications
+    if (window.cordova && window.FCMPlugin && storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
     localStorage.clear();
     vm.$router.push('/');
 });
