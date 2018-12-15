@@ -242,7 +242,7 @@
                     <md-icon md-src="icons/linked_camera.svg"></md-icon>
                     <span class="md-list-item-text">QRNotify</span>
                     <md-list slot="md-expand">
-                        Say cheese! Soon.
+                        <canvas id="qr" ref="qr"></canvas>
                     </md-list>
                 </md-list-item>
                 <p class="version" @click="countDevClick()">v.{{ version }}</p>
@@ -373,7 +373,10 @@
                     password: self.password
                 }, true, (err, res) => {
                     if (!err && res && res.token) {
+                        // subscribe to new token and unsubsribe from previous one
+                        if (window.cordova && window.FCMPlugin) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
                         storage.setValue('token', (self.token = res.token));
+                        if (window.cordova && window.FCMPlugin) FCMPlugin.subscribeToTopic(storage.getValue('token'));
                         self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
                     } else self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });
