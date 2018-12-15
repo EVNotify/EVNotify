@@ -185,6 +185,7 @@
                 socThreshold: 0,
                 notificationSent: false,
                 errorNotificationSent: false,
+                usedNotificationType: '',
                 showedBluetoothError: false,
                 chargingStarted: false,
                 chargingStartSOC: 0,
@@ -578,6 +579,7 @@
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
+                var socType = self.obd2Data.SOC_DISPLAY ? 'DISPLAY' : 'BMS';
 
                 if (soc == null) return; // no valid data
                 // set current timestamp and update last car response activity
@@ -596,20 +598,22 @@
                 }
                 // soc threshold watcher
                 if (self.obd2Data.CHARGING && self.chargingStartSOC < soc && soc >= self.socThreshold && !self.notificationSent) {
+                    self.notificationSent = true;
+                    self.usedNotificationType = socType;
                     // sent notification that soc has reached
                     http.sendRequest('POST', 'notification', {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token'),
                         debug: {
-                            lastResponse: self.chargingStartSOC,
+                            chargingStartSOC: self.chargingStartSOC,
                             threshold: self.socThreshold,
                             now: parseInt(new Date().getTime() / 1000),
                             obd2Data: self.obd2Data
                         }
                     }, false, err => {
-                        if (!err) self.notificationSent = true;
+                        if (err) self.notificationSent = false;
                     });
-                } else if (self.notificationSent && soc && soc < self.socThreshold) {
+                } else if (self.notificationSent && soc && socType === self.usedNotificationType && soc < self.socThreshold) {
                     // reset notification sent
                     self.notificationSent = false;
                 }
