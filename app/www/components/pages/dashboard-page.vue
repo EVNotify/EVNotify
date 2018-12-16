@@ -322,6 +322,8 @@
                                     self.isWaitingForConnect = self.showedBluetoothError = false;
                                     // reset all obd2data again to prevent wrong notifications and data
                                     Object.keys(self.obd2Data).forEach(key => Vue.set(self.obd2Data, key, null));
+                                    // force re-init (neccessary for re-connect?)
+                                    self.communicationEstablished = self.initialized = false;
                                     // run init process if not already running
                                     if (!self.initialized) {
                                         self.initialized = true;
