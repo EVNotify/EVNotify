@@ -2,6 +2,7 @@
 
 <script>
     import eventBus from './../modules/event.vue';
+    import storage from './../modules/storage.vue';
 
     export default {
         data() {
@@ -36,7 +37,8 @@
                     });
                     // send debug data to backend if debug mode enabled
                     if (DEBUG) Vue.http.post(RESTURL + 'debug', {
-                        data
+                        data,
+                        akey: storage.getValue('akey')
                     });
 
                     // error and empty response detection to start re-initialization
