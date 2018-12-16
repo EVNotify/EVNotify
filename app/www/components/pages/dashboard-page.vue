@@ -229,7 +229,7 @@
                 eventBus.$emit('syncChanged', ((!err) ? 'enabled' : 'problem'));
                 eventBus.$emit('syncModeChanged', ((!err && mode) ? mode : 'off'));
             },
-            pushData() {
+            pushData(callback) {
                 var self = this;
 
                 http.sendRequest('POST', 'soc', {
@@ -253,8 +253,11 @@
                             dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
                             dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
-                        }, false, err => self.syncEventEmitter(err, 'upload'));
-                    }
+                        }, false, err => {
+                            self.syncEventEmitter(err, 'upload');
+                            if (typeof callback === 'function') callback(err);
+                        });
+                    } else if (typeof callback === 'function') callback(err);
                 });
             },
             pullData() {
@@ -600,18 +603,23 @@
                 if (self.obd2Data.CHARGING && self.chargingStartSOC < soc && soc >= self.socThreshold && !self.notificationSent) {
                     self.notificationSent = true;
                     self.usedNotificationType = socType;
-                    // sent notification that soc has reached
-                    http.sendRequest('POST', 'notification', {
-                        akey: storage.getValue('akey'),
-                        token: storage.getValue('token'),
-                        debug: {
-                            chargingStartSOC: self.chargingStartSOC,
-                            threshold: self.socThreshold,
-                            now: parseInt(new Date().getTime() / 1000),
-                            obd2Data: self.obd2Data
-                        }
-                    }, false, err => {
-                        if (err) self.notificationSent = false;
+                    // update current state of charge
+                    self.pushData(err => {
+                        if (!err) {
+                            // sent notification that soc has reached
+                            http.sendRequest('POST', 'notification', {
+                                akey: storage.getValue('akey'),
+                                token: storage.getValue('token'),
+                                debug: {
+                                    chargingStartSOC: self.chargingStartSOC,
+                                    threshold: self.socThreshold,
+                                    now: parseInt(new Date().getTime() / 1000),
+                                    obd2Data: self.obd2Data
+                                }
+                            }, false, err => {
+                                if (err) self.notificationSent = false;
+                            });
+                        } else self.notificationSent = false;
                     });
                 } else if (self.notificationSent && soc && socType === self.usedNotificationType && soc < self.socThreshold) {
                     // reset notification sent
