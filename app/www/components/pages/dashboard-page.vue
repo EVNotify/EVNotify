@@ -588,7 +588,7 @@
 
                 if (soc == null) return; // no valid data
                 // set current timestamp and update last car response activity
-                self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
+                if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
                 // reset charging started info if no longer charging
