@@ -7,7 +7,7 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6', 'ATCRA7EC'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'ATSTFF', 'ATFE', 'ATSP6', 'ATCRA7EC'
                 ],
                 offset: 0,
                 inStandbyMode: false,
@@ -56,7 +56,10 @@
                         eventBus.$emit('obd2Data', self.parseData(data));
                         // toggle between commands each time
                         self.command = ((self.command === '220105') ? '220101' : '220105');
-                        setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
+			if (data.indexOf('NODATA') !== -1) bluetoothSerial.write('ATPC\r');
+                        else {
+				setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
+			}
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
 
@@ -102,7 +105,7 @@
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
                             chargingByte = extractedSecondData.slice(0, 2),
-                            notChargingIndicators = ['00', '01', '02', '03'],
+                            notChargingIndicators = ['00', '01', '02', '03', '05', '07'],
                             rapidPortIndicators = ['FB', 'FD', 'FE'],
                             normalPortIndicators = ['FF'],
                             fourthBlock = '7EC24',
@@ -133,6 +136,8 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
+				// adjust for recuperation
+				if (parsedData.NORMAL_CHARGE_PORT && parsedData.CHARGING && extractedFirstData.slice(12, 14) === '03') parsedData.CHARGING = 0;
                         }
                     }
                 } catch (err) {
