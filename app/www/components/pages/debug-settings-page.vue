@@ -48,6 +48,12 @@
             self.translated = translation.translatePage();
             self.debug = storage.getValue('debugSettings', {});
             if (!self.debug.resturl) self.debug.resturl = RESTURL; // original RESTURL as default
+            if (typeof Rollbar !== 'undefined') {
+                // if url changed, disable tracking to prevent errors being reported
+                Rollbar.configure({
+                    enabled: self.debug.resturl === RESTURL
+                });
+            }
             // listener for save
             eventBus.$off('debugsettings_save');
             eventBus.$on('debugsettings_save', () => {
