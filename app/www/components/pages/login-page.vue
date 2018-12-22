@@ -104,7 +104,19 @@
             var self = this;
 
             // determine if we are already logged in - if so, skip login page
-            if (storage.getValue('token') && storage.getValue('akey')) return self.$router.push('/dashboard');
+            if (storage.getValue('token') && storage.getValue('akey')) {
+                // enable user tracking
+                if (typeof Rollbar !== 'undefined') {
+                    Rollbar.configure({
+                        payload: {
+                            person: {
+                                id: storage.getValue('akey')
+                            }
+                        }
+                    });
+                }
+                return self.$router.push('/dashboard');
+            }
 
             // translate all labels in correct language
             self.translated = translation.translatePage();
