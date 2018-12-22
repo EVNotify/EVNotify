@@ -602,7 +602,7 @@
                     if (!self.chargingStartSOC) self.chargingStartSOC = soc;
                 }
                 // soc threshold watcher
-                if (self.obd2Data.CHARGING && self.chargingStartSOC < soc && soc >= self.socThreshold && !self.notificationSent) {
+                if (self.obd2Data.CHARGING && self.chargingStartSOC < self.socThreshold && soc >= self.socThreshold && !self.notificationSent) {
                     self.notificationSent = true;
                     self.usedNotificationType = socType;
                     // update current state of charge
