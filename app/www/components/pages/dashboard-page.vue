@@ -182,6 +182,7 @@
                 timestamp: '?',
                 device: null,
                 car: null,
+                push: false,
                 socThreshold: 0,
                 notificationSent: false,
                 errorNotificationSent: false,
@@ -301,6 +302,12 @@
             },
             startWatch() {
                 var self = this;
+
+                // if push enabled, subscribe, otherwise unsubscribe
+                if (window.cordova && window.FCMPlugin) {
+                    if (self.push) FCMPlugin.subscribeToTopic(storage.getValue('token'));
+                    else FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                }
 
                 // if device set and car supported, start watch
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
@@ -549,6 +556,7 @@
             var self = this;
 
             self.translated = translation.translatePage();
+            self.push = storage.getValue('settings', {}).push;
             self.device = storage.getValue('settings', {}).device;
             self.car = storage.getValue('settings', {}).car;
             self.consumption = parseFloat(storage.getValue('settings', {}).consumption) || 0;
