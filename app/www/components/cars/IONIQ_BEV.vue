@@ -101,6 +101,10 @@
                                 19) : ''),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
                             chargingBits = (parseInt(extractedFirstData.substr(-4).slice(0, 2), 16) >>> 0).toString(2), // before last byte within 1st block in binary
+                            thirdBlock = '7EC23',
+                            extractedThirdBlock = ((data.indexOf(thirdBlock) !== -1) ? data.substring(data.indexOf(thirdBlock), data.indexOf(thirdBlock) +
+                                19) : ''),
+                            extractedThirdData = extractedThirdBlock.replace(thirdBlock, ''),
                             fourthBlock = '7EC24',
                             extractedFourthBlock = ((data.indexOf(fourthBlock) !== -1) ? data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) +
                                 19) : ''),
@@ -110,7 +114,7 @@
                                 19) : ''),
                             extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
-                        if (extractedFirstData && extractedSecondData && extractedFourthData && extractedSixthData && extractedSixthData !== '00000000000000') {
+                        if (extractedFirstData && extractedSecondData && extractedThirdData && extractedFourthData && extractedSixthData && extractedSixthData !== '00000000000000') {
                             self.emptyResponses = 0;
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
@@ -120,6 +124,9 @@
                                 RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
                                 NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)), // 5th bit of charging bits,
                                 AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10, // 9th + 10th byte within fourth block divided by 10
+                                BATTERY_MIN_TEMPERATURE: parseInt(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
+                                BATTERY_MAX_TEMPERATURE: parseInt(extractedSecondData.slice(6, 8), 16), // fourth byte within 2nd block
+                                BATTERY_INLET_TEMPERATURE: parseInt(extractedThirdData.slice(4, 6), 16), // third byte within 3rd block
                                 DC_BATTERY_VOLTAGE: ((
                                         parseInt(
                                             extractedSecondData.slice(2, 4), 16 // second byte within 2nd block

@@ -4,7 +4,7 @@
         <toolbar @debugChanged="debugInfo()"></toolbar>
         <div class="content-within-page">
             <vueper-slides :fixed-height="true">
-                <vueper-slide v-for="i in 3" :key="i">
+                <vueper-slide v-for="i in 4" :key="i">
                     <div slot="slideContent">
                         <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
                             <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
@@ -139,6 +139,41 @@
                                 </md-card-header>
                             </md-card>
                         </div>
+                        <div v-if="i === 4" class="md-layout md-gutter md-alignment-center dashboard-card-list">
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/cold.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.BATTERY_MIN_TEMPERATURE || 0 }}°C</div>
+                                        <div class="md-subhead">{{ translated.BATTERY_MIN_TEMPERATURE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/hot.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.BATTERY_MAX_TEMPERATURE || 0 }}°C</div>
+                                        <div class="md-subhead">{{ translated.BATTERY_MAX_TEMPERATURE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                                <md-card-header>
+                                    <md-card-media>
+                                        <img src="icons/temperature.svg">
+                                    </md-card-media>
+                                    <md-card-header-text>
+                                        <div class="md-title">{{ obd2Data.BATTERY_INLET_TEMPERATURE || 0 }}°C</div>
+                                        <div class="md-subhead">{{ translated.BATTERY_INLET_TEMPERATURE }}</div>
+                                    </md-card-header-text>
+                                </md-card-header>
+                            </md-card>
+                        </div>
                     </div>
                 </vueper-slide>
             </vueper-slides>
@@ -253,7 +288,10 @@
                             auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
                             dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
-                            dcBatteryPower: self.obd2Data.DC_BATTERY_POWER
+                            dcBatteryPower: self.obd2Data.DC_BATTERY_POWER,
+                            batteryMinTemperature: self.obd2Data.BATTERY_MIN_TEMPERATURE,
+                            batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
+                            batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE
                         }, false, err => {
                             self.syncEventEmitter(err, 'upload');
                             if (typeof callback === 'function') callback(err);
@@ -297,6 +335,9 @@
                         Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.dc_battery_voltage);
                         Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
                         Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.dc_battery_power);
+                        Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
+                        Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
+                        Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
                     });
                 });
             },
