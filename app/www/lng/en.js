@@ -151,5 +151,13 @@ export default {
     ESTABLISHED: 'Connection established',
     OBD2_ERROR: 'OBDII error. Re-initialization. Please wait',
     STANDBY_MODE_ACTIVATED: 'No activity detected. Entering standby mode',
-    STANDBY_MODE_DEACTIVATED: 'Leaving standby mode'
+    STANDBY_MODE_DEACTIVATED: 'Leaving standby mode',
+    GENERATE_QR: 'Generate QR code',
+    DOWNLOAD_QR: 'Download QR code',
+    DOWNLOAD_QR_TEXT: 'To use your QR code now, you have to sent to you by e-mail. So you can print it yourself. Now enter the mail address.',
+    SEND: 'Send',
+    DELETE_QR: 'Delete QR code',
+    DELETE_QR_TEXT: 'When deleting the QR code, the existing QR code becomes invalid immediately. This can not be undone. If you then create a new one, you will get a new code.',
+    DELETE: 'Delete',
+    INFO_QR: 'Imagine the following situation: You are driving to a charging station, but another electric vehicle is already charging there. Now it would be good to know when the driver is done with charging to be able to start yours. QRNotify allows you to view the current state of charge and the expected departure time via a QR code. In addition, notifications can be sent here so that the charging station can be cleared for others if necessary.'
 };

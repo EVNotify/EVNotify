@@ -88,6 +88,27 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    <!-- QR Delete Modal -->
+                    <md-dialog-confirm
+                        :md-active.sync="deleteQRDialog"
+                        :md-title="translated.DELETE_QR"
+                        :md-content="translated.DELETE_QR_TEXT"
+                        :md-confirm-text="translated.DELETE"
+                        :md-cancel-text="translated.CANCEL"
+                        @md-cancel="deleteQRDialog = false"
+                        @md-confirm="deleteQRDialog = false; deleteQR();"
+                    />
+                    <!-- QR Send Modal -->
+                    <md-dialog-prompt
+                        :md-active.sync="sendQRDialog"
+                        v-model="qrMail"
+                        :md-title="translated.DOWNLOAD_QR"
+                        :md-content="translated.DOWNLOAD_QR_TEXT"
+                        :md-confirm-text="translated.SEND"
+                        :md-cancel-text="translated.CANCEL"
+                        @md-cancel="sendQRDialog = false; qrMail=''"
+                        @md-confirm="sendQRDialog = false; sendQR();"
+                    />
                 </v-layout>
                 <md-subheader>{{ translated.GENERAL }}</md-subheader>
                 <md-list-item md-expand>
@@ -242,7 +263,12 @@
                     <md-icon md-src="icons/linked_camera.svg"></md-icon>
                     <span class="md-list-item-text">QRNotify</span>
                     <md-list slot="md-expand">
-                        <canvas id="qr" ref="qr"></canvas>
+                        <span class="md-body-2" style="white-space: initial; text-align: justify">{{ translated.INFO_QR }}</span>
+                        <hr>
+                        <md-button class="md-raised md-primary" v-if="!qr" @click="createQR()">{{ translated.GENERATE_QR }}</md-button>
+                        <canvas id="qr" ref="qr" style="margin: auto"></canvas>
+                        <md-button class="md-raised md-primary" v-if="qr" @click="sendQRDialog = true">{{ translated.DOWNLOAD_QR }}</md-button><br>
+                        <md-button class="md-raised md-accent" v-if="qr" @click="deleteQRDialog = true">{{ translated.DELETE_QR }}</md-button>
                     </md-list>
                 </md-list-item>
                 <p class="version" @click="countDevClick()">v.{{ version }}</p>
@@ -276,6 +302,7 @@
                 autobluetooth: true,
                 akey: '',
                 token: '',
+                qr: false,
                 passwordDialog: false,
                 invalidPassword: false,
                 password: '',
@@ -284,6 +311,9 @@
                 tokenResetDialog: false,
                 passwordChangeDialog: false,
                 telegramDialog: false,
+                deleteQRDialog: false,
+                sendQRDialog: false,
+                qrMail: '',
                 nextDialog: '',
                 devClick: 0,
                 version: window.VERSION
@@ -429,6 +459,46 @@
             },
             showBluetoothSettings() {
                 if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.showBluetoothSettings();
+            },
+            createQR() {
+                var self = this;
+
+                http.sendRequest('PUT', 'qr', {
+                    akey: self.akey,
+                    token: self.token
+                }, true, (err, code) => {
+                    if (!err && code) {
+                        self.qr = storage.setValue('qr', true);
+                        QRCode.toCanvas(self.$refs.qr, 'https://qr.evnotify.de?code=' + code, {
+                            errorCorrectionLevel: 'H'
+                        });
+                    }
+                });
+            },
+            sendQR() {
+                var self = this;
+
+                http.sendRequest('POST', 'sendqr', {
+                    akey: self.akey,
+                    token: self.token,
+                    email: self.qrMail
+                }, true, err => {
+                    self.qrMail = '';
+                });
+            },
+            deleteQR() {
+                var self = this;
+
+                http.sendRequest('DELETE', 'qr', {
+                    akey: self.akey,
+                    token: self.token
+                }, true, err => {
+                    if (!err) {
+                        self.qr = storage.setValue('qr', false);
+                        // clear qr code
+                        self.$refs.qr.getContext('2d').clearRect(0, 0, self.$refs.qr.width, self.$refs.qr.height);
+                    }
+                });
             }
         },
         components: {
@@ -443,6 +513,7 @@
             self.translated = translation.translatePage();
             self.akey = storage.getValue('akey');
             self.token = storage.getValue('token');
+            self.qr = storage.getValue('qr');
             self.settings = storage.getValue('settings', self.settings);
             self.autoboot = storage.getValue('autoboot');
             self.keepawake = storage.getValue('keepawake');
@@ -464,6 +535,9 @@
                     self.settings = storage.setValue('settings', res.settings);
                 }
             });
+        },
+        mounted() {
+            if (this.qr) this.createQR();
         }
     }
 </script>

@@ -151,5 +151,13 @@ export default {
     ESTABLISHED: 'Verbindung erfolgreich.',
     OBD2_ERROR: 'OBDII Fehler. Re-Initializierung. Bitte warten',
     STANDBY_MODE_ACTIVATED: 'Keine Aktivität festgestellt. Standby-Modus aktiviert',
-    STANDBY_MODE_DEACTIVATED: 'Standby-Modus wurde deaktiviert'
+    STANDBY_MODE_DEACTIVATED: 'Standby-Modus wurde deaktiviert',
+    GENERATE_QR: 'QR-Code generieren',
+    DOWNLOAD_QR: 'QR-Code herunterladen',
+    DOWNLOAD_QR_TEXT: 'Um Deinen QR-Code nun zu nutzen, lass ihn Dir per Mail zuschicken. So kannst Du ihn Dir ausdrucken. Gib nun die Mail-Adresse an.',
+    SEND: 'Senden',
+    DELETE_QR: 'QR-Code löschen',
+    DELETE_QR_TEXT: 'Beim Löschen des QR-Codes wird der bestehende QR-Code sofort ungültig. Dies kann nicht rückgängig gemacht werden. Wenn Du anschließend einen neuen erstellen solltest, kriegst Du einen neuen Code.',
+    DELETE: 'Löschen',
+    INFO_QR: 'Stell Dir folgende Situation vor: Du fährst zu einer Ladestation, doch ein anderes Elektrofahrzeug lädt dort bereits. Jetzt wäre es gut zu wissen, wann der Fahrer fertig ist mit Laden, um Deine Ladung starten zu können. QRNotify erlaubt es, den aktuellen Ladezustand und die voraussichtliche Abfahrtszeit über einen QR Code einzusehen. Außerdem können Benachrichtigungen hierüber verschickt werden, damit die Ladestation bei Bedarf für andere freigemacht werden kann.'
 }
