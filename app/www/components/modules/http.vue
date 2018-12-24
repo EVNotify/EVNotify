@@ -23,6 +23,10 @@
                     params = {
                         params
                     }; // special handling for GET requests
+                } else if (method === 'delete') {
+                    params = {
+                        body: params
+                    }; // special handling for DELETE requests
                 }
                 if (loadingIndicator) EventBus.$emit('loading', true);
                 Vue.http[method](RESTURL + fnc, params).then(response => {
