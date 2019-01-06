@@ -1,6 +1,7 @@
 <template></template>
 <script>
     import eventBus from './../modules/event.vue';
+    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
 
     export default {
@@ -124,9 +125,9 @@
                                 RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
                                 NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)), // 5th bit of charging bits,
                                 AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10, // 9th + 10th byte within fourth block divided by 10
-                                BATTERY_MIN_TEMPERATURE: parseInt(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
-                                BATTERY_MAX_TEMPERATURE: parseInt(extractedSecondData.slice(6, 8), 16), // fourth byte within 2nd block
-                                BATTERY_INLET_TEMPERATURE: parseInt(extractedThirdData.slice(4, 6), 16), // third byte within 3rd block
+                                BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
+                                BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(6, 8), 16), // fourth byte within 2nd block
+                                BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(4, 6), 16), // third byte within 3rd block
                                 DC_BATTERY_VOLTAGE: ((
                                         parseInt(
                                             extractedSecondData.slice(2, 4), 16 // second byte within 2nd block
@@ -135,9 +136,9 @@
                                         extractedSecondData.slice(4, 6), 16 // third byte within 2nd block
                                     )
                                 ) / 10,
-                                DC_BATTERY_CURRENT: (((parseInt(
-                                    (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
-                                )+2**15)%(2**16))-2**15)*0.1 // some binary conversion to get signed int from value,
+                                DC_BATTERY_CURRENT: helper.parseSigned(
+                                  (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
+                                ) * 0.1
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;

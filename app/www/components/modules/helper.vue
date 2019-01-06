@@ -5,7 +5,7 @@ export default {
      * @param {Number} timestamp the unix timestamp to format
      * @returns {String} the formatted timestamp string
      */
-    formatDate: (timestamp) => {
+    formatDate: timestamp => {
         var date = new Date(timestamp * 1000);
 
         if(!(date instanceof Date) || isNaN(date)) return '?';
@@ -28,7 +28,7 @@ export default {
      * @param {Number} time the time to convert
      * @returns {String} the formatted time string
     */
-    convertDecimalTime: function(time) {
+    convertDecimalTime: time => {
         if (isNaN(parseInt(time))) return '00:00';
 
         var sign = ((time < 0) ? '-' : ''),
@@ -36,6 +36,16 @@ export default {
             sec = Math.floor((Math.abs(time) * 60) % 60);
             
         return sign + (((min < 10) ? '0' : '')) + min + ':' + (((sec < 10) ? '0' : '')) + sec;
+    },
+    /**
+     * Converts given hexadecimal signed number to decimal
+     * @param {String} data the hexadecimal number as string
+     * @returns {Number} the converted signed number
+    */
+    parseSigned: data => {
+        var bits = data.length * 4;
+        
+        return ((parseInt(data, 16) + Math.pow(2, bits - 1)) % Math.pow(2, bits)) - Math.pow(2, bits - 1);
     }
 }
 </script>
