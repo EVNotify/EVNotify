@@ -105,7 +105,8 @@
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
                             chargingByte = extractedSecondData.slice(0, 2),
-                            notChargingIndicators = ['00', '01', '02', '03', '05', '07'],
+                            chargingIndicator = extractedFirstData.slice(12, 14), // seventh byte within first block
+                            notChargingIndicators = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'],
                             rapidPortIndicators = ['FB', 'FD', 'FE'],
                             normalPortIndicators = ['FF'],
                             fourthBlock = '7EC24',
@@ -126,8 +127,8 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                CHARGING: notChargingIndicators.indexOf(chargingByte) === -1 ? 1 : 0,
-                                NORMAL_CHARGE_PORT: normalPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
+                                CHARGING: notChargingIndicators.indexOf(chargingByte) === -1 ? chargingIndicator == '03' ? 1 : 0 : 0,
+                                NORMAL_CHARGE_PORT: normalPortIndicators.indexOf(chargingByte) !== -1 && chargingIndicator == '03' ? 1 : 0,
                                 RAPID_CHARGE_PORT: rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
                                 DC_BATTERY_CURRENT: (((parseInt(
                                     (extractedSecondData.slice(0, 2) + extractedSecondData.slice(2, 4)), 16 // concat first and second byte of second block
@@ -136,8 +137,8 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
-				// adjust for recuperation
-				if (parsedData.NORMAL_CHARGE_PORT && parsedData.CHARGING && extractedFirstData.slice(12, 14) === '03') parsedData.CHARGING = 0;
+                            // adjust for recuperation // QUESTION Do we need this? Is it working?!
+                            // if (parsedData.NORMAL_CHARGE_PORT && parsedData.CHARGING && extractedFirstData.slice(12, 14) === '03') parsedData.CHARGING = parsedData.NORMAL_CHARGE_PORT = 0;
                         }
                     }
                 } catch (err) {
