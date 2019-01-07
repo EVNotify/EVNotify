@@ -1,6 +1,7 @@
 <template></template>
 <script>
     import eventBus from './../modules/event.vue';
+    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
 
     export default {
