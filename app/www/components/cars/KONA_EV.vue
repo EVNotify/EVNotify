@@ -111,6 +111,8 @@
                             rapidPortIndicators = ['FB', 'FD', 'FE'],
                             normalPortIndicators = ['FF'],
                             fourthBlock = '7EC24',
+                            extractedThirdBlock = data.substring(data.indexOf(thirdBlock), data.indexOf(fourthBlock)),
+                            extractedThirdData = extractedThirdBlock.replace(thirdBlock, ''),
                             fifthBlock = '7EC25',
                             extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
                             extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
