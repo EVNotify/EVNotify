@@ -184,6 +184,7 @@
         <IONIQPHEV ref="IONIQ_PHEV"></IONIQPHEV>
         <SOULEV ref="SOUL_EV"></SOULEV>
         <KONAEV ref="KONA_EV"></KONAEV>
+        <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar></bottom-bar>
     </div>
@@ -204,6 +205,7 @@
     import IONIQPHEV from './../cars/IONIQ_PHEV.vue';
     import SOULEV from './../cars/SOUL_EV.vue';
     import KONAEV from './../cars/KONA_EV.vue';
+    import ZOEQ210 from './../cars/ZOE_Q210.vue';
 
     export default {
         data() {
@@ -227,7 +229,7 @@
                 chargingStartSOC: 0,
                 lastResponse: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV', 'ZOE_Q210'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -588,7 +590,8 @@
             IONIQHEV,
             IONIQPHEV,
             SOULEV,
-            KONAEV
+            KONAEV,
+            ZOEQ210
         },
         beforeDestroy() {
             this.clear();

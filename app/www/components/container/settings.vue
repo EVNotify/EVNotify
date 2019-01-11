@@ -25,6 +25,7 @@
                     <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
                     <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
                     <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
+                    <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
                 </md-select>
             </md-field>
             <md-field>
