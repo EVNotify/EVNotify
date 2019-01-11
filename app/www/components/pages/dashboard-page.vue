@@ -274,6 +274,7 @@
                     display: self.obd2Data.SOC_DISPLAY,
                     bms: self.obd2Data.SOC_BMS
                 }, false, err => {
+                    // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                     self.syncEventEmitter(err, 'upload');
                     if (!err) {
                         // push extended data
@@ -293,11 +294,12 @@
                             batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
                             batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE
                         }, false, err => {
+                            // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                             self.syncEventEmitter(err, 'upload');
                             if (typeof callback === 'function') callback(err);
-                        });
+                        }, 10000);
                     } else if (typeof callback === 'function') callback(err);
-                });
+                }, 10000);
             },
             pullData() {
                 var self = this;
@@ -307,6 +309,7 @@
                     akey: storage.getValue('akey'),
                     token: storage.getValue('token')
                 }, false, (err, res) => {
+                    // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                     var baseData = self.$refs[self.car].getBaseData();
 
                     self.syncEventEmitter(err, 'download');
@@ -323,6 +326,7 @@
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token')
                     }, false, (err, res) => {
+                    // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                         self.syncEventEmitter(err, 'download');
                         if (err || !res) return;
                         // update extended data
@@ -338,8 +342,8 @@
                         Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
-                    });
-                });
+                    }, 10000);
+                }, 10000);
             },
             startWatch() {
                 var self = this;
@@ -454,7 +458,9 @@
                                     timestamp: pos.timestamp,
                                     accuracy: pos.coords.accuracy
                                 }
-                            });
+                            }, err => { 
+                                // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
+                            }, 1000);
                         }, err => console.log(err), {
                             maximumAge: 2000,
                             timeout: 5000,

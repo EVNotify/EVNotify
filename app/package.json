@@ -32,7 +32,8 @@
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-insomnia": "git+https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "cordova-plugin-whitelist": "^1.3.3",
-    "mocha": "^5.0.0",
+    "postcss": "^7.0.8",
+    "rollup": "^0.68.2",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-commonjs": "^9.1.3",
     "rollup-plugin-node-resolve": "^3.3.0",
@@ -43,6 +44,18 @@
     "vue-template-compiler": "^2.5.16"
   },
   "scripts": {
-    "test": "mocha ../tests/*"
+    "test": "mocha-webpack --webpack-config ../tests/webpack.config.js --require ../tests/setup.js ../tests/**/*.js"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.28",
+    "jsdom": "^13.1.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^5.2.0",
+    "mocha-webpack": "^2.0.0-beta.0",
+    "vue": "^2.5.21",
+    "vue-loader": "^15.5.1",
+    "vue-resource-mock": "^0.0.11",
+    "webpack": "^4.28.4",
+    "webpack-node-externals": "^1.7.2"
   }
 }
