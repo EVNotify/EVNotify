@@ -65,6 +65,8 @@
                         data,
                         akey: storage.getValue('akey')
                     });
+                    // parse the data
+                    eventBus.$emit('obd2Data', self.parseData(data));
                 });
 
                 // initialize the dongle by sending the first command
