@@ -11,6 +11,7 @@
                 ],
                 inStandbyMode: false,
                 offset: 0,
+                response: '',
                 monitoring: false
             };
         },
@@ -25,6 +26,8 @@
                 // unsubscribe from previous listener
                 bluetoothSerial.unsubscribe();
                 bluetoothSerial.unsubscribeRawData();
+                // reset response
+                self.response = '';
                 // subscribe to data (will be used for monitoring init only)
                 bluetoothSerial.subscribe('>', data => {
                     if (self.inStandbyMode) return;
@@ -45,6 +48,8 @@
                         data.indexOf('BUFFERFULL') !== -1) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
+                        // reset response
+                        self.response = '';
                         // emit obd2 error
                         eventBus.$emit('obd2Error', data);
                     }
@@ -65,8 +70,10 @@
                         data,
                         akey: storage.getValue('akey')
                     });
-                    // parse the data
-                    eventBus.$emit('obd2Data', self.parseData(data));
+                    // concat the data and add them until we reached all bytes
+                    self.response += data;
+                    // parse the full response
+                    if (self.response.length >= 19) eventBus.$emit('obd2Data', self.parseData(self.response));
                 });
 
                 // initialize the dongle by sending the first command
@@ -78,16 +85,20 @@
                     baseData = self.getBaseData();
 
                 try {
-                    parsedData = {
-                        SOC_DISPLAY: parseInt(data.substring(data.indexOf('654') + 3).slice(6, 8), 16), // 4th byte in data block
-                        CHARGING: 1,
-                        SLOW_CHARGE_PORT: 1,
-                        NORMAL_CHARGE_PORT: 1,
-                        RAPID_CHARGE_PORT: 1
-                    };   
+                    if (data.indexOf('654') !== -1) {
+                        parsedData = {
+                            SOC_DISPLAY: parseInt(data.substring(data.indexOf('654') + 3).slice(6, 8), 16), // 4th byte in data block
+                            CHARGING: 1,
+                            SLOW_CHARGE_PORT: 1,
+                            NORMAL_CHARGE_PORT: 1,
+                            RAPID_CHARGE_PORT: 1
+                        };
+                    }
                 } catch (err) {
                     console.error(err);
                 }
+                // reset response again
+                self.response = '';
                 // extend with base data
                 Object.keys(baseData).forEach(key => parsedData[key] = baseData[key]);
                 console.log({
