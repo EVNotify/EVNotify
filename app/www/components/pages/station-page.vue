@@ -2,58 +2,103 @@
     <div>
         <toolbar></toolbar>
         <div class="content-within-page">
-            <md-tabs class="md-transparent" md-alignment="fixed">
-                <md-tab id="tab-list" :md-label="translated.LIST"></md-tab>
-                <md-tab id="tab-favorites" :md-label="translated.FAVORITES"></md-tab>
-                <md-tab id="tab-map" :md-label="translated.MAP"></md-tab>
-            </md-tabs>
-            <md-empty-state v-if="!stations.length" >
-                <strong class='md-empty-state-label'>{{ translated.STATIONS_EMPTY }}</strong>
-                <i class='md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default'><img src='icons/ev_station.svg' class='emptystationicon' /></i>
-                <p class="md-empty-state-description">{{ translated.STATIONS_EMPTY_DESCRIPTION_1 }}
-                    <br>{{ translated.STATIONS_EMPTY_DESCRIPTION_2 }}</p>
-            </md-empty-state>
-            <div v-if="stations.length">
-                <md-card md-with-hover v-for="(station, index) in stations" :key="index" class="station-card">
-                    <div @click="openStation(station.ge_id)">
-                        <md-ripple>
-                            <md-card-header>
-                                <div>
-                                    <div class="md-title">{{ station.name }}</div>
-                                    <img v-if="station.verified && !station.fault_report" src="icons/verified.svg"
-                                        class="status-icon">
-                                    <img v-if="station.fault_report" src="icons/error.svg" class="status-icon">
-                                    <img v-if="!station.fault_report && !station.verified" src="icons/unverified.svg"
-                                        class="status-icon">
-                                </div>
-                                <div class="md-subhead">
-                                    {{ station.address.street }}, {{ station.address.city }}
-                                </div>
-                            </md-card-header>
-
-                            <md-card-content>
-                                <ul class="plugs-list">
-                                    <li v-for="(chargepoint, index) in station.chargepoints" :key="index">
-                                        {{ chargepoint.count }}x {{ chargepoint.type }} [{{ chargepoint.power }}kW]
-                                    </li>
-                                </ul>
-                            </md-card-content>
-
-                            <md-card-actions>
-                                <div class="linear-distance">{{ translated.LINEAR_DISTANCE }}: <b>{{
-                                        parseFloat(station.distance).toFixed(2)}}km</b>
-                                </div>
-                                <md-button class="md-icon-button" @click="favorite(station, $event)">
-                                    <img src="icons/favorite_border.svg">
-                                </md-button>
-                                <md-button class="md-icon-button" @click="navigate(station, $event)">
-                                    <img src="icons/directions.svg">
-                                </md-button>
-                            </md-card-actions>
-                        </md-ripple>
+            <md-card v-if="station.ge_id">
+                <vueper-slides v-if="loadedPhotos" autoplay :infinite="false" class="station-slides">
+                    <vueper-slide v-for="(photo, index) in station.photos" :key="index">
+                        <div slot="slideContent">
+                            <img class="station-photo" :style="{backgroundImage: convertPhoto(photos[photo.id])}">
+                        </div>
+                    </vueper-slide>
+                </vueper-slides>
+                <md-card-media-cover md-solid>
+                    <md-card-area>
+                        <md-card-header>
+                            <span class="md-title">{{ station.name }}</span>
+                            <span class="md-subhead">{{ station.address.street }} <br> {{ station.address.postcode }}
+                                {{ station.address.city }} <br> {{ station.address.country }}</span>
+                            <div class="station-network-operator">
+                                {{ station.network }} ({{ station.operator }})
+                            </div>
+                            <div class="station-status">
+                                <img v-if="station.verified && !station.fault_report" src="icons/verified.svg">
+                                <img v-if="!station.verified && !station.fault_report" src="icons/unverified.svg">
+                                <b>
+                                    <span v-if="station.verified && !station.fault_report">{{ translated.VERIFIED }}</span>
+                                    <span v-if="!station.verified && !station.fault_report">{{ translated.UNVERIFIED }}</span>
+                                </b>
+                                <img v-if="station.fault_report" src="icons/error.svg">
+                                <b>
+                                    <span v-if="station.fault_report">{{ translated.MALFUNCTION }}</span>
+                                </b>
+                            </div>
+                        </md-card-header>
+                    </md-card-area>
+                </md-card-media-cover>
+                <md-card-content>
+                    <h3 class="md-subheading">{{ translated.PLUGS }}</h3>
+                    <ul>
+                        <li v-for="(chargepoint, index) in station.chargepoints" :key="index">
+                            {{ chargepoint.count }}x {{ chargepoint.type }} [{{ chargepoint.power }}kW]
+                        </li>
+                    </ul>
+                    <div class="md-subhead">
+                        <div v-if="station.cost.freecharging" class="status-overview-icon">
+                            <img src="icons/money_off.svg">
+                            <b><span>{{ translated.FREE_CHARGING }}</span></b>
+                        </div>
+                        <div v-if="station.cost.freeparking" class="status-overview-icon">
+                            <img src="icons/parking.svg">
+                            <b><span>{{ translated.FREE_PARKING }}</span></b>
+                        </div>
+                        <div v-if="station.barrierfree" class="status-overview-icon">
+                            <img src="icons/accessibility.svg">
+                            <b><span>{{ translated.BARRIERFREE }}</span></b>
+                        </div>
+                        <div v-if="station.openinghours['24/7']" class="status-overview-icon">
+                            <img src="icons/access_time.svg">
+                            <b><span>24/7</span></b>
+                        </div>
                     </div>
-                </md-card>
-            </div>
+                    <div style="clear: both"></div>
+                    <b>{{ translated.GENERAL }}:</b><br>{{ station.general_information || '-' }}<br>
+                    <b>{{ translated.PASTIME }}:</b><br>{{ station.ladeweile || '-' }}<br>
+                    <b>{{ translated.LOCATION_DESCRIPTION }}:</b><br>{{ station.location_description || '-' }}<br>
+                </md-card-content>
+                <md-card-content>
+                    <h3 class="md-subheading">{{ translated.COSTS }}</h3>
+                    <b>{{ translated.SHORT_DESCRIPTION }}:</b><br>{{ station.cost.description_short || '-'}}<br>
+                    <b>{{ translated.DESCRIPTION }}:</b><br>{{ station.cost.description_long || '-' }}<br>
+                </md-card-content>
+                <md-card-content>
+                    <h3 class="md-subheading">{{ translated.CHARGE_CARDS }}</h3>
+                    <span v-if="!station.chargecards.length">-</span>
+                    <ul>
+                        <li v-for="(card, index) in station.chargecards" :key="index">
+                            {{ getCard(card.id) }}
+                        </li>
+                    </ul>
+                </md-card-content>
+                <md-card-content>
+                    <h3 class="md-subheading">{{ translated.OPENING_HOURS }}</h3>
+                    <b>{{ translated.DESCRIPTION }}:</b><br>{{ station.openinghours.description || '-' }}<br>
+                    <div v-if="station.openinghours['24/7']">
+                        <img src="icons/access_time.svg">
+                        <b><span>24/7</span></b>
+                    </div>
+                    <div v-if="!station.openinghours['24/7']">
+                        <div v-for="(day, index) in Object.keys(station.openinghours.days)" :key="index">
+                            <span><b>{{ translated[day.toUpperCase()] }}:</b> {{
+                                formatOpeningTime(station.openinghours.days[day]) }}</span>
+                        </div>
+                    </div>
+                </md-card-content>
+                <md-card-content>
+                    <div id="station-map" ref="map"></div>
+                </md-card-content>
+                <md-card-content>
+                    {{ translated.SOURCE }}: <a href="https://goingelectric.de">GoingElectric.de</a>
+                </md-card-content>
+            </md-card>
         </div>
         <bottom-bar></bottom-bar>
     </div>
@@ -61,118 +106,174 @@
 
 <script>
     import http from './../modules/http.vue';
-    import toolbar from './../container/toolbar.vue';
-    import EventBus from './../modules/event.vue';
+    import eventBus from './../modules/event.vue';
     import translation from './../modules/translation.vue';
+    import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
-
     export default {
         data() {
             return {
+                station: {},
                 translated: {},
-                coords: {},
-                stations: []
+                photos: {},
+                loadedPhotos: false
             };
         },
+        watch: {
+            'station.photos': 'getPhotos'
+        },
         methods: {
-            openStation(id) {
-                this.$router.push({
-                    path: 'station',
-                    query: {
-                        id
+            formatOpeningTime(time) {
+                if (time === 'closed') return this.translated.CLOSED;
+                return time.replace('from', '').replace('till', '').replace('  ', '-');
+            },
+            getStation() {
+                var self = this;
+                // get station details
+                http.sendRequest('get', 'station', {
+                    id: self.$route.query.id
+                }, true, (err, station) => {
+                    if (!err && station) {
+                        self.station = station;
+                        setTimeout(() => window.scrollTo(0, 0), 200);
+                        // wait for cordova device to be ready - apply listener, if not ready yet
+                        eventBus.$off('deviceReady');
+                        if (self.$root.deviceReady) self.buildMap();
+                        else {
+                            eventBus.$on('deviceReady', function () {
+                                self.buildMap();
+                            });
+                        }
+                    } else {
+                        // TODO
                     }
                 });
             },
-            navigate(station, event) {
-                event.stopPropagation();
-                if (window.cordova && window.launchnavigator) {
-                    launchnavigator.navigate([
-                        station.coordinates.lat, station.coordinates.lng
-                    ]);
+            getCard(id) {
+                try {
+                    return this.$root.stationcards.filter(card => card.card_id === id)[0].name;
+                } catch (e) {
+                    return '?';
                 }
             },
-            favorite(station, event) {
-                event.stopPropagation();
-            },
-            getStations() {
-                var self = this;
-
-                navigator.geolocation.getCurrentPosition(posObj => {
-                    self.coords = posObj.coords;
-                    // retrieve stations
-                    http.sendRequest('get', 'stations', {
-                        lat: self.coords.latitude,
-                        lng: self.coords.longitude
-                    }, true, (err, stations) => {
-                        if (!err && Array.isArray(stations)) {
-                            self.stations = stations;
-                        } else {
-                            // TODO
-                        }
-                    });
-                }, err => {
-                    console.warn('could not resolve position');
-                    // TODO
-                }, {
-                    maximumAge: 2000,
-                    timeout: 5000,
-                    enableHighAccuracy: true
+            getPhotos() {
+                var self = this,
+                    cnt = 0;
+                self.station.photos.forEach(photo => {
+                    self.$http.get(RESTURL + 'stationphoto', {
+                        params: {
+                            id: photo.id
+                        },
+                        responseType: 'arraybuffer'
+                    }).then(response => {
+                        self.photos[photo.id] = response.body;
+                        if (++cnt === self.station.photos.length) self.loadedPhotos = true;
+                    }).catch(); // TODO
                 });
+            },
+            convertPhoto(photo) {
+                var binary = '',
+                    bytes = new Uint8Array(photo);
+                // convert the binary
+                for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+                return 'url("data:image/png;base64,' + btoa(binary) + '")';
+            },
+            buildMap() {
+                var self = this;
+                if (self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
+                    if (!window.plugin || !plugin.google || !plugin.google.maps) return;
+                    Vue.nextTick(() => {
+                        var map = plugin.google.maps.Map.getMap(document.getElementById('station-map')),
+                            maxPower = Math.max.apply(Math, (self.station.chargepoints.map(chargepoint => chargepoint.power))),
+                            icon = ((maxPower >= 50) ? 'fast' : ((maxPower >= 11)? 'normal' : 'slow'));
+                        map.moveCamera({
+                            target: {
+                                lat: self.station.coordinates.lat,
+                                lng: self.station.coordinates.lng
+                            },
+                            zoom: 17
+                        });
+                        // build the marker for the station
+                        map.addMarker({
+                            position: {
+                                lat: self.station.coordinates.lat,
+                                lng: self.station.coordinates.lng
+                            },
+                            icon: 'icons/ev_station_' + icon + '.svg', // determine speed to set color
+                            title: self.station.name,
+                            snippet: self.station.address.street + '<br>' + self.station.address.postcode +
+                                ' ' +
+                                self.station.address.city + '<br>' + self.station.address.country,
+                            animation: plugin.google.maps.Animation.BOUNCE
+                        });
+                    });
+                }
             }
         },
         components: {
             toolbar,
             bottomBar
         },
-        created() {
+        mounted() {
             var self = this;
-
-            this.translated = translation.translatePage();
-            // retrieve stations after cards has been cached
-            if (self.$root.stationcards.length) self.getStations();
-            else EventBus.$on('stationcardsCached', () => self.getStations());
+            self.translated = translation.translatePage();
+            if (self.$route.query.id) {
+                eventBus.$off('station_openInNew');
+                eventBus.$on('station_openInNew', () => {
+                    if (self.station.url) window.open('https:' + self.station.url, '_blank');
+                });
+                eventBus.$off('station_navigate');
+                eventBus.$on('station_navigate', () => {
+                    if (self.station.coordinates && window.cordova && window.launchnavigator) {
+                        launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
+                    }
+                });
+                eventBus.$off('stationcardsCached');
+                // retrieve station after cards has been cached
+                if (self.$root.stationcards.length) self.getStation();
+                else eventBus.$on('stationcardsCached', () => self.getStation());
+            }
         }
     }
 </script>
 
 <style scoped>
-    .station-card {
-        border-bottom: 1px solid #898989;
+    .vueperslides {
+        background-color: #4b4b4b;
     }
-
-    .station-card .md-card-header,
-    .station-card .md-card-content,
-    .station-card .md-card-actions {
-        padding-bottom: 0;
-        padding-top: 0;
+    .md-card-media-cover {
+        margin-top: 140px;
     }
-
-    .station-card .md-title {
-        width: calc(100% - 24px);
-        font-size: 20px;
-    }
-
-    .station-card .md-card-header {
-        margin-top: 8px;
-    }
-
-    .station-card .md-subhead {
-        font-style: italic;
-        font-weight: bold;
-    }
-
-    .station-card .status-icon {
-        position: absolute;
-        right: 0;
-        top: 20px;
-    }
-
-    .station-card .linear-distance {
+    .station-network-operator {
         position: absolute;
         left: 16px;
+        bottom: 8px;
+        font-style: italic;
+        font-size: 11px;
     }
+    .station-status {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+    }
+    .status-overview-icon {
+        float: left;
+    }
+    .station-photo {
+        min-height: 140px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 100vw;
+        background-position: center center;
+    }
+</style>
 
-    .plugs-list {
-        margin: 0;
+<style>
+    .vueperslides__arrows .vueperslides__arrow {
+        fill: #448aff;
+    }
+    #station-map {
+        width: 100%;
+        height: 500px;
     }
 </style>
