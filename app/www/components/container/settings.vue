@@ -58,7 +58,7 @@
                 <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
             </md-field>
             <md-field>
-                <md-icon md-src="icons/notifications_active.svg"></md-icon>
+                <img src="icons/notifications_active.svg" />
             <span>{{ translated.PUSH }}</span>
             <md-switch v-model="settings.push"></md-switch>
             </md-field>
