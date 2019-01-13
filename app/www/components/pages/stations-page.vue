@@ -7,7 +7,9 @@
                 <md-tab id="tab-favorites" :md-label="translated.FAVORITES"></md-tab>
                 <md-tab id="tab-map" :md-label="translated.MAP"></md-tab>
             </md-tabs>
-            <md-empty-state v-if="!stations.length" md-icon="icons/ev_station.svg" :md-label="translated.STATIONS_EMPTY">
+            <md-empty-state v-if="!stations.length" >
+                <strong class='md-empty-state-label'>{{ translated.STATIONS_EMPTY }}</strong>
+                <i class='md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default'><img src='icons/ev_station.svg' class='emptystationicon' /></i>
                 <p class="md-empty-state-description">{{ translated.STATIONS_EMPTY_DESCRIPTION_1 }}
                     <br>{{ translated.STATIONS_EMPTY_DESCRIPTION_2 }}</p>
             </md-empty-state>
