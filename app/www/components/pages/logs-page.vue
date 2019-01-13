@@ -21,7 +21,7 @@
                 </md-list-item>
             </md-list>
             <md-button v-if="logs.length" class="md-fab md-plain md-fab-bottom-right" @click="createLog()">
-                <md-icon md-src="icons/add.svg"></md-icon>
+                <img src='icons/white/add.svg' />
             </md-button>
         </div>
         <bottom-bar></bottom-bar>
