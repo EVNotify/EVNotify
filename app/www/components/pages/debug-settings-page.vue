@@ -11,7 +11,7 @@
                 </md-field>
                 <md-subheader>{{ translated.DEVICE }}</md-subheader>
                 <md-list-item>
-                    <md-icon md-src="icons/cloud.svg"></md-icon>
+                    <img src='icons/cloud.svg' />
                     <span class="md-list-item-text">{{ translated.FORCE_SYNC_MODES }}</span>
                     <md-switch v-model="debug.forceSyncModes"></md-switch>
                 </md-list-item>
