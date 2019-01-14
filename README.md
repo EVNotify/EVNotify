@@ -1,9 +1,9 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/GPlay97/EVNotify.png?columns=all)](https://waffle.io/GPlay97/EVNotify?utm_source=badge) [![Greenkeeper badge](https://badges.greenkeeper.io/EVNotify/EVNotify.svg)](https://greenkeeper.io/)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/EVNotify/EVNotify.png?columns=all)](https://waffle.io/EVNotify/EVNotify?utm_source=badge) [![Greenkeeper badge](https://badges.greenkeeper.io/EVNotify/EVNotify.svg)](https://greenkeeper.io/)
 # EVNotify
 EVNotify allows you to control your electric vehicle and let you notify when the specified preset state of charge has been achieved.
 
 ### Note:
-This repository contains the frontend/client source code. For the backend please visit: https://github.com/GPlay97/EVNotifyBackend.
+This repository contains the frontend/client source code. For the backend please visit: https://github.com/EVNotify/EVNotifyBackend.
 EVNotify is still in an early stage of development. Errors or unexpected behavior may occur. Furthermore, not all features may be implemented yet.
 Stay tuned and please report any issues or suggestions.
 
