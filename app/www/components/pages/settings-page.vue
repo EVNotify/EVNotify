@@ -228,7 +228,7 @@
                 </md-list-item>
                 <md-subheader>{{ translated.NOTIFICATIONS }}</md-subheader>
                 <md-list-item md-expand>
-                    <img src='icons/notifications.svg' />
+                    <img src='icons/notifications.svg' class='settingicon' />
                     <span class="md-list-item-text">{{ translated.NOTIFICATION_TYPES }}</span>
                     <md-list slot="md-expand">
                         <md-field>
