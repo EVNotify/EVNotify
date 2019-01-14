@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/GPlay97/EVNotify.png?columns=all)](https://waffle.io/GPlay97/EVNotify?utm_source=badge)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/GPlay97/EVNotify.png?columns=all)](https://waffle.io/GPlay97/EVNotify?utm_source=badge) [![Greenkeeper badge](https://badges.greenkeeper.io/EVNotify/EVNotify.svg)](https://greenkeeper.io/)
 # EVNotify
 EVNotify allows you to control your electric vehicle and let you notify when the specified preset state of charge has been achieved.
 
