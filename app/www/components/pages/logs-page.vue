@@ -9,8 +9,8 @@
             </md-tabs>
             <md-empty-state v-if="!logs.length" >
                 <strong class="md-empty-state-label">{{ translated.LOGS_EMPTY }}</strong>
-                <i class='md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default'>
-                    <img src='icons/view_list.svg' class='emptystationicon' />
+                <i class="md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default">
+                    <img src="icons/view_list.svg" class="emptystationicon" />
                 </i>
                 <p class="md-empty-state-description">{{ translated.LOGS_EMPTY_DESCRIPTION_1 }}
                     <br>{{ translated.LOGS_EMPTY_DESCRIPTION_2 }}</p>
@@ -25,7 +25,7 @@
                 </md-list-item>
             </md-list>
             <md-button v-if="logs.length" class="md-fab md-plain md-fab-bottom-right" @click="createLog()">
-                <img src='icons/white/add.svg' />
+                <img src="icons/white/add.svg" />
             </md-button>
         </div>
         <bottom-bar></bottom-bar>
