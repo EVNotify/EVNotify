@@ -25,7 +25,7 @@
         </div>
         <div class="md-toolbar-section-end" v-if="stationPage">
             <md-button class="md-icon-button">
-                <img src='icons/white/favorite_border.svg' />
+                <img src="icons/white/favorite_border.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="openInNew()">
                 <img src='icons/white/open_in_new.svg' />
