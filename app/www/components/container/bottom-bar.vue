@@ -2,7 +2,7 @@
     <md-bottom-bar md-type="shift" :md-active-item.sync="currentSelection">
         <md-bottom-bar-item id="bottom-bar-item-dashboard" :md-label="translated.DASHBOARD" to="/dashboard">
             <img src='icons/white/dashboard.svg' />
-            <span class='md-bottom-bar-label'>{{ translated.DASHBOARD }}</span>
+            <span class="md-bottom-bar-label">{{ translated.DASHBOARD }}</span>
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-logs" :md-label="translated.LOGS" to="/logs">
             <img src='icons/white/list.svg' />
