@@ -6,7 +6,7 @@
                 <img src="icons/white/power_off.svg" />
             </md-button>
             <md-button class="md-icon-button" :disabled="!forceSyncModes" @click="switchSyncMode()">
-                <img :src='syncModeIcon' />
+                <img :src="syncModeIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
                 <img :src='bluetoothIcon' />
