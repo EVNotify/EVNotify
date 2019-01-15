@@ -9,7 +9,7 @@
                 <img :src="syncModeIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <img :src='bluetoothIcon' />
+                <img :src="bluetoothIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
                 <img :src='syncIcon' />
