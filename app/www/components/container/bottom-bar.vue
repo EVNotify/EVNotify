@@ -10,7 +10,7 @@
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-stations" :md-label="translated.STATIONS" to="/stations">
             <img src="icons/white/ev_station.svg" />
-            <span class='md-bottom-bar-label'>{{ translated.STATIONS }}</span>
+            <span class="md-bottom-bar-label">{{ translated.STATIONS }}</span>
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-settings" :md-label="translated.SETTINGS" to="/settings">
             <img src='icons/white/settings.svg' />
