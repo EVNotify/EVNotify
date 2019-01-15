@@ -8,7 +8,7 @@
                 <md-tab id="tab-statistics" :md-label="translated.STATISTICS"></md-tab>
             </md-tabs>
             <md-empty-state v-if="!logs.length" >
-                <strong class='md-empty-state-label'>{{ translated.LOGS_EMPTY }}</strong>
+                <strong class="md-empty-state-label">{{ translated.LOGS_EMPTY }}</strong>
                 <i class='md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default'>
                     <img src='icons/view_list.svg' class='emptystationicon' />
                 </i>
