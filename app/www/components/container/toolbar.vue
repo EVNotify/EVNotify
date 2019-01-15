@@ -3,7 +3,7 @@
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
             <md-button class="md-icon-button" v-if="inStandbyMode" @click="disableStandbyMode()">
-                <img src='icons/white/power_off.svg' />
+                <img src="icons/white/power_off.svg" />
             </md-button>
             <md-button class="md-icon-button" :disabled="!forceSyncModes" @click="switchSyncMode()">
                 <img :src='syncModeIcon' />
