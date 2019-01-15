@@ -28,7 +28,7 @@
                 <img src="icons/white/favorite_border.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="openInNew()">
-                <img src='icons/white/open_in_new.svg' />
+                <img src="icons/white/open_in_new.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="navigate()">
                 <img src='icons/white/directions.svg' />
