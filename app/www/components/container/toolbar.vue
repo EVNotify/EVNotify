@@ -31,7 +31,7 @@
                 <img src="icons/white/open_in_new.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="navigate()">
-                <img src='icons/white/directions.svg' />
+                <img src="icons/white/directions.svg" />
             </md-button>
         </div>
     </md-toolbar>
