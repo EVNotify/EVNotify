@@ -15,7 +15,7 @@
                 <img :src="syncIcon" />
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
-                <img src='icons/white/bug_report.svg' />
+                <img src="icons/white/bug_report.svg" />
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage || logPage || debugSettingsPage">
