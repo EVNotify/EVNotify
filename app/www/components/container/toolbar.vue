@@ -20,7 +20,7 @@
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage || logPage || debugSettingsPage">
             <md-button class="md-icon-button" @click="emitSave()">
-                <img src='icons/white/save.svg' />
+                <img src="icons/white/save.svg" />
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="stationPage">
