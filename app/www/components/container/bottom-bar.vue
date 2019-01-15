@@ -14,7 +14,7 @@
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-settings" :md-label="translated.SETTINGS" to="/settings">
             <img src="icons/white/settings.svg" />
-            <span class='md-bottom-bar-label'>{{ translated.SETTINGS }}</span>
+            <span class="md-bottom-bar-label">{{ translated.SETTINGS }}</span>
         </md-bottom-bar-item>
     </md-bottom-bar>
 </template>
