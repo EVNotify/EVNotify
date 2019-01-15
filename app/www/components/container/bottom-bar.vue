@@ -6,7 +6,7 @@
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-logs" :md-label="translated.LOGS" to="/logs">
             <img src="icons/white/list.svg" />
-            <span class='md-bottom-bar-label'>{{ translated.LOGS }}</span>
+            <span class="md-bottom-bar-label">{{ translated.LOGS }}</span>
         </md-bottom-bar-item>
         <md-bottom-bar-item id="bottom-bar-item-stations" :md-label="translated.STATIONS" to="/stations">
             <img src='icons/white/ev_station.svg' />
