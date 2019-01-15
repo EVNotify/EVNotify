@@ -12,7 +12,7 @@
                 <img :src="bluetoothIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <img :src='syncIcon' />
+                <img :src="syncIcon" />
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
                 <img src='icons/white/bug_report.svg' />
