@@ -1,6 +1,9 @@
 export default {
+    TOUR_LOGIN_1: 'Welcome to EVNotify. EVNotify allows you to remotely monitor data of your electric vehicle!',
+    TOUR_LOGIN_2: 'To start directly, you can create an account here.',
+    TOUR_LOGIN_3: 'If you are already using EVNotify, you can use your existing credentials. Then you will be able to monitor the data from the car!',
     V1_MIGRATION_NOTE: 'If you have previously used V1, you need to create a new account.',
-    SLOGAN: 'Control your electric vehicle',
+    SLOGAN: 'Monitor your electric vehicle',
     NEXT: 'Next',
     CANCEL: 'Cancel',
     INVALID_CREDENTIALS: 'Invalid credentials. Please check your input.',

@@ -1,4 +1,7 @@
 export default {
+    TOUR_LOGIN_1: 'Willkommen zu EVNotify. EVNotify ermöglicht es Dir, Daten Deines Elektroautos aus der Ferne zu überwachen!',
+    TOUR_LOGIN_2: 'Um direkt starten zu können, kannst Du hier einen Account erstellen.',
+    TOUR_LOGIN_3: 'Falls Du EVNotify bereits nutzen solltest, kannst Du Dich hier mit Deinen bestehenden Zugangsdaten anmelden, um die Daten des Autos überwachen zu können!',
     V1_MIGRATION_NOTE: 'Falls Du zuvor V1 genutzt hast, musst Du einen neuen Account erstellen.',
     SLOGAN: 'Überwache Dein Elektroauto',
     NEXT: 'Weiter',

@@ -11,6 +11,9 @@
     align-items: center;
     justify-content: center;
   }
+  .v-step {
+    z-index: 99;
+  }
   .input-field-error {
     position: absolute;
     left: 0;
