@@ -10,8 +10,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    }
-    .input-field-error {
+  }
+  .v-step {
+    z-index: 99;
+  }
+  .input-field-error {
     position: absolute;
     left: 0;
     top: 50px;

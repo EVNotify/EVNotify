@@ -133,9 +133,9 @@
                                 CHARGING: notChargingIndicators.indexOf(chargingByte) === -1 ? chargingIndicator == '03' || rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0 : 0,
                                 NORMAL_CHARGE_PORT: normalPortIndicators.indexOf(chargingByte) !== -1 && chargingIndicator == '03' ? 1 : 0,
                                 RAPID_CHARGE_PORT: rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
-                                BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // sixth byte within 2nd block
+                                BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(10, 12), 16), // sixth byte within 2nd block
                                 BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
-                                BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(8, 10), 16), // sixth byte within 3rd block
+                                BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(10, 12), 16), // sixth byte within 3rd block
                                 DC_BATTERY_CURRENT: helper.parseSigned(
                                     (extractedSecondData.slice(0, 2) + extractedSecondData.slice(2, 4)), 16 // concat first and second byte of second block
                                 )*0.1, // some binary conversion to get signed int from value

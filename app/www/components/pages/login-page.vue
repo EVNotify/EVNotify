@@ -2,14 +2,15 @@
 <template>
     <div id="login" class="centered-container">
         <md-content class="md-elevation-3">
+            <v-tour name="login-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
             <div class="title">
                 <img src="img/logo.png">
-                <div class="md-title">EVNotify</div>
+                <div class="md-title v-step-1">EVNotify</div>
                 <div class="md-body-1">{{ translated.SLOGAN }}</div>
                 <div class="md-body-1 error-message" v-if="unexpectedError">{{ translated.UNEXPECTED_ERROR }}</div>
                 <div class="md-body-1 error-message" v-if="invalidCredentials">{{ translated.INVALID_CREDENTIALS }}</div>
             </div>
-            <form class="form">
+            <form class="form v-step-3">
                 <md-field>
                     <label>AKey</label>
                     <md-input v-model="akey" autofocus v-on:input="invalidCredentials=false" required></md-input>
@@ -21,7 +22,7 @@
                     <md-input v-model="password" type="password" v-on:input="invalidCredentials=false" required></md-input>
                 </md-field>
             </form>
-            <div class="actions md-layout md-alignment-center-space-between" style="float: left">
+            <div class="actions md-layout md-alignment-center-space-between v-step-2" style="float: left">
                 <router-link to="/register">{{ translated.CREATE_ACCOUNT }}</router-link>
             </div>
             <div class="actions md-layout md-alignment-center-space-between" style="float: right">
@@ -51,7 +52,22 @@
                 invalidCredentials: false,
                 password: '',
                 translated: {},
-                unexpectedError: false
+                unexpectedError: false,
+                steps: [{
+                    target: '.v-step-1',
+                    content: 'TOUR_LOGIN_1'
+                }, {
+                    target: '.v-step-2',
+                    content: 'TOUR_LOGIN_2'
+                }, {
+                    target: '.v-step-3',
+                    content: 'TOUR_LOGIN_3'
+                }],
+                tourCallbacks: {
+                    onStop: () => {
+                        storage.setValue('tour_completed_login', true);
+                    }
+                }
             };
         },
         components: {
@@ -100,7 +116,7 @@
                 });
             }
         },
-        created() {
+        mounted() {
             var self = this;
 
             // determine if we are already logged in - if so, skip login page
@@ -120,6 +136,12 @@
 
             // translate all labels in correct language
             self.translated = translation.translatePage();
+            // start the tour
+            if (!storage.getValue('tour_completed_login')) {
+                // translate the tour and start afterwards
+                self.steps.forEach(step => step.content = translation.translate(step.content));
+                self.$tours['login-tour'].start();
+            }
             // apply backbuttonPressed listener to handle exit or back
             eventBus.$off('backbuttonPressed');
             eventBus.$on('backbuttonPressed', function(e) {

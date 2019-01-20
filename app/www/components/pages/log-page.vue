@@ -172,34 +172,59 @@
                         labels: self.log.stats.sort((a, b) => a.timestamp - b.timestamp).map(stat => helper.formatDate(
                             stat.timestamp)),
                         datasets: [{
-                            label: 'SOC_DISPLAY',
-                            lineTension: 0,
-                            spanGaps: true,
-                            fill: false,
-                            borderColor: '#50f84f',
-                            data: self.log.stats.map(stat => stat.soc_display)
-                        }, {
-                            label: 'SOC_BMS',
-                            lineTension: 0,
-                            spanGaps: true,
-                            fill: false,
-                            borderColor: '#f83be1',
-                            data: self.log.stats.map(stat => stat.soc_bms)
-                        }, {
-                            label: 'DC_BATTERY_POWER',
-                            lineTension: 0,
-                            spanGaps: true,
-                            fill: false,
-                            borderColor: '#324df8',
-                            data: self.log.stats.map(stat => stat.dc_battery_power ? stat.dc_battery_power *
-                                ((charging) ? -1 : 1) : stat.dc_battery_power)
-                        }].concat(((charging) ? [] : [{
+                                label: 'SOC_DISPLAY',
+                                lineTension: 0,
+                                spanGaps: true,
+                                fill: false,
+                                borderColor: '#50f84f',
+                                data: self.log.stats.map(stat => stat.soc_display)
+                            }, {
+                                label: 'SOC_BMS',
+                                lineTension: 0,
+                                spanGaps: true,
+                                fill: false,
+                                borderColor: '#f83be1',
+                                data: self.log.stats.map(stat => stat.soc_bms)
+                            }, {
+                                label: 'DC_BATTERY_POWER',
+                                lineTension: 0,
+                                spanGaps: true,
+                                fill: false,
+                                borderColor: '#324df8',
+                                data: self.log.stats.map(stat => stat.dc_battery_power ? stat.dc_battery_power *
+                                    ((charging) ? -1 : 1) : stat.dc_battery_power)
+                            }, {
+                                label: 'Battery Temperature (Min) °C',
+                                borderColor: '#00b8ff',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_min_temperature),
+                            },
+                            {
+                                label: 'Battery Temperature (Max) °C',
+                                borderColor: '#b31212',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_max_temperature),
+                            },
+                            {
+                                label: 'Battery Temperature (Inlet) °C',
+                                borderColor: '#5a5252',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_inlet_temperature),
+                            }
+                        ].concat(((charging) ? [] : [{
                             label: 'GPS_SPEED',
                             borderColor: '#f81d28',
                             fill: false,
                             lineTension: 0,
                             spanGaps: true,
-                            data: self.log.stats.map(stats => stats.gps_speed ? stats.gps_speed * 3.6 : stats.gps_speed)
+                            data: self.log.stats.map(stats => stats.gps_speed ? stats.gps_speed *
+                                3.6 : stats.gps_speed)
                         }]))
                     },
                     options: {
@@ -294,7 +319,8 @@
     .v-picker__body.theme--dark {
         width: auto !important;
     }
-     #log-map {
+
+    #log-map {
         width: 100%;
         height: 500px;
     }
