@@ -93,10 +93,10 @@
                     </div>
                 </md-card-content>
                 <md-card-content>
-                    <div id="station-map" ref="map"></div>
+                    {{ translated.SOURCE }}: <a href="https://goingelectric.de">GoingElectric.de</a>
                 </md-card-content>
                 <md-card-content>
-                    {{ translated.SOURCE }}: <a href="https://goingelectric.de">GoingElectric.de</a>
+                    <div id="station-map" ref="map"></div>
                 </md-card-content>
             </md-card>
         </div>
@@ -185,33 +185,24 @@
             buildMap() {
                 var self = this;
 
-                if (self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
-                    if (!window.plugin || !plugin.google || !plugin.google.maps) return;
+                if (typeof MAPBOX_TOKEN === 'string' && self.station.coordinates != null && self.station.coordinates.lat && self.station.coordinates.lng) {
+                    // Wait one tick to let Vue update the DOM to be rendered correctly, before acccesing the map
                     Vue.nextTick(() => {
-                        var map = plugin.google.maps.Map.getMap(document.getElementById('station-map')),
+                        var map = L.map('station-map').setView([self.station.coordinates.lat, self.station.coordinates.lng], 17),
                             maxPower = Math.max.apply(Math, (self.station.chargepoints.map(chargepoint => chargepoint.power))),
                             icon = ((maxPower >= 50) ? 'fast' : ((maxPower >= 11)? 'normal' : 'slow'));
 
-                        map.moveCamera({
-                            target: {
-                                lat: self.station.coordinates.lat,
-                                lng: self.station.coordinates.lng
-                            },
-                            zoom: 17
-                        });
-                        // build the marker for the station
-                        map.addMarker({
-                            position: {
-                                lat: self.station.coordinates.lat,
-                                lng: self.station.coordinates.lng
-                            },
-                            icon: 'icons/ev_station_' + icon + '.svg', // determine speed to set color
-                            title: self.station.name,
-                            snippet: self.station.address.street + '<br>' + self.station.address.postcode +
-                                ' ' +
-                                self.station.address.city + '<br>' + self.station.address.country,
-                            animation: plugin.google.maps.Animation.BOUNCE
-                        });
+                        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                            maxZoom: 18,
+                            id: 'mapbox.streets',
+                            accessToken: MAPBOX_TOKEN
+                        }).addTo(map);
+                        
+                        L.marker([self.station.coordinates.lat, self.station.coordinates.lng], {
+                            icon: L.icon({iconUrl: 'icons/ev_station_' + icon + '.svg'}), // determine speed to set color
+                            title: self.station.name
+                        }).addTo(map).bindPopup(self.station.address.street + '<br>' + self.station.address.postcode + ' ' + self.station.address.city + '<br>' + self.station.address.country).openPopup();
                     });
                 }
             }
