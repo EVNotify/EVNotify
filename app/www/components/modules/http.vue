@@ -10,33 +10,53 @@
          * @param {Object} params the params to send
          * @param {Boolean} loadingIndicator whether or not a loading indicator should be visible
          * @param {Function} callback callback function
+         * @param {Number} [timeout] the timeout for the request
          */
-        sendRequest(method, fnc, params, loadingIndicator, callback) {
+        sendRequest(method, fnc, params, loadingIndicator, callback, timeout) {
             var allowedMethods = ['get', 'post', 'put', 'delete'];
 
             method = ((typeof method === 'string') ? method.toLowerCase() : '');
 
             if (allowedMethods.includes(method)) {
+                var third = null;
                 if (typeof fnc !== 'string') fnc = '';
                 if (params == null || typeof params !== 'object') params = {}; // ensure that it is a valid object
+                if (timeout == null || typeof timeout !== 'number') timeout = 0;
                 if (method === 'get') {
                     params = {
-                        params
+                        params,
+                        timeout,
                     }; // special handling for GET requests
                 } else if (method === 'delete') {
                     params = {
-                        body: params
+                        body: params,
+                        timeout,
                     }; // special handling for DELETE requests
+                } else {
+                    third = {
+                        timeout,
+                    };
                 }
                 if (loadingIndicator) EventBus.$emit('loading', true);
-                Vue.http[method](RESTURL + fnc, params).then(response => {
+                Vue.http[method](RESTURL + fnc, params, third).then(response => {
                     EventBus.$emit('loading', false);
                     if (typeof callback === 'function') callback(null, response.body || response);
                 }, err => {
-                    EventBus.$emit('loading', false);
+                    if (loadingIndicator) EventBus.$emit('loading', false);
                     // global events for critical errors
-                    if (err && err.status === 401) EventBus.$emit('unauthorized');
-                    else if (err && err.status === 500) EventBus.$emit('internalerror');
+                    if (err) {
+                        switch(err.status) {
+                        case 0:
+                            EventBus.$emit('timeout');
+                            break;
+                        case 401:
+                            EventBus.$emit('unauthorized');
+                            break;
+                        case 500:
+                            EventBus.$emit('internalerror');
+                            break;
+                        }
+                    }
                     if (typeof callback === 'function') callback(err);
                 });
             } else if (typeof callback === 'function') callback(405);
