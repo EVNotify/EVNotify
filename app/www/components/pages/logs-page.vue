@@ -7,7 +7,11 @@
                 <md-tab id="tab-drives" :md-label="translated.DRIVES"></md-tab>
                 <md-tab id="tab-statistics" :md-label="translated.STATISTICS"></md-tab>
             </md-tabs>
-            <md-empty-state v-if="!logs.length" md-icon="icons/view_list.svg" :md-label="translated.LOGS_EMPTY">
+            <md-empty-state v-if="!logs.length" >
+                <strong class="md-empty-state-label">{{ translated.LOGS_EMPTY }}</strong>
+                <i class="md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default">
+                    <img src="icons/view_list.svg" class="emptystationicon" />
+                </i>
                 <p class="md-empty-state-description">{{ translated.LOGS_EMPTY_DESCRIPTION_1 }}
                     <br>{{ translated.LOGS_EMPTY_DESCRIPTION_2 }}</p>
                 <md-button class="md-primary md-raised" @click="createLog()">{{ translated.LOGS_CREATE }}</md-button>
@@ -21,7 +25,7 @@
                 </md-list-item>
             </md-list>
             <md-button v-if="logs.length" class="md-fab md-plain md-fab-bottom-right" @click="createLog()">
-                <md-icon md-src="icons/add.svg"></md-icon>
+                <img src="icons/white/add.svg" />
             </md-button>
         </div>
         <bottom-bar></bottom-bar>

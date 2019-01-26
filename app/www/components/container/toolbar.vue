@@ -3,35 +3,35 @@
         <span class="md-title">EVNotify</span>
         <div class="md-toolbar-section-end" v-if="dashboardPage">
             <md-button class="md-icon-button" v-if="inStandbyMode" @click="disableStandbyMode()">
-                <md-icon md-src="icons/power_off.svg"></md-icon>
+                <img src="icons/white/power_off.svg" />
             </md-button>
             <md-button class="md-icon-button" :disabled="!forceSyncModes" @click="switchSyncMode()">
-                <md-icon :md-src="syncModeIcon"></md-icon>
+                <img :src="syncModeIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon :md-src="bluetoothIcon"></md-icon>
+                <img :src="bluetoothIcon" />
             </md-button>
             <md-button class="md-icon-button" :disabled="true">
-                <md-icon :md-src="syncIcon"></md-icon>
+                <img :src="syncIcon" />
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
-                <md-icon md-src="icons/bug_report.svg"></md-icon>
+                <img src="icons/white/bug_report.svg" />
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage || logPage || debugSettingsPage">
             <md-button class="md-icon-button" @click="emitSave()">
-                <md-icon md-src="icons/save.svg"></md-icon>
+                <img src="icons/white/save.svg" />
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="stationPage">
             <md-button class="md-icon-button">
-                <md-icon md-src="icons/favorite_border.svg"></md-icon>
+                <img src="icons/white/favorite_border.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="openInNew()">
-                <md-icon md-src="icons/open_in_new.svg"></md-icon>
+                <img src="icons/white/open_in_new.svg" />
             </md-button>
             <md-button class="md-icon-button" @click="navigate()">
-                <md-icon md-src="icons/directions.svg"></md-icon>
+                <img src="icons/white/directions.svg" />
             </md-button>
         </div>
     </md-toolbar>
@@ -51,9 +51,9 @@ export default {
             logPage: false,
             forceSyncModes: false,
             inStandbyMode: false,
-            bluetoothIcon: 'icons/bluetooth_disabled.svg',
-            syncIcon: 'icons/sync_disabled.svg',
-            syncModeIcon: 'icons/cloud_off.svg'
+            bluetoothIcon: 'icons/white/bluetooth_disabled.svg',
+            syncIcon: 'icons/white/sync_disabled.svg',
+            syncModeIcon: 'icons/white/cloud_off.svg'
         };
     },
     methods: {
@@ -73,10 +73,10 @@ export default {
         },
         switchSyncMode() {
             if (this.syncModeIcon.indexOf('upload') !== -1) {
-                this.syncModeIcon = 'icons/cloud_download.svg';
+                this.syncModeIcon = 'icons/white/cloud_download.svg';
                 eventBus.$emit('forcedSyncMode', storage.setValue('lstSyncMode', 'download'));
             } else {
-                this.syncModeIcon = 'icons/cloud_upload.svg';
+                this.syncModeIcon = 'icons/white/cloud_upload.svg';
                 eventBus.$emit('forcedSyncMode', storage.setValue('lstSyncMode', 'upload'));
             }
         },
@@ -102,9 +102,9 @@ export default {
         eventBus.$off('syncChanged');
         eventBus.$off('syncModeChanged');
         eventBus.$off('standby');
-        eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/bluetooth_' + state + '.svg');
-        eventBus.$on('syncChanged', state => self.syncIcon = 'icons/sync_' + state + '.svg');
-        eventBus.$on('syncModeChanged', state => self.syncModeIcon = 'icons/cloud_' + state + '.svg');
+        eventBus.$on('bluetoothChanged', state => self.bluetoothIcon = 'icons/white/bluetooth_' + state + '.svg');
+        eventBus.$on('syncChanged', state => self.syncIcon = 'icons/white/sync_' + state + '.svg');
+        eventBus.$on('syncModeChanged', state => self.syncModeIcon = 'icons/white/cloud_' + state + '.svg');
         eventBus.$on('standby', () => self.inStandbyMode = true);
     }
 }

@@ -110,7 +110,6 @@
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
-
     export default {
         data() {
             return {
@@ -130,7 +129,6 @@
             },
             getStation() {
                 var self = this;
-
                 // get station details
                 http.sendRequest('get', 'station', {
                     id: self.$route.query.id
@@ -161,7 +159,6 @@
             getPhotos() {
                 var self = this,
                     cnt = 0;
-
                 self.station.photos.forEach(photo => {
                     self.$http.get(RESTURL + 'stationphoto', {
                         params: {
@@ -177,7 +174,6 @@
             convertPhoto(photo) {
                 var binary = '',
                     bytes = new Uint8Array(photo);
-
                 // convert the binary
                 for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
                 return 'url("data:image/png;base64,' + btoa(binary) + '")';
@@ -213,7 +209,6 @@
         },
         mounted() {
             var self = this;
-
             self.translated = translation.translatePage();
             if (self.$route.query.id) {
                 eventBus.$off('station_openInNew');
@@ -239,11 +234,9 @@
     .vueperslides {
         background-color: #4b4b4b;
     }
-
     .md-card-media-cover {
         margin-top: 140px;
     }
-
     .station-network-operator {
         position: absolute;
         left: 16px;
@@ -251,17 +244,14 @@
         font-style: italic;
         font-size: 11px;
     }
-
     .station-status {
         position: absolute;
         right: 16px;
         bottom: 16px;
     }
-
     .status-overview-icon {
         float: left;
     }
-
     .station-photo {
         min-height: 140px;
         background-repeat: no-repeat;
@@ -275,7 +265,6 @@
     .vueperslides__arrows .vueperslides__arrow {
         fill: #448aff;
     }
-
     #station-map {
         width: 100%;
         height: 500px;

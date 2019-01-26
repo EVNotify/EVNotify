@@ -112,7 +112,7 @@
                 </v-layout>
                 <md-subheader>{{ translated.GENERAL }}</md-subheader>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/language.svg"></md-icon>
+                    <img src="icons/language.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.LANGUAGE}}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -125,13 +125,13 @@
                     </md-list>
                 </md-list-item>
                 <md-list-item>
-                    <md-icon md-src="icons/bug_report.svg"></md-icon>
+                    <img src="icons/bug_report.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.ERROR_TRACKING }}</span>
                     <md-switch v-model="errortracking"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.USER }}</md-subheader>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/account_circle.svg"></md-icon>
+                    <img src="icons/account_circle.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.CREDENTIALS }}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -162,7 +162,7 @@
                 </md-list-item>
                 <md-subheader>{{ translated.CAR}}</md-subheader>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/car.svg"></md-icon>
+                    <img src="icons/car.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.CAR_SELECTION }}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -180,7 +180,7 @@
                     </md-list>
                 </md-list-item>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/ev_station.svg"></md-icon>
+                    <img src="icons/ev_station.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.CONSUMPTION }}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -192,13 +192,13 @@
                 </md-list-item>
                 <md-subheader>{{ translated.SYNC }}</md-subheader>
                 <md-list-item>
-                    <md-icon md-src="icons/location_on.svg"></md-icon>
+                    <img src="icons/location_on.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.SYNC_LOCATION }}</span>
                     <md-switch v-model="locationsync"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.DEVICES }}</md-subheader>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/bluetooth_connected.svg"></md-icon>
+                    <img src="icons/bluetooth_connected.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.OBD2_DEVICE }}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -212,43 +212,43 @@
                     </md-list>
                 </md-list-item>
                 <md-list-item>
-                    <md-icon md-src="icons/location_on.svg"></md-icon>
+                    <img src="icons/location_on.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.BLUETOOTH_AUTO_ENABLE }}</span>
                     <md-switch v-model="autobluetooth"></md-switch>
                 </md-list-item>
                 <md-list-item>
-                    <md-icon md-src="icons/settings_brightness.svg"></md-icon>
+                    <img src="icons/settings_brightness.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.KEEPAWAKE }}</span>
                     <md-switch v-model="keepawake"></md-switch>
                 </md-list-item>
                 <md-list-item>
-                    <md-icon md-src="icons/launch.svg"></md-icon>
+                    <img src="icons/launch.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.AUTOBOOT }}</span>
                     <md-switch v-model="autoboot"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.NOTIFICATIONS }}</md-subheader>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/notifications.svg"></md-icon>
+                    <img src="icons/notifications.svg" class="settingicon" />
                     <span class="md-list-item-text">{{ translated.NOTIFICATION_TYPES }}</span>
                     <md-list slot="md-expand">
                         <md-field>
-                            <md-icon md-src="icons/mail.svg"></md-icon>
+                            <img src="icons/mail.svg" class="settingicon"/>
                             <label for="email">{{ translated.EMAIL }}</label>
                             <md-input v-model="settings.email" type="email" placeholder="mail@example.com"></md-input>
                         </md-field>
                         <md-list-item>
-                            <md-icon md-src="icons/notifications_active.svg"></md-icon>
+                            <img src="icons/notifications_active.svg" class="settingicon"/>
                             <span class="md-list-item">{{ translated.PUSH }}</span>
                             <md-switch v-model="settings.push"></md-switch>
                         </md-list-item>
                         <md-list-item>
-                            <md-icon md-src="icons/message.svg"></md-icon>
+                            <img src="icons/message.svg" class="settingicon"/>
                             <span class="md-list-item telegram-linking-text" @click="telegramDialog = true">{{ translated.TELEGRAM_LINKING }}</span>
                         </md-list-item>
                     </md-list>
                 </md-list-item>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/notifications_active.svg"></md-icon>
+                    <img src="icons/notifications_active.svg" class="settingicon"/>
                     <span class="md-list-item-text">{{ translated.NOTIFICATION_THRESHOLD }}</span>
                     <md-list slot="md-expand">
                         <md-field>
@@ -261,7 +261,7 @@
                     </md-list>
                 </md-list-item>
                 <md-list-item md-expand>
-                    <md-icon md-src="icons/linked_camera.svg"></md-icon>
+                    <img src="icons/linked_camera.svg" class="settingicon"/>
                     <span class="md-list-item-text">QRNotify</span>
                     <md-list slot="md-expand">
                         <span class="md-body-2" style="white-space: initial; text-align: justify">{{ translated.INFO_QR }}</span>
