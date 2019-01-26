@@ -105,11 +105,7 @@
                             thirdBlock = '7EC23',
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
-                            chargingByte = extractedSecondData.slice(0, 2),
-                            chargingIndicator = extractedFirstData.slice(12, 14), // seventh byte within first block
-                            notChargingIndicators = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'],
-                            rapidPortIndicators = ['FB', 'FD', 'FE'],
-                            normalPortIndicators = ['FF'],
+                            chargingBits = (parseInt(extractedSecondData.slice(2, 4), 16) >>> 0).toString(2), // second byte within 2nd block in binary
                             fourthBlock = '7EC24',
                             extractedThirdBlock = data.substring(data.indexOf(thirdBlock), data.indexOf(fourthBlock)),
                             extractedThirdData = extractedThirdBlock.replace(thirdBlock, ''),
@@ -118,6 +114,8 @@
                             extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
                         if (extractedFirstData && extractedSecondData && extractedFourthData) {
+                            // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
+                            chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
                             parsedData = {
                                 SOC_BMS: parseInt(
                                     extractedFirstData.slice(2, 4), 16
@@ -130,9 +128,9 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                CHARGING: notChargingIndicators.indexOf(chargingByte) === -1 ? chargingIndicator == '03' || rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0 : 0,
-                                NORMAL_CHARGE_PORT: normalPortIndicators.indexOf(chargingByte) !== -1 && chargingIndicator == '03' ? 1 : 0,
-                                RAPID_CHARGE_PORT: rapidPortIndicators.indexOf(chargingByte) !== -1 ? 1 : 0,
+                                CHARGING: chargingBits[0],
+                                NORMAL_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) === '03', // charging and seventh byte is 03
+                                RAPID_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) !== '03',
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(10, 12), 16), // sixth byte within 2nd block
                                 BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
                                 BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(10, 12), 16), // sixth byte within 3rd block
@@ -143,8 +141,6 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
-                            // adjust for recuperation // QUESTION Do we need this? Is it working?!
-                            // if (parsedData.NORMAL_CHARGE_PORT && parsedData.CHARGING && extractedFirstData.slice(12, 14) === '03') parsedData.CHARGING = parsedData.NORMAL_CHARGE_PORT = 0;
                         }
                     }
                 } catch (err) {
