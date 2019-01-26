@@ -247,20 +247,22 @@
                         };
                     });
 
-                if (!window.plugin || !plugin.google || !plugin.google.maps) return;
-                Vue.nextTick(() => {
-                    var map = plugin.google.maps.Map.getMap(document.getElementById('log-map'), {
-                        camera: {
-                            target: coords
-                        }
-                    });
+                if(!coords.length || typeof MAPBOX_TOKEN !== 'string') return;
 
-                    map.addPolyline({
-                        points: coords,
-                        color: '#324df8',
-                        width: 5,
-                        geodesic: true
-                    })
+                // Wait one tick to let Vue update the DOM to be rendered correctly, before acccesing the map
+                Vue.nextTick(() => {
+                    var map = L.map('log-map');
+
+                    map.fitBounds(L.polyline(coords, {
+                        color: '#4589fc'
+                    }).addTo(map).getBounds());
+
+                    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox.streets',
+                        accessToken: MAPBOX_TOKEN
+                    }).addTo(map);
                 });
             }
         },
