@@ -7,5 +7,20 @@
         <transition name="fade">
             <router-view></router-view>
         </transition>
+        <md-dialog-alert :md-active.sync="$root.updateAvailable" :md-title="updateTitle" :md-content="updateText" />
     </div>
 </template>
+
+<script>
+    import eventBus from './../modules/event.vue';
+    import translation from './../modules/translation.vue';
+
+    export default {
+        data() {
+            return {
+                updateTitle: translation.translate('UPDATE_AVAILABLE_TITLE'),
+                updateText: translation.translate('UPDATE_AVAILABLE_TEXT')
+            };
+        }
+    }
+</script>

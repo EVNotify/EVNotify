@@ -1,4 +1,6 @@
 export default {
+    UPDATE_AVAILABLE_TITLE: 'New update',
+    UPDATE_AVAILABLE_TEXT: 'A new update is now available. Please update the app to take advantage of the latest features and fixes.',
     TOUR_LOGIN_1: 'Welcome to EVNotify. EVNotify allows you to remotely monitor data of your electric vehicle!',
     TOUR_LOGIN_2: 'To start directly, you can create an account here.',
     TOUR_LOGIN_3: 'If you are already using EVNotify, you can use your existing credentials. Then you will be able to monitor the data from the car!',
