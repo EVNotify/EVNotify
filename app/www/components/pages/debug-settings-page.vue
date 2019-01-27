@@ -15,6 +15,22 @@
                     <span class="md-list-item-text">{{ translated.FORCE_SYNC_MODES }}</span>
                     <md-switch v-model="debug.forceSyncModes"></md-switch>
                 </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">PERSISTENT_NOTIFICATION</span>
+                    <md-switch v-model="debug.persistentNotification"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">REALTIME_SYNC</span>
+                    <md-switch v-model="debug.realtimeSync"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">AUTO_WAKEUP</span>
+                    <md-switch v-model="debug.autoWakeup"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">PAUSE_LOCATION_SYNC_ON_CHARGE</span>
+                    <md-switch v-model="debug.pauseLocationSyncOnCharge"></md-switch>
+                </md-list-item>
             </form>
         </md-list>
         <snackbar ref="snackbar"></snackbar>
