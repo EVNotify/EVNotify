@@ -460,7 +460,7 @@
                                     timestamp: pos.timestamp,
                                     accuracy: pos.coords.accuracy
                                 }
-                            }, err => { 
+                            }, false, err => { 
                                 // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
                             }, 2000);
                         }, err => console.log(err), {
