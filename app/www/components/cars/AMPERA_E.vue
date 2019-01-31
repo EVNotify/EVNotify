@@ -22,6 +22,9 @@
                 eventBus.$off('wakeup');
                 eventBus.$on('wakeup', () => self.inStandbyMode = false);
 
+                // unsubscribe from prior existing listener
+                bluetoothSerial.unsubscribe();
+
                 // subscribe to data
                 bluetoothSerial.subscribe('>', data => {
                     if (self.inStandbyMode) return;
@@ -51,15 +54,18 @@
                         setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
+
+                // initialize the dongle by sending the first command
+                bluetoothSerial.write(self.initCMD[self.offset] + '\r');
             },
             parseData(data) {
                 var self = this,
-                    parseData = {},
+                    parsedData = {},
                     baseData = self.getBaseData();
 
                 try {
                     if (data.indexOf('415B') !== -1) {
-                        parseData = {
+                        parsedData = {
                             SOC_DISPLAY: (parseInt(data.substr(data.indexOf('415B'), 6).slice(-2), 16) * 100 / 255).toFixed(2), // following 2 bytes from response after 415B
                             CHARGING: 1, // TODO
                             SLOW_CHARGE_PORT: 1, // TODO
