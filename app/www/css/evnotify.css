@@ -35,6 +35,8 @@
     }
     .md-snackbar.md-position-center.md-theme-default {
     bottom: 56px;
+    margin-bottom:env(safe-area-inset-bottom); /* iOS 11.0 */
+    margin-bottom: constant(safe-area-inset-top); /* iOS 11.0 */
     }
     .content-within-page {
     height: 90%;
