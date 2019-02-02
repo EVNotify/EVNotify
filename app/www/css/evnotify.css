@@ -23,11 +23,15 @@
     .md-toolbar.md-theme-default.md-primary {
     position: fixed;
     z-index: 6;
+    padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
+    padding-top: env(safe-area-inset-top); /* iOS 11.2 */
     }
     .md-bottom-bar.md-theme-default.md-type-shift {
     position: fixed;
     bottom: 0;
     z-index: 5;
+    padding-bottom:env(safe-area-inset-bottom); /* iOS 11.0 */
+    padding-bottom: constant(safe-area-inset-top); /* iOS 11.0 */
     }
     .md-snackbar.md-position-center.md-theme-default {
     bottom: 56px;
