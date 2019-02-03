@@ -1,7 +1,38 @@
+
+
+@media screen
+and (device-aspect-ratio: 40/71)
+and (orientation: portrait){
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+
+@media screen
+and (device-aspect-ratio: 375/667)
+and (orientation: portrait) {
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+
+
+
 @media only screen
 and (device-width : 414px)
 and (device-height : 896px)
-and (-webkit-device-pixel-ratio : 2) {
+and (-webkit-device-pixel-ratio : 2)
+and (orientation: portrait) {
     #app{
         padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
         padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
@@ -24,8 +55,6 @@ and (-webkit-device-pixel-ratio : 2) {
     }
     
     .content-within-page {
-        height: 90%;
-        padding: 56px 0 56px 0;
         padding-top: env(safe-area-inset-top);/* iOS 11.2 */
         padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
     }
@@ -59,7 +88,8 @@ and (-webkit-device-pixel-ratio : 2) {
 @media only screen
 and (device-width : 375px)
 and (device-height : 812px)
-and (-webkit-device-pixel-ratio : 3) {
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: portrait) {
     #app{
         padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
         padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
@@ -87,8 +117,6 @@ and (-webkit-device-pixel-ratio : 3) {
     }
     
     .content-within-page {
-        height: 90%;
-        padding: 56px 0 56px 0;
         padding-top: env(safe-area-inset-top);/* iOS 11.2 */
         padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
     }
@@ -122,7 +150,8 @@ and (-webkit-device-pixel-ratio : 3) {
 @media only screen
 and (device-width : 414px)
 and (device-height : 896px)
-and (-webkit-device-pixel-ratio : 3) {
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: portrait){
     #app{
         padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
         padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
@@ -150,8 +179,6 @@ and (-webkit-device-pixel-ratio : 3) {
     }
     
     .content-within-page {
-        height: 90%;
-        padding: 56px 0 56px 0;
         padding-top: env(safe-area-inset-top);/* iOS 11.2 */
         padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
     }
@@ -174,6 +201,111 @@ and (-webkit-device-pixel-ratio : 3) {
     .vueperslides.station-slides{
         margin-top: env(safe-area-inset-top);/* iOS 11.2 */
         margin-top: constant(safe-area-inset-top); /* iOS 11.0 */
+    }
+    
+    .vueperslides__bullets{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+}
+
+
+
+
+
+
+
+
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 2)
+and (orientation: landscape) {
+    #app{
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    
+    .vueperslides__bullets{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+}
+
+@media only screen
+and (device-width : 375px)
+and (device-height : 812px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: landscape) {
+    #app{
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .vueperslides__bullets{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+}
+
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: landscape){
+    #app{
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
+    }
+    
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:env(safe-area-inset-bottom);/* iOS 11.2 */
+        margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
     }
     
     .vueperslides__bullets{
