@@ -81,7 +81,9 @@
     <plugin name="cordova-plugin-insomnia" spec="git+https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git" />
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
     <plugin name="cordova-plugin-add-swift-support" spec="^1.7.4" />
+    <!-- For iOS (later)
     <plugin name="cordova-plugin-ble-central" spec="^1.2.2">
         <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Read OBD II BLE Dongle" />
     </plugin>
+    -->
 </widget>
