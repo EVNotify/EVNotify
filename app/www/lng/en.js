@@ -1,166 +1,169 @@
-en = JSON.parse('{\
-    "DEBUG_MODE_ENABLED": "Debug mode enabled",\
-    "DEBUG_MODE_DISABLED": "Debug mode disabled",\
-    "TITLE_EVNOTIFY": "EVNotify",\
-    "HEADER_OVERVIEW": "Overview",\
-    "MENU_OVERVIEW": "Overview",\
-    "MENU_CHARGING_STATIONS": "Charging stations",\
-    "HEADER_CHARGING_STATIONS": "Charging stations",\
-    "HEADER_CHARGING_STATION": "Charging station",\
-    "FETCHING_STATIONS": "Fetching stations.. Please wait..",\
-    "FETCHING_STATION": "Fetching details from station.. Please wait..",\
-    "STATIONS_ERROR": "Error on fetching stations.",\
-    "STATION_ERROR": "Error on fetching station details.",\
-    "STATION_FAULT": "Station malfunction",\
-    "STATION_OPERATIONAL": "Station operational",\
-    "STATION_VERIFIED": "Station verified",\
-    "STATION_NOT_VERIFIED": "Station not verified",\
-    "STATION_BARRIERFREE": "Station barrier-free",\
-    "STATION_NOT_BARRIERFREE": "Station not barrier-free",\
-    "STATION_NO_INFORMATION": "No information",\
-    "STATION_NETWORK": "Charging network",\
-    "STATION_OPERATOR": "Operator",\
-    "STATION_CHARGING_TIME": "Charging time",\
-    "STATION_LOCATION": "Location",\
-    "STATION_INFORMATION": "General information",\
-    "STATION_FREE_CHARGING": "Free charging",\
-    "STATION_FREE_PARKING": "Free parking",\
-    "POSITION_ERROR": "Failed to retrieve location. Allow permissions for location.",\
-    "CARDS_ERROR": "Failed to retrieve charge cards.",\
-    "LIST_VIEW": "List view",\
-    "MAPS_VIEW": "Maps view",\
-    "FAVORITES": "Favorites",\
-    "GENERAL_VIEW": "General",\
-    "ACCESS_VIEW": "Access",\
-    "MONDAY": "Monday",\
-    "TUESDAY": "Tuesday",\
-    "WEDNESDAY": "Wednesday",\
-    "THURSDAY": "Thursday",\
-    "FRIDAY": "Friday",\
-    "SATURDAY": "Saturday",\
-    "SUNDAY": "Sunday",\
-    "LOG_VIEW": "Log",\
-    "MENU_CHARGE": "Charging cycles",\
-    "MENU_NOTIFYME": "NotifyMe",\
-    "MENU_SETTINGS": "Settings",\
-    "MISSING_CONFIGURATION": "No device or car selected. Please visit the settings.",\
-    "NEXT": "Next",\
-    "CANCEL": "Cancel",\
-    "YES": "Yes",\
-    "NO": "No",\
-    "LANGUAGE_SETUP": "Language selection",\
-    "LNG_EN": "English",\
-    "LNG_DE": "German",\
-    "WELCOME": "Welcome to EVNotify",\
-    "WELCOME_TEXT": "Before you can be notified, you first have to create an account.\
-    It is required to manage your notifications. Ensure that you have an active internet and bluetooth connection.\
-    The app also requires to have a OBD2-Dongle. Please turn bluetooth on every time you use EVNotify.<br>\
-    \<a href=\\\"https://github.com/GPlay97/EVNotify/blob/master/LICENSE.MD\\\"\>License information</a><br>\
-    \<a href=\\\"https://evnotify.de/privacy.html\\\"\>Privacy</a><br>\
-    <b>By clicking on Next I accept the license information and agree to the linked conditions.</b>",\
-    "LOGIN_TYPE_LOGIN": "Use existing account",\
-    "LOGIN_TYPE_REGISTER": "Create new account",\
-    "REGISTER": "Create account",\
-    "REGISTER_TEXT": "Almost there. Misses only a password. For your own safety please use a strong password (at least with 6 characters).",\
-    "PASSWORD_LENGTH_ERROR": "The password must be at least 6 characters.",\
-    "CONNECTION_ERROR": "Network error. Please try again.",\
-    "SETUP_COMPLETE": "Done!",\
-    "SETUP_COMPLETE_TEXT": "You are now ready to track your state of charge of your electric vehicle. All you have to do now, \
-    is to set your notifications and to select your OBD2-Dongle, which needs to be connected on the OBD2-Interface of the car.\
-    After that save. All settings can be adjusted at any time. Please have in mind, that some OBD2-Dongle even stays active when the car is turned off for a longer time.\
-    For that reason do not let the OBD2-Dongle connected to the car for a longer time. If you have questions or fouund a bug, feel free to visit the repository on GitHub.\
-    EVNotify is still on an early stage of development. Please do not forget - there is a lot of work behind it. If something does not work, report it - it will be fixed ;-)",\
-    "LOGIN": "Login",\
-    "LOGIN_TEXT": "Login with your existing account (AKey).",\
-    "LOGIN_PASSWORD": "Password",\
-    "LOGIN_PASSWORD_TEXT": "Now enter the password of the account.",\
-    "LOGIN_FAILED": "Login failed.",\
-    "LOGIN_SUCCESSFUL": "Login successful.",\
-    "AKEY_LENGTH_ERROR": "The akey must be 6 characters long.",\
-    "OLD_PASSWORD": "Old password",\
-    "OLD_PASSWORD_TEXT": "Please enter your old password.",\
-    "NEW_PASSWORD": "New password",\
-    "NEW_PASSWORD_TEXT": "Now enter your new password.",\
-    "NEW_PASSWORD_RETYPE": "Retype password",\
-    "NEW_PASSWORD_RETYPE_TEXT": "Retype your new password for confirmation.",\
-    "PASSWORD_MISMATCH": "The passwords do not match.",\
-    "CHANGE_PASSWORD_FAILED": "Password change failed.",\
-    "CHANGE_PASSWORD_SUCCESSFUL": "Password successfully changed.",\
-    "OWN_RISK": "Use at your own risk",\
-    "OWN_RISK_TEXT": "I am not liable for damages resulting from improper use or the use of a counterfeit OBD2 dongle. Extended use of OBD2 dongle may possibly drain the 12V battery. By using EVNotify, you are aware of the risks and agree with them.",\
-    "CHARGING_STATE": "State of charge ",\
-    "NOTIFICATION_SENT_ERROR": "An error occured trying to sent the notifications.",\
-    "BLUETOOTH_DATA_SENT_ERROR": "An error occured trying to send data via bluetooth.",\
-    "BLUETOOTH_CONNECTED": "Connection successfully established. Now a communication with the car will be established!",\
-    "BLUETOOTH_NOT_CONNECTED": "Connection failed.",\
-    "PREPARATION": "Preparation.. Please wait..",\
-    "RESET_SUCCESSFULL": "OBD2-Dongle successfully configured.",\
-    "BLUETOOTH_CONNECTION_ERROR": "A bluetooth connection could not be established with the device.",\
-    "BLUETOOTH_DISABLED": "Bluetooth is disabled. Please turn bluetooth on!",\
-    "STANDBY_MODE_ENABLED": "Monitoring ended. OBD2-Dongle now in stand-by-mode. 12V battery can still lose energy.",\
-    "STANDBY_MODE_FAILED": "Something went wrong during the stand-by-mode.",\
-    "UNSUPPORTED_CAR": "The car is currently not supported. More cars will be added soon.",\
-    "UNSUPPORTED_DEVICE": "Your platform is not supported. A web-version is coming soon.",\
-    "SETTINGS_PASSWORD": "Password",\
-    "SETTINGS_PASSWORD_TEXT": "Please enter your password to save the settings.",\
-    "SET_SETTINGS_FAILED": "Saving the settings failed.",\
-    "GET_SETTINGS_FAILED": "Fetching the settings failed.",\
-    "SET_SETTINGS_SUCCESSFUL": "The settings have been saved successfully.",\
-    "HEADER_SETTINGS": "Settings",\
-    "SETTINGS_ACCOUNT": "Account",\
-    "SETTINGS_AKEY": "AKey",\
-    "CHANGE_PASSWORD": "Change password",\
-    "LANGUAGE": "Language",\
-    "CONSUMPTION": "Consumption",\
-    "CONSUMPTION_TEXT": "Enter your avaerage consumption (kWh/100km)",\
-    "NOTIFICATIONS": "Notifications",\
-    "EMAIL_NOTIFICATION": "Mail-Adress",\
-    "PUSH_NOTIFICATION": "Push-Notification",\
-    "DAILY_SUMMARY": "Send daily summary",\
-    "TELEGRAM_NOTIFICATION": "Telegram-Notification",\
-    "TELEGRAM_MANAGE_NOTIFICATION": "Manage Telegram integration",\
-    "TELEGRAM_UNSUBSCRIBE": "Deactivate telegram notifications",\
-    "TELEGRAM_UNSUBSCRIBE_TEXT": "To no longer receive telegram notifications, simply write /unsubscribe to the \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\>.\
-    You can reenable the telegram notifications at any times.",\
-    "TELEGRAM_SUBSCRIBE": "Activate telegram notifications",\
-    "TELEGRAM_SUBSCRIBE_TEXT": "To activate telegram notifications, just write /subscribe to the \<a href=\\\"https://telegram.me/evnotifybot\\\"\>Telegram-Bot\<\/a\>.\
-    You have to specify the token below. Do not share this with others! Preferably you should delete the message on telegram after the setup.",\
-    "SETTINGS_SOC_HELP": "The desired state of charge at which the notifications should be sent.",\
-    "SETTINGS_SYSTEM": "System",\
-    "SETTINGS_DEVICES": "Bluetooth-Device",\
-    "SETTINGS_SYNC": "Automatic syncronization",\
-    "SETTINGS_CHARGINGERROR_DETECTION": "Charging error detection",\
-    "INTERVAL_0": "deactivated",\
-    "INTERVAL_2": "every 2 seconds",\
-    "INTERVAL_5": "every 5 seconds",\
-    "INTERVAL_10": "every 10 seconds",\
-    "INTERVAL_15": "every 15 seconds",\
-    "INTERVAL_20": "every 20 seconds",\
-    "INTERVAL_30": "every 30 seconds",\
-    "INTERVAL_60": "every minute",\
-    "INTERVAL_120": "every 2 minutes",\
-    "INTERVAL_300": "every 5 minutes",\
-    "INTERVAL_600": "every 10 minutes",\
-    "INTERVAL_1800": "every half an hour",\
-    "INTERVAL_3600": "every hour",\
-    "SYNC_WARNING": "Short syncronization intervals leads to increased data usage",\
-    "CHARGINGERROR_WARNING": "Short misrecognition intervals can possibly lead to false alarms, but inform the fastest about a possible aborted loading.",\
-    "SWITCH_ACCOUNT": "Change account",\
-    "SWITCH_ACCOUNT_TEXT": "Connect as many devices as you want. Just register with an existing account here. Specify the AKey of the account to be used.",\
-    "SYNC_SETTINGS_FAILED": "Syncronization failed.",\
-    "SYNC_SETTINGS_SUCCESSFUL": "Syncronization successful.",\
-    "SWITCH_ACCOUNT_SUCCESSFUL": "Account changed successfully.",\
-    "SYNC": "Sync settings",\
-    "SYNC_TEXT": "Here you have the possibility to manually synchronize the settings. You can either get the current settings or set them for other linked devices. This can overwrite existing settings!",\
-    "SYNC_TYPE_PULL": "Get settings",\
-    "SYNC_TYPE_PUSH": "Set settings",\
-    "SAVE_SETTINGS": "Save settings",\
-    "SYNC_MODE_DISABLED": "Auto-Sync is not enabled.",\
-    "SYNC_MODE_AUTO": "Auto-Sync active. Mode: Automatic change",\
-    "SYNC_MODE_UPLOAD": "Auto-Sync active. Mode: Send state of charge only",\
-    "SYNC_MODE_DOWNLOAD": "Auto-Sync active. Mode: Receive state of charge only",\
-    "DEVICE_SETTINGS": "Device settings",\
-    "SLOW_CHARGING": "slow",\
-    "NORMAL_CHARGING": "normal",\
-    "FAST_CHARGING": "fast"\
-}');
+export default {
+    UPDATE_AVAILABLE_TITLE: 'New update',
+    UPDATE_AVAILABLE_TEXT: 'A new update is now available. Please update the app to take advantage of the latest features and fixes.',
+    TOUR_LOGIN_1: 'Welcome to EVNotify. EVNotify allows you to remotely monitor data of your electric vehicle!',
+    TOUR_LOGIN_2: 'To start directly, you can create an account here.',
+    TOUR_LOGIN_3: 'If you are already using EVNotify, you can use your existing credentials. Then you will be able to monitor the data from the car!',
+    V1_MIGRATION_NOTE: 'If you have previously used V1, you need to create a new account.',
+    SLOGAN: 'Monitor your electric vehicle',
+    NEXT: 'Next',
+    CANCEL: 'Cancel',
+    INVALID_CREDENTIALS: 'Invalid credentials. Please check your input.',
+    UNEXPECTED_ERROR: 'Unexpected error',
+    CHECK_INPUTS: 'Check inputs',
+    CHECK_PASSWORD: 'Password must be at least 6 characters long',
+    PASSWORD: 'Password',
+    PASSWORD_ENTER: 'Please enter your current password',
+    PASSWORD_NEW: 'Choose a new password containing at least 6 characters. Please check it for before changing!',
+    PASSWORD_REPEAT: 'Repeat password',
+    PASSWORD_MISMATCH: 'Passwords do not match',
+    PASSWORD_CHANGE: 'Change password',
+    PASSWORD_CHANGED: 'Password succesfully changed.',
+    TOKEN_RESET: 'Reset token',
+    TOKEN_RESET_WARNING: 'Do you really want to reset your token? This will invalidate your current token and other devices and applications that use the old token will no longer have access until you sign in again.',
+    TOKEN_RESETTED: 'Token succesfully resetted',
+    CREATE_ACCOUNT: 'Create account',
+    PASSWORD_FORGOT: 'Forgot password',
+    LOGIN: 'Login',
+    LOGOUT: 'Logout',
+    PROCEED: 'Proceed',
+    DONE: 'Done',
+    SAVE: 'Save',
+    INTRODUCTION: 'Introduction',
+    SETUP: 'Setup',
+    OWN_RISK: 'Use at your own risk. I am not liable for damages that may result from improper use or the use of counterfeit OBD2 dongle. By creating an account you agree with it.',
+    INTRODUCTION_TEXT_1: 'EVNotify allows you to remotely monitor your electric vehicle.',
+    INTRODUCTION_TEXT_2: 'Keep track of your state of charge and let you notify when your desired state of charge is reached.',
+    INTRODUCTION_TEXT_3: 'Useful statistics and various functions, such as finding charging stations, simplify everyday life.',
+    INTRODUCTION_TEXT_4: 'What are you waiting for? EVNotify is free, open source. All you need is an Android device with Bluetooth, Internet and a Bluetooth-enabled OBD2 dongle.',
+    CREATE_ACCOUNT_TEXT_1: 'Create your personal access now. Choose a strong password - you will receive a random "AKey" - your anonymized ID.',
+    CREATE_ACCOUNT_TEXT_2: 'Everything about privacy can be found at: ',
+    PRIVACY_URL: 'https://evnotify.de/privacy.html',
+    GENERAL: 'General',
+    ERROR_TRACKING: 'Autom. Error tracking',
+    USER: 'User',
+    CREDENTIALS: 'Credentials',
+    CAR: 'Car',
+    CAR_SELECTION: 'Car selection',
+    SYNC: 'Synchronisation',
+    SYNC_LOCATION: 'Location synchronisation',
+    LOCATION_ACCESS_DENIED: 'Location access denied. Check permission',
+    DEVICES: 'Devices',
+    DEVICE: 'Device',
+    NOTIFICATIONS: 'Notifications',
+    LANGUAGE: 'Language',
+    GERMAN: 'German',
+    ENGLISH: 'English',
+    AMPERA_E: 'Opel Ampera E',
+    IONIQ_BEV: 'Hyundai IONIQ Electric',
+    IONIQ_HEV: 'Hyundai IONIQ Hybrid',
+    IONIQ_PHEV: 'Hyundai IONIQ PlugIn-Hybrid',
+    KONA_EV: 'Hyundai KONA EV',
+    ZOE_Q210: 'Renault Zoe Q210',
+    SOUL_EV: 'Kia Soul EV',
+    CONSUMPTION: 'Consumption',
+    OBD2_DEVICE: 'OBDII-Device',
+    OBD2_DEVICE_PAIR: 'Not listed? Pair a new device here',
+    BLUETOOTH_AUTO_ENABLE: 'Automatically enable bluetooth',
+    AUTOBOOT: 'Launch on system start',
+    KEEPAWAKE: 'Keep display active',
+    NOTIFICATION_TYPES: 'Notification types',
+    NOTIFICATION_THRESHOLD: 'Notification threshold',
+    SOC_THRESHOLD: 'State of charge, when to send out notifications',
+    EMAIL: 'Mail',
+    PUSH: 'Push-Notifications',
+    TELEGRAM_LINKING: 'Telegram linking management',
+    TELEGRAM_LINKING_TEXT: 'In order to be informed about the state of charge and to query it via telegram, the account must be linked. Enter the token below - never share it with people you do not trust. You can copy the token and write it to the bot after typing / subscribe. Just as well, you can also unsubscribe with / unsubscribe with telegram.',
+    SUMMARY: 'Send daily summary of state of charge',
+    DASHBOARD: 'Dashboard',
+    LOGS: 'Logs',
+    LOGS_EMPTY: 'No logs existing',
+    LOGS_EMPTY_DESCRIPTION_1: 'Start a charge and/or drive around.',
+    LOGS_EMPTY_DESCRIPTION_2: 'Alternatively create an manual entry.',
+    LOGS_CREATE: 'Create log',
+    LOG_SAVED: 'Log saved successfully',
+    LOG_SAVE_ERROR: 'An error occured while saving the logs',
+    DETAILS: 'Details',
+    TITLE: 'Title',
+    START_DATE: 'Start date',
+    START_TIME: 'Start time',
+    END_DATE: 'End date',
+    END_TIME: 'End time',
+    CHARGES: 'Charges',
+    CHARGE: 'Charge',
+    DRIVES: 'Drives',
+    STATISTICS: 'Statistics',
+    STATIONS: 'Stations',
+    LIST: 'List',
+    MAP: 'Map',
+    FAVORITES: 'Favorites',
+    STATIONS_EMPTY: 'No charging stations',
+    STATIONS_EMPTY_DESCRIPTION_1: 'No charging stations matching the search criteria were found.',
+    STATIONS_EMPTY_DESCRIPTION_2: 'If necessary, adjust the filter and try again.',
+    LINEAR_DISTANCE: 'Linear distance',
+    PASTIME: 'Pastime',
+    LOCATION_DESCRIPTION: 'Location description',
+    YES: 'Yes',
+    NO: 'No',
+    VERIFIED: 'Verified',
+    UNVERIFIED: 'Unverified',
+    MALFUNCTION: 'Malfunction',
+    FREE_CHARGING: 'Free charging',
+    FREE_PARKING: 'Free parking',
+    BARRIERFREE: 'Barrierfree',
+    COSTS: 'Costs',
+    OPENING_HOURS: 'Opening hours',
+    SHORT_DESCRIPTION: 'Short description',
+    DESCRIPTION: 'Description',
+    MONDAY: 'Monday',
+    TUESDAY: 'Tuesday',
+    WEDNESDAY: 'Wednesday',
+    THURSDAY: 'Thursday',
+    FRIDAY: 'Friday',
+    SATURDAY: 'Saturday',
+    SUNDAY: 'Sunday',
+    CLOSED: 'Closed',
+    PLUGS: 'Plugs',
+    SOURCE: 'Source',
+    CHARGE_CARDS: 'Charge cards',
+    SETTINGS: 'Settings',
+    DEVELOPER_OPTIONS: 'Developer options',
+    SETTINGS_SAVED: 'Settings saved successfully',
+    SOC_DISPLAY: 'State of charge (Display)',
+    SOC_BMS: 'State of charge (BMS)',
+    SOH: 'Battery health (SOH)',
+    AUX_BATTERY_VOLTAGE: '12V Car Battery',
+    DC_BATTERY_VOLTAGE: 'Battery voltage',
+    DC_BATTERY_CURRENT: 'Battery current',
+    DC_BATTERY_POWER: 'Charge-/Discharge power',
+    BATTERY_MIN_TEMPERATURE: 'Battery temperature (Min)',
+    BATTERY_MAX_TEMPERATURE: 'Battery temperature (Max)',
+    BATTERY_INLET_TEMPERATURE: 'Battery temperature (Inlet)',
+    ESTIMATED_RANGE: 'Estimated range',
+    ESTIMATED_TIME: 'Estimated charging time',
+    IS_CHARGING: '(Charging)',
+    CHARGING_SPEEDS: '(Slow, Normal, Fast)',
+    NO_DEVICE_SELECTED: 'No OBDII-Device selected',
+    NO_CAR_SELECTED: 'No car selected',
+    DEBUG_MODE_ENABLED: 'Debug mode enabled. Data will be transfered',
+    DEBUG_MODE_DISABLED: 'Debug mode disabled',
+    DEBUG_SETTINGS_WARNING: 'The future is yours! Here you have full control. But that also means that you have full responsibility. If you do not know how you got here - or if someone told you to go and do something - leave it. And disappear. As fast as possible. Otherwise - if you know what you are doing - have fun!',
+    DEBUG_SETTINGS_WELCOME: 'Welcome to the dark side of power',
+    FORCE_SYNC_MODES: 'Force sync-modes',
+    CONNECTION: 'Connection',
+    BLUETOOTH_ENABLE_ERROR: 'Bluetooth could not be enabled',
+    BLUETOOTH_CONNECT_ERROR: 'Bluetooth connection failed',
+    INITIALIZATION: 'Initialization. Please wait.',
+    ESTABLISHED: 'Connection established',
+    OBD2_ERROR: 'OBDII error. Re-initialization. Please wait',
+    STANDBY_MODE_ACTIVATED: 'No activity detected. Entering standby mode',
+    STANDBY_MODE_DEACTIVATED: 'Leaving standby mode',
+    GENERATE_QR: 'Generate QR code',
+    DOWNLOAD_QR: 'Download QR code',
+    DOWNLOAD_QR_TEXT: 'To use your QR code now, you have to sent to you by e-mail. So you can print it yourself. Now enter the mail address.',
+    SEND: 'Send',
+    DELETE_QR: 'Delete QR code',
+    DELETE_QR_TEXT: 'When deleting the QR code, the existing QR code becomes invalid immediately. This can not be undone. If you then create a new one, you will get a new code.',
+    DELETE: 'Delete',
+    INFO_QR: 'Imagine the following situation: You are driving to a charging station, but another electric vehicle is already charging there. Now it would be good to know when the driver is done with charging to be able to start yours. QRNotify allows you to view the current state of charge and the expected departure time via a QR code. In addition, notifications can be sent here so that the charging station can be cleared for others if necessary.'
+};

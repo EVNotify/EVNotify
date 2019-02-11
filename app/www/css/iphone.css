@@ -1,0 +1,241 @@
+
+/*iPhone 5,5s*/
+@media screen
+and (device-aspect-ratio: 40/71)
+and (orientation: portrait){
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+/*iPhone 6,7*/
+@media screen
+and (device-aspect-ratio: 375/667)
+and (orientation: portrait) {
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+
+
+/* iphone 6,7,8 Plus*/
+@media only screen
+and (min-device-width: 414px)
+and (max-device-width: 736px)
+and (-webkit-min-device-pixel-ratio: 3)
+and (orientation: portrait) {
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top:15px;
+    }
+}
+
+
+/* iPhone XR Portrait*/
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 2)
+and (orientation: portrait) {
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:15px;
+    }
+    
+    .md-tabs{
+        margin-top:25px;
+    }
+    
+    .content-within-page {
+        padding-top: 45px;
+    }
+    
+    .content-within-page > .md-layout{
+        padding-top: 25px;
+    }
+    
+    .form.inner-form {
+        margin-top:45px;
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:15px;
+    }
+    
+    .vueperslides.station-slides{
+        margin-top: 25px;
+    }
+}
+/* iPhone X,XS Portrait*/
+@media only screen
+and (device-width : 375px)
+and (device-height : 812px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: portrait) {
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top: 25px;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom: 15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:15px;
+    }
+    
+    .md-tabs{
+        margin-top:25px;
+    }
+    
+    .content-within-page {
+        padding-top: 45px;
+    }
+    
+    .content-within-page > .md-layout{
+        padding-top: 25px;
+    }
+    
+    .form.inner-form {
+        margin-top:45px;
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom: 15px;
+    }
+    
+    .vueperslides.station-slides{
+        margin-top: 25px;
+    }
+}
+/* iPhone XS Max Portrait*/
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: portrait){
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top: 25px;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:15px;
+    }
+    
+    .md-tabs{
+        margin-top:25px;
+    }
+    
+    .content-within-page {
+        padding-top: 45px;
+    }
+    
+    .content-within-page > .md-layout{
+        padding-top: 25px;
+    }
+    
+    .form.inner-form {
+        margin-top:45px;
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:15px;
+    }
+    
+    .vueperslides.station-slides{
+        margin-top: 25px;
+    }
+    
+}
+/* iPhone XR Landscape*/
+
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 2)
+and (orientation: landscape) {
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:15px;
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:15px;
+    }
+}
+
+/* iPhone X,XS Landscape*/
+@media only screen
+and (device-width : 375px)
+and (device-height : 812px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: landscape) {
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom:15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom:15px;
+    }
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom:15px;
+    }
+}
+/* iPhone XS Max Landscape*/
+@media only screen
+and (device-width : 414px)
+and (device-height : 896px)
+and (-webkit-device-pixel-ratio : 3)
+and (orientation: landscape){
+    #app{
+        padding-bottom:15px;
+        box-sizing:border-box;
+    }
+    
+    .md-bottom-bar.md-theme-default.md-type-shift {
+        padding-bottom: 15px;
+    }
+    
+    .md-snackbar.md-position-center.md-theme-default {
+        margin-bottom: 15px;
+    }
+    
+    
+    .md-fab.md-fab-bottom-right{
+        margin-bottom: 15px;
+    }
+}
