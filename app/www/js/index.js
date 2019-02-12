@@ -101,6 +101,15 @@ document.addEventListener('deviceready', function() {
     document.addEventListener('backbutton', function(e) {
         eventBus.$emit('backbuttonPressed', e);
     });
+    // create persistent notification (experimental to prevent sleeping of phone)
+    cordova.plugins.notification.local.schedule({
+        title: 'EVNotify',
+        text: 'Is running..',
+        foreground: true,
+        priority: 2,
+        ongoing: true,
+        sticky: true
+    });
 });
 
 eventBus.$on('unauthorized', () => {
