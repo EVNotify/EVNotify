@@ -143,6 +143,7 @@ export default {
     ESTIMATED_TIME: 'Geschätzte Ladezeit',
     IS_CHARGING: '(Ladevorgang gestartet)',
     CHARGING_SPEEDS: '(Langsam, Normal, Schnell)',
+    CHARGING_SINCE: 'Lädt seit',
     NO_DEVICE_SELECTED: 'Kein OBDII-Gerät ausgewählt',
     NO_CAR_SELECTED: 'Kein Auto ausgewählt',
     DEBUG_MODE_ENABLED: 'Debug-Modus aktiviert. Daten werden nun übermittelt',

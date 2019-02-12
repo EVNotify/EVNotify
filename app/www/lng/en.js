@@ -143,6 +143,7 @@ export default {
     ESTIMATED_TIME: 'Estimated charging time',
     IS_CHARGING: '(Charging)',
     CHARGING_SPEEDS: '(Slow, Normal, Fast)',
+    CHARGING_SINCE: 'Charging since',
     NO_DEVICE_SELECTED: 'No OBDII-Device selected',
     NO_CAR_SELECTED: 'No car selected',
     DEBUG_MODE_ENABLED: 'Debug mode enabled. Data will be transfered',

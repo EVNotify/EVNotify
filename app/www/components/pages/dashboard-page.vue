@@ -55,6 +55,9 @@
                                                 <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.RAPID_CHARGE_PORT">
                                                     {{ formatDecimalTime(estimatedFastTime) }}
                                                 </li>
+                                                <p v-if="obd2Data.charging">
+                                                    {{ translated.CHARGING_SINCE}}: {{ formatChargingTime(chargingStarted) }}
+                                                </p>
                                             </ul>
                                         </div>
                                         <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
@@ -225,7 +228,7 @@
                 errorNotificationSent: false,
                 usedNotificationType: '',
                 showedBluetoothError: false,
-                chargingStarted: false,
+                chargingStarted: 0,
                 chargingStartSOC: 0,
                 lastResponse: 0,
                 consumption: 0,
@@ -253,6 +256,9 @@
             'communicationEstablished': 'communicationMessage'
         },
         methods: {
+            formatChargingTime(timestamp) {
+                return helper.convertDecimalTime(parseInt(new Date().getTime() / 1000) - timestamp) + 'h';
+            },
             formatDate(timestamp) {
                 return helper.formatDate(timestamp);
             },
@@ -650,13 +656,10 @@
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
                 // reset charging started info if no longer charging
-                if (self.chargingStarted && !self.obd2Data.CHARGING) {
-                    self.chargingStarted = false;
-                    self.chargingStartSOC = 0;
-                }
+                if (self.chargingStarted && !self.obd2Data.CHARGING) self.chargingStarted = self.chargingStartSOC = 0;
                 // track charging started
                 if (self.obd2Data.CHARGING) {
-                    self.chargingStarted = true;
+                    self.chargingStarted = parseInt(new Date().getTime() / 1000);
                     if (!self.chargingStartSOC) self.chargingStartSOC = soc;
                 }
                 // soc threshold watcher
