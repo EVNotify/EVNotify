@@ -39,6 +39,8 @@ export default {
     CREATE_ACCOUNT_TEXT_1: 'Erstelle Dir nun Deinen persönlichen Zugang. Wähle hierfür ein starkes Passwort aus - Du erhältst dann einen zufälligen "AKey" - Deine anonymisierte ID.',
     CREATE_ACCOUNT_TEXT_2: 'Alles zum Thema Datenschutz findest Du unter: ',
     PRIVACY_URL: 'https://evnotify.de/datenschutz.html',
+    MISSING_FEATURE: 'Wie Sie sehen, sehen Sie nichts..',
+    MISSING_FEATURE_DESCRIPTION: 'Hier wird gerade noch kräftig gebaut und programmiert..',
     GENERAL: 'Allgemeines',
     ERROR_TRACKING: 'Autom. Fehleranalyse',
     USER: 'Benutzer',
