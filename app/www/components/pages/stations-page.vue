@@ -2,18 +2,18 @@
     <div>
         <toolbar></toolbar>
         <div class="content-within-page">
-            <md-tabs class="md-transparent" md-alignment="fixed">
+            <md-tabs ref="tabs" class="md-transparent" md-alignment="fixed" @md-changed="loadStations()">
                 <md-tab id="tab-list" :md-label="translated.LIST"></md-tab>
                 <md-tab id="tab-favorites" :md-label="translated.FAVORITES"></md-tab>
                 <md-tab id="tab-map" :md-label="translated.MAP"></md-tab>
             </md-tabs>
-            <md-empty-state v-if="!stations.length" >
+            <md-empty-state v-if="!stations.length && !notImplemented">
                 <strong class="md-empty-state-label">{{ translated.STATIONS_EMPTY }}</strong>
                 <i class="md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default"><img src="icons/ev_station.svg" class="emptystationicon" /></i>
                 <p class="md-empty-state-description">{{ translated.STATIONS_EMPTY_DESCRIPTION_1 }}
                     <br>{{ translated.STATIONS_EMPTY_DESCRIPTION_2 }}</p>
             </md-empty-state>
-            <div v-if="stations.length">
+            <div v-if="stations.length && !notImplemented">
                 <md-card md-with-hover v-for="(station, index) in stations" :key="index" class="station-card">
                     <div @click="openStation(station.ge_id)">
                         <md-ripple>
@@ -54,6 +54,13 @@
                     </div>
                 </md-card>
             </div>
+            <md-empty-state v-if="notImplemented" class="missing">
+                <strong class="md-empty-state-label">{{ translated.MISSING_FEATURE }}</strong>
+                <i class="md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default">
+                    <img src="icons/build.svg" class="emptystationicon" />
+                </i>
+                <p class="md-empty-state-description">{{ translated.MISSING_FEATURE_DESCRIPTION }}</p>
+            </md-empty-state>
         </div>
         <bottom-bar></bottom-bar>
     </div>
@@ -71,7 +78,8 @@
             return {
                 translated: {},
                 coords: {},
-                stations: []
+                stations: [],
+                notImplemented: false
             };
         },
         methods: {
@@ -118,6 +126,14 @@
                     timeout: 5000,
                     enableHighAccuracy: true
                 });
+            },
+            loadStations() {
+                var self = this;
+
+                if (self.$refs.tabs.activeTab === 'tab-list') {
+                    self.notImplemented = false;
+                    self.getStations();
+                } else self.notImplemented = true;
             }
         },
         components: {
