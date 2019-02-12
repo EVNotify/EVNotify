@@ -127,7 +127,7 @@
                                 AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10, // 9th + 10th byte within fourth block divided by 10
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
                                 BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(6, 8), 16), // fourth byte within 2nd block
-                                BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(4, 6), 16), // third byte within 3rd block
+                                BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(8, 10), 16), // fifth byte within 3rd block
                                 DC_BATTERY_VOLTAGE: ((
                                         parseInt(
                                             extractedSecondData.slice(2, 4), 16 // second byte within 2nd block
