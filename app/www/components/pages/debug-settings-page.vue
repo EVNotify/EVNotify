@@ -31,6 +31,22 @@
                     <span class="md-list-item-text">PAUSE_LOCATION_SYNC_ON_CHARGE</span>
                     <md-switch v-model="debug.pauseLocationSyncOnCharge"></md-switch>
                 </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">SEXY_DASHBOARD</span>
+                    <md-switch v-model="debug.sexyDashboard"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">ML_PREDICTIONS</span>
+                    <md-switch v-model="debug.mlPredictions"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">STATIONS_NOTIFICATIONS</span>
+                    <md-switch v-model="debug.stationsNotifications"></md-switch>
+                </md-list-item>
+                <md-list-item>
+                    <span class="md-list-item-text">STATIONS_CHECKIN</span>
+                    <md-switch v-model="debug.stationsCheckIn"></md-switch>
+                </md-list-item>
             </form>
         </md-list>
         <snackbar ref="snackbar"></snackbar>
