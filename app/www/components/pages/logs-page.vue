@@ -2,7 +2,7 @@
     <div>
         <toolbar></toolbar>
         <div class="content-within-page">
-            <md-tabs ref="tabs" class="md-transparent" md-alignment="fixed" @md-changed="loadLogs()">
+            <md-tabs ref="tabs" class="md-transparent logs-tabs" md-alignment="fixed" @md-changed="loadLogs()">
                 <md-tab id="tab-charges" :md-label="translated.CHARGES"></md-tab>
                 <md-tab id="tab-drives" :md-label="translated.DRIVES"></md-tab>
                 <md-tab id="tab-statistics" :md-label="translated.STATISTICS"></md-tab>
@@ -16,7 +16,7 @@
                     <br>{{ translated.LOGS_EMPTY_DESCRIPTION_2 }}</p>
                 <md-button class="md-primary md-raised" @click="createLog()">{{ translated.LOGS_CREATE }}</md-button>
             </md-empty-state>
-            <md-list v-if="logs.length" class="md-double-line">
+            <md-list v-if="logs.length && !notImplemented" class="md-double-line list">
                 <md-list-item v-for="(log, index) in logs" :key="index">
                     <div class="md-list-item-text" @click="openLog(log.id)">
                         <span>{{ log.title || '-' }}</span>
@@ -24,7 +24,14 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-button v-if="logs.length" class="md-fab md-plain md-fab-bottom-right" @click="createLog()">
+            <md-empty-state v-if="notImplemented" class="missing">
+                <strong class="md-empty-state-label">{{ translated.MISSING_FEATURE }}</strong>
+                <i class="md-svg-loader md-icon md-icon-image md-empty-state-icon md-theme-default">
+                    <img src="icons/build.svg" class="emptystationicon" />
+                </i>
+                <p class="md-empty-state-description">{{ translated.MISSING_FEATURE_DESCRIPTION }}</p>
+            </md-empty-state>
+            <md-button v-if="logs.length && !notImplemented" class="md-fab md-plain md-fab-bottom-right" @click="createLog()">
                 <img src="icons/white/add.svg" />
             </md-button>
         </div>
@@ -44,7 +51,8 @@
         data() {
             return {
                 translated: {},
-                logs: []
+                logs: [],
+                notImplemented: false
             };
         },
         methods: {
@@ -55,6 +63,7 @@
                 var self = this;
 
                 if (self.$refs.tabs.activeTab !== 'tab-statistics') {
+                    self.notImplemented = false;
                     http.sendRequest('get', 'logs', {
                         akey: storage.getValue('akey'),
                         token: storage.getValue('token'),
@@ -65,7 +74,7 @@
                             // TODO
                         }
                     });
-                }
+                } else self.notImplemented = true;
             },
             openLog(id) {
                 this.$router.push({
@@ -99,11 +108,23 @@
 
     .md-fab.md-fab-bottom-right {
         bottom: 80px;
+        position: fixed;
+    }
+
+    .list,
+    .missing {
+        margin-top: 48px;
     }
 </style>
 
 <style>
     .md-button.md-fab .md-ripple .md-icon.md-theme-default.md-icon-image svg {
         fill: #fff;
+    }
+    .md-tabs.logs-tabs.md-theme-default .md-tabs-navigation {
+        position: fixed;
+        z-index: 3;
+        background-color: white !important;
+        width: 100%;
     }
 </style>
