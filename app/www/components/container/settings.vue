@@ -1,5 +1,6 @@
 <template>
     <div class="content-within-page">
+        <v-tour name="setting-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
         <form class="form inner-form">
             <md-subheader class="md-primary">
                 <b>{{ translated.USER }}</b>
@@ -7,7 +8,7 @@
             <md-divider></md-divider>
             <md-field>
                 <label for="lng">{{ translated.LANGUAGE }}</label>
-                <md-select v-model="settings.lng" required>
+                <md-select v-model="settings.lng" required class="v-step-1">
                     <md-option value="de">{{ translated.GERMAN }}</md-option>
                     <md-option value="en">{{ translated.ENGLISH }}</md-option>
                 </md-select>
@@ -18,7 +19,7 @@
             <md-divider></md-divider>
             <md-field>
                 <label for="car">{{ translated.CAR }}</label>
-                <md-select v-model="settings.car" required @md-selected="showCarMessage()">
+                <md-select v-model="settings.car" required @md-selected="showCarMessage()" class="v-step-2">
                     <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                     <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                     <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
@@ -31,7 +32,7 @@
             </md-field>
             <md-field>
                 <label for="consumption">{{ translated.CONSUMPTION }}</label>
-                <md-input v-model="settings.consumption" type="number" placeholder="12.34" required></md-input>
+                <md-input v-model="settings.consumption" type="number" placeholder="12.34" class="v-step-3" required></md-input>
                 <span class="md-suffix">kWh/100km</span>
             </md-field>
             <md-subheader class="md-primary">
@@ -40,7 +41,7 @@
             <md-divider></md-divider>
             <md-field>
                 <label for="devices">{{ translated.OBD2_DEVICE }}</label>
-                <md-select v-model="settings.device" required>
+                <md-select v-model="settings.device" required class="v-step-4">
                     <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{ device.name }}</md-option>
                 </md-select>
             </md-field>
@@ -51,7 +52,7 @@
             <md-divider></md-divider>
             <md-field>
                 <input v-model.number="settings.soc" type="range" style="width: 100%">{{ settings.soc }}%
-                <span class="md-helper-text">{{ translated.SOC_THRESHOLD }}</span>
+                <span class="md-helper-text v-step-5">{{ translated.SOC_THRESHOLD }}</span>
             </md-field>
             <br>
             <md-field>
@@ -85,7 +86,28 @@
                 carMessage: '',
                 devices: [],
                 autoboot: false,
-                keepawake: false
+                keepawake: false,
+                steps: [{
+                    target: '.v-step-1',
+                    content: 'TOUR_SETTING_1'
+                }, {
+                    target: '.v-step-2',
+                    content: 'TOUR_SETTING_2'
+                }, {
+                    target: '.v-step-3',
+                    content: 'TOUR_SETTING_3'
+                }, {
+                    target: '.v-step-4',
+                    content: 'TOUR_SETTING_4'
+                }, {
+                    target: '.v-step-5',
+                    content: 'TOUR_SETTING_5'
+                }],
+                tourCallbacks: {
+                    onStop: () => {
+                        storage.setValue('tour_completed_setting', true);
+                    }
+                }
             };
         },
         components: {
@@ -118,6 +140,8 @@
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translatePage();
+                // translate tour
+                this.steps.forEach(step => step.content = translation.translate(step.content));
                 this.$emit('languageChanged');
                 eventBus.$emit('settings_languageChanged');
             },
@@ -159,6 +183,18 @@
             // listen for save btn press (only for settings page) to push event
             eventBus.$off('settings_save');
             if (self.$route.path === '/settings') eventBus.$on('settings_save', () => self.$emit('settingsSaved', self.settings));
+        },
+        mounted() {
+            var self = this;
+
+            eventBus.$off('registration_accountCreated');
+            eventBus.$on('registration_accountCreated', () => {
+                if (!storage.getValue('tour_completed_setting')) {
+                    // translate the tour and start afterwards
+                    self.steps.forEach(step => step.content = translation.translate(step.content));
+                    setTimeout(() => self.$tours['setting-tour'].start(), 1000);
+                }
+            });
         }
     }
 </script>

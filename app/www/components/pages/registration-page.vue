@@ -100,6 +100,7 @@
                                     storage.setValue('token', res.token);
                                     self[id] = true; // mark the current step as valid
                                     nextPage();
+                                    eventBus.$emit('registration_accountCreated');
                                 } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
                             });
                         } else self.secondStepError = translation.translate('UNEXPECTED_ERROR');
