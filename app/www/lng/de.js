@@ -47,6 +47,8 @@ export default {
     CREDENTIALS: 'Zugangsdaten',
     CAR: 'Auto',
     CAR_SELECTION: 'Fahrzeugauswahl',
+    CAR_BASIS_SUPPORT: 'Bisher nur wenige Daten auslesbar',
+    CAR_INVALID_SUPPORT: 'Daten werden ggf. falsch interpretiert',
     SYNC: 'Synchronisation',
     SYNC_LOCATION: 'Standort-Synchronisation',
     LOCATION_ACCESS_DENIED: 'Standort-Zugriff verweigert. Berechtigung prüfen',

@@ -167,7 +167,7 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="car">{{ translated.CAR }}</label>
-                            <md-select v-model="settings.car" required>
+                            <md-select v-model="settings.car" required @md-selected="showCarMessage()">
                                 <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                                 <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
@@ -176,6 +176,7 @@
                                 <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                                 <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
                             </md-select>
+                            <span class="input-field-error">{{ carMessage }}</span>
                         </md-field>
                     </md-list>
                 </md-list-item>
@@ -296,6 +297,7 @@
                 translated: {},
                 settings: {},
                 devices: [],
+                carMessage: '',
                 errortracking: false,
                 locationsync: false,
                 keepawake: false,
@@ -329,6 +331,24 @@
             'settings.push': 'setPush'
         },
         methods: {
+            showCarMessage() {
+                if (!this.settings.car) return this.carMessage = '';
+                switch (this.settings.car) {
+                    case 'IONIQ_HEV':
+                    case 'IONIQ_PHEV':
+                    case 'ZOE_Q210':
+                    case 'AMPERA_E':
+                        this.carMessage = translation.translate('CAR_BASIS_SUPPORT');
+                        break;
+                    case 'SOUL_EV':
+                    case 'KONA_EV':
+                        this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
+                        break;
+                    default:
+                        this.carMessage = '';
+                        break;
+                }
+            },
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();

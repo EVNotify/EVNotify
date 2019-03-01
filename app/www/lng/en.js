@@ -47,6 +47,8 @@ export default {
     CREDENTIALS: 'Credentials',
     CAR: 'Car',
     CAR_SELECTION: 'Car selection',
+    CAR_BASIS_SUPPORT: 'So far only few data can be read out',
+    CAR_INVALID_SUPPORT: 'Data may be evaluated incorrectly',
     SYNC: 'Synchronisation',
     SYNC_LOCATION: 'Location synchronisation',
     LOCATION_ACCESS_DENIED: 'Location access denied. Check permission',
