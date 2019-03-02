@@ -111,7 +111,19 @@
                             extractedThirdData = extractedThirdBlock.replace(thirdBlock, ''),
                             fifthBlock = '7EC25',
                             extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
-                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
+                            extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
+                            sixthBlock = '7EC26',
+                            extractedFifthBlock = data.substring(data.indexOf(fifthBlock), data.indexOf(sixthBlock)),
+                            extractedFifthData = extractedFifthBlock.replace(fifthBlock, ''),
+                            seventhBlock = '7EC27',
+                            extractedSixthBlock = data.substring(data.indexOf(sixthBlock), data.indexOf(seventhBlock)),
+                            extractedSixthData = extractedSixthBlock.replace(sixthBlock, ''),
+                            eigthBlock = '7EC28',
+                            extractedSeventhBlock = data.substring(data.indexOf(seventhBlock), data.indexOf(eigthBlock)),
+                            extractedSeventhData = extractedSeventhBlock.replace(seventhBlock, ''),
+                            extractedEightBlock = data.substring(data.indexOf(eigthBlock), data.indexOf(eigthBlock) + 18),
+                            extractedEightData = extractedEightBlock.replace(eigthBlock, '');
 
                         if (extractedFirstData && extractedSecondData && extractedFourthData) {
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
@@ -141,6 +153,14 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
+                            // experimental charging detection
+                            parsedData.CHARGING =  ((
+                                    ["FD","FB","FE","FF","00","FC"].indexOf(extractedSecondData.slice(0, 2)) > -1 &&
+                                    ["A3","3D","6E","36","DC","57"].indexOf(extractedFifthData.slice(10, 12)) > -1 &&
+                                    ["C0","C8","65","D7","93","CE"].indexOf(extractedSeventhData.slice(0, 2)) > -1 &&
+                                    ["0A","04","06","08","0F"].indexOf(extractedSeventhData.slice(4, 6)) > -1 &&
+                                    ["09","01"].indexOf(extractedSeventhData.slice(10, 12)) > -1 ) ? 1 : 0
+                            );
                         }
                     }
                 } catch (err) {
