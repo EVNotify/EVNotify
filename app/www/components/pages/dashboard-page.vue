@@ -1,9 +1,10 @@
 <!-- The Dashboard Page -->
 <template>
     <div>
-        <toolbar @debugChanged="debugInfo()"></toolbar>
+        <v-tour name="dashboard-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
+        <toolbar @debugChanged="debugInfo()" class="v-step-1"></toolbar>
         <div class="content-within-page">
-            <vueper-slides :fixed-height="true">
+            <vueper-slides :fixed-height="true" class="v-step-2">
                 <vueper-slide v-for="i in 4" :key="i">
                     <div slot="slideContent">
                         <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
@@ -189,7 +190,7 @@
         <KONAEV ref="KONA_EV"></KONAEV>
         <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
         <snackbar ref="snackbar"></snackbar>
-        <bottom-bar></bottom-bar>
+        <bottom-bar class="v-step-3"></bottom-bar>
     </div>
 </template>
 
@@ -245,7 +246,22 @@
                 communicationEstablished: false,
                 batteryIcon: 'icons/battery_unknown.svg',
                 debugSettings: {},
-                syncMode: ''
+                syncMode: '',
+                steps: [{
+                    target: '.v-step-1',
+                    content: 'TOUR_DASHBOARD_1'
+                }, {
+                    target: '.v-step-2',
+                    content: 'TOUR_DASHBOARD_2'
+                }, {
+                    target: '.v-step-3',
+                    content: 'TOUR_DASHBOARD_3'
+                }],
+                tourCallbacks: {
+                    onStop: () => {
+                        storage.setValue('tour_completed_dashboard', true);
+                    }
+                }
             };
         },
         watch: {
@@ -715,6 +731,12 @@
                 eventBus.$on('deviceReady', function () {
                     self.startWatch();
                 });
+            }
+            // start the tour
+            if (!storage.getValue('tour_completed_dashboard')) {
+                // translate the tour and start afterwards
+                self.steps.forEach(step => step.content = translation.translate(step.content));
+                self.$tours['dashboard-tour'].start();
             }
         }
     }
