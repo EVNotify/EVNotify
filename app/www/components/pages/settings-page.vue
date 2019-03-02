@@ -383,6 +383,8 @@
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
+                // translate tour
+                this.steps.forEach(step => step.content = translation.translate(step.content));
                 eventBus.$emit('settings_languageChanged');
             },
             openTelegramBot() {
