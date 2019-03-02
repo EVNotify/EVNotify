@@ -134,6 +134,8 @@ document.addEventListener('deviceready', function() {
             });
         } else cordova.plugins.notification.local.clearAll();
     });
+    eventBus.$emit('persistentNotificationChanged');
+    eventBus.$emit('backgroundModeChanged');
 });
 
 eventBus.$on('unauthorized', () => {
