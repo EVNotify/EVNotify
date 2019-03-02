@@ -232,6 +232,7 @@
                 chargingStarted: 0,
                 chargingStartSOC: 0,
                 lastResponse: 0,
+                obd2ErrorCount: 0,
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV', 'ZOE_Q210'],
                 initialized: false,
@@ -523,7 +524,7 @@
 
                     // Watch lastResponse to force standy mode on no valid data after a specific time
                     self.standbyWatcher = setInterval(() => {
-                        if (typeof bluetoothSerial !== 'undefined' && self.lastResponse && parseInt(new Date().getTime() / 1000) > self.lastResponse + 600) {
+                        if (typeof bluetoothSerial !== 'undefined' && ((self.lastResponse && parseInt(new Date().getTime() / 1000) > self.lastResponse + 600) || self.obd2ErrorCount >= 42)) {
                             // no valid response in 10 minutes detected, force standby
                             self.clear();
                             self.$refs[self.car].standbyMode();
@@ -666,7 +667,8 @@
                 var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
                 var socType = self.obd2Data.SOC_DISPLAY ? 'DISPLAY' : 'BMS';
 
-                if (soc == null) return; // no valid data
+                if (soc == null) return self.obd2ErrorCount++; // no valid data
+                self.obd2ErrorCount = 0;
                 // set current timestamp and update last car response activity
                 if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
                 // inform user once about success
