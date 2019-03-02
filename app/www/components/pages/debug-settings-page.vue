@@ -90,6 +90,7 @@
             eventBus.$off('debugsettings_save');
             eventBus.$on('debugsettings_save', () => {
                 storage.setValue('debugSettings', self.debug);
+                eventBus.$emit('resturlChanged');
                 self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
             });
         },

@@ -69,6 +69,7 @@ var vm = new Vue({
             deviceReady: false,
             updateAvailable: false,
             loading: false,
+            originalRESTURL: RESTURL,
             stationcards: []
         };
     },
@@ -91,7 +92,8 @@ var vm = new Vue({
 });
 
 // overwrite RESTURL if specified within debug settings
-RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL;
+eventBus.$on('resturlChanged', () => RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL);
+eventBus.$emit('resturlChanged');
 
 // apply event listener for cordova device
 document.addEventListener('deviceready', function() {
@@ -134,7 +136,7 @@ http.sendRequest('get', 'stationcards', null, true, (err, cards) => {
     }
 });
 
-if (typeof ROLLBAR_TOKEN === 'string') {
+if (typeof ROLLBAR_TOKEN === 'string' && vm.originalRESTURL === RESTURL) {
     // rollbar error tracking
     var _rollbarConfig = {
         accessToken: ROLLBAR_TOKEN,
