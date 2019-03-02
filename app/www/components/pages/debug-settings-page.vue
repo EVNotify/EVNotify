@@ -20,6 +20,10 @@
                     <md-switch v-model="debug.persistentNotification"></md-switch>
                 </md-list-item>
                 <md-list-item>
+                    <span class="md-list-item-text">BACKGROUND_MODE</span>
+                    <md-switch v-model="debug.backgroundMode"></md-switch>
+                </md-list-item>
+                <md-list-item>
                     <span class="md-list-item-text">REALTIME_SYNC</span>
                     <md-switch v-model="debug.realtimeSync"></md-switch>
                 </md-list-item>
@@ -91,6 +95,8 @@
             eventBus.$on('debugsettings_save', () => {
                 storage.setValue('debugSettings', self.debug);
                 eventBus.$emit('resturlChanged');
+                eventBus.$emit('persistentNotificationChanged');
+                eventBus.$emit('backgroundModeChanged');
                 self.$refs.snackbar.setMessage('SETTINGS_SAVED', false, 'success');
             });
         },

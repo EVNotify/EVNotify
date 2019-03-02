@@ -103,6 +103,37 @@ document.addEventListener('deviceready', function() {
     document.addEventListener('backbutton', function(e) {
         eventBus.$emit('backbuttonPressed', e);
     });
+    // background mode handling
+    cordova.plugins.backgroundMode.on('activate', function() {
+        cordova.plugins.backgroundMode.disableWebViewOptimizations();
+    });
+    eventBus.$on('backgroundModeChanged', () => {
+        if (storage.getValue(('debugSettings', {}).backgroundMode)) {
+            cordova.plugins.backgroundMode.enable();
+            cordova.plugins.backgroundMode.setDefaults({
+                title: 'EVNotify',
+                text: 'SOC: 0%'
+            });
+        } else cordova.plugins.backgroundMode.disable();
+    });
+    eventBus.$on('persistentNotificationChanged', () => {
+        if (storage.getValue('debugSettings', {}).persistentNotification) {
+            cordova.plugins.notification.local.setDefaults({
+                vibrate: 0,
+                sound: null,
+                wakeup: false
+            });
+            cordova.plugins.notification.local.schedule({
+                id: 42,
+                title: 'EVNotify',
+                text: 'SOC: 0%',
+                foreground: true,
+                priority: 1,
+                ongoing: true,
+                sticky: true
+            });
+        } else cordova.plugins.notification.local.clearAll();
+    });
     // create persistent notification (experimental to prevent sleeping of phone)
     cordova.plugins.notification.local.schedule({
         title: 'EVNotify',

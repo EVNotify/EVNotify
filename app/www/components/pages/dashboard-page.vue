@@ -346,6 +346,7 @@
                     Vue.set(self.obd2Data, 'SOC_DISPLAY', res.soc_display);
                     Vue.set(self.obd2Data, 'SOC_BMS', res.soc_bms);
                     self.timestamp = res.last_soc;
+                    self.updateNotification(self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS);
                     // get extended data
                     http.sendRequest('GET', 'extended', {
                         akey: storage.getValue('akey'),
@@ -608,6 +609,23 @@
                 if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
                 if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
                 this.$refs.snackbar.setMessage('STANDBY_MODE_ACTIVATED', false, 'warning');
+            },
+            updateNotification(soc) {
+                var debugSettings = storage.getValue('debugSettings', {});
+
+                if (debugSettings.persistentNotification) {
+                    cordova.plugins.notification.local.update({
+                        id: 42,
+                        text: 'SOC: ' + soc + '%',
+                        priority: 1
+                    });
+                }
+                if (debugSettings.backgroundMode) {
+                    cordova.plugins.backgroundMode.configure({
+                        title: 'EVNotify',
+                        text: 'SOC: ' + soc + '%'
+                    });
+                }
             }
         },
         components: {
@@ -641,6 +659,8 @@
             eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
+                    cordova.plugins.notification.local.clearAll();
+                    cordova.plugins.backgroundMode.disable();
                     // end bluetooth connection, force standby mode
                     self.clear();
                     if (typeof bluetoothSerial === 'undefined') return navigator.app.exitApp();
@@ -671,6 +691,8 @@
                 self.obd2ErrorCount = 0;
                 // set current timestamp and update last car response activity
                 if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
+                else self.obd2ErrorCount++; // no valid data
+                self.updateNotification(soc);
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
                 // reset charging started info if no longer charging

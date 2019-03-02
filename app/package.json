@@ -15,7 +15,8 @@
       "cordova-plugin-autostart": {},
       "cordova-plugin-insomnia": {},
       "cordova-plugin-fcm": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-background-mode": {}
     }
   },
   "dependencies": {
