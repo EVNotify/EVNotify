@@ -30,6 +30,8 @@
                 <!-- <router-link to="/passwordForgot">{{ translated.PASSWORD_FORGOT }}</router-link> -->
                 <md-button class="md-raised md-primary" @click="login" id="loginBtn">{{ translated.LOGIN }}</md-button>
             </div>
+            <br><br><br>
+            <small class="md-layout md-alignment-center" @click="setLng()">{{ translated.CHANGE_LANGUAGE }}</small>
         </md-content>
         <div class="background"></div>
         <transition name="fade">
@@ -55,12 +57,15 @@
                 unexpectedError: false,
                 steps: [{
                     target: '.v-step-1',
+                    originalContent: 'TOUR_LOGIN_1',
                     content: 'TOUR_LOGIN_1'
                 }, {
                     target: '.v-step-2',
+                    originalContent: 'TOUR_LOGIN_2',
                     content: 'TOUR_LOGIN_2'
                 }, {
                     target: '.v-step-3',
+                    originalContent: 'TOUR_LOGIN_3',
                     content: 'TOUR_LOGIN_3'
                 }],
                 tourCallbacks: {
@@ -76,6 +81,19 @@
             settings
         },
         methods: {
+            setLng() {
+                var self = this;
+                var currentLng = storage.getValue('lng', 'de');
+
+                storage.setValue('lng', ((currentLng === 'de') ? 'en' : 'de'));
+                self.translated = translation.translatePage();
+                // translate tour
+                self.steps = self.steps.map(step => {
+                    step.content = translation.translate(step.originalContent);
+                    return step;
+                });
+                eventBus.$emit('settings_languageChanged');
+            },
             login() {
                 var self = this;
 

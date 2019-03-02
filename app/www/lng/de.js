@@ -40,6 +40,7 @@ export default {
     TOKEN_RESETTED: 'Token erfolgreich zurückgesetzt',
     CREATE_ACCOUNT:  'Account erstellen',
     PASSWORD_FORGOT: 'Passwort vergessen',
+    CHANGE_LANGUAGE: 'Sprache ändern',
     LOGIN: 'Anmelden',
     LOGOUT: 'Abmelden',
     PROCEED: 'Weiter',
