@@ -134,15 +134,6 @@ document.addEventListener('deviceready', function() {
             });
         } else cordova.plugins.notification.local.clearAll();
     });
-    // create persistent notification (experimental to prevent sleeping of phone)
-    cordova.plugins.notification.local.schedule({
-        title: 'EVNotify',
-        text: 'Is running..',
-        foreground: true,
-        priority: 2,
-        ongoing: true,
-        sticky: true
-    });
 });
 
 eventBus.$on('unauthorized', () => {
