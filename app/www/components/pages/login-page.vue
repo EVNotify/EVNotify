@@ -83,7 +83,7 @@
         methods: {
             setLng() {
                 var self = this;
-                var currentLng = storage.getValue('lng', 'de');
+                var currentLng = storage.getValue('lng', translation.getLocalLng());
 
                 storage.setValue('lng', ((currentLng === 'de') ? 'en' : 'de'));
                 self.translated = translation.translatePage();

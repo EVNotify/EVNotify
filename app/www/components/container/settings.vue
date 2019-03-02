@@ -89,18 +89,23 @@
                 keepawake: false,
                 steps: [{
                     target: '.v-step-1',
+                    originalContent: 'TOUR_SETTING_1',
                     content: 'TOUR_SETTING_1'
                 }, {
                     target: '.v-step-2',
+                    originalContent: 'TOUR_SETTING_2',
                     content: 'TOUR_SETTING_2'
                 }, {
                     target: '.v-step-3',
+                    originalContent: 'TOUR_SETTING_3',
                     content: 'TOUR_SETTING_3'
                 }, {
                     target: '.v-step-4',
+                    originalContent: 'TOUR_SETTING_4',
                     content: 'TOUR_SETTING_4'
                 }, {
                     target: '.v-step-5',
+                    originalContent: 'TOUR_SETTING_5',
                     content: 'TOUR_SETTING_5'
                 }],
                 tourCallbacks: {
@@ -141,7 +146,11 @@
                 storage.setValue('lng', this.settings.lng);
                 this.translatePage();
                 // translate tour
-                this.steps.forEach(step => step.content = translation.translate(step.content));
+                // translate tour
+                this.steps = this.steps.map(step => {
+                    step.content = translation.translate(step.originalContent);
+                    return step;
+                });
                 this.$emit('languageChanged');
                 eventBus.$emit('settings_languageChanged');
             },

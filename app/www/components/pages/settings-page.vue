@@ -323,27 +323,35 @@
                 version: window.VERSION,
                 steps: [{
                     target: '.v-step-1',
+                    originalContent: 'TOUR_SETTINGS_1',
                     content: 'TOUR_SETTINGS_1'
                 }, {
                     target: '.v-step-2',
+                    originalContent: 'TOUR_SETTINGS_2',
                     content: 'TOUR_SETTINGS_2'
                 }, {
                     target: '.v-step-3',
+                    originalContent: 'TOUR_SETTINGS_3',
                     content: 'TOUR_SETTINGS_3'
                 }, {
                     target: '.v-step-4',
+                    originalContent: 'TOUR_SETTINGS_4',
                     content: 'TOUR_SETTINGS_4'
                 }, {
                     target: '.v-step-5',
+                    originalContent: 'TOUR_SETTINGS_5',
                     content: 'TOUR_SETTINGS_5'
                 }, {
                     target: '.v-step-6',
+                    originalContent: 'TOUR_SETTINGS_6',
                     content: 'TOUR_SETTINGS_6'
                 }, {
                     target: '.v-step-7',
+                    originalContent: 'TOUR_SETTINGS_7',
                     content: 'TOUR_SETTINGS_7'
                 }, {
                     target: '.v-step-8',
+                    originalContent: 'TOUR_SETTINGS_8',
                     content: 'TOUR_SETTINGS_8'
                 }],
                 tourCallbacks: {
@@ -384,7 +392,10 @@
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
                 // translate tour
-                this.steps.forEach(step => step.content = translation.translate(step.content));
+                this.steps = this.steps.map(step => {
+                    step.content = translation.translate(step.originalContent);
+                    return step;
+                });
                 eventBus.$emit('settings_languageChanged');
             },
             openTelegramBot() {
