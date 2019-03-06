@@ -108,7 +108,7 @@ document.addEventListener('deviceready', function() {
         cordova.plugins.backgroundMode.disableWebViewOptimizations();
     });
     eventBus.$on('backgroundModeChanged', () => {
-        if (storage.getValue(('debugSettings', {}).backgroundMode)) {
+        if (storage.getValue('debugSettings', {}).backgroundMode) {
             cordova.plugins.backgroundMode.enable();
             cordova.plugins.backgroundMode.setDefaults({
                 title: 'EVNotify',
@@ -129,7 +129,6 @@ document.addEventListener('deviceready', function() {
                 text: 'SOC: 0%',
                 foreground: true,
                 priority: 1,
-                ongoing: true,
                 sticky: true
             });
         } else cordova.plugins.notification.local.clearAll();
