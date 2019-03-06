@@ -69,6 +69,7 @@ var vm = new Vue({
             deviceReady: false,
             updateAvailable: false,
             loading: false,
+            originalRESTURL: RESTURL,
             stationcards: []
         };
     },
@@ -91,7 +92,8 @@ var vm = new Vue({
 });
 
 // overwrite RESTURL if specified within debug settings
-RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL;
+eventBus.$on('resturlChanged', () => RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL);
+eventBus.$emit('resturlChanged');
 
 // apply event listener for cordova device
 document.addEventListener('deviceready', function() {
@@ -101,15 +103,38 @@ document.addEventListener('deviceready', function() {
     document.addEventListener('backbutton', function(e) {
         eventBus.$emit('backbuttonPressed', e);
     });
-    // create persistent notification (experimental to prevent sleeping of phone)
-    cordova.plugins.notification.local.schedule({
-        title: 'EVNotify',
-        text: 'Is running..',
-        foreground: true,
-        priority: 2,
-        ongoing: true,
-        sticky: true
+    // background mode handling
+    cordova.plugins.backgroundMode.on('activate', function() {
+        cordova.plugins.backgroundMode.disableWebViewOptimizations();
     });
+    eventBus.$on('backgroundModeChanged', () => {
+        if (storage.getValue('debugSettings', {}).backgroundMode) {
+            cordova.plugins.backgroundMode.enable();
+            cordova.plugins.backgroundMode.setDefaults({
+                title: 'EVNotify',
+                text: 'SOC: 0%'
+            });
+        } else cordova.plugins.backgroundMode.disable();
+    });
+    eventBus.$on('persistentNotificationChanged', () => {
+        if (storage.getValue('debugSettings', {}).persistentNotification) {
+            cordova.plugins.notification.local.setDefaults({
+                vibrate: 0,
+                sound: null,
+                wakeup: false
+            });
+            cordova.plugins.notification.local.schedule({
+                id: 42,
+                title: 'EVNotify',
+                text: 'SOC: 0%',
+                foreground: true,
+                priority: 1,
+                sticky: true
+            });
+        } else cordova.plugins.notification.local.clearAll();
+    });
+    eventBus.$emit('persistentNotificationChanged');
+    eventBus.$emit('backgroundModeChanged');
 });
 
 eventBus.$on('unauthorized', () => {
@@ -134,7 +159,7 @@ http.sendRequest('get', 'stationcards', null, true, (err, cards) => {
     }
 });
 
-if (typeof ROLLBAR_TOKEN === 'string') {
+if (typeof ROLLBAR_TOKEN === 'string' && vm.originalRESTURL === RESTURL) {
     // rollbar error tracking
     var _rollbarConfig = {
         accessToken: ROLLBAR_TOKEN,

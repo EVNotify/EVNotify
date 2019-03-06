@@ -1,9 +1,10 @@
 <!-- The Dashboard Page -->
 <template>
     <div>
-        <toolbar @debugChanged="debugInfo()"></toolbar>
+        <v-tour name="dashboard-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
+        <toolbar @debugChanged="debugInfo()" class="v-step-1"></toolbar>
         <div class="content-within-page">
-            <vueper-slides :fixed-height="true">
+            <vueper-slides :fixed-height="true" class="v-step-2">
                 <vueper-slide v-for="i in 4" :key="i">
                     <div slot="slideContent">
                         <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
@@ -189,7 +190,7 @@
         <KONAEV ref="KONA_EV"></KONAEV>
         <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
         <snackbar ref="snackbar"></snackbar>
-        <bottom-bar></bottom-bar>
+        <bottom-bar class="v-step-3"></bottom-bar>
     </div>
 </template>
 
@@ -231,6 +232,7 @@
                 chargingStarted: 0,
                 chargingStartSOC: 0,
                 lastResponse: 0,
+                obd2ErrorCount: 0,
                 consumption: 0,
                 supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV', 'ZOE_Q210'],
                 initialized: false,
@@ -245,7 +247,22 @@
                 communicationEstablished: false,
                 batteryIcon: 'icons/battery_unknown.svg',
                 debugSettings: {},
-                syncMode: ''
+                syncMode: '',
+                steps: [{
+                    target: '.v-step-1',
+                    content: 'TOUR_DASHBOARD_1'
+                }, {
+                    target: '.v-step-2',
+                    content: 'TOUR_DASHBOARD_2'
+                }, {
+                    target: '.v-step-3',
+                    content: 'TOUR_DASHBOARD_3'
+                }],
+                tourCallbacks: {
+                    onStop: () => {
+                        storage.setValue('tour_completed_dashboard', true);
+                    }
+                }
             };
         },
         watch: {
@@ -329,6 +346,7 @@
                     Vue.set(self.obd2Data, 'SOC_DISPLAY', res.soc_display);
                     Vue.set(self.obd2Data, 'SOC_BMS', res.soc_bms);
                     self.timestamp = res.last_soc;
+                    self.updateNotification(self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS);
                     // get extended data
                     http.sendRequest('GET', 'extended', {
                         akey: storage.getValue('akey'),
@@ -507,7 +525,7 @@
 
                     // Watch lastResponse to force standy mode on no valid data after a specific time
                     self.standbyWatcher = setInterval(() => {
-                        if (typeof bluetoothSerial !== 'undefined' && self.lastResponse && parseInt(new Date().getTime() / 1000) > self.lastResponse + 600) {
+                        if (typeof bluetoothSerial !== 'undefined' && ((self.lastResponse && parseInt(new Date().getTime() / 1000) > self.lastResponse + 600) || self.obd2ErrorCount >= 42)) {
                             // no valid response in 10 minutes detected, force standby
                             self.clear();
                             self.$refs[self.car].standbyMode();
@@ -591,6 +609,23 @@
                 if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.unsubscribe();
                 if (this.locationWatcher) navigator.geolocation.clearWatch(this.locationWatcher);
                 this.$refs.snackbar.setMessage('STANDBY_MODE_ACTIVATED', false, 'warning');
+            },
+            updateNotification(soc) {
+                var debugSettings = storage.getValue('debugSettings', {});
+
+                if (debugSettings.persistentNotification) {
+                    cordova.plugins.notification.local.update({
+                        id: 42,
+                        text: 'SOC: ' + soc + '%',
+                        priority: 1
+                    });
+                }
+                if (debugSettings.backgroundMode) {
+                    cordova.plugins.backgroundMode.configure({
+                        title: 'EVNotify',
+                        text: 'SOC: ' + soc + '%'
+                    });
+                }
             }
         },
         components: {
@@ -624,6 +659,8 @@
             eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
+                    cordova.plugins.notification.local.clearAll();
+                    cordova.plugins.backgroundMode.disable();
                     // end bluetooth connection, force standby mode
                     self.clear();
                     if (typeof bluetoothSerial === 'undefined') return navigator.app.exitApp();
@@ -650,9 +687,12 @@
                 var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
                 var socType = self.obd2Data.SOC_DISPLAY ? 'DISPLAY' : 'BMS';
 
-                if (soc == null) return; // no valid data
+                if (soc == null) return self.obd2ErrorCount++; // no valid data
+                self.obd2ErrorCount = 0;
                 // set current timestamp and update last car response activity
                 if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
+                else self.obd2ErrorCount++; // no valid data
+                self.updateNotification(soc);
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
                 // reset charging started info if no longer charging
@@ -715,6 +755,12 @@
                 eventBus.$on('deviceReady', function () {
                     self.startWatch();
                 });
+            }
+            // start the tour
+            if (!storage.getValue('tour_completed_dashboard')) {
+                // translate the tour and start afterwards
+                self.steps.forEach(step => step.content = translation.translate(step.content));
+                self.$tours['dashboard-tour'].start();
             }
         }
     }

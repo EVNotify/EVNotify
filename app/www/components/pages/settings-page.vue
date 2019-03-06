@@ -1,6 +1,7 @@
 <template>
     <div>
-        <toolbar></toolbar>
+        <v-tour name="settings-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
+        <toolbar class="v-step-1"></toolbar>
         <md-list class="content-within-page" :md-expand-single="true">
             <form class="form inner-form">
                 <v-layout row justify-center>
@@ -126,13 +127,13 @@
                 </md-list-item>
                 <md-list-item>
                     <img src="icons/bug_report.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.ERROR_TRACKING }}</span>
+                    <span class="md-list-item-text v-step-2">{{ translated.ERROR_TRACKING }}</span>
                     <md-switch v-model="errortracking"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.USER }}</md-subheader>
                 <md-list-item md-expand>
                     <img src="icons/account_circle.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.CREDENTIALS }}</span>
+                    <span class="md-list-item-text v-step-3">{{ translated.CREDENTIALS }}</span>
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="akey">AKey</label>
@@ -167,7 +168,7 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="car">{{ translated.CAR }}</label>
-                            <md-select v-model="settings.car" required>
+                            <md-select v-model="settings.car" required @md-selected="showCarMessage()">
                                 <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                                 <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
@@ -176,6 +177,7 @@
                                 <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                                 <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
                             </md-select>
+                            <span class="input-field-error">{{ carMessage }}</span>
                         </md-field>
                     </md-list>
                 </md-list-item>
@@ -193,7 +195,7 @@
                 <md-subheader>{{ translated.SYNC }}</md-subheader>
                 <md-list-item>
                     <img src="icons/location_on.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.SYNC_LOCATION }}</span>
+                    <span class="md-list-item-text v-step-4">{{ translated.SYNC_LOCATION }}</span>
                     <md-switch v-model="locationsync"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.DEVICES }}</md-subheader>
@@ -213,17 +215,17 @@
                 </md-list-item>
                 <md-list-item>
                     <img src="icons/location_on.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.BLUETOOTH_AUTO_ENABLE }}</span>
+                    <span class="md-list-item-text v-step-5">{{ translated.BLUETOOTH_AUTO_ENABLE }}</span>
                     <md-switch v-model="autobluetooth"></md-switch>
                 </md-list-item>
                 <md-list-item>
                     <img src="icons/settings_brightness.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.KEEPAWAKE }}</span>
+                    <span class="md-list-item-text v-step-6">{{ translated.KEEPAWAKE }}</span>
                     <md-switch v-model="keepawake"></md-switch>
                 </md-list-item>
                 <md-list-item>
                     <img src="icons/launch.svg" class="settingicon"/>
-                    <span class="md-list-item-text">{{ translated.AUTOBOOT }}</span>
+                    <span class="md-list-item-text v-step-7">{{ translated.AUTOBOOT }}</span>
                     <md-switch v-model="autoboot"></md-switch>
                 </md-list-item>
                 <md-subheader>{{ translated.NOTIFICATIONS }}</md-subheader>
@@ -272,7 +274,7 @@
                         <md-button class="md-raised md-accent" v-if="qr" @click="deleteQRDialog = true">{{ translated.DELETE_QR }}</md-button>
                     </md-list>
                 </md-list-item>
-                <p class="version" @click="countDevClick()">v.{{ version }}</p>
+                <p class="version v-step-8" @click="countDevClick()">v.{{ version }}</p>
             </form>
         </md-list>
         <snackbar ref="snackbar"></snackbar>
@@ -296,6 +298,7 @@
                 translated: {},
                 settings: {},
                 devices: [],
+                carMessage: '',
                 errortracking: false,
                 locationsync: false,
                 keepawake: false,
@@ -317,7 +320,45 @@
                 qrMail: '',
                 nextDialog: '',
                 devClick: 0,
-                version: window.VERSION
+                version: window.VERSION,
+                steps: [{
+                    target: '.v-step-1',
+                    originalContent: 'TOUR_SETTINGS_1',
+                    content: 'TOUR_SETTINGS_1'
+                }, {
+                    target: '.v-step-2',
+                    originalContent: 'TOUR_SETTINGS_2',
+                    content: 'TOUR_SETTINGS_2'
+                }, {
+                    target: '.v-step-3',
+                    originalContent: 'TOUR_SETTINGS_3',
+                    content: 'TOUR_SETTINGS_3'
+                }, {
+                    target: '.v-step-4',
+                    originalContent: 'TOUR_SETTINGS_4',
+                    content: 'TOUR_SETTINGS_4'
+                }, {
+                    target: '.v-step-5',
+                    originalContent: 'TOUR_SETTINGS_5',
+                    content: 'TOUR_SETTINGS_5'
+                }, {
+                    target: '.v-step-6',
+                    originalContent: 'TOUR_SETTINGS_6',
+                    content: 'TOUR_SETTINGS_6'
+                }, {
+                    target: '.v-step-7',
+                    originalContent: 'TOUR_SETTINGS_7',
+                    content: 'TOUR_SETTINGS_7'
+                }, {
+                    target: '.v-step-8',
+                    originalContent: 'TOUR_SETTINGS_8',
+                    content: 'TOUR_SETTINGS_8'
+                }],
+                tourCallbacks: {
+                    onStop: () => {
+                        storage.setValue('tour_completed_settings', true);
+                    }
+                }
             };
         },
         watch: {
@@ -329,9 +370,32 @@
             'settings.push': 'setPush'
         },
         methods: {
+            showCarMessage() {
+                if (!this.settings.car) return this.carMessage = '';
+                switch (this.settings.car) {
+                    case 'IONIQ_HEV':
+                    case 'IONIQ_PHEV':
+                    case 'ZOE_Q210':
+                    case 'AMPERA_E':
+                        this.carMessage = translation.translate('CAR_BASIS_SUPPORT');
+                        break;
+                    case 'SOUL_EV':
+                    case 'KONA_EV':
+                        this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
+                        break;
+                    default:
+                        this.carMessage = '';
+                        break;
+                }
+            },
             setLng() {
                 storage.setValue('lng', this.settings.lng);
                 this.translated = translation.translatePage();
+                // translate tour
+                this.steps = this.steps.map(step => {
+                    step.content = translation.translate(step.originalContent);
+                    return step;
+                });
                 eventBus.$emit('settings_languageChanged');
             },
             openTelegramBot() {
@@ -538,7 +602,15 @@
             });
         },
         mounted() {
-            if (this.qr) this.createQR();
+            var self = this;
+
+            if (self.qr) self.createQR();
+            // start the tour
+            if (!storage.getValue('tour_completed_settings')) {
+                // translate the tour and start afterwards
+                self.steps.forEach(step => step.content = translation.translate(step.content));
+                setTimeout(() => self.$tours['settings-tour'].start(), 1000);
+            }
         }
     }
 </script>

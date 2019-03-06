@@ -15,7 +15,7 @@
                 <img :src="syncIcon" />
             </md-button>
             <md-button class="md-icon-button" @click="toggleDebug()">
-                <img src="icons/white/bug_report.svg" />
+                <img :src="debugIcon" />
             </md-button>
         </div>
         <div class="md-toolbar-section-end" v-if="settingsPage || logPage || debugSettingsPage">
@@ -51,6 +51,7 @@ export default {
             logPage: false,
             forceSyncModes: false,
             inStandbyMode: false,
+            debugIcon: 'icons/white/bug_report.svg',
             bluetoothIcon: 'icons/white/bluetooth_disabled.svg',
             syncIcon: 'icons/white/sync_disabled.svg',
             syncModeIcon: 'icons/white/cloud_off.svg'
@@ -58,6 +59,7 @@ export default {
     },
     methods: {
         toggleDebug() {
+            this.debugIcon = ((this.debugIcon === 'icons/white/bug_report.svg') ? 'icons/white/adb.svg' : 'icons/white/bug_report.svg');
             this.$emit('debugChanged', (DEBUG = !DEBUG));
         },
         openInNew() {
