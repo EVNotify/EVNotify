@@ -155,7 +155,6 @@
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
                             // experimental charging detection
                             parsedData.CHARGING =  ((
-                                    //["FD","FB","FE","FF","00","FC"].indexOf(extractedSecondData.slice(0, 2)) > -1 &&
                                     ["09"].indexOf(extractedSeventhData.slice(10, 12)) > -1 ) ? 1 : 0
                             );
                         }
