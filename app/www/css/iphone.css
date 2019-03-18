@@ -31,13 +31,17 @@ and (orientation: portrait) {
 
 /* iPhone XR Portrait*/
 @media only screen
-and (device-width : 414px)
-and (device-height : 896px)
+and (device-width : 375px) 
+and (device-height : 812px)
 and (-webkit-device-pixel-ratio : 2)
 and (orientation: portrait) {
     #app{
         padding-bottom:15px;
         box-sizing:border-box;
+    }
+    
+    .md-toolbar.md-theme-default.md-primary {
+        padding-top: 25px;
     }
     
     .md-bottom-bar.md-theme-default.md-type-shift {
@@ -170,8 +174,8 @@ and (orientation: portrait){
 /* iPhone XR Landscape*/
 
 @media only screen
-and (device-width : 414px)
-and (device-height : 896px)
+and (device-width : 375px) 
+and (device-height : 812px)
 and (-webkit-device-pixel-ratio : 2)
 and (orientation: landscape) {
     #app{
