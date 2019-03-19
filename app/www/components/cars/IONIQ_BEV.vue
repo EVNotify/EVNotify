@@ -110,12 +110,16 @@
                             extractedFourthBlock = ((data.indexOf(fourthBlock) !== -1) ? data.substring(data.indexOf(fourthBlock), data.indexOf(fourthBlock) +
                                 19) : ''),
                             extractedFourthData = extractedFourthBlock.replace(fourthBlock, ''),
+                            fifthBlock = '7EC25',
+                            extractedFifthBlock = ((data.indexOf(fifthBlock) !== -1) ? data.substring(data.indexOf(fifthBlock), data.indexOf(fifthBlock) +
+                                19) : ''),
+                            extractedFifthData = extractedFifthBlock.replace(fifthBlock, ''),
                             sixthBlock = '7EC26',
                             extractedSixthBlock = ((data.indexOf(sixthBlock) !== -1) ? data.substring(data.indexOf(sixthBlock), data.indexOf(sixthBlock) +
                                 19) : ''),
                             extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
-                        if (extractedFirstData && extractedSecondData && extractedThirdData && extractedFourthData && extractedSixthData && extractedSixthData !== '00000000000000') {
+                        if (extractedFirstData && extractedSecondData && extractedThirdData && extractedFourthData && extractedFifthData && extractedSixthData && extractedSixthData !== '00000000000000') {
                             self.emptyResponses = 0;
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
@@ -138,7 +142,21 @@
                                 ) / 10,
                                 DC_BATTERY_CURRENT: helper.parseSigned(
                                   (extractedFirstData.slice(12, 14) + extractedSecondData.slice(0, 2)), 16 // concat 7th byte of first block with first byte of second block
-                                ) * 0.1
+                                ) * 0.1,
+                                CUMULATIVE_ENERGY_CHARGED: ((
+                                    (parseInt(
+                                        extractedFifthBlock.slice(-2), 16 // last byte within 5th block
+                                    ) << 24) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(0, 2), 16 // first byte within 6th block
+                                    ) << 16) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(2, 4), 16 // second byte within 6th block
+                                    ) << 8) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(4, 6), 16 // third byte within 6th block
+                                    )
+                                )) / 10)
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
