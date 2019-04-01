@@ -2,7 +2,7 @@
     <div>
         <toolbar></toolbar>
         <div class="content-within-page">
-            <md-tabs ref="tabs" class="md-transparent" md-alignment="fixed" @md-changed="loadStations()">
+            <md-tabs ref="tabs" class="md-transparent stations-tabs" md-alignment="fixed" @md-changed="loadStations()">
                 <md-tab id="tab-list" :md-label="translated.LIST"></md-tab>
                 <md-tab id="tab-favorites" :md-label="translated.FAVORITES"></md-tab>
                 <md-tab id="tab-map" :md-label="translated.MAP"></md-tab>
@@ -13,7 +13,7 @@
                 <p class="md-empty-state-description">{{ translated.STATIONS_EMPTY_DESCRIPTION_1 }}
                     <br>{{ translated.STATIONS_EMPTY_DESCRIPTION_2 }}</p>
             </md-empty-state>
-            <div v-if="stations.length && !notImplemented">
+            <div v-if="stations.length && !notImplemented" class="stations-list">
                 <md-card md-with-hover v-for="(station, index) in stations" :key="index" class="station-card">
                     <div @click="openStation(station.ge_id)">
                         <md-ripple>
@@ -152,6 +152,10 @@
 </script>
 
 <style scoped>
+    .stations-list,
+    .missing {
+        margin-top: 48px;
+    }
     .station-card {
         border-bottom: 1px solid #898989;
     }
@@ -190,5 +194,14 @@
 
     .plugs-list {
         margin: 0;
+    }
+</style>
+
+<style>
+    .md-tabs.stations-tabs.md-theme-default .md-tabs-navigation {
+        position: fixed;
+        z-index: 3;
+        background-color: white !important;
+        width: 100%;
     }
 </style>
