@@ -103,8 +103,9 @@ document.addEventListener('deviceready', function() {
     document.addEventListener('backbutton', function(e) {
         eventBus.$emit('backbuttonPressed', e);
     });
+    vm.appPlatform = ((window.device && typeof device.platform === 'string') ? device.platform.toLowerCase() : 'browser'); 
     // if ios, prevent some features
-    if (device.platform.toLowerCase().indexOf('ios') === -1 && device.platform.toLowerCase().indexOf('mac') === -1) {
+    if (vm.appPlatform.indexOf('ios') === -1 && vm.appPlatform.indexOf('mac') === -1) {
         // background mode handling
         cordova.plugins.backgroundMode.on('activate', function() {
             cordova.plugins.backgroundMode.disableWebViewOptimizations();
