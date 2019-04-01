@@ -4,8 +4,8 @@
         <div class="content-within-page">
             <md-tabs ref="tabs" class="md-transparent stations-tabs" md-alignment="fixed" @md-changed="loadStations()">
                 <md-tab id="tab-list" :md-label="translated.LIST"></md-tab>
-                <md-tab id="tab-favorites" :md-label="translated.FAVORITES"></md-tab>
-                <md-tab id="tab-map" :md-label="translated.MAP"></md-tab>
+                <md-tab id="tab-favorites" :md-label="translated.FAVORITES" v-if="notApple"></md-tab>
+                <md-tab id="tab-map" :md-label="translated.MAP" v-if="notApple"></md-tab>
             </md-tabs>
             <md-empty-state v-if="!stations.length && !notImplemented">
                 <strong class="md-empty-state-label">{{ translated.STATIONS_EMPTY }}</strong>
@@ -79,7 +79,8 @@
                 translated: {},
                 coords: {},
                 stations: [],
-                notImplemented: false
+                notImplemented: false,
+                notApple: false
             };
         },
         methods: {
@@ -144,6 +145,7 @@
             var self = this;
 
             this.translated = translation.translatePage();
+            this.notApple = this.$root.appPlatform.indexOf('ios') === -1 && this.$root.appPlatform.indexOf('mac') === -1;
             // retrieve stations after cards has been cached
             if (self.$root.stationcards.length) self.getStations();
             else EventBus.$on('stationcardsCached', () => self.getStations());
