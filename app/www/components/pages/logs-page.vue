@@ -5,7 +5,7 @@
             <md-tabs ref="tabs" class="md-transparent logs-tabs" md-alignment="fixed" @md-changed="loadLogs()">
                 <md-tab id="tab-charges" :md-label="translated.CHARGES"></md-tab>
                 <md-tab id="tab-drives" :md-label="translated.DRIVES"></md-tab>
-                <md-tab id="tab-statistics" :md-label="translated.STATISTICS"></md-tab>
+                <md-tab id="tab-statistics" :md-label="translated.STATISTICS" v-if="notApple"></md-tab>
             </md-tabs>
             <md-empty-state v-if="!logs.length" >
                 <strong class="md-empty-state-label">{{ translated.LOGS_EMPTY }}</strong>
@@ -52,7 +52,8 @@
             return {
                 translated: {},
                 logs: [],
-                notImplemented: false
+                notImplemented: false,
+                notApple: false
             };
         },
         methods: {
@@ -94,6 +95,7 @@
         },
         created() {
             this.translated = translation.translatePage();
+            this.notApple = this.$root.appPlatform.indexOf('ios') === -1 && this.$root.appPlatform.indexOf('mac') === -1;
         },
         mounted() {
             this.loadLogs();
