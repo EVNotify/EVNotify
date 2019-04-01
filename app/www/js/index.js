@@ -69,6 +69,7 @@ var vm = new Vue({
             deviceReady: false,
             updateAvailable: false,
             loading: false,
+            appPlatform: 'browser',
             originalRESTURL: RESTURL,
             stationcards: []
         };
