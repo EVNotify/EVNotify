@@ -8,7 +8,7 @@
                 <vueper-slide v-for="i in 4" :key="i">
                     <div slot="slideContent">
                         <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img :src="batteryIcon">
@@ -23,7 +23,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/car.svg">
@@ -39,7 +39,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/schedule.svg">
@@ -70,7 +70,7 @@
                             </md-card>
                         </div>
                         <div v-if="i === 2" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img :src="batteryIcon">
@@ -85,7 +85,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/favorite.svg">
@@ -96,7 +96,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/flash.svg">
@@ -109,7 +109,7 @@
                             </md-card>
                         </div>
                         <div v-if="i === 3" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/battery_charging_100.svg">
@@ -120,7 +120,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/flash_auto.svg">
@@ -131,7 +131,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/power.svg">
@@ -144,7 +144,7 @@
                             </md-card>
                         </div>
                         <div v-if="i === 4" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/cold.svg">
@@ -155,7 +155,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/hot.svg">
@@ -166,7 +166,7 @@
                                     </md-card-header-text>
                                 </md-card-header>
                             </md-card>
-                            <md-card class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100">
+                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
                                 <md-card-header>
                                     <md-card-media>
                                         <img src="icons/temperature.svg">
