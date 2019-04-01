@@ -200,6 +200,7 @@
 <style>
     .md-tabs.stations-tabs.md-theme-default .md-tabs-navigation {
         position: fixed;
+        top: 56px;
         z-index: 3;
         background-color: white !important;
         width: 100%;
