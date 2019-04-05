@@ -187,5 +187,9 @@ export default {
     DELETE_QR: 'Delete QR code',
     DELETE_QR_TEXT: 'When deleting the QR code, the existing QR code becomes invalid immediately. This can not be undone. If you then create a new one, you will get a new code.',
     DELETE: 'Delete',
-    INFO_QR: 'Imagine the following situation: You are driving to a charging station, but another electric vehicle is already charging there. Now it would be good to know when the driver is done with charging to be able to start yours. QRNotify allows you to view the current state of charge and the expected departure time via a QR code. In addition, notifications can be sent here so that the charging station can be cleared for others if necessary.'
+    INFO_QR: 'Imagine the following situation: You are driving to a charging station, but another electric vehicle is already charging there. Now it would be good to know when the driver is done with charging to be able to start yours. QRNotify allows you to view the current state of charge and the expected departure time via a QR code. In addition, notifications can be sent here so that the charging station can be cleared for others if necessary.',
+    DELETE_LOG: 'Delete log entry',
+    DELETE_LOG_TEXT: 'When deleting the log, all associated, transmitted data will be deleted irrevocably. This can not be undone.',
+    LOG_DELETED: 'Log entry deleted',
+    LOG_DELETED_ERROR: 'Log entry could not be deleted'
 };

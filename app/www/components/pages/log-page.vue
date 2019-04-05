@@ -54,6 +54,16 @@
                                     </v-btn>
                                 </v-time-picker>
                             </v-dialog>
+                            <md-dialog-confirm
+                                :md-active.sync="deleteLogDialog"
+                                :md-title="translated.DELETE_LOG"
+                                :md-content="translated.DELETE_LOG_TEXT"
+                                :md-confirm-text="translated.DELETE"
+                                :md-cancel-text="translated.CANCEL"
+                                @md-cancel="deleteLogDialog = false"
+                                @md-confirm="deleteLogDialog = false; deleteLog();"
+                            />
+                            <md-button class="md-raised md-accent log-delete-btn" @click="deleteLogDialog = true" v-if="log.id">{{ translated.DELETE}}</md-button>
                         </div>
                     </md-card-content>
                     <md-card-content>
@@ -83,6 +93,7 @@
     export default {
         data() {
             return {
+                deleteLogDialog: false,
                 translated: {},
                 log: {},
                 startDate: '',
@@ -117,6 +128,22 @@
                         self.$router.push('/logs');
                     } else {
                         self.$refs.snackbar.setMessage('LOG_SAVE_ERROR', false, 'error');
+                    }
+                });
+            },
+            deleteLog() {
+                var self = this;
+
+                http.sendRequest('delete', 'logdetail', {
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token'),
+                    id: self.log.id
+                }, true, err => {
+                    if (!err) {
+                        self.$refs.snackbar.setMessage('LOG_DELETED', false, 'success');
+                        self.$router.push('/logs');
+                    } else {
+                        self.$refs.snackbar.setMessage('LOG_DELETED_ERROR', false, 'error');
                     }
                 });
             },
@@ -313,6 +340,9 @@
         position: absolute;
         right: 0;
         top: 16px;
+    }
+    .log-delete-btn {
+        float: right;
     }
 </style>
 

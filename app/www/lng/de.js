@@ -187,5 +187,9 @@ export default {
     DELETE_QR: 'QR-Code löschen',
     DELETE_QR_TEXT: 'Beim Löschen des QR-Codes wird der bestehende QR-Code sofort ungültig. Dies kann nicht rückgängig gemacht werden. Wenn Du anschließend einen neuen erstellen solltest, kriegst Du einen neuen Code.',
     DELETE: 'Löschen',
-    INFO_QR: 'Stell Dir folgende Situation vor: Du fährst zu einer Ladestation, doch ein anderes Elektrofahrzeug lädt dort bereits. Jetzt wäre es gut zu wissen, wann der Fahrer fertig ist mit Laden, um Deine Ladung starten zu können. QRNotify erlaubt es, den aktuellen Ladezustand und die voraussichtliche Abfahrtszeit über einen QR Code einzusehen. Außerdem können Benachrichtigungen hierüber verschickt werden, damit die Ladestation bei Bedarf für andere freigemacht werden kann.'
+    INFO_QR: 'Stell Dir folgende Situation vor: Du fährst zu einer Ladestation, doch ein anderes Elektrofahrzeug lädt dort bereits. Jetzt wäre es gut zu wissen, wann der Fahrer fertig ist mit Laden, um Deine Ladung starten zu können. QRNotify erlaubt es, den aktuellen Ladezustand und die voraussichtliche Abfahrtszeit über einen QR Code einzusehen. Außerdem können Benachrichtigungen hierüber verschickt werden, damit die Ladestation bei Bedarf für andere freigemacht werden kann.',
+    DELETE_LOG: 'Log-Eintrag löschen',
+    DELETE_LOG_TEXT: 'Beim Löschen des Logs werden alle damit übertragenen, zugehörigen Daten unwiderruflich gelöscht. Dies kann nicht rückgängig gemacht werden.',
+    LOG_DELETED: 'Log-Eintrag gelöscht',
+    LOG_DELETED_ERROR: 'Der Log-Eintrag konnte nicht gelöscht werden'
 }
