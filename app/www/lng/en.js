@@ -52,7 +52,7 @@ export default {
     INTRODUCTION_TEXT_1: 'EVNotify allows you to remotely monitor your electric vehicle.',
     INTRODUCTION_TEXT_2: 'Keep track of your state of charge and let you notify when your desired state of charge is reached.',
     INTRODUCTION_TEXT_3: 'Useful statistics and various functions, such as finding charging stations, simplify everyday life.',
-    INTRODUCTION_TEXT_4: 'What are you waiting for? EVNotify is free, open source. All you need is an Android device with Bluetooth, Internet and a Bluetooth-enabled OBD2 dongle.',
+    INTRODUCTION_TEXT_4: 'What are you waiting for? EVNotify is free, open source. All you need is an device with Bluetooth, Internet and a Bluetooth-enabled OBD2 dongle.',
     CREATE_ACCOUNT_TEXT_1: 'Create your personal access now. Choose a strong password - you will receive a random "AKey" - your anonymized ID.',
     CREATE_ACCOUNT_TEXT_2: 'Everything about privacy can be found at: ',
     PRIVACY_URL: 'https://evnotify.de/privacy.html',

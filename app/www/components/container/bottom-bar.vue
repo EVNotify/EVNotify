@@ -1,5 +1,5 @@
 <template>
-    <md-bottom-bar md-type="shift" :md-active-item.sync="currentSelection">
+    <md-bottom-bar md-type="shift" :md-active-item.sync="currentSelection" class="app-bottom-bar">
         <md-bottom-bar-item id="bottom-bar-item-dashboard" :md-label="translated.DASHBOARD" to="/dashboard">
             <img src="icons/white/dashboard.svg" />
             <span class="md-bottom-bar-label">{{ translated.DASHBOARD }}</span>
@@ -50,3 +50,16 @@
         }
     }
 </script>
+
+<style>
+.app-bottom-bar .md-ripple {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.app-bottom-bar .md-bottom-bar-item {
+    width: 20%;
+    max-width: 20% !important;
+}
+</style>
