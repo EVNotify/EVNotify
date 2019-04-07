@@ -191,5 +191,10 @@ export default {
     DELETE_LOG: 'Delete log entry',
     DELETE_LOG_TEXT: 'When deleting the log, all associated, transmitted data will be deleted irrevocably. This can not be undone.',
     LOG_DELETED: 'Log entry deleted',
-    LOG_DELETED_ERROR: 'Log entry could not be deleted'
+    LOG_DELETED_ERROR: 'Log entry could not be deleted',
+    EXPORT: 'Export',
+    EXPORT_LOG: 'Export log',
+    EXPORT_LOG_TEXT: 'You can export this log with all its associated data. This will generate a file that will be sent to the specified mail address. The process can take several minutes.',
+    LOG_EXPORTED: 'Log exported. Check your mail',
+    LOG_EXPORTED_ERROR: 'Error while exporting the log'
 };

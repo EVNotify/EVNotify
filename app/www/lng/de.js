@@ -191,5 +191,10 @@ export default {
     DELETE_LOG: 'Log-Eintrag löschen',
     DELETE_LOG_TEXT: 'Beim Löschen des Logs werden alle damit übertragenen, zugehörigen Daten unwiderruflich gelöscht. Dies kann nicht rückgängig gemacht werden.',
     LOG_DELETED: 'Log-Eintrag gelöscht',
-    LOG_DELETED_ERROR: 'Der Log-Eintrag konnte nicht gelöscht werden'
+    LOG_DELETED_ERROR: 'Der Log-Eintrag konnte nicht gelöscht werden',
+    EXPORT: 'Exportieren',
+    EXPORT_LOG: 'Log exportieren',
+    EXPORT_LOG_TEXT: 'Du kannst diesen Log mit allen zugehörigen Daten exportieren. Hierbei wird eine Datei generiert, die an die angegebene E-Mail versandt wird. Der Prozess kann einige Minuten in Anspruch nehmen.',
+    LOG_EXPORTED: 'Log exportiert. Prüfe Deine E-Mail',
+    LOG_EXPORTED_ERROR: 'Fehler beim Export des Logs'
 }
