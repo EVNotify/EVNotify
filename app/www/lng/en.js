@@ -82,6 +82,7 @@ export default {
     KONA_EV: 'Hyundai KONA EV',
     ZOE_Q210: 'Renault Zoe Q210',
     SOUL_EV: 'Kia Soul EV',
+    NIRO_EV: 'Kia Niro EV',
     CONSUMPTION: 'Consumption',
     OBD2_DEVICE: 'OBDII-Device',
     OBD2_DEVICE_PAIR: 'Not listed? Pair a new device here',

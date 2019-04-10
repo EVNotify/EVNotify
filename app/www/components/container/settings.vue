@@ -27,6 +27,7 @@
                     <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
                     <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                     <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
+                    <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                 </md-select>
                 <span class="input-field-error">{{ carMessage }}</span>
             </md-field>
@@ -135,6 +136,7 @@
                         break;
                     case 'SOUL_EV':
                     case 'KONA_EV':
+                    case 'NIRO_EV':
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;
                     default:
