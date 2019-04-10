@@ -105,7 +105,6 @@
                             thirdBlock = '7EC23',
                             extractedSecondBlock = data.substring(data.indexOf(secondBlock), data.indexOf(thirdBlock)),
                             extractedSecondData = extractedSecondBlock.replace(secondBlock, ''),
-                            chargingBits = (parseInt(extractedSecondData.slice(2, 4), 16) >>> 0).toString(2), // second byte within 2nd block in binary
                             fourthBlock = '7EC24',
                             extractedThirdBlock = data.substring(data.indexOf(thirdBlock), data.indexOf(fourthBlock)),
                             extractedThirdData = extractedThirdBlock.replace(thirdBlock, ''),
@@ -122,6 +121,7 @@
                             eigthBlock = '7EC28',
                             extractedSeventhBlock = data.substring(data.indexOf(seventhBlock), data.indexOf(eigthBlock)),
                             extractedSeventhData = extractedSeventhBlock.replace(seventhBlock, ''),
+                            chargingBits = (parseInt(extractedSeventhData.slice(10, 12), 16) >>> 0).toString(2), // sixth byte within 7th block in binary
                             extractedEightBlock = data.substring(data.indexOf(eigthBlock), data.indexOf(eigthBlock) + 18),
                             extractedEightData = extractedEightBlock.replace(eigthBlock, '');
 
@@ -140,7 +140,7 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                CHARGING: chargingBits[0],
+                                CHARGING: parseInt(chargingBits.slice(4, 5)), // 4th bit of charging bits
                                 NORMAL_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) === '03', // charging and seventh byte is 03
                                 RAPID_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) !== '03',
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(10, 12), 16), // sixth byte within 2nd block
@@ -153,10 +153,6 @@
                             };
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
-                            // experimental charging detection
-                            parsedData.CHARGING =  ((
-                                    ["09"].indexOf(extractedSeventhData.slice(10, 12)) > -1 ) ? 1 : 0
-                            );
                         }
                     }
                 } catch (err) {
