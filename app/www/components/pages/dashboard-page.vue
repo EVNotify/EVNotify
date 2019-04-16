@@ -557,7 +557,14 @@
                         eventBus.$emit('forcedSyncMode', (self.syncMode = storage.getValue('lstSyncMode', 'download')));
                         eventBus.$emit('syncModeChanged', self.syncMode);
                     } else self.syncIntervalHandler(); // start sync on beginning
-                } else self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), true, 'warning');
+                } else {
+                    // the sync interval
+                    self.syncInterval = setInterval(() => {
+                        self.pullData();
+                    }, 10000);
+                    self.pullData();
+                    self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), !!self.device, 'warning');
+                }
                 
                 // plugin handling based on local device settings
                 window.plugins.insomnia[((storage.getValue('keepawake') ? 'keepAwake' : 'allowSleepAgain'))]();
