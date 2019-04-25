@@ -317,6 +317,7 @@
                             dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
                             dcBatteryPower: self.obd2Data.DC_BATTERY_POWER,
+                            cumulativeEnergyCharged: self.obd2Data.CUMULATIVE_ENERGY_CHARGED,
                             batteryMinTemperature: self.obd2Data.BATTERY_MIN_TEMPERATURE,
                             batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
                             batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE
@@ -367,6 +368,7 @@
                         Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.dc_battery_voltage);
                         Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
                         Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.dc_battery_power);
+                        Vue.set(self.obd2Data, 'CUMULATIVE_ENERGY_CHARGED', res.cumulativeEnergyCharged);
                         Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
