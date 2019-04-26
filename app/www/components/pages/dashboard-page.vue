@@ -183,6 +183,7 @@
             </vueper-slides>
         </div>
         <AMPERAE ref="AMPERA_E"></AMPERAE>
+        <BOLTEV ref="BOLT_EV"></BOLTEV>
         <IONIQBEV ref="IONIQ_BEV"></IONIQBEV>
         <IONIQHEV ref="IONIQ_HEV"></IONIQHEV>
         <IONIQPHEV ref="IONIQ_PHEV"></IONIQPHEV>
@@ -205,6 +206,7 @@
     import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
     import AMPERAE from './../cars/AMPERA_E.vue';
+    import BOLTEV from './../cars/BOLT_EV.vue';
     import IONIQBEV from './../cars/IONIQ_BEV.vue';
     import IONIQHEV from './../cars/IONIQ_HEV.vue';
     import IONIQPHEV from './../cars/IONIQ_PHEV.vue';
@@ -236,7 +238,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'KONA_EV', 'ZOE_Q210', 'NIRO_EV'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'SOUL_EV', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'NIRO_EV'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -644,6 +646,7 @@
             snackbar,
             toolbar,
             AMPERAE,
+            BOLTEV,
             IONIQBEV,
             IONIQHEV,
             IONIQPHEV,
