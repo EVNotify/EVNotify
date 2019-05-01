@@ -140,7 +140,7 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                CHARGING: parseInt(chargingBits.slice(4, 5)), // 4th bit of charging bits
+                                CHARGING: parseInt(chargingBits.slice(4, 5)) && !parseInt(chargingBits.slice(5, 6)), // 4th bit of charging bits and not 3th bit 1
                                 NORMAL_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) === '03', // charging and seventh byte is 03
                                 RAPID_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) !== '03',
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(10, 12), 16), // sixth byte within 2nd block
