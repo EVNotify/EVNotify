@@ -1,186 +1,146 @@
 <!-- The Dashboard Page -->
 <template>
     <div>
-        <v-tour name="dashboard-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour>
+        <!-- <v-tour name="dashboard-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour> -->
         <toolbar @debugChanged="debugInfo()" class="v-step-1"></toolbar>
         <div class="content-within-page">
-            <vueper-slides :fixed-height="true" class="v-step-2">
-                <vueper-slide v-for="i in 4" :key="i">
-                    <div slot="slideContent">
-                        <div v-if="i === 1" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img :src="batteryIcon">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.SOC_DISPLAY || 0 }}%</div>
-                                        <div class="md-subhead">{{ translated.SOC_DISPLAY }}</div>
-                                        <md-divider></md-divider>
-                                        <div>
-                                            <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
-                                        </div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/car.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ estimatedRangeCurrent }}km / {{ estimatedRangeTotal
-                                            }}km</div>
-                                        <div class="md-subhead">{{ translated.ESTIMATED_RANGE }}</div>
-                                        <md-divider></md-divider>
-                                        <div>
-                                            <img src="icons/ev_station.svg">{{ consumption || 0 }}kWh/100km
-                                        </div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/schedule.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">
-                                            <ul class="dashboard-charging-times">
-                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.SLOW_CHARGE_PORT">
-                                                    {{ formatDecimalTime(estimatedSlowTime) }}
-                                                </li>
-                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.NORMAL_CHARGE_PORT">
-                                                    {{ formatDecimalTime(estimatedNormalTime) }}
-                                                </li>
-                                                <li v-if="!obd2Data.CHARGING || obd2Data.CHARGING && obd2Data.RAPID_CHARGE_PORT">
-                                                    {{ formatDecimalTime(estimatedFastTime) }}
-                                                </li>
-                                                <p v-if="obd2Data.charging">
-                                                    {{ translated.CHARGING_SINCE}}: {{ formatChargingTime(chargingStarted) }}
-                                                </p>
-                                            </ul>
-                                        </div>
-                                        <div class="md-subhead">{{ translated.ESTIMATED_TIME }}</div>
-                                        <md-divider></md-divider>
-                                        <div v-if="!obd2Data.CHARGING">{{ translated.CHARGING_SPEEDS }}</div>
-                                        <div v-if="obd2Data.CHARGING">{{ translated.IS_CHARGING }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
+            <v-layout>
+                <v-flex xs12 sm6 offset-sm3>
+                <v-card>
+                    <v-card-title primary-title>
+                    <div class="upper-part">
+                        <div class="progress-cycle-container left">
+                        <v-progress-circular :rotate="-90" :size="100" :width="15"
+                            :value="obd2Data.SOC_DISPLAY || obd2Data.SOC_BMS" :color="cycleColor">
+                            <div class="progress-cycle-text-container">
+                            <p>{{ obd2Data.SOC_DISPLAY ||obd2Data.SOC_BMS }} %</p>
+                            <v-icon color="primary" v-if="obd2Data.CHARGING">flash_on</v-icon>
+                            </div>
+                        </v-progress-circular>
+                        <p class="caption progress-cycle-text" v-if="obd2Data.SOC_DISPLAY">SOC Display</p>
+                        <p class="caption progress-cycle-text" v-else>SOC BMS</p>
                         </div>
-                        <div v-if="i === 2" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img :src="batteryIcon">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.SOC_BMS || 0 }}%</div>
-                                        <div class="md-subhead">{{ translated.SOC_BMS }}</div>
-                                        <md-divider></md-divider>
-                                        <div>
-                                            <img src="icons/sync_enabled.svg">{{ formatDate(timestamp) }}
-                                        </div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/favorite.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.SOH || 0 }}%</div>
-                                        <div class="md-subhead">{{ translated.SOH }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/flash.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }}V</div>
-                                        <div class="md-subhead">{{ translated.AUX_BATTERY_VOLTAGE }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                        </div>
-                        <div v-if="i === 3" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/battery_charging_100.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_VOLTAGE) || 0 }}V</div>
-                                        <div class="md-subhead">{{ translated.DC_BATTERY_VOLTAGE }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/flash_auto.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_CURRENT) || 0 }}A</div>
-                                        <div class="md-subhead">{{ translated.DC_BATTERY_CURRENT }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/power.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ roundTo2Digits(obd2Data.DC_BATTERY_POWER) || 0 }}kW</div>
-                                        <div class="md-subhead">{{ translated.DC_BATTERY_POWER }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                        </div>
-                        <div v-if="i === 4" class="md-layout md-gutter md-alignment-center dashboard-card-list">
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/cold.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.BATTERY_MIN_TEMPERATURE || 0 }}°C</div>
-                                        <div class="md-subhead">{{ translated.BATTERY_MIN_TEMPERATURE }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/hot.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.BATTERY_MAX_TEMPERATURE || 0 }}°C</div>
-                                        <div class="md-subhead">{{ translated.BATTERY_MAX_TEMPERATURE }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
-                            <md-card class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100 md-large-size-100">
-                                <md-card-header>
-                                    <md-card-media>
-                                        <img src="icons/temperature.svg">
-                                    </md-card-media>
-                                    <md-card-header-text>
-                                        <div class="md-title">{{ obd2Data.BATTERY_INLET_TEMPERATURE || 0 }}°C</div>
-                                        <div class="md-subhead">{{ translated.BATTERY_INLET_TEMPERATURE }}</div>
-                                    </md-card-header-text>
-                                </md-card-header>
-                            </md-card>
+                        <div class="progress-cycle-container right">
+                        <v-list>
+                            <v-list-tile>
+                            <v-list-tile-action>
+                                <v-icon color="#448aff">flash_on</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title :style="{color: powerAmountColor}">{{ powerAmount }} kW</v-list-tile-title>
+                                <span v-if="obd2Data.CHARGING" class="font-weight-light font-italic">{{ rangePerMinute }} km / min</span>
+                            </v-list-tile-content>
+                            </v-list-tile>
+                            <v-list-tile v-if="supportedCars.indexOf(car) !== -1">
+                            <v-list-tile-action>
+                                <v-icon color="#448aff">drive_eta</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title :style="{color: currentRangeColor}">{{ currentRange }} / {{ totalRange }} km</v-list-tile-title>
+                                <span class="font-weight-light font-italic">{{ consumption || 0 }} kWh / 100 km</span>
+                            </v-list-tile-content>
+                            </v-list-tile>
+                            <v-list-tile v-if="obd2Data.CHARGING && supportedCars.indexOf(car) !== -1">
+                            <v-list-tile-action>
+                                <v-icon color="#448aff">schedule</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ chargingTimeLeft }} h ({{ finishTime }})</v-list-tile-title>
+                            </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
                         </div>
                     </div>
-                </vueper-slide>
-            </vueper-slides>
+                    <small class="updated-timestamp" v-if="!dataOutdated()">{{ updatedTimestamp }}</small>
+                    <v-alert type="warning" :value="dataOutdated()" transition="scale-transition">
+                        {{ dataOutdatedMessage }}<br>
+                        <small>{{ dataOutdatedMessageTimestamp }}</small>
+                    </v-alert>
+                    <div class="bottom-part">
+                        <v-list two-line>
+                        <v-subheader>Battery temperature</v-subheader>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">ac_unit</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>
+                                <p class="temperature-text" :style="{color: getTemperatureColor(obd2Data.BATTERY_MIN_TEMPERATURE)}">
+                                {{ obd2Data.BATTERY_MIN_TEMPERATURE || 0 }}
+                                </p> /
+                                <p class="temperature-text" :style="{color: getTemperatureColor(obd2Data.BATTERY_MAX_TEMPERATURE)}">
+                                {{ obd2Data.BATTERY_MAX_TEMPERATURE || 0 }}
+                                </p> /
+                                <p class="temperature-text"
+                                :style="{color: getTemperatureColor(obd2Data.BATTERY_INLET_TEMPERATURE)}">
+                                {{ obd2Data.BATTERY_INLET_TEMPERATURE || 0 }}
+                                </p> °C
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>Min / Max / Inlet</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-subheader>Battery health</v-subheader>
+                        <v-list-tile v-if="obd2Data.SOC_DISPLAY">
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">battery_std</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.SOC_BMS || 0 }} %</v-list-tile-title>
+                            <v-list-tile-sub-title>SOC BMS</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">favorite</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.SOH || 0 }} %</v-list-tile-title>
+                            <v-list-tile-sub-title>State of Health (SOH)</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">flash_auto</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
+                            <v-list-tile-sub-title>Aux Battery Voltage</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-subheader>Battery data</v-subheader>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">battery_charging_full</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.DC_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
+                            <v-list-tile-sub-title>Battery voltage</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">power</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.DC_BATTERY_CURRENT || 0 }} A</v-list-tile-title>
+                            <v-list-tile-sub-title>Battery current</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile class="last-tile">
+                            <v-list-tile-action>
+                            <v-icon color="#448aff">battery_unknown</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                            <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh</v-list-tile-title>
+                            <v-list-tile-sub-title>Cumulative energy charged</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        </v-list>
+                    </div>
+                    </v-card-title>
+                </v-card>
+                </v-flex>
+            </v-layout>
         </div>
         <AMPERAE ref="AMPERA_E"></AMPERAE>
         <BOLTEV ref="BOLT_EV"></BOLTEV>
@@ -262,6 +222,9 @@
                     target: '.v-step-3',
                     content: 'TOUR_DASHBOARD_3'
                 }],
+                updatedTimestamp: '',
+                dataOutdatedMessage: '',
+                dataOutdatedMessageTimestamp: '',
                 tourCallbacks: {
                     onStop: () => {
                         storage.setValue('tour_completed_dashboard', true);
@@ -276,7 +239,73 @@
             'initialized': 'initMessage',
             'communicationEstablished': 'communicationMessage'
         },
+        computed: {
+            cycleColor() {
+                const soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
+
+                if (soc < 15) return 'red';
+                else if (soc < 30) return 'orange';
+                else if (soc < 50) return 'yellow';
+                return 'green';
+            },
+            powerAmount() {
+                return (Math.abs(this.obd2Data.DC_BATTERY_POWER) || 0).toFixed(2);
+            },
+            powerAmountColor() {
+                if (this.obd2Data.CHARGING) return 'green';
+                return 'red';
+            },
+            totalRange() {
+                return parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
+            },
+            currentRange() {
+                const soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
+
+                return parseInt(this.totalRange * ((soc === 100) ? 1 : '0.' + ((soc < 10) ? ('0' + parseInt(soc)) :
+                parseInt(soc)))) || 0;
+            },
+            currentRangeColor() {
+                if (this.currentRange < (this.totalRange * 10 / 100)) {
+                return 'red';
+                }
+                return 'green';
+            },
+            rangePerMinute() {
+                const time = helper.chargeDecimalTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED);
+                return (parseFloat((this.totalRange - this.currentRange) / (60 / 100 * time * 100)) || 0).toFixed(2);
+            },
+            chargingTimeLeft() {
+                return helper.chargeTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "timeleft");
+            },
+            finishTime() {
+                return helper.chargeTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "finishtime");
+            },
+        },
         methods: {
+            dataOutdated() {
+                const now = parseInt(new Date() / 1000);
+                const lastUpdate = this.timestamp;
+
+                if(!lastUpdate) {
+                    this.dataOutdatedMessage = translation.translate('DATA_OUTDATED_NEVER_CONNECTED');
+                } else {
+                    this.dataOutdatedMessage = translation.translate('DATA_OUTDATED_WITH_TIMESTAMP') + this.$root.MomentJS(new Date(lastUpdate * 1000)).fromNow() + '.';
+                    this.dataOutdatedMessageTimestamp = `(${this.$root.MomentJS(new Date(lastUpdate * 1000)).format('MMMM Do YYYY HH:mm')})`;
+                }
+                return !lastUpdate || lastUpdate + 600 < now;
+            },
+            getTemperatureColor(temperature) {
+                if (temperature < 20) return 'blue';
+                else if (temperature < 30) return 'green';
+                else if (temperature < 35) return 'orange';
+                return 'red';
+            },
+            updateTimestamp () {
+                const lastUpdate = this.timestamp;
+
+                if (!lastUpdate) this.updatedTimestamp = translation.translate('DATA_UPDATED_NEVER');
+                else this.updatedTimestamp = translation.translate('DATA_UPDATED_TEXT') + this.$root.MomentJS(new Date(lastUpdate * 1000)).fromNow();
+            },
             formatChargingTime(timestamp) {
                 return helper.convertDecimalTime(parseInt(new Date().getTime() / 1000) - timestamp) + 'h';
             },
@@ -351,6 +380,7 @@
                     Vue.set(self.obd2Data, 'SOC_DISPLAY', res.soc_display);
                     Vue.set(self.obd2Data, 'SOC_BMS', res.soc_bms);
                     self.timestamp = res.last_soc;
+                    self.updateTimestamp();
                     self.updateNotification(self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS);
                     // get extended data
                     http.sendRequest('GET', 'extended', {
@@ -707,6 +737,7 @@
                 // set current timestamp and update last car response activity
                 if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
                 else self.obd2ErrorCount++; // no valid data
+                self.updateTimestamp();
                 self.updateNotification(soc);
                 // inform user once about success
                 if (!self.communicationEstablished) self.communicationEstablished = true;
@@ -781,8 +812,71 @@
     }
 </script>
 
+<style scoped>
+.v-alert {
+    width: 100%;
+}
+
+.warning {
+    background-color: #fb8c00 !important;
+}
+
+.layout {
+    width: 100%;
+}
+
+.upper-part,
+.bottom-part {
+    width: 100%;
+}
+
+.updated-timestamp {
+    padding: 0 16px;
+}
+
+.progress-cycle-container.left {
+    padding-top: 16px;
+    float: left;
+}
+
+.progress-cycle-container.right {
+    float: right;
+}
+
+.progress-cycle-text {
+    text-align: center;
+    padding-top: 6px;
+}
+
+.progress-cycle-text-container p {
+    margin-bottom: 0;
+    text-align: center;
+    color: #1976d2;
+}
+.progress-cycle-text-container i {
+    color: #448aff;
+}
+
+.temperature-text {
+    display: inline;
+}
+
+.last-tile {
+    padding-bottom: 56px;
+}
+.v-card__title--primary {
+    padding-top: 5px;
+}
+.v-subheader {
+    height: 20px;
+}
+</style>
+
 <style>
 .vueperslides__arrows .vueperslides__arrow {
     fill: #448aff;
+}
+.v-list--two-line .v-list__tile {
+    height: 60px;
 }
 </style>

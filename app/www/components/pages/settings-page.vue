@@ -514,6 +514,7 @@
             logout() {
                 storage.removeValue('akey');
                 storage.removeValue('token');
+                storage.removeValue('settings');
                 this.$router.push('/');
             },
             countDevClick() {

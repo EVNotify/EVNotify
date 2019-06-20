@@ -12,6 +12,7 @@ import StationsPage from './../components/pages/stations-page.vue';
 import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
 import DebugSettingsPage from './../components/pages/debug-settings-page.vue';
+import MomentJS from 'moment';
 
 Vue.use(VueMaterial.default);
 Vue.use(VueResource);
@@ -71,7 +72,8 @@ var vm = new Vue({
             loading: false,
             appPlatform: 'browser',
             originalRESTURL: RESTURL,
-            stationcards: []
+            stationcards: [],
+            MomentJS
         };
     },
     components: {
