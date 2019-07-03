@@ -207,7 +207,7 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="devices">{{ translated.OBD2_DEVICE }}</label>
-                            <md-select v-model="settings.device" required>
+                            <md-select v-model="settings.device" required @click="listDevices()">
                                 <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{
                                     device.name }}</md-option>
                             </md-select>
@@ -458,7 +458,9 @@
 
                 bluetoothSerial.enable(enabled => {
                     bluetoothSerial.list(devices => {
-                        self.devices = devices;
+                        devices.forEach((device, idX) => {
+                            Vue.set(self.devices, idX, device);
+                        });
                     }, err => console.log(err));
                 }, err => console.log(err));
             },
