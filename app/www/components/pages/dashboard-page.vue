@@ -122,7 +122,7 @@
                             <v-icon color="#448aff">power</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.DC_BATTERY_CURRENT || 0 }} A</v-list-tile-title>
+                            <v-list-tile-title>{{ roundTo2Digits(obd2Data.DC_BATTERY_CURRENT) || 0 }} A</v-list-tile-title>
                             <v-list-tile-sub-title>Battery current</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -253,7 +253,7 @@
             },
             powerAmountColor() {
                 if (this.obd2Data.CHARGING) return 'green';
-                return 'red';
+                return this.powerAmount <= 0 ? '#448aff' : 'red';
             },
             totalRange() {
                 return parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
