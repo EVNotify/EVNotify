@@ -156,6 +156,20 @@
                                     (parseInt(
                                         extractedSixthData.slice(4, 6), 16 // third byte within 6th block
                                     )
+                                )) / 10),
+                                CUMULATIVE_ENERGY_DISCHARGED: ((
+                                    (parseInt(
+                                        extractedSixthData.slice(6, 8), 16 // fourth byte within 6th block
+                                    ) << 24) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(8, 10), 16 // fifth byte within 6th block
+                                    ) << 16) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(10, 12), 16 // sixth byte within 6th block
+                                    ) << 8) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(12, 14), 16 // seventh byte within 6th block
+                                    )
                                 )) / 10)
                             };
                             // add battery power

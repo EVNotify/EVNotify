@@ -131,8 +131,8 @@
                             <v-icon color="#448aff">battery_unknown</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh</v-list-tile-title>
-                            <v-list-tile-sub-title>Cumulative energy charged</v-list-tile-sub-title>
+                            <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh / {{ obd2Data.CUMULATIVE_ENERGY_DISCHARGED || 0 }} kWh</v-list-tile-title>
+                            <v-list-tile-sub-title>Cumulative energy charged / <br>Cumulative energy discharged</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         </v-list>
@@ -349,6 +349,7 @@
                             dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
                             dcBatteryPower: self.obd2Data.DC_BATTERY_POWER,
                             cumulativeEnergyCharged: self.obd2Data.CUMULATIVE_ENERGY_CHARGED,
+                            cumulativeEnergyDischarged: self.obd2Data.CUMULATIVE_ENERGY_DISCHARGED,
                             batteryMinTemperature: self.obd2Data.BATTERY_MIN_TEMPERATURE,
                             batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
                             batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE
@@ -401,6 +402,7 @@
                         Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
                         Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.dc_battery_power);
                         Vue.set(self.obd2Data, 'CUMULATIVE_ENERGY_CHARGED', res.cumulative_energy_charged);
+                        Vue.set(self.obd2Data, 'CUMULATIVE_ENERGY_DISCHARGED', res.cumulative_energy_discharged);
                         Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
