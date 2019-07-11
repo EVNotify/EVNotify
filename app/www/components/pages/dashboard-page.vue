@@ -304,7 +304,7 @@
                 const lastUpdate = this.timestamp;
 
                 if (!lastUpdate) this.updatedTimestamp = translation.translate('DATA_UPDATED_NEVER');
-                else this.updatedTimestamp = translation.translate('DATA_UPDATED_TEXT') + this.$root.MomentJS(new Date(lastUpdate * 1000)).fromNow();
+                else this.updatedTimestamp = translation.translate('DATA_UPDATED_TEXT') + this.$root.MomentJS(new Date(lastUpdate * 1000)).fromNow() + ' [' + this.$root.MomentJS(new Date(lastUpdate) * 1000).format('HH:mm:ss') + ']';
             },
             formatChargingTime(timestamp) {
                 return helper.convertDecimalTime(parseInt(new Date().getTime() / 1000) - timestamp) + 'h';
