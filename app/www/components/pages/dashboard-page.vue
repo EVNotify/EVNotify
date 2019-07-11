@@ -24,7 +24,9 @@
                         <v-list>
                             <v-list-tile>
                             <v-list-tile-action>
-                                <v-icon color="#448aff">flash_on</v-icon>
+                                <v-btn flat icon :ripple="false">
+                                    <img src="icons/blue/flash.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title :style="{color: powerAmountColor}">{{ powerAmount }} kW</v-list-tile-title>
@@ -33,7 +35,9 @@
                             </v-list-tile>
                             <v-list-tile v-if="supportedCars.indexOf(car) !== -1">
                             <v-list-tile-action>
-                                <v-icon color="#448aff">drive_eta</v-icon>
+                                <v-btn flat icon :ripple="false">
+                                    <img src="icons/blue/car.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title :style="{color: currentRangeColor}">{{ currentRange }} / {{ totalRange }} km</v-list-tile-title>
@@ -42,7 +46,9 @@
                             </v-list-tile>
                             <v-list-tile v-if="obd2Data.CHARGING && supportedCars.indexOf(car) !== -1">
                             <v-list-tile-action>
-                                <v-icon color="#448aff">schedule</v-icon>
+                                <v-btn flat icon :ripple="false">
+                                    <img src="icons/blue/schedule.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title>{{ chargingTimeLeft }} h ({{ finishTime }})</v-list-tile-title>
@@ -61,7 +67,9 @@
                         <v-subheader>{{ translated.BATTERY_TEMPERATURE }}</v-subheader>
                         <v-list-tile>
                             <v-list-tile-action>
-                            <v-icon color="#448aff">ac_unit</v-icon>
+                                <v-btn flat icon :ripple="false">
+                                    <img src="icons/blue/cold.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
                             <v-list-tile-title>
@@ -76,63 +84,75 @@
                                 {{ obd2Data.BATTERY_INLET_TEMPERATURE || 0 }}
                                 </p> °C
                             </v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.BATTERY_TEMPERATURE_SHORTS }}</v-list-tile-sub-title>
+                                <v-list-tile-sub-title>{{ translated.BATTERY_TEMPERATURE_SHORTS }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_HEALTH }}</v-subheader>
                         <v-list-tile v-if="obd2Data.SOC_DISPLAY">
                             <v-list-tile-action>
-                            <v-icon color="#448aff">battery_std</v-icon>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/battery_100.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.SOC_BMS || 0 }} %</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.SOC_BMS }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ obd2Data.SOC_BMS || 0 }} %</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.SOC_BMS }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile>
                             <v-list-tile-action>
-                            <v-icon color="#448aff">favorite</v-icon>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/favorite.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.SOH || 0 }} %</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.SOH }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ obd2Data.SOH || 0 }} %</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.SOH }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile>
-                            <v-list-tile-action>
-                            <v-icon color="#448aff">flash_auto</v-icon>
+                            <v-list-tile-action :rippled="false">
+                                <v-btn flat icon>
+                                    <img src="icons/blue/flash_auto.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.AUX_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.AUX_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_DATA }}</v-subheader>
                         <v-list-tile>
                             <v-list-tile-action>
-                            <v-icon color="#448aff">battery_charging_full</v-icon>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/battery_charging_100.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.DC_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.DC_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ obd2Data.DC_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.DC_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile>
                             <v-list-tile-action>
-                            <v-icon color="#448aff">power</v-icon>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/power.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ roundTo2Digits(obd2Data.DC_BATTERY_CURRENT) || 0 }} A</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.DC_BATTERY_CURRENT }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ roundTo2Digits(obd2Data.DC_BATTERY_CURRENT) || 0 }} A</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.DC_BATTERY_CURRENT }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile class="last-tile">
                             <v-list-tile-action>
-                            <v-icon color="#448aff">battery_unknown</v-icon>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/battery_unknown.svg" />
+                                </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                            <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh / {{ obd2Data.CUMULATIVE_ENERGY_DISCHARGED || 0 }} kWh</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ translated.CUMULATIVE_ENERGY_CHARGED }} / <br>{{ translated.CUMULATIVE_ENERGY_DISCHARGED }}</v-list-tile-sub-title>
+                                <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh / {{ obd2Data.CUMULATIVE_ENERGY_DISCHARGED || 0 }} kWh</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.CUMULATIVE_ENERGY_CHARGED }} / <br>{{ translated.CUMULATIVE_ENERGY_DISCHARGED }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         </v-list>
