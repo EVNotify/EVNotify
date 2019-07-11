@@ -11,14 +11,14 @@
                     <div class="upper-part">
                         <div class="progress-cycle-container left">
                         <v-progress-circular :rotate="-90" :size="100" :width="15"
-                            :value="obd2Data.SOC_DISPLAY || obd2Data.SOC_BMS" :color="cycleColor">
+                            :value="(obd2Data.SOC_DISPLAY || obd2Data.SOC_BMS) || 0" :color="cycleColor">
                             <div class="progress-cycle-text-container">
-                            <p>{{ obd2Data.SOC_DISPLAY ||obd2Data.SOC_BMS }} %</p>
+                            <p>{{ (obd2Data.SOC_DISPLAY || obd2Data.SOC_BMS) || 0 }} %</p>
                             <v-icon color="primary" v-if="obd2Data.CHARGING">flash_on</v-icon>
                             </div>
                         </v-progress-circular>
-                        <p class="caption progress-cycle-text" v-if="obd2Data.SOC_DISPLAY">SOC Display</p>
-                        <p class="caption progress-cycle-text" v-else>SOC BMS</p>
+                        <p class="caption progress-cycle-text" v-if="obd2Data.SOC_DISPLAY">{{ translated.SOC_DISPLAY }}</p>
+                        <p class="caption progress-cycle-text" v-else>{{ translated.SOC_BMS }}</p>
                         </div>
                         <div class="progress-cycle-container right">
                         <v-list>
@@ -836,6 +836,14 @@
     padding: 0 16px;
 }
 
+.progress-cycle-container {
+    width: 50%;
+}
+.progress-cycle-container .v-progress-circular {
+    margin: auto;
+    display: block;
+}
+
 .progress-cycle-container.left {
     padding-top: 16px;
     float: left;
@@ -880,5 +888,9 @@
 }
 .v-list--two-line .v-list__tile {
     height: 60px;
+}
+.progress-cycle-container.right .v-list__tile {
+    height: auto;
+    padding: 0;
 }
 </style>
