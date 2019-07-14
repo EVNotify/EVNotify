@@ -140,15 +140,43 @@
                                         extractedSecondData.slice(6, 8), 16 // fourth byte within 2nd block
                                     )
                                 ) / 10,
-                                CHARGING: parseInt(chargingBits.slice(4, 5)) && !parseInt(chargingBits.slice(5, 6)), // 4th bit of charging bits and not 3th bit 1
-                                NORMAL_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) === '03', // charging and seventh byte is 03
-                                RAPID_CHARGE_PORT: chargingBits[1] && extractedFirstData.slice(12, 14) !== '03',
+                                CHARGING: (parseInt(chargingBits.slice(4, 5)) && !parseInt(chargingBits.slice(5, 6))) >>> 0, // 4th bit of charging bits and not 3th bit 1
+                                NORMAL_CHARGE_PORT: (chargingBits[1] && extractedFirstData.slice(12, 14) === '03') >>> 0, // charging and seventh byte is 03
+                                RAPID_CHARGE_PORT: (chargingBits[1] && extractedFirstData.slice(12, 14) !== '03') >>> 0,
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(10, 12), 16), // sixth byte within 2nd block
                                 BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
                                 BATTERY_INLET_TEMPERATURE: helper.parseSigned(extractedThirdData.slice(10, 12), 16), // sixth byte within 3rd block
                                 DC_BATTERY_CURRENT: helper.parseSigned(
                                     (extractedSecondData.slice(0, 2) + extractedSecondData.slice(2, 4)), 16 // concat first and second byte of second block
                                 )*0.1, // some binary conversion to get signed int from value
+                                CUMULATIVE_ENERGY_CHARGED: ((
+                                    (parseInt(
+                                        extractedSixthData.slice(0, 2), 16 // first byte within 6th block
+                                    ) << 24) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(2, 4), 16 // second byte within 6th block
+                                    ) << 16) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(4, 6), 16 // third byte within 6th block
+                                    ) << 8) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(6, 8), 16 // fourth byte within 6th block
+                                    )
+                                )) / 10),
+                                CUMULATIVE_ENERGY_DISCHARGED: ((
+                                    (parseInt(
+                                        extractedSixthData.slice(8, 10), 16 // fifth byte within 6th block
+                                    ) << 24) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(10, 12), 16 // sixth byte within 6th block
+                                    ) << 16) + 
+                                    (parseInt(
+                                        extractedSixthData.slice(12, 14), 16 // seventh byte within 6th block
+                                    ) << 8) + 
+                                    (parseInt(
+                                        extractedSeventhData.slice(0, 2), 16 // first byte within 7th block
+                                    )
+                                )) / 10),
                                 AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(10, 12), 16) / 10 // sixth byte within fourth block
                             };
                             // add battery power
