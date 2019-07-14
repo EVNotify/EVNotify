@@ -87,40 +87,6 @@
                                 <v-list-tile-sub-title>{{ translated.BATTERY_TEMPERATURE_SHORTS }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
-                        <v-subheader>{{ translated.BATTERY_HEALTH }}</v-subheader>
-                        <v-list-tile v-if="obd2Data.SOC_DISPLAY">
-                            <v-list-tile-action>
-                                <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/battery_100.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ obd2Data.SOC_BMS || 0 }} %</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.SOC_BMS }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile>
-                            <v-list-tile-action>
-                                <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/favorite.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ obd2Data.SOH || 0 }} %</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.SOH }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile>
-                            <v-list-tile-action :rippled="false">
-                                <v-btn flat icon>
-                                    <img src="icons/blue/flash_auto.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.AUX_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_DATA }}</v-subheader>
                         <v-list-tile>
                             <v-list-tile-action>
@@ -144,7 +110,7 @@
                                 <v-list-tile-sub-title>{{ translated.DC_BATTERY_CURRENT }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
-                        <v-list-tile class="last-tile">
+                        <v-list-tile class="double-line">
                             <v-list-tile-action>
                                 <v-btn flat icon :rippled="false">
                                     <img src="icons/blue/battery_unknown.svg" />
@@ -153,6 +119,40 @@
                             <v-list-tile-content>
                                 <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh / {{ obd2Data.CUMULATIVE_ENERGY_DISCHARGED || 0 }} kWh</v-list-tile-title>
                                 <v-list-tile-sub-title>{{ translated.CUMULATIVE_ENERGY_CHARGED }} / <br>{{ translated.CUMULATIVE_ENERGY_DISCHARGED }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-subheader>{{ translated.BATTERY_HEALTH }}</v-subheader>
+                        <v-list-tile v-if="obd2Data.SOC_DISPLAY">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/battery_100.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ obd2Data.SOC_BMS || 0 }} %</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.SOC_BMS }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/favorite.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ obd2Data.SOH || 0 }} %</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.SOH }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile class="last-tile">
+                            <v-list-tile-action :rippled="false">
+                                <v-btn flat icon>
+                                    <img src="icons/blue/flash_auto.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ obd2Data.AUX_BATTERY_VOLTAGE || 0 }} V</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.AUX_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         </v-list>
@@ -912,5 +912,8 @@
 .progress-cycle-container.right .v-list__tile {
     height: auto;
     padding: 0;
+}
+.v-list--two-line .double-line .v-list__tile {
+    height: 70px;
 }
 </style>
