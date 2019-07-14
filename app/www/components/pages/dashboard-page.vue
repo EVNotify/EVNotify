@@ -273,7 +273,7 @@
             },
             powerAmountColor() {
                 if (this.obd2Data.CHARGING) return 'green';
-                return this.powerAmount <= 0 ? '#448aff' : 'red';
+                return parseInt(this.obd2Data.DC_BATTERY_POWER) <= 0 ? '#448aff' : 'red';
             },
             totalRange() {
                 return parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
