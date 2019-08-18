@@ -181,6 +181,11 @@
                             </md-select>
                             <span class="input-field-error">{{ carMessage }}</span>
                         </md-field>
+                        <md-field>
+                            <label for="capacity">{{ translated.CAPACITY }}</label>
+                            <md-input v-model="carCapacity" @input="settings.capacity = parseInt($event || 0)"></md-input>
+                            <span class="md-suffix">kWh</span>
+                        </md-field>
                     </md-list>
                 </md-list-item>
                 <md-list-item md-expand>
@@ -571,6 +576,23 @@
                         self.$refs.qr.getContext('2d').clearRect(0, 0, self.$refs.qr.width, self.$refs.qr.height);
                     }
                 });
+            }
+        },
+        computed: {
+            carCapacity() {
+                var capacities = {
+                    AMPERA_E: 60,
+                    BOLT_EV: 60,
+                    IONIQ_BEV: 28,
+                    IONIQ_HEV: 1.6,
+                    IONIQ_PHEV: 8.9,
+                    KONA_EV: 64,
+                    NIRO_EV: 64,
+                    SOUL_EV: 28,
+                    ZOE_Q210: 22
+                };
+
+                return this.settings.capacity = this.settings.capacity || capacities[this.settings.car] || 0;
             }
         },
         components: {

@@ -85,6 +85,7 @@ export default {
     SOUL_EV: 'Kia Soul EV',
     NIRO_EV: 'Kia Niro EV',
     CONSUMPTION: 'Consumption',
+    CAPACITY: 'Capacity',
     OBD2_DEVICE: 'OBDII-Device',
     OBD2_DEVICE_PAIR: 'Not listed? Pair a new device here',
     BLUETOOTH_AUTO_ENABLE: 'Automatically enable bluetooth',
