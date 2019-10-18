@@ -3,6 +3,7 @@
 import storage from './storage.vue';
 import de from './../../lng/de.js';
 import en from './../../lng/en.js';
+import es from './../../lng/es.js';
 
 export default {
     /**
