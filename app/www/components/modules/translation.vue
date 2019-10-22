@@ -3,6 +3,7 @@
 import storage from './storage.vue';
 import de from './../../lng/de.js';
 import en from './../../lng/en.js';
+import es from './../../lng/es.js';
 
 export default {
     /**
@@ -13,6 +14,7 @@ export default {
         var lng = storage.getValue('lng', (navigator.language || navigator.userLanguage));
 
         if(typeof lng === 'string' && lng.toLowerCase().indexOf('de') !== -1) return 'de';
+        else if(typeof lng === 'string' && lng.toLowerCase().indexOf('es') !== -1) return 'es';
 
         return 'en';
     },

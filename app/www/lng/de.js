@@ -75,6 +75,7 @@ export default {
     LANGUAGE: 'Sprache',
     GERMAN: 'Deutsch',
     ENGLISH: 'Englisch',
+    SPANISH: 'Spanisch',
     AMPERA_E: 'Opel Ampera E',
     IONIQ_BEV: 'Hyundai IONIQ Elektro',
     IONIQ_HEV: 'Hyundai IONIQ Hybrid',
