@@ -19,7 +19,7 @@
             <md-divider></md-divider>
             <md-field>
                 <label for="car">{{ translated.CAR }}</label>
-                <md-select v-model="settings.car" required @md-selected="showCarMessage()" class="v-step-2">
+                <md-select v-model="settings.car" required @md-selected="showCarMessage(); resetCapacity()" class="v-step-2">
                     <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                     <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                     <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
@@ -31,6 +31,11 @@
                     <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                 </md-select>
                 <span class="input-field-error">{{ carMessage }}</span>
+            </md-field>
+            <md-field>
+                <label for="capacity">{{ translated.CAPACITY }}</label>
+                <md-input v-model="settings.capacity" @input="settings.capacity = parseFloat($event || 0)" @blur="checkCapacity()"></md-input>
+                <span class="md-suffix">kWh</span>
             </md-field>
             <md-field>
                 <label for="consumption">{{ translated.CONSUMPTION }}</label>
@@ -73,6 +78,7 @@
 
 <script>
     import translation from './../modules/translation.vue';
+    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
 
@@ -83,6 +89,8 @@
                 settings: {
                     soc: 70,
                     summary: false,
+                    car: 'IONIQ_BEV',
+                    capacity: 28,
                     lng: translation.getLocalLng()
                 },
                 carMessage: '',
@@ -178,6 +186,13 @@
             },
             showBluetoothSettings() {
                 if (typeof bluetoothSerial !== 'undefined') bluetoothSerial.showBluetoothSettings();
+            },
+            checkCapacity() {
+                this.settings.capacity = helper.getCarCapacity(this.settings.car, this.settings.capacity);
+            },
+            resetCapacity() {
+                this.settings.capacity = 0;
+                this.checkCapacity();
             }
         },
         created() {

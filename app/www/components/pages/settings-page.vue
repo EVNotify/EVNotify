@@ -183,7 +183,7 @@
                         </md-field>
                         <md-field>
                             <label for="capacity">{{ translated.CAPACITY }}</label>
-                            <md-input v-model="settings.capacity" @input="settings.capacity = parseInt($event || 0)" @blur="checkCapacity()"></md-input>
+                            <md-input v-model="settings.capacity" @input="settings.capacity = parseFloat($event || 0)" @blur="checkCapacity()"></md-input>
                             <span class="md-suffix">kWh</span>
                         </md-field>
                     </md-list>
@@ -294,6 +294,7 @@
     import storage from './../modules/storage.vue';
     import translation from './../modules/translation.vue';
     import eventBus from './../modules/event.vue';
+    import helper from './../modules/helper.vue';
     import toolbar from './../container/toolbar.vue';
     import snackbar from './../modules/snackbar.vue';
     import settings from './../container/settings.vue';
@@ -578,19 +579,7 @@
                 });
             },
             checkCapacity() {
-                var capacities = {
-                    AMPERA_E: 60,
-                    BOLT_EV: 60,
-                    IONIQ_BEV: 28,
-                    IONIQ_HEV: 1.6,
-                    IONIQ_PHEV: 8.9,
-                    KONA_EV: 64,
-                    NIRO_EV: 64,
-                    SOUL_EV: 28,
-                    ZOE_Q210: 22
-                };
-
-                return this.settings.capacity = this.settings.capacity || capacities[this.settings.car] || 0;
+                this.settings.capacity = helper.getCarCapacity(this.settings.car, this.settings.capacity);
             },
             resetCapacity() {
                 this.settings.capacity = 0;

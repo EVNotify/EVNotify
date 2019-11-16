@@ -1,5 +1,6 @@
 <script>
 import MomentJS from 'moment';
+import storage from './storage.vue';
 
 export default {
     /**
@@ -78,6 +79,21 @@ export default {
             amountToCharge / (Math.abs(batteryPower))
         ).toFixed(2);
         return decimalTime;
+    },
+    getCarCapacity(car, capacity) {
+        var capacities = {
+            AMPERA_E: 60,
+            BOLT_EV: 60,
+            IONIQ_BEV: 28,
+            IONIQ_HEV: 1.6,
+            IONIQ_PHEV: 8.9,
+            KONA_EV: 64,
+            NIRO_EV: 64,
+            SOUL_EV: 28,
+            ZOE_Q210: 22
+        };
+
+        return capacity || capacities[car] || 0;
     }
 }
 </script>
