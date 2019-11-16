@@ -634,37 +634,6 @@
             debugInfo() {
                 this.$refs.snackbar.setMessage('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
             },
-            estimate() {
-                var soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
-
-                if (typeof soc !== 'number' || isNaN(soc) ||
-                    typeof this.consumption !== 'number' || isNaN(this.consumption) ||
-                    typeof this.carCapacity !== 'number' || isNaN(this.carCapacity)) {
-                    this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime =
-                        this.estimatedFastTime = 0;
-                    this.batteryIcon = 'icons/battery_unknown.svg';
-                } else {
-                    // calculate range
-                    this.estimatedRangeTotal = parseInt((this.carCapacity / this.consumption) * 100) || 0;
-                    this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
-                        '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))) || 0;
-                    // calculate time
-                    if (this.obd2Data.SLOW_SPEED >= 0 && this.obd2Data.NORMAL_SPEED >= 0 && this.obd2Data.FAST_SPEED >= 0) {
-                        var amountToCharge = this.carCapacity - parseFloat(this.carCapacity * ((soc === 100) ?
-                            1 :
-                            '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0,
-                            realChargingSpeed = ((this.obd2Data.CHARGING && this.obd2Data.DC_BATTERY_POWER) ? (this.obd2Data.DC_BATTERY_POWER * -1) : false);
-
-                        this.estimatedSlowTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.SLOW_SPEED)).toFixed(2));
-                        this.estimatedNormalTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.NORMAL_SPEED)).toFixed(2));
-                        this.estimatedFastTime = parseFloat((amountToCharge / (realChargingSpeed || this.obd2Data.FAST_SPEED)).toFixed(2));
-                    }
-                    // set icon based on soc
-                    this.batteryIcon = 'icons/battery_' + ((this.obd2Data.CHARGING) ? 'charging_' : '') + (
-                        Math.ceil((((soc === 100) ? 99 : parseInt(soc)) + 1) / 5) * 5
-                    ) + '.svg';
-                }
-            },
             initMessage() {
                 if (this.initialized) this.$refs.snackbar.setMessage('INITIALIZATION');
             },
