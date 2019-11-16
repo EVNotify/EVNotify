@@ -41,7 +41,7 @@
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title :style="{color: currentRangeColor}">{{ currentRange }} / {{ totalRange }} km</v-list-tile-title>
-                                <span class="font-weight-light font-italic">{{ consumption || 0 }} kWh / 100 km</span>
+                                <span class="font-weight-light font-italic">{{ consumption || 12.34 }} kWh / 100 km</span>
                             </v-list-tile-content>
                             </v-list-tile>
                             <v-list-tile v-if="obd2Data.CHARGING && supportedCars.indexOf(car) !== -1">
@@ -276,7 +276,7 @@
                 return parseFloat(this.obd2Data.DC_BATTERY_POWER) <= 0 ? '#448aff' : 'red';
             },
             totalRange() {
-                return parseInt((this.carCapacity / this.consumption) * 100) || 0;
+                return parseInt((this.carCapacity / (this.consumption || 12.34)) * 100) || 0;
             },
             currentRange() {
                 const soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
