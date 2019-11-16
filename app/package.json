@@ -1,6 +1,6 @@
 {
   "name": "com.evnotify.app",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "displayName": "EVNotify",
   "cordova": {
     "platforms": [
@@ -18,7 +18,8 @@
       "cordova-plugin-insomnia": {},
       "cordova-plugin-fcm": {},
       "cordova-plugin-local-notification": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-device": ""
     }
   },
   "dependencies": {
