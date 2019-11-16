@@ -168,7 +168,7 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="car">{{ translated.CAR }}</label>
-                            <md-select v-model="settings.car" required @md-selected="showCarMessage()">
+                            <md-select v-model="settings.car" required @md-selected="showCarMessage(); resetCapacity()">
                                 <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                                 <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
@@ -183,7 +183,7 @@
                         </md-field>
                         <md-field>
                             <label for="capacity">{{ translated.CAPACITY }}</label>
-                            <md-input v-model="carCapacity" @input="settings.capacity = parseInt($event || 0)"></md-input>
+                            <md-input v-model="settings.capacity" @input="settings.capacity = parseInt($event || 0)" @blur="checkCapacity()"></md-input>
                             <span class="md-suffix">kWh</span>
                         </md-field>
                     </md-list>
@@ -576,10 +576,8 @@
                         self.$refs.qr.getContext('2d').clearRect(0, 0, self.$refs.qr.width, self.$refs.qr.height);
                     }
                 });
-            }
-        },
-        computed: {
-            carCapacity() {
+            },
+            checkCapacity() {
                 var capacities = {
                     AMPERA_E: 60,
                     BOLT_EV: 60,
@@ -593,6 +591,10 @@
                 };
 
                 return this.settings.capacity = this.settings.capacity || capacities[this.settings.car] || 0;
+            },
+            resetCapacity() {
+                this.settings.capacity = 0;
+                this.checkCapacity();
             }
         },
         components: {
