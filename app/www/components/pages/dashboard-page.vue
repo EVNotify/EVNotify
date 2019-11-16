@@ -276,7 +276,7 @@
                 return parseFloat(this.obd2Data.DC_BATTERY_POWER) <= 0 ? '#448aff' : 'red';
             },
             totalRange() {
-                return parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
+                return parseInt((this.carCapacity / this.consumption) * 100) || 0;
             },
             currentRange() {
                 const soc = this.obd2Data.SOC_DISPLAY || this.obd2Data.SOC_BMS;
@@ -291,15 +291,20 @@
                 return 'green';
             },
             rangePerMinute() {
-                const time = helper.chargeDecimalTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED);
+                const time = helper.chargeDecimalTime(this.carCapacity, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED);
                 return (parseFloat((this.totalRange - this.currentRange) / (60 / 100 * time * 100)) || 0).toFixed(2);
             },
             chargingTimeLeft() {
-                return helper.chargeTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "timeleft");
+                return helper.chargeTime(this.carCapacity, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "timeleft");
             },
             finishTime() {
-                return helper.chargeTime(this.obd2Data.CAPACITY, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "finishtime");
+                return helper.chargeTime(this.carCapacity, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "finishtime");
             },
+            carCapacity() {
+                const settingsCapacity = parseInt(storage.getValue('settings', {}).capacity) || 0;
+
+                return settingsCapacity || this.obd2Data.CAPACITY;
+            }
         },
         methods: {
             dataOutdated() {
@@ -634,18 +639,18 @@
 
                 if (typeof soc !== 'number' || isNaN(soc) ||
                     typeof this.consumption !== 'number' || isNaN(this.consumption) ||
-                    typeof this.obd2Data.CAPACITY !== 'number' || isNaN(this.obd2Data.CAPACITY)) {
+                    typeof this.carCapacity !== 'number' || isNaN(this.carCapacity)) {
                     this.estimatedRangeCurrent = this.estimatedRangeTotal = this.estimatedSlowTime = this.estimatedNormalTime =
                         this.estimatedFastTime = 0;
                     this.batteryIcon = 'icons/battery_unknown.svg';
                 } else {
                     // calculate range
-                    this.estimatedRangeTotal = parseInt((this.obd2Data.CAPACITY / this.consumption) * 100) || 0;
+                    this.estimatedRangeTotal = parseInt((this.carCapacity / this.consumption) * 100) || 0;
                     this.estimatedRangeCurrent = parseInt(this.estimatedRangeTotal * ((soc === 100) ? 1 :
                         '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))) || 0;
                     // calculate time
                     if (this.obd2Data.SLOW_SPEED >= 0 && this.obd2Data.NORMAL_SPEED >= 0 && this.obd2Data.FAST_SPEED >= 0) {
-                        var amountToCharge = this.obd2Data.CAPACITY - parseFloat(this.obd2Data.CAPACITY * ((soc === 100) ?
+                        var amountToCharge = this.carCapacity - parseFloat(this.carCapacity * ((soc === 100) ?
                             1 :
                             '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))).toFixed(2) || 0,
                             realChargingSpeed = ((this.obd2Data.CHARGING && this.obd2Data.DC_BATTERY_POWER) ? (this.obd2Data.DC_BATTERY_POWER * -1) : false);
