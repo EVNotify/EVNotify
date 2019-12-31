@@ -169,16 +169,23 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="car">{{ translated.CAR }}</label>
-                            <md-select v-model="settings.car" required @md-selected="showCarMessage()">
+                            <md-select v-model="settings.car" required @md-selected="showCarMessage(); resetCapacity()">
                                 <md-option value="IONIQ_BEV">{{ translated.IONIQ_BEV }}</md-option>
                                 <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
                                 <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
                                 <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
+                                <md-option value="BOLT_EV">{{ translated.BOLT_EV }}</md-option>
                                 <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                                 <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
+                                <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                             </md-select>
                             <span class="input-field-error">{{ carMessage }}</span>
+                        </md-field>
+                        <md-field>
+                            <label for="capacity">{{ translated.CAPACITY }}</label>
+                            <md-input v-model="settings.capacity" @input="settings.capacity = parseFloat($event || 0)" @blur="checkCapacity()"></md-input>
+                            <span class="md-suffix">kWh</span>
                         </md-field>
                     </md-list>
                 </md-list-item>
@@ -206,7 +213,7 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="devices">{{ translated.OBD2_DEVICE }}</label>
-                            <md-select v-model="settings.device" required>
+                            <md-select v-model="settings.device" required @click="listDevices()">
                                 <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{
                                     device.name }}</md-option>
                             </md-select>
@@ -288,6 +295,7 @@
     import storage from './../modules/storage.vue';
     import translation from './../modules/translation.vue';
     import eventBus from './../modules/event.vue';
+    import helper from './../modules/helper.vue';
     import toolbar from './../container/toolbar.vue';
     import snackbar from './../modules/snackbar.vue';
     import settings from './../container/settings.vue';
@@ -378,10 +386,12 @@
                     case 'IONIQ_PHEV':
                     case 'ZOE_Q210':
                     case 'AMPERA_E':
+                    case 'BOLT_EV':
                         this.carMessage = translation.translate('CAR_BASIS_SUPPORT');
                         break;
                     case 'SOUL_EV':
                     case 'KONA_EV':
+                    case 'NIRO_EV':
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;
                     default:
@@ -455,7 +465,9 @@
 
                 bluetoothSerial.enable(enabled => {
                     bluetoothSerial.list(devices => {
-                        self.devices = devices;
+                        devices.forEach((device, idX) => {
+                            Vue.set(self.devices, idX, device);
+                        });
                     }, err => console.log(err));
                 }, err => console.log(err));
             },
@@ -511,6 +523,7 @@
             logout() {
                 storage.removeValue('akey');
                 storage.removeValue('token');
+                storage.removeValue('settings');
                 this.$router.push('/');
             },
             countDevClick() {
@@ -565,6 +578,13 @@
                         self.$refs.qr.getContext('2d').clearRect(0, 0, self.$refs.qr.width, self.$refs.qr.height);
                     }
                 });
+            },
+            checkCapacity() {
+                this.settings.capacity = helper.getCarCapacity(this.settings.car, this.settings.capacity);
+            },
+            resetCapacity() {
+                this.settings.capacity = 0;
+                this.checkCapacity();
             }
         },
         components: {

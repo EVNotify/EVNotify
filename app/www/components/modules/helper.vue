@@ -1,4 +1,7 @@
 <script>
+import MomentJS from 'moment';
+import storage from './storage.vue';
+
 export default {
     /**
      * Formats given timestamp into human readable form ( dd.mm.yyyy hh:mm:ss)
@@ -46,6 +49,51 @@ export default {
         var bits = data.length * 4;
         
         return ((parseInt(data, 16) + Math.pow(2, bits - 1)) % Math.pow(2, bits)) - Math.pow(2, bits - 1);
+    },
+    /**
+     * Calculates chargetime left and finishtime while charging
+     * @param {Number} capacity the capacity in kWh
+     * @param {String} socDisplay the state of charge from display
+     * @param {String} socBMS the state of charge from BMS
+     * @param {String} batteryPower the charging speed
+     * @param {String} typeOfTime the result timeType that gets returned
+     * @returns {*} the defined and calculated timeType
+     */
+    chargeTime(capacity, socDisplay, socBMS, batteryPower, typeOfTime) {
+        const duration = MomentJS.duration(parseFloat(this.chargeDecimalTime(capacity, socDisplay, socBMS, batteryPower))).asMilliseconds();
+        const now = new Date().getTime();
+        if(typeOfTime == "timeleft") {
+            return MomentJS().startOf('day').add(duration, 'minutes').format('m:ss');
+        } else if (typeOfTime == "finishtime") {
+            return MomentJS(now).add(duration, 'hours').format('HH:mm');
+        } else {
+            return false;
+        }
+    },
+    chargeDecimalTime(capacity, socDisplay, socBMS, batteryPower) {
+        const soc = socDisplay || socBMS;
+        const amountToCharge = capacity - parseFloat(
+            capacity * ((soc === 100) ? 1 : '0.' + ((soc < 10) ? ('0' + parseInt(soc)) : parseInt(soc)))
+        ).toFixed(2) || 0;
+        const decimalTime = parseFloat(
+            amountToCharge / (Math.abs(batteryPower))
+        ).toFixed(2);
+        return decimalTime;
+    },
+    getCarCapacity(car, capacity) {
+        var capacities = {
+            AMPERA_E: 60,
+            BOLT_EV: 60,
+            IONIQ_BEV: 28,
+            IONIQ_HEV: 1.6,
+            IONIQ_PHEV: 8.9,
+            KONA_EV: 64,
+            NIRO_EV: 64,
+            SOUL_EV: 28,
+            ZOE_Q210: 22
+        };
+
+        return capacity || capacities[car] || 0;
     }
 }
 </script>
