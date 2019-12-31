@@ -121,6 +121,7 @@
                             <md-select v-model="settings.lng" required>
                                 <md-option value="de">{{ translated.GERMAN }}</md-option>
                                 <md-option value="en">{{ translated.ENGLISH }}</md-option>
+                                <md-option value="es">{{ translated.SPANISH }}</md-option>
                             </md-select>
                         </md-field>
                     </md-list>

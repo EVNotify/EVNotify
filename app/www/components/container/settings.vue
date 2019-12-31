@@ -11,6 +11,7 @@
                 <md-select v-model="settings.lng" required class="v-step-1">
                     <md-option value="de">{{ translated.GERMAN }}</md-option>
                     <md-option value="en">{{ translated.ENGLISH }}</md-option>
+                    <md-option value="es">{{ translated.SPANISH }}</md-option>
                 </md-select>
             </md-field>
             <md-subheader class="md-primary">
