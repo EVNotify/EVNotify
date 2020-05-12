@@ -42,7 +42,7 @@
                     });
 
                     // error and empty response detection to start re-initialization
-                    // TODO: we need to find out the error detection and empty responses for KONA EV
+                    // TODO: we need to find out the error detection and empty responses for NIRO EV
                     if (data.indexOf('CANERROR') !== -1 ||
                         data.indexOf('UNABLETOCONNECT') !== -1 ||
                         data.indexOf('BUFFERFULL') !== -1) {
