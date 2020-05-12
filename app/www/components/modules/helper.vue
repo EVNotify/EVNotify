@@ -87,6 +87,7 @@ export default {
             IONIQ_BEV: 28,
             IONIQ_HEV: 1.6,
             IONIQ_PHEV: 8.9,
+            IONIQ_FL_EV: 38,
             KONA_EV: 64,
             NIRO_EV: 64,
             E_SOUL: 64,
