@@ -174,6 +174,7 @@
                                 <md-option value="IONIQ_HEV">{{ translated.IONIQ_HEV }}</md-option>
                                 <md-option value="IONIQ_PHEV">{{ translated.IONIQ_PHEV }}</md-option>
                                 <md-option value="SOUL_EV">{{ translated.SOUL_EV }}</md-option>
+                                <md-option value="E_SOUL">{{ translated.E_SOUL }}</md-option>
                                 <md-option value="AMPERA_E">{{ translated.AMPERA_E }}</md-option>
                                 <md-option value="BOLT_EV">{{ translated.BOLT_EV }}</md-option>
                                 <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
@@ -390,7 +391,7 @@
                         this.carMessage = translation.translate('CAR_BASIS_SUPPORT');
                         break;
                     case 'SOUL_EV':
-                    case 'KONA_EV':
+                    case 'E_SOUL':
                     case 'NIRO_EV':
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;

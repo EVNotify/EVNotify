@@ -89,6 +89,7 @@ export default {
             IONIQ_PHEV: 8.9,
             KONA_EV: 64,
             NIRO_EV: 64,
+            E_SOUL: 64,
             SOUL_EV: 28,
             ZOE_Q210: 22
         };

@@ -168,6 +168,7 @@
         <IONIQHEV ref="IONIQ_HEV"></IONIQHEV>
         <IONIQPHEV ref="IONIQ_PHEV"></IONIQPHEV>
         <SOULEV ref="SOUL_EV"></SOULEV>
+        <ESOUL ref="E_SOUL"></ESOUL>
         <KONAEV ref="KONA_EV"></KONAEV>
         <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
         <NIROEV ref="NIRO_EV"></NIROEV>
@@ -191,6 +192,7 @@
     import IONIQHEV from './../cars/IONIQ_HEV.vue';
     import IONIQPHEV from './../cars/IONIQ_PHEV.vue';
     import SOULEV from './../cars/SOUL_EV.vue';
+    import ESOUL from './../cars/E_SOUL.vue';
     import KONAEV from './../cars/KONA_EV.vue';
     import ZOEQ210 from './../cars/ZOE_Q210.vue';
     import NIROEV from './../cars/NIRO_EV.vue';
