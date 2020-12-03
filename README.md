@@ -28,15 +28,15 @@ With EVNotify you can just check the state of charge remotely - or simply gets n
 - more features and supported cars will be added soon
 
 ### Prerequisites
-To use EVNotify you need to download the Android Application linked above. The app must be installed on an Android device with Android version greater than Android 4.1 (Android 5 or greater recommended). The android device must have a bluetooth connection and optionally an internet connection. The app also runs on Android TV Sticks.
-EVNotify communicates over the obd2 interface of the car, so a bluetooth capable obd2-dongle is required. For supported obd2 dongle please have a look at the wiki.
+To use EVNotify you need to download the Android Application linked above. The app must be installed on an Android device with Android version greater than Android 4.1 (Android 5 or greater recommended). The android device must have a Bluetooth connection and optionally an internet connection. The app also runs on Android TV Sticks.
+EVNotify communicates over the OBD2 interface of the car, so a Bluetooth capable OBD2-dongle is required. For supported OBD2 dongle please have a look at the wiki.
 
 ### Contributing
-Feel free to help and to contribute to this repository. Even if you can't code, feel free to create issues if you have discovered a bug or a strange behavior. If you want to commit code, please create a pull request for it in a seperate branch (dev or a feature-branch, not master!).
+Feel free to help and to contribute to this repository. Even if you can't code, feel free to create issues if you have discovered a bug or a strange behavior. If you want to commit code, please create a pull request for it in a separate branch (dev or a feature-branch, not master!).
 If you are a developer and want to contribute, have a look at the CONTRIBUTING.md file.
 
 ### How it works
-EVNotify interacts with the electric vehicle over a bluetooth-capable OBD2-Dongle. The device interacting with the Dongle, must be an Android device and has to support Bluetooth.
+EVNotify interacts with the electric vehicle over a Bluetooth-capable OBD2-Dongle. The device interacting with the Dongle, must be an Android device and has to support Bluetooth.
 For full functionality, an internet connection is required.
 The readout and monitoring of the state of charge works locally, the notifications are sent over the internet.
 

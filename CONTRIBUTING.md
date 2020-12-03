@@ -44,11 +44,11 @@ This can be done via a "Clone" or a "Fork". The latter is recommended, if you wa
 You can fork the project within https://github.com/GPlay97/EVNotify by clicking the "Fork" button. Or you can "clone" the version (only recommended if you don't want to change code!).
 This can be done easily with `git clone https://github.com/GPlay97/EVNotify`.
 
-After forking or cloning the project, go to the directory and it's app directory with `cd EVNotify/app`.
+After forking or cloning the project, go to the `app` directory with `cd EVNotify/app`.
 
 You will need to create a client configuration file once with `touch client.js`.
-It's important, that the file will be in the `app` directory of EVNotify.
-The content of the client.js file must be the following:
+It's important that the file will be in the `app` directory of EVNotify.
+The content of the `client.js` file must be the following:
 
 ```JavaScript
 RESTURL = 'https://evnotify.de:8743/', /* you can replace this with your custom EVNotify backend url if exists */
