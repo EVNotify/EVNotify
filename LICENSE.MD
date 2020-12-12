@@ -13,6 +13,8 @@ Forks of (partial) code which won't be used for Pull Requests, must be declared 
 
 The use of the software is at your own risk. I am not liable for damage caused by improper use or cheap, fake OBD2 dongle.
 
-[Imprint](https://evnotify.de/imprint.html)
+[Imprint DE](https://evnotify.de/impressum)
+[Imprint EN](https://evnotify.de/imprint)
 
-[Privacy](https://evnotify.de/privacy.html)
+[Privacy DE](https://evnotify.de/datenschutz)
+[Privacy EN](https://evnotify.de/privacy)
