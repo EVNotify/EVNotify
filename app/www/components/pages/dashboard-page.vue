@@ -451,6 +451,7 @@
 
                 // if device set and car supported, start watch
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
+                    alert('SUPPORTED');
                     self.bluetoothInterval = setInterval(() => {
                         var proceed = () => {
                             // wait, until currenct connect process finished
@@ -460,8 +461,11 @@
                                 self.isWaitingForConnect = self.showedBluetoothError = false;
                                 // run init process if not already running
                                 if (!self.initialized) {
+                                    alert('INIT');
                                     self.initialized = true;
                                     self.$refs[self.car].init();
+                                } else {
+                                    alert('ERROR INIT');
                                 }
                                 eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
