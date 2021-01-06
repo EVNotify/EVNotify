@@ -461,11 +461,15 @@
                                 self.isWaitingForConnect = self.showedBluetoothError = false;
                                 // run init process if not already running
                                 if (!self.initialized) {
-                                    alert('INIT');
+                                    alert('INIT 1 for ' + self.car);
                                     self.initialized = true;
-                                    self.$refs[self.car].init();
+                                    try {
+                                        self.$refs[self.car].init();   
+                                    } catch (error) {
+                                        alert(error);
+                                    }
                                 } else {
-                                    alert('ERROR INIT');
+                                    alert('ERROR INIT 1');
                                 }
                                 eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
@@ -477,8 +481,15 @@
                                     self.communicationEstablished = self.initialized = false;
                                     // run init process if not already running
                                     if (!self.initialized) {
+                                        alert('INIT 2 for ' + self.car);
                                         self.initialized = true;
-                                        self.$refs[self.car].init();
+                                        try {
+                                            self.$refs[self.car].init();   
+                                        } catch (error) {
+                                            alert(error);
+                                        }
+                                    } else {
+                                        alert('ERROR INIT 2');
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
@@ -489,6 +500,7 @@
                                         self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', false, 'error');
                                     }
                                     self.initialized = self.isWaitingForConnect = false;
+                                    alert('ERROR BT DISABLED 1');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                 });
                             });
@@ -511,6 +523,7 @@
                                 // user has not allowed to enable bluetooth, save it for future
                                 storage.setValue('autoboot', false);
                                 self.initialized = false;
+                                alert('ERROR BLUETOOTH DISABLED 2')
                                 self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
                                 eventBus.$emit('bluetoothChanged', 'disabled');
                             });
@@ -784,6 +797,7 @@
             });
             eventBus.$off('obd2Error');
             eventBus.$on('obd2Error', function (error) {
+                alert('OBD2 ERROR ' + error);
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
                 // disconnect from obd2 device - this seems to probably solve the issue when buffer is full (to force full re-init)
                 bluetoothSerial.disconnect(() => {
