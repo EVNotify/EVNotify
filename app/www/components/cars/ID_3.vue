@@ -20,6 +20,8 @@
             init() {
                 var self = this;
 
+                alert('START');
+
                 // listener to wakeup after standby mode
                 eventBus.$off('wakeup');
                 eventBus.$on('wakeup', () => self.inStandbyMode = false);
@@ -29,6 +31,7 @@
 
                 // subscribe to data
                 bluetoothSerial.subscribe('>', data => {
+                    alert('RAW: ' + data);
                     if (self.inStandbyMode) return;
                     // remove spaces
                     data = data.trim().replace(/\s/g, '');

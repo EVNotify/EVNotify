@@ -729,6 +729,7 @@
             // listen to obd2Data (we can not use once here)
             eventBus.$off('obd2Data');
             eventBus.$on('obd2Data', function (data) {
+                alert('PARSED: ' + data);
                 // update / extend local obd2 data - use Vue.set due to reactivity
                 Object.keys(data).forEach(key => Vue.set(self.obd2Data, key, data[key]));
                 var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
