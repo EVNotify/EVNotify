@@ -20,8 +20,6 @@
             init() {
                 var self = this;
 
-                alert('START');
-
                 // listener to wakeup after standby mode
                 eventBus.$off('wakeup');
                 eventBus.$on('wakeup', () => self.inStandbyMode = false);
@@ -31,7 +29,6 @@
 
                 // subscribe to data
                 bluetoothSerial.subscribe('>', data => {
-                    alert('RAW: ' + data);
                     if (self.inStandbyMode) return;
                     // remove spaces
                     data = data.trim().replace(/\s/g, '');
@@ -58,6 +55,14 @@
                 var self = this,
                     parsedData = {},
                     baseData = self.getBaseData();
+
+                try {
+                    parsedData = {
+                        SOC_BMS: parseInt(data.slice(8,10), 16) / 2.5 // fifth byte
+                    };
+                } catch (err) {
+                    console.error(err);
+                }
 
                 // extend with base data
                 Object.keys(baseData).forEach(key => parsedData[key] = baseData[key]);
