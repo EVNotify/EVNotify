@@ -451,7 +451,6 @@
 
                 // if device set and car supported, start watch
                 if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
-                    alert('SUPPORTED');
                     self.bluetoothInterval = setInterval(() => {
                         var proceed = () => {
                             // wait, until currenct connect process finished
@@ -461,15 +460,8 @@
                                 self.isWaitingForConnect = self.showedBluetoothError = false;
                                 // run init process if not already running
                                 if (!self.initialized) {
-                                    alert('INIT 1 for ' + self.car);
                                     self.initialized = true;
-                                    try {
-                                        self.$refs[self.car].init();   
-                                    } catch (error) {
-                                        alert(error);
-                                    }
-                                } else {
-                                    alert('ERROR INIT 1');
+                                    self.$refs[self.car].init();
                                 }
                                 eventBus.$emit('bluetoothChanged', 'connected');
                             }, disconnected => {
@@ -481,15 +473,8 @@
                                     self.communicationEstablished = self.initialized = false;
                                     // run init process if not already running
                                     if (!self.initialized) {
-                                        alert('INIT 2 for ' + self.car);
                                         self.initialized = true;
-                                        try {
-                                            self.$refs[self.car].init();   
-                                        } catch (error) {
-                                            alert(error);
-                                        }
-                                    } else {
-                                        alert('ERROR INIT 2');
+                                        self.$refs[self.car].init();   
                                     }
                                     eventBus.$emit('bluetoothChanged', 'connected');
                                 }, err => {
@@ -500,7 +485,6 @@
                                         self.$refs.snackbar.setMessage('BLUETOOTH_CONNECT_ERROR', false, 'error');
                                     }
                                     self.initialized = self.isWaitingForConnect = false;
-                                    alert('ERROR BT DISABLED 1');
                                     eventBus.$emit('bluetoothChanged', 'disabled');
                                 });
                             });
@@ -523,7 +507,6 @@
                                 // user has not allowed to enable bluetooth, save it for future
                                 storage.setValue('autoboot', false);
                                 self.initialized = false;
-                                alert('ERROR BLUETOOTH DISABLED 2')
                                 self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
                                 eventBus.$emit('bluetoothChanged', 'disabled');
                             });
@@ -702,7 +685,8 @@
             SOULEV,
             KONAEV,
             ZOEQ210,
-            NIROEV
+            NIROEV,
+            ID3
         },
         beforeDestroy() {
             this.clear();
@@ -797,7 +781,6 @@
             });
             eventBus.$off('obd2Error');
             eventBus.$on('obd2Error', function (error) {
-                alert('OBD2 ERROR ' + error);
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
                 // disconnect from obd2 device - this seems to probably solve the issue when buffer is full (to force full re-init)
                 bluetoothSerial.disconnect(() => {
