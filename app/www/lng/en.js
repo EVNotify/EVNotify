@@ -66,6 +66,7 @@ export default {
     CAR_SELECTION: 'Car selection',
     CAR_BASIS_SUPPORT: 'So far only few data can be read out',
     CAR_INVALID_SUPPORT: 'Data may be evaluated incorrectly',
+    CAR_EXPERIMENTAL_SUPPORT: 'Experimental support. Functions may be restricted or faulty',
     SYNC: 'Synchronisation',
     SYNC_LOCATION: 'Location synchronisation',
     LOCATION_ACCESS_DENIED: 'Location access denied. Check permission',

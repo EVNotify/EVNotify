@@ -154,6 +154,9 @@
                     case 'NIRO_EV':
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;
+                    case 'ID_3':
+                        this.carMessage = translation.translate('CAR_EXPERIMENTAL_SUPPORT');
+                        break;
                     default:
                         this.carMessage = '';
                         break;

@@ -66,6 +66,7 @@ export default {
     CAR_SELECTION: 'Selección de vehículo',
     CAR_BASIS_SUPPORT: 'Hasta ahora solo se pueden leer pocos datos',
     CAR_INVALID_SUPPORT: 'Los datos pueden evaluarse incorrectamente',
+    CAR_EXPERIMENTAL_SUPPORT: 'Soporte experimental. Las funciones pueden estar restringidas o defectuosas',
     SYNC: 'Sincronización',
     SYNC_LOCATION: 'Sincronización de ubicación',
     LOCATION_ACCESS_DENIED: 'Acceso de ubicación denegado. Comprobar permis',
