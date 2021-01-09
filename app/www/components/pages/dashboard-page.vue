@@ -680,6 +680,7 @@
             IONIQBEV,
             IONIQHEV,
             IONIQPHEV,
+            IONIQFLEV,
             SOULEV,
             KONAEV,
             ZOEQ210,
