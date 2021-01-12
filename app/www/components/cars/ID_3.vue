@@ -36,8 +36,8 @@
                         data
                     });
                     // send debug data to backend if debug mode enabled
-                    if (true) Vue.http.post(RESTURL + 'debug', {
-                        data: 'ID3: ' + data,
+                    if (DEBUG) Vue.http.post(RESTURL + 'debug', {
+                        data,
                         akey: storage.getValue('akey')
                     });
 
