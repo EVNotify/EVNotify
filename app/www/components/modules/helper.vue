@@ -84,6 +84,7 @@ export default {
         var capacities = {
             AMPERA_E: 60,
             BOLT_EV: 60,
+            ID_3: 58,
             IONIQ_BEV: 28,
             IONIQ_HEV: 1.6,
             IONIQ_PHEV: 8.9,
