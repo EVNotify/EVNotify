@@ -13,7 +13,7 @@
                 offset: 0,
                 inStandbyMode: false,
                 emptyResponses: 0,
-                command: '03 22 02 8C 55 55 55 55'
+                command: '0322028C55555555'
             };
         },
         methods: {
@@ -57,8 +57,10 @@
                     baseData = self.getBaseData();
 
                 try {
+                    data = data.replace(self.command, '');
                     parsedData = {
-                        SOC_BMS: parseInt(data.slice(8,10), 16) / 2.5 // fifth byte
+                        SOC_BMS: parseInt(data.slice(8,10), 16) / 2.5, // fifth byte
+                        CHARGING: 1
                     };
                 } catch (err) {
                     console.error(err);
