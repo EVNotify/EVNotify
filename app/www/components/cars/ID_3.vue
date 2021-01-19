@@ -58,8 +58,12 @@
 
                 try {
                     data = data.replace(self.command, '');
+
+                    const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+
                     parsedData = {
-                        SOC_BMS: parseInt(data.slice(8,10), 16) / 2.5, // fifth byte
+                        SOC_BMS: socBMS,
+                        SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1),
                         CHARGING: 1
                     };
                 } catch (err) {
@@ -77,8 +81,8 @@
                 return {
                     CAPACITY: 58,
                     SLOW_SPEED: 2.3,
-                    NORMAL_SPEED: 4.6,
-                    FAST_SPEED: 50
+                    NORMAL_SPEED: 11,
+                    FAST_SPEED: 100
                 };
             },
             standbyMode() {
