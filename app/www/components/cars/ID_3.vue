@@ -63,7 +63,7 @@
 
                     parsedData = {
                         SOC_BMS: socBMS,
-                        SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1),
+                        SOC_DISPLAY: (socBMS * 51 / 46 - 6).toFixed(1),
                         CHARGING: 1
                     };
                 } catch (err) {
