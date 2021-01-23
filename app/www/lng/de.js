@@ -77,6 +77,7 @@ export default {
     GERMAN: 'Deutsch',
     ENGLISH: 'Englisch',
     SPANISH: 'Spanisch',
+    SWEDISH: 'Schwedisch',
     AMPERA_E: 'Opel Ampera E',
     BOLT_EV: 'Chevrolet Bolt',
     IONIQ_BEV: 'Hyundai IONIQ Elektro',
