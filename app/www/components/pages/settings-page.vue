@@ -122,6 +122,7 @@
                                 <md-option value="de">{{ translated.GERMAN }}</md-option>
                                 <md-option value="en">{{ translated.ENGLISH }}</md-option>
                                 <md-option value="es">{{ translated.SPANISH }}</md-option>
+                                <md-option value="sv">{{ translated.SWEDISH }}</md-option>
                             </md-select>
                         </md-field>
                     </md-list>
