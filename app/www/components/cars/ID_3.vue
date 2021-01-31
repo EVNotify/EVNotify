@@ -13,7 +13,12 @@
                 offset: 0,
                 inStandbyMode: false,
                 emptyResponses: 0,
-                command: '0322028C55555555'
+                currentCommand: 0,
+                commands: [
+                    '03221e3b55555555',
+                    '03221e3d55555555',
+                    '0322028C55555555',
+                ]
             };
         },
         methods: {
@@ -37,14 +42,19 @@
                     });
                     // send debug data to backend if debug mode enabled
                     if (DEBUG) Vue.http.post(RESTURL + 'debug', {
-                        data,
+                        data: self.commands[self.currentCommand] + ': ' + data,
                         akey: storage.getValue('akey')
                     });
 
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
-                        setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
+                        setTimeout(() => {
+                            bluetoothSerial.write(self.commands[self.currentCommand] + '\r', () => {
+                                if (self.currentCommand + 1 === self.commands.length) self.currentCommand = 0;
+                                else self.currentCommand++;
+                            });
+                        }, 500);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
 
@@ -57,15 +67,34 @@
                     baseData = self.getBaseData();
 
                 try {
+                    if (self.command.startsWith('AT')) return;
                     data = data.replace(self.command, '');
 
-                    const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+                    if (self.currentCommand === 0) {
+                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
+                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
 
-                    parsedData = {
-                        SOC_BMS: socBMS,
-                        SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1),
-                        CHARGING: 0
-                    };
+                        parsedData = {
+                            DC_BATTERY_VOLTAGE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 4
+                        };
+                    } else if (self.currentCommand === 1) {
+                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
+                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
+                        const thirdDataByte = parseInt(data.slice(12, 14), 16); // seventh byte
+                        const fourthDataByte = parseInt(data.slice(14, 16), 16); // eigth byte
+
+                        parsedData = {
+                            DC_BATTERY_CURRENT: (firstDataByte * Math.pow(2, 32) + secondDataByte * Math.pow(2, 16) + thirdDataByte * Math.pow(2, 8) + fourthDataByte - 150000) / 100
+                        };
+                    } else if (self.currentCommand === 2) {
+                        const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+
+                        parsedData = {
+                            SOC_BMS: socBMS,
+                            SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1),
+                            CHARGING: 0
+                        };
+                    }
                 } catch (err) {
                     console.error(err);
                 }
