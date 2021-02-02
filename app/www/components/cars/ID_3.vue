@@ -102,6 +102,11 @@
                     parsedData
                 });
                 
+                if (DEBUG) Vue.http.post(RESTURL + 'debug', {
+                    data: 'Parsed: ' + self.commands[self.currentCommand] + ': ' + data,
+                    akey: storage.getValue('akey')
+                });
+                
                 if (self.currentCommand + 1 === self.commands.length) self.currentCommand = 0;
                 else self.currentCommand++;
 
