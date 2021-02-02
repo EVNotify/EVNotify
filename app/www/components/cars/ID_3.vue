@@ -50,10 +50,7 @@
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
                         setTimeout(() => {
-                            bluetoothSerial.write(self.commands[self.currentCommand] + '\r', () => {
-                                if (self.currentCommand + 1 === self.commands.length) self.currentCommand = 0;
-                                else self.currentCommand++;
-                            });
+                            bluetoothSerial.write(self.commands[self.currentCommand] + '\r');
                         }, 500);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
@@ -104,6 +101,10 @@
                 console.log({
                     parsedData
                 });
+                
+                if (self.currentCommand + 1 === self.commands.length) self.currentCommand = 0;
+                else self.currentCommand++;
+
                 return parsedData;
             },
             getBaseData() {
