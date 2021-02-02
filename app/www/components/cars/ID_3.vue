@@ -65,7 +65,7 @@
 
                 try {
                     if (self.command.startsWith('AT')) return;
-                    data = data.replace(self.command, '');
+                    data = data.replace(self.commands[self.currentCommand], '');
 
                     if (self.currentCommand === 0) {
                         const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
@@ -100,11 +100,6 @@
                 Object.keys(baseData).forEach(key => parsedData[key] = baseData[key]);
                 console.log({
                     parsedData
-                });
-                
-                if (DEBUG) Vue.http.post(RESTURL + 'debug', {
-                    data: 'Parsed: ' + self.commands[self.currentCommand] + ': ' + data,
-                    akey: storage.getValue('akey')
                 });
                 
                 if (self.currentCommand + 1 === self.commands.length) self.currentCommand = 0;
