@@ -81,7 +81,7 @@
                         const fourthDataByte = parseInt(data.slice(14, 16), 16); // eigth byte
 
                         parsedData = {
-                            DC_BATTERY_CURRENT: (firstDataByte * Math.pow(2, 32) + secondDataByte * Math.pow(2, 16) + thirdDataByte * Math.pow(2, 8) + fourthDataByte - 150000) / 100
+                            DC_BATTERY_CURRENT: ((firstDataByte * Math.pow(2, 32) + secondDataByte * Math.pow(2, 16) + thirdDataByte * Math.pow(2, 8) + fourthDataByte - 150000) / 100) * -1
                         };
                     } else if (self.currentCommand === 2) {
                         const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
