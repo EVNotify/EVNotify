@@ -64,7 +64,6 @@
                     baseData = self.getBaseData();
 
                 try {
-                    if (self.command.startsWith('AT')) return;
                     data = data.replace(self.commands[self.currentCommand], '');
 
                     if (self.currentCommand === 0) {
