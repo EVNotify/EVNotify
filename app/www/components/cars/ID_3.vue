@@ -91,7 +91,7 @@
                             SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1)
                         };
                     } else if (self.currentCommand === 3) {
-                        const mode = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+                        const mode = parseInt(data.slice(8,10), 16); // fifth byte
 
                         parsedData = {
                             CHARGING: mode === 4 || mode === 6
