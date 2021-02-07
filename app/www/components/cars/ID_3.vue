@@ -94,7 +94,7 @@
                         const mode = parseInt(data.slice(8,10), 16); // fifth byte
 
                         parsedData = {
-                            CHARGING: mode === 4 || mode === 6
+                            CHARGING: mode === 4 || mode === 6 ? 1 : 0
                         };
                     }
                 } catch (err) {
