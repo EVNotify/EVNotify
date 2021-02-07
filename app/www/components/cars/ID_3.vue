@@ -1,7 +1,6 @@
 <template></template>
 <script>
     import eventBus from './../modules/event.vue';
-    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
 
     export default {
@@ -18,7 +17,10 @@
                     '03221e3b55555555',
                     '03221e3d55555555',
                     '0322028C55555555',
-                    '0322744855555555'
+                    '0322744855555555',
+                    '0322189d55555555',
+                    '03221e0f55555555',
+                    '03221e0e55555555'
                 ]
             };
         },
@@ -95,6 +97,27 @@
 
                         parsedData = {
                             CHARGING: mode === 4 || mode === 6 ? 1 : 0
+                        };
+                    } else if (self.currentCommand === 4) {
+                        const firstDataByte = parseInt(data.slice(12,14), 16); // seventh byte
+                        const secondDataByte = parseInt(data.slice(14,16), 16); // eigth byte
+
+                        parsedData = {
+                            BATTERY_INLET_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                        };
+                    } else if (self.currentCommand === 5) {
+                        const firstDataByte = parseInt(data.slice(8,10), 16); // fifth byte
+                        const secondDataByte = parseInt(data.slice(10,12), 16); // sixth byte
+
+                        parsedData = {
+                            BATTERY_MIN_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                        };
+                    } else if (self.currentCommand === 6) {
+                        const firstDataByte = parseInt(data.slice(8,10), 16); // fifth byte
+                        const secondDataByte = parseInt(data.slice(10,12), 16); // sixth byte
+
+                        parsedData = {
+                            BATTERY_MAX_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
                         };
                     }
                 } catch (err) {
