@@ -738,6 +738,10 @@
 
                 if (soc == null) return self.obd2ErrorCount++; // no valid data
                 self.obd2ErrorCount = 0;
+                // calculate battery power for ID3 (special handling since it's coming partially)
+                if (self.car === 'ID_3' && self.obd2Data.DC_BATTERY_CURRENT && self.obd2Data.DC_BATTERY_VOLTAGE) {
+                    Vue.set(self.obd2Data, 'DC_BATTERY_POWER', self.obd2Data.DC_BATTERY_CURRENT * self.obd2Data.DC_BATTERY_VOLTAGE / 1000);
+                }
                 // set current timestamp and update last car response activity
                 if (data.SOC_DISPLAY || data.SOC_BMS) self.timestamp = self.lastResponse = parseInt(new Date().getTime() / 1000);
                 else self.obd2ErrorCount++; // no valid data

@@ -18,6 +18,7 @@
                     '03221e3b55555555',
                     '03221e3d55555555',
                     '0322028C55555555',
+                    '0322744855555555'
                 ]
             };
         },
@@ -87,8 +88,13 @@
 
                         parsedData = {
                             SOC_BMS: socBMS,
-                            SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1),
-                            CHARGING: 0
+                            SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1)
+                        };
+                    } else if (self.currentCommand === 3) {
+                        const mode = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+
+                        parsedData = {
+                            CHARGING: mode === 4 || mode === 6
                         };
                     }
                 } catch (err) {
