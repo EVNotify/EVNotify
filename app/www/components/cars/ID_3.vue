@@ -1,6 +1,7 @@
 <template></template>
 <script>
     import eventBus from './../modules/event.vue';
+    import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
 
     export default {
@@ -103,21 +104,21 @@
                         const secondDataByte = parseInt(data.slice(14,16), 16); // eigth byte
 
                         parsedData = {
-                            BATTERY_INLET_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_INLET_TEMPERATURE: helper.parseSigned((firstDataByte * Math.pow(2, 8) + secondDataByte) / 64)
                         };
                     } else if (self.currentCommand === 5) {
                         const firstDataByte = parseInt(data.slice(8,10), 16); // fifth byte
                         const secondDataByte = parseInt(data.slice(10,12), 16); // sixth byte
 
                         parsedData = {
-                            BATTERY_MIN_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MIN_TEMPERATURE: helper.parseSigned((firstDataByte * Math.pow(2, 8) + secondDataByte) / 64)
                         };
                     } else if (self.currentCommand === 6) {
                         const firstDataByte = parseInt(data.slice(8,10), 16); // fifth byte
                         const secondDataByte = parseInt(data.slice(10,12), 16); // sixth byte
 
                         parsedData = {
-                            BATTERY_MAX_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MAX_TEMPERATURE: helper.parseSigned((firstDataByte * Math.pow(2, 8) + secondDataByte) / 64)
                         };
                     }
                 } catch (err) {
