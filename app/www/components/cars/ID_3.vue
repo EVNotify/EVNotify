@@ -97,7 +97,9 @@
                         const mode = parseInt(data.slice(8,10), 16); // fifth byte
 
                         parsedData = {
-                            CHARGING: mode === 4 || mode === 6 ? 1 : 0
+                            CHARGING: mode === 4 || mode === 6 ? 1 : 0,
+                            NORMAL_CHARGE_PORT: mode === 4 ? 1 : 0,
+                            RAPID_CHARGE_PORT: mode === 6 ? 1 : 0
                         };
                     } else if (self.currentCommand === 4) {
                         const firstDataByte = parseInt(data.slice(12,14), 16); // seventh byte
