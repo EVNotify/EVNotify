@@ -32,7 +32,7 @@
                         return JSON.parse(value);
                     } catch (error) {}
                 }
-                if (value) return ((!isNaN(parseFloat(value)) && isFinite(value)) ? parseFloat(value) :
+                if (value) return (typeof value.toString === 'function' && !value.toString().includes('e') && (!isNaN(parseFloat(value)) && isFinite(value)) ? parseFloat(value) :
                     ((value === 'true') ? true : ((value === 'false') ? false : value)));
                 if (defaultValue) return defaultValue;
                 return '';
