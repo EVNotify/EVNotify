@@ -102,22 +102,22 @@
                             RAPID_CHARGE_PORT: mode === 6 ? 1 : 0
                         };
                     } else if (self.currentCommand === 4) {
-                        const firstDataByte = helper.parseSigned(data.slice(12,14), 16); // seventh byte
-                        const secondDataByte = helper.parseSigned(data.slice(14,16), 16); // eigth byte
+                        const firstDataByte = helper.parseSigned(data.slice(12,14)); // seventh byte
+                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(14,16))); // eigth byte
 
                         parsedData = {
                             BATTERY_INLET_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
                         };
                     } else if (self.currentCommand === 5) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10), 16); // fifth byte
-                        const secondDataByte = helper.parseSigned(data.slice(10,12), 16); // sixth byte
+                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
+                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
 
                         parsedData = {
                             BATTERY_MIN_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
                         };
                     } else if (self.currentCommand === 6) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10), 16); // fifth byte
-                        const secondDataByte = helper.parseSigned(data.slice(10,12), 16); // sixth byte
+                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
+                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
 
                         parsedData = {
                             BATTERY_MAX_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
