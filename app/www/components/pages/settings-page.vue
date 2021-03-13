@@ -71,6 +71,20 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+                    <!-- ABRP dialog -->
+                    <v-dialog v-model="abrpDialog" persistent max-width="500px">
+                        <v-card>
+                            <v-card-title class="headline grey lighten-2">
+                                <span class="headline">{{ translated.ABRP_LINKING}}</span>
+                            </v-card-title>
+                            <v-card-text><span v-html="settings.abrp ? translated.ABRP_LINKED_TEXT : translated.ABRP_LINKING_TEXT"></span></v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" flat @click.native="abrpDialog = false">{{ translated.CANCEL }}</v-btn>
+                                <v-btn v-if="!settings.abrp" color="blue darken-1" flat @click.native="abrpDialog = false; openABRP()">{{ translated.NEXT }}</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                     <!-- Telegram reset dialog -->
                     <v-dialog v-model="telegramDialog" persistent max-width="500px">
                         <v-card>
@@ -159,6 +173,15 @@
                                 <md-button style="width: 95%" class="md-accent" @click="logout()">{{ translated.LOGOUT
                                     }}</md-button>
                             </div>
+                        </div>
+                    </md-list>
+                </md-list-item>
+                <md-list-item md-expand>
+                    <img src="icons/group.svg" class="settingicon"/>
+                    <span class="md-list-item-text">{{ translated.INTEGRATIONS }}</span>
+                    <md-list slot="md-expand">
+                        <div class="md-layout-item">
+                            <md-button class="md-raised md-primary text-uppercase" style="width: 95%" @click="abrpDialog = true">A Better Route Planner</md-button>
                         </div>
                     </md-list>
                 </md-list-item>
@@ -326,6 +349,7 @@
                 newPassword2: '',
                 tokenResetDialog: false,
                 passwordChangeDialog: false,
+                abrpDialog: false,
                 telegramDialog: false,
                 deleteQRDialog: false,
                 sendQRDialog: false,
@@ -421,6 +445,15 @@
                 
                 a.target = "_blank";
                 a.href = 'https://t.me/evnotify2bot';
+                a.click();
+            },
+            openABRP() {
+                var akey = this.akey;
+                var token = this.token;
+                var a = document.createElement("a");
+                
+                a.target = "_blank";
+                a.href = window.open('https://abetterrouteplanner.com/oauth/auth?client_id=8&redirect_uri=https://app.evnotify.de/integrations/abrp/auth/' + akey + '/' + token, '_blank');
                 a.click();
             },
             setLocationSync() {
