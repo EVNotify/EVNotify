@@ -25,6 +25,7 @@ export default {
     translate(key) {
         if (typeof key !== 'string') return '';
         if(this.getLocalLng() === 'de') return de[key] || key;
+        else if(this.getLocalLng() === 'es') return es[key] || key;
         return en[key] || key;
     },
     /**
