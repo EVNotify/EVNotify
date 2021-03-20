@@ -181,7 +181,7 @@
                     <span class="md-list-item-text">{{ translated.INTEGRATIONS }}</span>
                     <md-list slot="md-expand">
                         <div class="md-layout-item">
-                            <md-button class="md-raised md-primary text-uppercase" style="width: 95%" @click="abrpDialog = true">A Better Route Planner</md-button>
+                            <md-button class="md-raised md-primary text-uppercase" style="width: 95%" @click="showABRPDialog()">A Better Route Planner</md-button>
                         </div>
                     </md-list>
                 </md-list-item>
@@ -446,6 +446,19 @@
                 a.target = "_blank";
                 a.href = 'https://t.me/evnotify2bot';
                 a.click();
+            },
+            showABRPDialog() {
+                var self = this;
+
+                http.sendRequest('GET', 'settings', {
+                    akey: self.akey,
+                    token: self.token
+                }, true, (err, res) => {
+                    if (!err && res && res.settings != null) {
+                        self.settings = storage.setValue('settings', res.settings);
+                        self.abrpDialog = true;
+                    }
+                });
             },
             openABRP() {
                 var akey = this.akey;
