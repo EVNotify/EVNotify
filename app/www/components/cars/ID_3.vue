@@ -8,7 +8,7 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATSP7', 'ATBI', 'ATSH FC007B', 'ATCP 17', 'ATCAF0', 'ATCF 17FE7', 'ATCF17FE007B'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATSP7', 'ATBI', 'ATSH FC007B', 'ATCP 17', 'ATCAF0', 'ATCF 17FE7', 'ATCRA17FE007B'
                 ],
                 offset: 0,
                 inStandbyMode: false,
