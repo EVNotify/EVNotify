@@ -174,6 +174,7 @@
         <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
         <NIROEV ref="NIRO_EV"></NIROEV>
         <ID3 ref="ID_3"></ID3>
+        <ZSEV ref="ZS_EV"></ZSEV>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar class="v-step-3"></bottom-bar>
     </div>
@@ -200,6 +201,7 @@
     import ZOEQ210 from './../cars/ZOE_Q210.vue';
     import NIROEV from './../cars/NIRO_EV.vue';
     import ID3 from './../cars/ID_3.vue';
+    import ZSEV from './../cars/ZS_EV.vue';
 
     export default {
         data() {
@@ -224,7 +226,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'NIRO_EV', 'ID_3'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'NIRO_EV', 'ID_3', 'ZS_EV'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -687,7 +689,8 @@
             KONAEV,
             ZOEQ210,
             NIROEV,
-            ID3
+            ID3,
+            ZSEV
         },
         beforeDestroy() {
             this.clear();
