@@ -11,7 +11,7 @@
                 ],
                 inStandbyMode: false,
                 offset: 0,
-                command: '0322B04600000000'
+                command: '22b046'
             };
         },
         methods: {
