@@ -172,6 +172,7 @@
         <ESOUL ref="E_SOUL"></ESOUL>
         <KONAEV ref="KONA_EV"></KONAEV>
         <ZOEQ210 ref="ZOE_Q210"></ZOEQ210>
+        <ZOEZE50 ref="ZOE_ZE50"></ZOEZE50>
         <NIROEV ref="NIRO_EV"></NIROEV>
         <ID3 ref="ID_3"></ID3>
         <ZSEV ref="ZS_EV"></ZSEV>
@@ -199,6 +200,7 @@
     import ESOUL from './../cars/E_SOUL.vue';
     import KONAEV from './../cars/KONA_EV.vue';
     import ZOEQ210 from './../cars/ZOE_Q210.vue';
+    import ZOEZE50 from './../cars/ZOE_ZE50.vue';
     import NIROEV from './../cars/NIRO_EV.vue';
     import ID3 from './../cars/ID_3.vue';
     import ZSEV from './../cars/ZS_EV.vue';
@@ -226,7 +228,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'NIRO_EV', 'ID_3', 'ZS_EV'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ZS_EV'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -686,8 +688,10 @@
             IONIQPHEV,
             IONIQFLEV,
             SOULEV,
+            ESOUL,
             KONAEV,
             ZOEQ210,
+            ZOEZE50,
             NIROEV,
             ID3,
             ZSEV

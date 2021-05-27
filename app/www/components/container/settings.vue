@@ -31,6 +31,7 @@
                     <md-option value="BOLT_EV">{{ translated.BOLT_EV }}</md-option>
                     <md-option value="KONA_EV">{{ translated.KONA_EV }}</md-option>
                     <md-option value="ZOE_Q210">{{ translated.ZOE_Q210 }}</md-option>
+                    <md-option value="ZOE_ZE50">{{ translated.ZOE_ZE50 }}</md-option>
                     <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                     <md-option value="ID_3">{{ translated.ID_3 }}</md-option>
                     <md-option value="ZS_EV">ZS_EV</md-option>
