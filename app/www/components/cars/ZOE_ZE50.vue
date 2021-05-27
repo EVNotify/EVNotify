@@ -65,7 +65,9 @@
                     data = data.replace(self.commands[self.currentCommand], '');
 
                     if (self.currentCommand === 0) {
-                        // SOC
+                        parsedData = {
+                            SOC_DISPLAY: parseInt(data.substr(-4), 16) / 100
+                        };
                     }
                 } catch (err) {
                     console.error(err);
