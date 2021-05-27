@@ -64,6 +64,11 @@
                 try {
                     data = data.replace(self.commands[self.currentCommand], '');
 
+                    if (DEBUG) Vue.http.post(RESTURL + 'debug', {
+                        data: self.commands[self.currentCommand] + ' parsing: ' + data,
+                        akey: storage.getValue('akey')
+                    });
+
                     if (self.currentCommand === 0) {
                         parsedData = {
                             SOC_DISPLAY: parseInt(data.substr(-4), 16) / 100
