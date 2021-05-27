@@ -62,12 +62,7 @@
                     baseData = self.getBaseData();
 
                 try {
-                    data = data.replace(self.commands[self.currentCommand], '');
-
-                    if (DEBUG) Vue.http.post(RESTURL + 'debug', {
-                        data: self.commands[self.currentCommand] + ' parsing: ' + data,
-                        akey: storage.getValue('akey')
-                    });
+                    data = data.replace(self.commands[self.currentCommand], '').replace('>', '');
 
                     if (self.currentCommand === 0) {
                         parsedData = {
