@@ -85,15 +85,18 @@ export default {
             AMPERA_E: 60,
             BOLT_EV: 60,
             ID_3: 58,
+            ID_4: 52,
             IONIQ_BEV: 28,
             IONIQ_HEV: 1.6,
             IONIQ_PHEV: 8.9,
             IONIQ_FL_EV: 38,
+            IONIQ_5: 58,
             KONA_EV: 64,
             NIRO_EV: 64,
             E_SOUL: 64,
             SOUL_EV: 28,
-            ZOE_Q210: 22
+            ZOE_Q210: 22,
+            ZOE_ZE50: 52
         };
 
         return capacity || capacities[car] || 0;
