@@ -92,6 +92,7 @@ export default {
     E_SOUL: 'Kia E-Soul',
     NIRO_EV: 'Kia Niro EV',
     ID_3: 'VW ID.3',
+    ID_4: 'VW ID.4',
     CONSUMPTION: 'Verbrauch',
     CAPACITY: 'Kapazität',
     OBD2_DEVICE: 'OBDII-Gerät',

@@ -35,6 +35,7 @@
                     <md-option value="ZOE_ZE50">{{ translated.ZOE_ZE50 }}</md-option>
                     <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                     <md-option value="ID_3">{{ translated.ID_3 }}</md-option>
+                    <md-option value="ID_4">{{ translated.ID_4 }}</md-option>
                 </md-select>
                 <span class="input-field-error">{{ carMessage }}</span>
             </md-field>
@@ -158,6 +159,7 @@
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;
                     case 'ID_3':
+                    case 'ID_4':
                     case 'ZOE_ZE50':
                         this.carMessage = translation.translate('CAR_EXPERIMENTAL_SUPPORT');
                         break;
