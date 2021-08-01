@@ -425,6 +425,7 @@
                         this.carMessage = translation.translate('CAR_INVALID_SUPPORT');
                         break;
                     case 'ID_3':
+                    case 'ZOE_ZE50':
                         this.carMessage = translation.translate('CAR_EXPERIMENTAL_SUPPORT');
                         break;
                     default:
