@@ -206,6 +206,7 @@
     import NIROEV from './../cars/NIRO_EV.vue';
     import ID3 from './../cars/ID_3.vue';
     import ID4 from './../cars/ID_4.vue';
+    import ENYAQIV80 from './../cars/ENYAQ_IV80.vue';
 
     export default {
         data() {
@@ -230,7 +231,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4', 'ENYAQ_IV80'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -697,7 +698,8 @@
             ZOEZE50,
             NIROEV,
             ID3,
-            ID4
+            ID4,
+            ENYAQIV80
         },
         beforeDestroy() {
             this.clear();
@@ -748,8 +750,8 @@
 
                 if (soc == null) return self.obd2ErrorCount++; // no valid data
                 self.obd2ErrorCount = 0;
-                // calculate battery power for ID3, ID4 (special handling since it's coming partially)
-                if ((self.car === 'ID_3' || self.car === 'ID_4') && self.obd2Data.DC_BATTERY_CURRENT && self.obd2Data.DC_BATTERY_VOLTAGE) {
+                // calculate battery power for ID3, ID4, Enyaq (special handling since it's coming partially)
+                if ((self.car === 'ID_3' || self.car === 'ID_4' || self.car === 'ENYAQ_IV80') && self.obd2Data.DC_BATTERY_CURRENT && self.obd2Data.DC_BATTERY_VOLTAGE) {
                     Vue.set(self.obd2Data, 'DC_BATTERY_POWER', self.obd2Data.DC_BATTERY_CURRENT * self.obd2Data.DC_BATTERY_VOLTAGE / 1000);
                 }
                 // set current timestamp and update last car response activity
