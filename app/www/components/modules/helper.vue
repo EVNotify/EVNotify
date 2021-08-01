@@ -86,6 +86,7 @@ export default {
             BOLT_EV: 60,
             ID_3: 58,
             ID_4: 52,
+            ENYAQ_IV80: 76.6,
             IONIQ_BEV: 28,
             IONIQ_HEV: 1.6,
             IONIQ_PHEV: 8.9,

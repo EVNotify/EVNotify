@@ -93,6 +93,7 @@ export default {
     NIRO_EV: 'Kia Niro EV',
     ID_3: 'VW ID.3',
     ID_4: 'VW ID.4',
+    ENYAQ_IV80: 'Skoda Enyaq iV 80',
     CONSUMPTION: 'Consumption',
     CAPACITY: 'Capacity',
     OBD2_DEVICE: 'OBDII-Device',
