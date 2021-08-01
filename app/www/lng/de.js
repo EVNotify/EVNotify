@@ -86,6 +86,7 @@ export default {
     IONIQ_FL_EV: 'Hyundai IONIQ Facelift EV',
     KONA_EV: 'Hyundai KONA Elektro',
     ZOE_Q210: 'Renault Zoe Q210',
+    ZOE_ZE50: 'Renault Zoe ZE50',
     SOUL_EV: 'Kia Soul EV',
     E_SOUL: 'Kia E-Soul',
     NIRO_EV: 'Kia Niro EV',
