@@ -34,7 +34,6 @@
                     <md-option value="ZOE_ZE50">{{ translated.ZOE_ZE50 }}</md-option>
                     <md-option value="NIRO_EV">{{ translated.NIRO_EV }}</md-option>
                     <md-option value="ID_3">{{ translated.ID_3 }}</md-option>
-                    <md-option value="ZS_EV">ZS_EV</md-option>
                 </md-select>
                 <span class="input-field-error">{{ carMessage }}</span>
             </md-field>
