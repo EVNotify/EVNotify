@@ -94,6 +94,7 @@ export default {
     ID_3: 'VW ID.3',
     ID_4: 'VW ID.4',
     ENYAQ_IV80: 'Skoda Enyaq iV 80',
+    E_GOLF: 'VW eGolf',
     CONSUMPTION: 'Consumption',
     CAPACITY: 'Capacity',
     OBD2_DEVICE: 'OBDII-Device',
