@@ -177,6 +177,8 @@
         <NIROEV ref="NIRO_EV"></NIROEV>
         <ID3 ref="ID_3"></ID3>
         <ID4 ref="ID_4"></ID4>
+        <ENYAQIV80 ref="ENYAQ_IV80"></ENYAQIV80>
+        <EGOLF ref="E_GOLF"></EGOLF>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar class="v-step-3"></bottom-bar>
     </div>
@@ -207,6 +209,7 @@
     import ID3 from './../cars/ID_3.vue';
     import ID4 from './../cars/ID_4.vue';
     import ENYAQIV80 from './../cars/ENYAQ_IV80.vue';
+    import EGOLF from './../cars/E_GOLF.vue';
 
     export default {
         data() {
@@ -231,7 +234,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4', 'ENYAQ_IV80'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4', 'ENYAQ_IV80', 'E_GOLF'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -699,7 +702,8 @@
             NIROEV,
             ID3,
             ID4,
-            ENYAQIV80
+            ENYAQIV80,
+            EGOLF
         },
         beforeDestroy() {
             this.clear();
@@ -750,8 +754,10 @@
 
                 if (soc == null) return self.obd2ErrorCount++; // no valid data
                 self.obd2ErrorCount = 0;
-                // calculate battery power for ID3, ID4, Enyaq (special handling since it's coming partially)
-                if ((self.car === 'ID_3' || self.car === 'ID_4' || self.car === 'ENYAQ_IV80') && self.obd2Data.DC_BATTERY_CURRENT && self.obd2Data.DC_BATTERY_VOLTAGE) {
+                // calculate battery power for ID3, ID4, Enyaq, Ioniq5, eGolf (special handling since it's coming partially)
+                var missingPowerCars = ['ID_3', 'ID_4', 'ENYAQ_IV80', 'E_GOLF', 'IONIQ_5'];
+
+                if (missingPowerCars.includes(self.car) && self.obd2Data.DC_BATTERY_CURRENT && self.obd2Data.DC_BATTERY_VOLTAGE) {
                     Vue.set(self.obd2Data, 'DC_BATTERY_POWER', self.obd2Data.DC_BATTERY_CURRENT * self.obd2Data.DC_BATTERY_VOLTAGE / 1000);
                 }
                 // set current timestamp and update last car response activity
