@@ -179,7 +179,7 @@
         <ID4 ref="ID_4"></ID4>
         <ENYAQIV80 ref="ENYAQ_IV80"></ENYAQIV80>
         <EGOLF ref="E_GOLF"></EGOLF>
-        <EUP ref="E_UP"></EGOLF>
+        <EUP ref="E_UP"></EUP>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar class="v-step-3"></bottom-bar>
     </div>
