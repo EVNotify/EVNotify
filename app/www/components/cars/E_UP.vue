@@ -8,19 +8,19 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATSP7', 'ATBI', 'ATSH FC007B', 'ATCP 17', 'ATCAF0', 'ATCF 17FE7', 'ATCRA17FE007B'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATAT1', 'ATST64', 'ATSP6', 'ATSH 7E5', 'ATCRA 7ED'
                 ],
                 offset: 0,
                 inStandbyMode: false,
                 emptyResponses: 0,
                 currentCommand: 0,
                 commands: [
-                    '03221e3b55555555',
-                    '03221e3d55555555',
-                    '0322028C55555555',
-                    '0322744855555555',
-                    '03221e0f55555555',
-                    '03221e0e55555555'
+                    '221e3b',
+                    '221e3d',
+                    '22028C',
+                    '227448',
+                    '221e0f',
+                    '221e0e'
                 ]
             };
         },
