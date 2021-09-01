@@ -705,7 +705,8 @@
             ID3,
             ID4,
             ENYAQIV80,
-            EGOLF
+            EGOLF,
+            EUP
         },
         beforeDestroy() {
             this.clear();
