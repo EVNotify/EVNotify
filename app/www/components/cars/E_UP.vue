@@ -74,16 +74,14 @@
                         const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
 
                         parsedData = {
-                            DC_BATTERY_VOLTAGE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 4
+                            DC_BATTERY_VOLTAGE: ((firstDataByte << 8) + secondDataByte) / 4
                         };
                     } else if (self.currentCommand === 1) {
                         const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
                         const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
-                        const thirdDataByte = parseInt(data.slice(12, 14), 16); // seventh byte
-                        const fourthDataByte = parseInt(data.slice(14, 16), 16); // eigth byte
 
                         parsedData = {
-                            DC_BATTERY_CURRENT: ((firstDataByte * Math.pow(2, 32) + secondDataByte * Math.pow(2, 16) + thirdDataByte * Math.pow(2, 8) + fourthDataByte - 150000) / 100) * -1
+                            DC_BATTERY_CURRENT: ((firstDataByte << 8) + secondDataByte - 2044) / 4
                         };
                     } else if (self.currentCommand === 2) {
                         const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
@@ -105,14 +103,14 @@
                         const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
 
                         parsedData = {
-                            BATTERY_MIN_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MIN_TEMPERATURE: ((firstDataByte << 8) + secondDataByte) / 64
                         };
                     } else if (self.currentCommand === 5) {
                         const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
                         const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
 
                         parsedData = {
-                            BATTERY_MAX_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MAX_TEMPERATURE: ((firstDataByte << 8) + secondDataByte) / 64
                         };
                     }
                 } catch (err) {
