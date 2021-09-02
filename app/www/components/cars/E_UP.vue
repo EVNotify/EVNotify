@@ -67,31 +67,29 @@
                     baseData = self.getBaseData();
 
                 try {
-                    data = data.replace(self.commands[self.currentCommand], '');
-
                     if (self.currentCommand === 0) {
-                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
-                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
+                        const firstDataByte = parseInt(data.slice(6, 8), 16);
+                        const secondDataByte = parseInt(data.slice(8, 10), 16);
 
                         parsedData = {
                             DC_BATTERY_VOLTAGE: ((firstDataByte << 8) + secondDataByte) / 4
                         };
                     } else if (self.currentCommand === 1) {
-                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
-                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
+                        const firstDataByte = parseInt(data.slice(6, 8), 16);
+                        const secondDataByte = parseInt(data.slice(8, 10), 16);
 
                         parsedData = {
                             DC_BATTERY_CURRENT: ((firstDataByte << 8) + secondDataByte - 2044) / 4
                         };
                     } else if (self.currentCommand === 2) {
-                        const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
+                        const socBMS = parseInt(data.slice(6, 8), 16) / 2.5;
 
                         parsedData = {
                             SOC_BMS: socBMS,
                             SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1)
                         };
                     } else if (self.currentCommand === 3) {
-                        const mode = parseInt(data.slice(8,10), 16); // fifth byte
+                        const mode = parseInt(data.slice(6, 8), 16);
 
                         parsedData = {
                             CHARGING: mode === 4 || mode === 6 ? 1 : 0,
@@ -99,15 +97,15 @@
                             RAPID_CHARGE_PORT: mode === 6 ? 1 : 0
                         };
                     } else if (self.currentCommand === 4) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
-                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
+                        const firstDataByte = helper.parseSigned(data.slice(6, 8));
+                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(8, 10)));
 
                         parsedData = {
                             BATTERY_MIN_TEMPERATURE: ((firstDataByte << 8) + secondDataByte) / 64
                         };
                     } else if (self.currentCommand === 5) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
-                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
+                        const firstDataByte = helper.parseSigned(data.slice(6, 8));
+                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(8, 10)));
 
                         parsedData = {
                             BATTERY_MAX_TEMPERATURE: ((firstDataByte << 8) + secondDataByte) / 64
