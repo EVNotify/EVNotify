@@ -1,6 +1,12 @@
 # EVNotify
 EVNotify allows you to control your electric vehicle and let you notify when the specified preset state of charge has been achieved.
 
+🚧 🚧 🚧 
+
+This repository contains the "v2" code of the app. EVNotify is under active development for the next generation "v3". The corresponding repository of v3 is currently still private. I just want to let you know, that in the upcming weeks the first official tests will start with you. Thanks for all of your patience. The project is alive, and v3 will be ready to test soon (and will be open source later).
+
+🚧 🚧 🚧
+
 ### Note:
 This repository contains the frontend/client source code. For the backend please visit: https://github.com/EVNotify/EVNotifyBackend.
 EVNotify is still in an early stage of development. Errors or unexpected behavior may occur. Furthermore, not all features may be implemented yet.
