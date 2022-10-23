@@ -179,6 +179,7 @@
         <ID4 ref="ID_4"></ID4>
         <ENYAQIV80 ref="ENYAQ_IV80"></ENYAQIV80>
         <EGOLF ref="E_GOLF"></EGOLF>
+        <EUP ref="E_UP"></EUP>
         <snackbar ref="snackbar"></snackbar>
         <bottom-bar class="v-step-3"></bottom-bar>
     </div>
@@ -210,6 +211,7 @@
     import ID4 from './../cars/ID_4.vue';
     import ENYAQIV80 from './../cars/ENYAQ_IV80.vue';
     import EGOLF from './../cars/E_GOLF.vue';
+    import EUP from './../cars/E_UP.vue';
 
     export default {
         data() {
@@ -234,7 +236,7 @@
                 lastResponse: 0,
                 obd2ErrorCount: 0,
                 consumption: 0,
-                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4', 'ENYAQ_IV80', 'E_GOLF'],
+                supportedCars: ['IONIQ_BEV', 'IONIQ_HEV', 'IONIQ_PHEV', 'IONIQ_FL_EV', 'IONIQ_5', 'SOUL_EV', 'E_SOUL', 'AMPERA_E', 'BOLT_EV', 'KONA_EV', 'ZOE_Q210', 'ZOE_ZE50', 'NIRO_EV', 'ID_3', 'ID_4', 'ENYAQ_IV80', 'E_GOLF', 'E_UP'],
                 initialized: false,
                 translated: {},
                 isWaitingForEnable: false,
@@ -703,7 +705,8 @@
             ID3,
             ID4,
             ENYAQIV80,
-            EGOLF
+            EGOLF,
+            EUP
         },
         beforeDestroy() {
             this.clear();
