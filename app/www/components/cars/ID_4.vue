@@ -142,7 +142,7 @@
                 return {
                     CAPACITY: 52,
                     SLOW_SPEED: 2.3,
-                    NORMAL_SPEED: 7.2,
+                    NORMAL_SPEED: 11,
                     FAST_SPEED: 50
                 };
             },
