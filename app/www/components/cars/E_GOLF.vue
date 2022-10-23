@@ -8,20 +8,21 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATSP7', 'ATBI', 'ATSH FC007B', 'ATCP 17', 'ATCAF0', 'ATCF 17FE7', 'ATCRA17FE007B'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATAT1', 'ATST64', 'ATSP6', 'ATSH 7E5', 'ATCRA 7ED'
                 ],
                 offset: 0,
                 inStandbyMode: false,
                 emptyResponses: 0,
                 currentCommand: 0,
                 commands: [
-                    '03221e3b55555555',
-                    '03221e3d55555555',
-                    '0322028C55555555',
-                    '0322744855555555',
-                    '0322189d55555555',
-                    '03221e0f55555555',
-                    '03221e0e55555555'
+                    '221e3b',
+                    '221e3d',
+                    '22028C',
+                    '227448',
+                    '221e0f',
+                    '221e0e',
+                    '221e32',
+                    '2202bd'
                 ]
             };
         },
@@ -51,11 +52,16 @@
                     });
 
                     if (self.offset + 1 === self.initCMD.length) {
+                        var timeout = 10;
+                        if(self.currentCommand + 1 === self.commands.length)
+                        {
+                            timeout = 3000;
+                        }
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
                         setTimeout(() => {
                             bluetoothSerial.write(self.commands[self.currentCommand] + '\r');
-                        }, 500);
+                        }, timeout);
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
 
@@ -66,61 +72,55 @@
                 var self = this,
                     parsedData = {},
                     baseData = self.getBaseData();
-
                 try {
-                    data = data.replace(self.commands[self.currentCommand], '');
-
-                    if (self.currentCommand === 0) {
-                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
-                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
-
+                    var parts = data.split(/.:/);
+                    var payload = data;
+                    if(parts.length > 1)
+                    {
+                        payload = parts.slice(1).join('');
+                    }
+                    
+                    var response_cmd = payload.slice(0, 6).toLowerCase()
+                    
+                    if (response_cmd === '621e3b') {
                         parsedData = {
-                            DC_BATTERY_VOLTAGE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 4
+                            DC_BATTERY_VOLTAGE: parseInt(payload.slice(6, 10), 16) / 4
                         };
-                    } else if (self.currentCommand === 1) {
-                        const firstDataByte = parseInt(data.slice(8, 10), 16); // fifth byte
-                        const secondDataByte = parseInt(data.slice(10, 12), 16); // sixth byte
-                        const thirdDataByte = parseInt(data.slice(12, 14), 16); // seventh byte
-                        const fourthDataByte = parseInt(data.slice(14, 16), 16); // eigth byte
-
+                    } else if (response_cmd === '621e3d') {
                         parsedData = {
-                            DC_BATTERY_CURRENT: ((firstDataByte * Math.pow(2, 32) + secondDataByte * Math.pow(2, 16) + thirdDataByte * Math.pow(2, 8) + fourthDataByte - 150000) / 100) * -1
+                            DC_BATTERY_CURRENT: (parseInt(payload.slice(6, 10), 16) - 2044) / 4
                         };
-                    } else if (self.currentCommand === 2) {
-                        const socBMS = parseInt(data.slice(8,10), 16) / 2.5; // fifth byte
-
+                    } else if (response_cmd === '62028c') {
+                        const socBMS = parseInt(payload.slice(6, 8), 16) / 2.5;
                         parsedData = {
-                            SOC_BMS: socBMS,
-                            SOC_DISPLAY: (socBMS * 51 / 46 - 6.4).toFixed(1)
+                            SOC_BMS: socBMS, 
+                            SOC_DISPLAY: ((socBMS - 8.0) / 0.88).toFixed(1)
                         };
-                    } else if (self.currentCommand === 3) {
-                        const mode = parseInt(data.slice(8,10), 16); // fifth byte
-
+                    } else if (response_cmd === '627448') {
+                        const mode = parseInt(payload.slice(6, 8), 16);
                         parsedData = {
                             CHARGING: mode === 4 || mode === 6 ? 1 : 0,
                             NORMAL_CHARGE_PORT: mode === 4 ? 1 : 0,
                             RAPID_CHARGE_PORT: mode === 6 ? 1 : 0
                         };
-                    } else if (self.currentCommand === 4) {
-                        const firstDataByte = helper.parseSigned(data.slice(12,14)); // seventh byte
-                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(14,16))); // eigth byte
-
+                    } else if (response_cmd === '621e0f') {
                         parsedData = {
-                            BATTERY_INLET_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MIN_TEMPERATURE: helper.parseSigned(payload.slice(6, 10)) / 64
                         };
-                    } else if (self.currentCommand === 5) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
-                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
-
+                    } else if (response_cmd === '621e0e') {
                         parsedData = {
-                            BATTERY_MIN_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            BATTERY_MAX_TEMPERATURE: helper.parseSigned(payload.slice(6, 10)) / 64
                         };
-                    } else if (self.currentCommand === 6) {
-                        const firstDataByte = helper.parseSigned(data.slice(8,10)); // fifth byte
-                        const secondDataByte = Math.abs(helper.parseSigned(data.slice(10,12))); // sixth byte
-
+                    }
+                    else if (response_cmd === '621e32') {
                         parsedData = {
-                            BATTERY_MAX_TEMPERATURE: (firstDataByte * Math.pow(2, 8) + secondDataByte) / 64
+                            CUMULATIVE_ENERGY_CHARGED: (helper.parseSigned(payload.slice(22, 30)) / 8583.07212).toFixed(3),
+                            CUMULATIVE_ENERGY_DISCHARGED: -(helper.parseSigned(payload.slice(30, 38)) / 8583.07212).toFixed(3)
+                        };
+                    }
+                    else if (response_cmd === '6202bd') {
+                        parsedData = {
+                            ODO: parseInt(payload.slice(8, 14), 16)
                         };
                     }
                 } catch (err) {
@@ -140,10 +140,10 @@
             },
             getBaseData() {
                 return {
-                    CAPACITY: 35.8,
+                    CAPACITY: 31.5,
                     SLOW_SPEED: 2.3,
                     NORMAL_SPEED: 7.2,
-                    FAST_SPEED: 50
+                    FAST_SPEED: 40
                 };
             },
             standbyMode() {
