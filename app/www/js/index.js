@@ -2,6 +2,7 @@ import VueResource from 'vue-resource';
 import http from './../components/modules/http.vue';
 import eventBus from './../components/modules/event.vue';
 import storage from './../components/modules/storage.vue';
+import native from './../components/modules/native.vue';
 import App from './../components/pages/App.vue';
 import LoginPage from './../components/pages/login-page.vue';
 import RegistrationPage from './../components/pages/registration-page.vue';
@@ -13,6 +14,27 @@ import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
 import DebugSettingsPage from './../components/pages/debug-settings-page.vue';
 import MomentJS from 'moment';
+
+var runtimeRESTURL = (typeof RESTURL === 'string' && RESTURL.length) ? RESTURL : '';
+var runtimeRollbarToken = (typeof ROLLBAR_TOKEN === 'string') ? ROLLBAR_TOKEN : undefined;
+
+function showClientConfigError() {
+    var appRoot = document.getElementById('app');
+
+    if (!appRoot) return;
+    appRoot.innerHTML = [
+        '<div style="padding:24px;font-family:Arial,sans-serif;line-height:1.5;">',
+        '<h2 style="margin:0 0 12px;">Missing client configuration</h2>',
+        '<p style="margin:0 0 12px;">The app could not load <code>www/client.js</code>.</p>',
+        '<p style="margin:0;">Create <code>app/www/client.js</code> from <code>app/www/client.js.example</code> and rebuild.</p>',
+        '</div>'
+    ].join('');
+}
+
+if (!runtimeRESTURL) {
+    showClientConfigError();
+    throw new Error('Missing runtime client configuration: RESTURL is not defined. Expected app/www/client.js.');
+}
 
 Vue.use(VueMaterial.default);
 Vue.use(VueResource);
@@ -71,7 +93,7 @@ var vm = new Vue({
             updateAvailable: false,
             loading: false,
             appPlatform: 'browser',
-            originalRESTURL: RESTURL,
+            originalRESTURL: runtimeRESTURL,
             stationcards: [],
             MomentJS
         };
@@ -95,7 +117,7 @@ var vm = new Vue({
 });
 
 // overwrite RESTURL if specified within debug settings
-eventBus.$on('resturlChanged', () => RESTURL = storage.getValue('debugSettings', {}).resturl || RESTURL);
+eventBus.$on('resturlChanged', () => window.RESTURL = storage.getValue('debugSettings', {}).resturl || runtimeRESTURL);
 eventBus.$emit('resturlChanged');
 
 // apply event listener for cordova device
@@ -108,19 +130,18 @@ document.addEventListener('deviceready', function() {
     });
     vm.appPlatform = ((window.device && typeof device.platform === 'string') ? device.platform.toLowerCase() : 'browser'); 
     // if ios, prevent some features
-    if (vm.appPlatform.indexOf('ios') === -1 && vm.appPlatform.indexOf('mac') === -1) {
+    if (!native.isApplePlatform(vm.appPlatform)) {
         // background mode handling
-        cordova.plugins.backgroundMode.on('activate', function() {
-            cordova.plugins.backgroundMode.disableWebViewOptimizations();
+        native.onBackgroundActivate(function() {
+            native.disableBackgroundWebViewOptimizations();
         });
         eventBus.$on('backgroundModeChanged', () => {
             if (storage.getValue('debugSettings', {}).backgroundMode) {
-                cordova.plugins.backgroundMode.enable();
-                cordova.plugins.backgroundMode.setDefaults({
+                native.enableBackgroundMode({
                     title: 'EVNotify',
                     text: 'SOC: 0%'
                 });
-            } else cordova.plugins.backgroundMode.disable();
+            } else native.disableBackgroundMode();
         });
         eventBus.$emit('backgroundModeChanged');
         // check for new update
@@ -135,20 +156,22 @@ document.addEventListener('deviceready', function() {
     }
     eventBus.$on('persistentNotificationChanged', () => {
         if (storage.getValue('debugSettings', {}).persistentNotification) {
-            cordova.plugins.notification.local.setDefaults({
-                vibrate: 0,
-                sound: null,
-                wakeup: false
+            native.requestNotificationPermission(() => {
+                native.setPersistentNotificationDefaults({
+                    vibrate: 0,
+                    sound: null,
+                    wakeup: false
+                });
+                native.schedulePersistentNotification({
+                    id: 42,
+                    title: 'EVNotify',
+                    text: 'SOC: 0%',
+                    foreground: true,
+                    priority: 1,
+                    sticky: true
+                });
             });
-            cordova.plugins.notification.local.schedule({
-                id: 42,
-                title: 'EVNotify',
-                text: 'SOC: 0%',
-                foreground: true,
-                priority: 1,
-                sticky: true
-            });
-        } else cordova.plugins.notification.local.clearAll();
+        } else native.clearPersistentNotifications();
     });
     eventBus.$emit('persistentNotificationChanged');
 });
@@ -156,7 +179,7 @@ document.addEventListener('deviceready', function() {
 eventBus.$on('unauthorized', () => {
     console.log('Unauthorized');
     // unsubscribe from push notifications
-    if (window.cordova && window.FCMPlugin && storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+    if (native.isCordova() && storage.getValue('token')) native.unsubscribeFromPushTopic(storage.getValue('token'));
     localStorage.clear();
     vm.$router.push('/');
 });
@@ -175,10 +198,10 @@ http.sendRequest('get', 'stationcards', null, true, (err, cards) => {
     }
 });
 
-if (typeof ROLLBAR_TOKEN === 'string' && vm.originalRESTURL === RESTURL) {
+if (runtimeRollbarToken && vm.originalRESTURL === window.RESTURL) {
     // rollbar error tracking
     var _rollbarConfig = {
-        accessToken: ROLLBAR_TOKEN,
+        accessToken: runtimeRollbarToken,
         captureUncaught: true,
         captureUnhandledRejections: true,
         payload: {

@@ -46,6 +46,7 @@
     import settings from './../container/settings.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
+    import native from './../modules/native.vue';
 
     export default {
         data() {
@@ -104,11 +105,11 @@
                     if (!err && res) {
                         if (res.token) {
                             // push notifications handling
-                            if (window.cordova && window.FCMPlugin) {
+                            if (native.isCordova()) {
                                 // check if there was another token linked before
-                                if (storage.getValue('token')) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                                if (storage.getValue('token')) native.unsubscribeFromPushTopic(storage.getValue('token'));
                                 // subscribe to own messages
-                                FCMPlugin.subscribeToTopic(res.token);
+                                native.subscribeToPushTopic(res.token);
                             }
                             // save akey and token
                             storage.setValue('akey', self.akey);

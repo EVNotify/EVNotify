@@ -192,6 +192,7 @@
     import translation from './../modules/translation.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
+    import native from './../modules/native.vue';
     import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
     import AMPERAE from './../cars/AMPERA_E.vue';
@@ -456,9 +457,9 @@
                 var self = this;
 
                 // if push enabled, subscribe, otherwise unsubscribe
-                if (window.cordova && window.FCMPlugin) {
-                    if (self.push) FCMPlugin.subscribeToTopic(storage.getValue('token'));
-                    else FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                if (native.isCordova()) {
+                    if (self.push) native.subscribeToPushTopic(storage.getValue('token'));
+                    else native.unsubscribeFromPushTopic(storage.getValue('token'));
                 }
 
                 // if device set and car supported, start watch
@@ -646,8 +647,8 @@
                 }
                 
                 // plugin handling based on local device settings
-                window.plugins.insomnia[((storage.getValue('keepawake') ? 'keepAwake' : 'allowSleepAgain'))]();
-                cordova.plugins.autoStart[((storage.getValue('autoboot') ? 'enable' : 'disable'))]();
+                native.setKeepAwake(storage.getValue('keepawake'));
+                native.setAutoStart(storage.getValue('autoboot'));
             },
             debugInfo() {
                 this.$refs.snackbar.setMessage('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
@@ -671,14 +672,14 @@
                 var debugSettings = storage.getValue('debugSettings', {});
 
                 if (debugSettings.persistentNotification) {
-                    cordova.plugins.notification.local.update({
+                    native.updatePersistentNotification({
                         id: 42,
                         text: 'SOC: ' + soc + '%',
                         priority: 1
                     });
                 }
                 if (debugSettings.backgroundMode) {
-                    cordova.plugins.backgroundMode.configure({
+                    native.configureBackgroundMode({
                         title: 'EVNotify',
                         text: 'SOC: ' + soc + '%'
                     });
@@ -727,8 +728,8 @@
             eventBus.$on('backbuttonPressed', function (e) {
                 if (self.$route.path === '/dashboard' || self.$route.path === '/') {
                     e.preventDefault();
-                    cordova.plugins.notification.local.clearAll();
-                    cordova.plugins.backgroundMode.disable();
+                    native.clearPersistentNotifications();
+                    native.disableBackgroundMode();
                     // end bluetooth connection, force standby mode
                     self.clear();
                     if (typeof bluetoothSerial === 'undefined') return navigator.app.exitApp();

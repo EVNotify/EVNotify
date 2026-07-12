@@ -107,6 +107,7 @@
 <script>
     import http from './../modules/http.vue';
     import eventBus from './../modules/event.vue';
+    import native from './../modules/native.vue';
     import translation from './../modules/translation.vue';
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
@@ -217,8 +218,8 @@
                 });
                 eventBus.$off('station_navigate');
                 eventBus.$on('station_navigate', () => {
-                    if (self.station.coordinates && window.cordova && window.launchnavigator) {
-                        launchnavigator.navigate([self.station.coordinates.lat, self.station.coordinates.lng]);
+                    if (self.station.coordinates && native.isCordova()) {
+                        native.navigateToCoordinates(self.station.coordinates.lat, self.station.coordinates.lng);
                     }
                 });
                 eventBus.$off('stationcardsCached');

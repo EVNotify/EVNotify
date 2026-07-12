@@ -46,14 +46,14 @@ This can be done easily with `git clone https://github.com/GPlay97/EVNotify`.
 
 After forking or cloning the project, go to the `app` directory with `cd EVNotify/app`.
 
-You will need to create a client configuration file once with `touch client.js`.
-It's important that the file will be in the `app` directory of EVNotify.
-The content of the `client.js` file must be the following:
+You will need to create a client configuration file once with `cp www/client.js.example www/client.js`.
+It's important that the file will be in the `app/www` directory of EVNotify, because Cordova loads it as a runtime web asset.
+The content of the `www/client.js` file must be the following:
 
 ```JavaScript
-RESTURL = 'https://evnotify.de:8743/', /* you can replace this with your custom EVNotify backend url if exists */
+RESTURL = 'https://app.evnotify.de/', /* you can replace this with your custom EVNotify backend url if exists */
 DEBUG = false,
-VERSION = '1.X.X'
+VERSION = '2.5.0'
 SOC_CMD = {
     IONIQ: '2105',  /* for compatibility to old versions only! */
     IONIQ_BEV: '2105',
@@ -71,6 +71,8 @@ SYNC_MODE = 'disabled',
 LAST_CAR_ACTIVITY = 0,
 NOTIFICATION_SENT = false;
 ```
+
+If you already have an older `app/client.js`, move or copy it to `app/www/client.js` before building.
 
 Once created, you can build your very first EVNotify build.
 On the very first run, you'll first need to add the android resources.

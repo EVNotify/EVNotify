@@ -4,6 +4,8 @@ import babel from 'rollup-plugin-babel';
 import commonJS from 'rollup-plugin-commonjs';
 import serve from 'rollup-plugin-serve';
 
+const shouldServe = process.env.ROLLUP_SERVE === '1';
+
 export default {
     input: './www/js/index.js',
     output: [
@@ -20,10 +22,9 @@ export default {
         }),
         babel({
             exclude: 'node_modules/**' // only transpile our source code
-        }),
-        serve({
-            open: true,
-            contentBase: 'www'
         })
-    ]
+    ].concat(shouldServe ? [serve({
+        open: true,
+        contentBase: 'www'
+    })] : [])
 };

@@ -91,6 +91,7 @@
     import helper from './../modules/helper.vue';
     import storage from './../modules/storage.vue';
     import eventBus from './../modules/event.vue';
+    import native from './../modules/native.vue';
 
     export default {
         data() {
@@ -186,9 +187,9 @@
                 eventBus.$emit('settings_languageChanged');
             },
             setPush() {
-                if (window.cordova && window.FCMPlugin) {
-                    if (this.settings.push) FCMPlugin.subscribeToTopic(storage.getValue('token'));
-                    else FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                if (native.isCordova()) {
+                    if (this.settings.push) native.subscribeToPushTopic(storage.getValue('token'));
+                    else native.unsubscribeFromPushTopic(storage.getValue('token'));
                 }
             },
             translatePage() {

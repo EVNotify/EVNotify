@@ -328,6 +328,7 @@
     import translation from './../modules/translation.vue';
     import eventBus from './../modules/event.vue';
     import helper from './../modules/helper.vue';
+    import native from './../modules/native.vue';
     import toolbar from './../container/toolbar.vue';
     import snackbar from './../modules/snackbar.vue';
     import settings from './../container/settings.vue';
@@ -494,9 +495,9 @@
             setPush() {
                 // fix for md-switch accepting only booleans instead of numbers that equal boolean values
                 this.settings.push = (this.settings.push == true);
-                if (window.cordova && window.FCMPlugin) {
-                    if (this.settings.push) FCMPlugin.subscribeToTopic(this.token);
-                    else FCMPlugin.unsubscribeFromTopic(this.token);
+                if (native.isCordova()) {
+                    if (this.settings.push) native.subscribeToPushTopic(this.token);
+                    else native.unsubscribeFromPushTopic(this.token);
                 }
             },
             setKeepAwake() {
@@ -545,9 +546,9 @@
                 }, true, (err, res) => {
                     if (!err && res && res.token) {
                         // subscribe to new token and unsubsribe from previous one
-                        if (window.cordova && window.FCMPlugin) FCMPlugin.unsubscribeFromTopic(storage.getValue('token'));
+                        if (native.isCordova()) native.unsubscribeFromPushTopic(storage.getValue('token'));
                         storage.setValue('token', (self.token = res.token));
-                        if (window.cordova && window.FCMPlugin) FCMPlugin.subscribeToTopic(storage.getValue('token'));
+                        if (native.isCordova()) native.subscribeToPushTopic(storage.getValue('token'));
                         self.$refs.snackbar.setMessage('TOKEN_RESETTED', false, 'success');
                     } else self.$refs.snackbar.setMessage(((err && err.status === 401) ? 'INVALID_CREDENTIALS' : 'UNEXPECTED_ERROR'), false, 'error');
                 });

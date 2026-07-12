@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="204000" id="com.evnotify.app" version="2.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="205000" id="com.evnotify.app" version="2.5.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>EVNotify</name>
     <description>
         EVNotify allows you to control your electric vehicle and let you notify when the specified preset state of charge has been achieved.
@@ -9,9 +9,10 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <preference name="android-minSdkVersion" value="19" />
-    <preference name="android-compileSdkVersion" value="29" />
-    <preference name="android-targetSdkVersion" value="29" />
+    <preference name="android-minSdkVersion" value="24" />
+    <preference name="android-compileSdkVersion" value="36" />
+    <preference name="android-targetSdkVersion" value="36" />
+    <preference name="AndroidXEnabled" value="true" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -28,70 +29,52 @@
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />        
-        <splash src="res/screen/ios/Default~iphone.png" width="320" height="480"/>
-        <splash src="res/screen/ios/Default@2x~iphone.png" width="640" height="960"/>
-        <splash src="res/screen/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
-        <splash src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
-        <splash src="res/screen/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
-        <splash src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>
-        <splash src="res/screen/ios/Default-568h@2x~iphone.png" width="640" height="1136"/>
-        <splash src="res/screen/ios/Default-667h.png" width="750" height="1334"/>
-        <splash src="res/screen/ios/Default-2436h.png" width="1125" height="2436"/>
-        <splash src="res/screen/ios/Default-736h.png" width="1242" height="2208"/>
-        <splash src="res/screen/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
-        <!-- iOS 7.0+ -->
-        <!-- Notification -->
-        <icon src="res/icon/ios/icon-20.png" width="20" height="20" />
-        <icon src="res/icon/ios/icon-20@2x.png" width="40" height="40" />
-        <icon src="res/icon/ios/icon-20@3x.png" width="60" height="60" />
-        <!-- iOS 8.0+ -->
-        <!-- iPhone 6 Plus  -->
-        <icon src="res/icon/ios/icon-60@3x.png" width="180" height="180" />
-        <!-- iOS 7.0+ -->
-        <!-- iPhone / iPod Touch  -->
-        <icon src="res/icon/ios/icon-60.png" width="60" height="60" />
-        <icon src="res/icon/ios/icon-60@2x.png" width="120" height="120" />
-        <!-- iPad -->
-        <icon src="res/icon/ios/icon-76.png" width="76" height="76" />
-        <icon src="res/icon/ios/icon-76@2x.png" width="152" height="152" />
-        <!-- iOS 6.1 -->
-        <!-- Spotlight Icon -->
-        <icon src="res/icon/ios/icon-40.png" width="40" height="40" />
-        <icon src="res/icon/ios/icon-40@2x.png" width="80" height="80" />
-        <!-- iPhone / iPod Touch -->
-        <icon src="res/icon/ios/icon.png" width="57" height="57" />
-        <icon src="res/icon/ios/icon@2x.png" width="114" height="114" />
-        <!-- iPad -->
-        <icon src="res/icon/ios/icon-72.png" width="72" height="72" />
-        <icon src="res/icon/ios/icon-72@2x.png" width="144" height="144" />
-
-        <icon src="res/icon/ios/icon-83.5@2x.png" width="167" height="167" />
-
-        <!-- iPhone Spotlight and Settings Icon -->
-        <icon src="res/icon/ios/icon-small.png" width="29" height="29" />
-        <icon src="res/icon/ios/icon-small@2x.png" width="58" height="58" />
-        <icon src="res/icon/ios/icon-small@3x.png" width="87" height="87" />
-        <!-- iPad Spotlight and Settings Icon -->
-        <icon src="res/icon/ios/icon-50.png" width="50" height="50" />
-        <icon src="res/icon/ios/icon-50@2x.png" width="100" height="100" />
+        <allow-intent href="itms-apps:*" />
+        <splash height="480" src="res/screen/ios/Default~iphone.png" width="320" />
+        <splash height="960" src="res/screen/ios/Default@2x~iphone.png" width="640" />
+        <splash height="1024" src="res/screen/ios/Default-Portrait~ipad.png" width="768" />
+        <splash height="2048" src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" />
+        <splash height="768" src="res/screen/ios/Default-Landscape~ipad.png" width="1024" />
+        <splash height="1536" src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" />
+        <splash height="1136" src="res/screen/ios/Default-568h@2x~iphone.png" width="640" />
+        <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
+        <splash height="2436" src="res/screen/ios/Default-2436h.png" width="1125" />
+        <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
+        <splash height="1242" src="res/screen/ios/Default-Landscape-736h.png" width="2208" />
+        <icon height="20" src="res/icon/ios/icon-20.png" width="20" />
+        <icon height="40" src="res/icon/ios/icon-20@2x.png" width="40" />
+        <icon height="60" src="res/icon/ios/icon-20@3x.png" width="60" />
+        <icon height="180" src="res/icon/ios/icon-60@3x.png" width="180" />
+        <icon height="60" src="res/icon/ios/icon-60.png" width="60" />
+        <icon height="120" src="res/icon/ios/icon-60@2x.png" width="120" />
+        <icon height="76" src="res/icon/ios/icon-76.png" width="76" />
+        <icon height="152" src="res/icon/ios/icon-76@2x.png" width="152" />
+        <icon height="40" src="res/icon/ios/icon-40.png" width="40" />
+        <icon height="80" src="res/icon/ios/icon-40@2x.png" width="80" />
+        <icon height="57" src="res/icon/ios/icon.png" width="57" />
+        <icon height="114" src="res/icon/ios/icon@2x.png" width="114" />
+        <icon height="72" src="res/icon/ios/icon-72.png" width="72" />
+        <icon height="144" src="res/icon/ios/icon-72@2x.png" width="144" />
+        <icon height="167" src="res/icon/ios/icon-83.5@2x.png" width="167" />
+        <icon height="29" src="res/icon/ios/icon-small.png" width="29" />
+        <icon height="58" src="res/icon/ios/icon-small@2x.png" width="58" />
+        <icon height="87" src="res/icon/ios/icon-small@3x.png" width="87" />
+        <icon height="50" src="res/icon/ios/icon-50.png" width="50" />
+        <icon height="100" src="res/icon/ios/icon-50@2x.png" width="100" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-bluetooth-serial" spec="^0.4.7" />
-    <plugin name="cordova-plugin-geolocation" spec="^2.4.3" />
-    <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="^4.2.2" />
+    <plugin name="cordova-plugin-geolocation" spec="^5.0.0" />
+    <plugin name="cordova-plugin-device" spec="^3.0.0" />
+    <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" spec="^5.0.7">
+        <variable name="LOCATION_USAGE_DESCRIPTION" value="This app requires access to your location for navigation purposes" />
+        <variable name="GOOGLE_API_KEY_FOR_ANDROID" value="replace-with-your-google-maps-api-key" />
+    </plugin>
     <plugin name="cordova-plugin-autostart" spec="git+https://github.com/ToniKorin/cordova-plugin-autostart.git" />
     <plugin name="cordova-plugin-insomnia" spec="git+https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git" />
-    <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
-    <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.2" />
-    <plugin name="cordova-plugin-background-mode" spec="~0.7.2" />
-    <engine name="browser" spec="^5.0.4" />
-    <engine name="android" spec="^6.3.0" />
-    <!-- For iOS (later)
-    <plugin name="cordova-plugin-add-swift-support" spec="^1.7.4" />
-    <plugin name="cordova-plugin-ble-central" spec="^1.2.2">
-        <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Read OBD II BLE Dongle" />
-    </plugin>
-    -->
+    <plugin name="cordova-plugin-firebasex" spec="^20.0.2" />
+    <plugin name="cordova-plugin-local-notification" spec="^1.2.3" />
+    <plugin name="cordova-plugin-background-mode" spec="^0.7.3" />
+    <plugin name="cordova-plugin-dialogs" spec="^2.0.2" />
+    <engine name="browser" spec="^7.0.0" />
+    <engine name="android" spec="^15.0.0" />
 </widget>

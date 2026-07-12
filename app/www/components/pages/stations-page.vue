@@ -70,6 +70,7 @@
     import http from './../modules/http.vue';
     import toolbar from './../container/toolbar.vue';
     import EventBus from './../modules/event.vue';
+    import native from './../modules/native.vue';
     import translation from './../modules/translation.vue';
     import bottomBar from './../container/bottom-bar.vue';
 
@@ -94,10 +95,8 @@
             },
             navigate(station, event) {
                 event.stopPropagation();
-                if (window.cordova && window.launchnavigator) {
-                    launchnavigator.navigate([
-                        station.coordinates.lat, station.coordinates.lng
-                    ]);
+                if (native.isCordova()) {
+                    native.navigateToCoordinates(station.coordinates.lat, station.coordinates.lng);
                 }
             },
             favorite(station, event) {
