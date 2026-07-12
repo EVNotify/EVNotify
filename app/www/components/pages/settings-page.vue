@@ -527,11 +527,13 @@
             listDevices() {
                 var self = this;
 
-                bluetoothSerial.enable(enabled => {
-                    bluetoothSerial.list(devices => {
-                        devices.forEach((device, idX) => {
-                            Vue.set(self.devices, idX, device);
-                        });
+                native.requestBluetoothPermissions(() => {
+                    bluetoothSerial.enable(enabled => {
+                        bluetoothSerial.list(devices => {
+                            devices.forEach((device, idX) => {
+                                Vue.set(self.devices, idX, device);
+                            });
+                        }, err => console.log(err));
                     }, err => console.log(err));
                 }, err => console.log(err));
             },

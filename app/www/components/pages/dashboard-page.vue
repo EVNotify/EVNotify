@@ -250,6 +250,7 @@
                 communicationEstablished: false,
                 batteryIcon: 'icons/battery_unknown.svg',
                 debugSettings: {},
+                showedBluetoothPermissionError: false,
                 syncMode: '',
                 steps: [{
                     target: '.v-step-1',
@@ -455,15 +456,8 @@
             },
             startWatch() {
                 var self = this;
-
-                // if push enabled, subscribe, otherwise unsubscribe
-                if (native.isCordova()) {
-                    if (self.push) native.subscribeToPushTopic(storage.getValue('token'));
-                    else native.unsubscribeFromPushTopic(storage.getValue('token'));
-                }
-
-                // if device set and car supported, start watch
-                if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
+                var startBluetoothWatch = () => {
+                    self.showedBluetoothPermissionError = false;
                     self.bluetoothInterval = setInterval(() => {
                         var proceed = () => {
                             // wait, until currenct connect process finished
@@ -551,30 +545,6 @@
                     self.syncInterval = setInterval(() => {
                         self.syncIntervalHandler();
                     }, 10000);
-                    // listener for location changes to push location to server
-                    if (storage.getValue('locationsync')) {
-                        self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
-                            // send location if communication is established
-                            if (!self.communicationEstablished) return;
-                            http.sendRequest('POST', 'location', {
-                                akey: storage.getValue('akey'),
-                                token: storage.getValue('token'),
-                                location: {
-                                    latitude: pos.coords.latitude,
-                                    longitude: pos.coords.longitude,
-                                    speed: pos.coords.speed,
-                                    timestamp: pos.timestamp,
-                                    accuracy: pos.coords.accuracy
-                                }
-                            }, false, err => { 
-                                // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
-                            }, 2000);
-                        }, err => console.log(err), {
-                            maximumAge: 2000,
-                            timeout: 5000,
-                            enableHighAccuracy: true
-                        });
-                    }
                     // watch for charging interrupted
                     self.chargingWatcher = setInterval(() => {
                         var soc = self.obd2Data.SOC_DISPLAY || self.obd2Data.SOC_BMS;
@@ -637,6 +607,57 @@
                         eventBus.$emit('forcedSyncMode', (self.syncMode = storage.getValue('lstSyncMode', 'download')));
                         eventBus.$emit('syncModeChanged', self.syncMode);
                     } else self.syncIntervalHandler(); // start sync on beginning
+                };
+                var handleBluetoothPermissionDenied = () => {
+                    self.initialized = false;
+                    eventBus.$emit('bluetoothChanged', 'disabled');
+                    self.syncInterval = setInterval(() => {
+                        self.pullData();
+                    }, 10000);
+                    self.pullData();
+                    if (!self.showedBluetoothPermissionError) {
+                        self.showedBluetoothPermissionError = true;
+                        self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
+                    }
+                };
+
+                // if push enabled, subscribe, otherwise unsubscribe
+                if (native.isCordova()) {
+                    if (self.push) native.subscribeToPushTopic(storage.getValue('token'));
+                    else native.unsubscribeFromPushTopic(storage.getValue('token'));
+                }
+
+                // if device set and car supported, start watch
+                if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
+                    native.requestBluetoothPermissions(() => {
+                        startBluetoothWatch();
+                    }, () => {
+                        handleBluetoothPermissionDenied();
+                    });
+                    // listener for location changes to push location to server
+                    if (storage.getValue('locationsync')) {
+                        self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
+                            // send location if communication is established
+                            if (!self.communicationEstablished) return;
+                            http.sendRequest('POST', 'location', {
+                                akey: storage.getValue('akey'),
+                                token: storage.getValue('token'),
+                                location: {
+                                    latitude: pos.coords.latitude,
+                                    longitude: pos.coords.longitude,
+                                    speed: pos.coords.speed,
+                                    timestamp: pos.timestamp,
+                                    accuracy: pos.coords.accuracy
+                                }
+                            }, false, err => { 
+                                // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
+                            }, 2000);
+                        }, err => console.log(err), {
+                            maximumAge: 2000,
+                            timeout: 5000,
+                            enableHighAccuracy: true
+                        });
+                    }
                 } else {
                     // the sync interval
                     self.syncInterval = setInterval(() => {

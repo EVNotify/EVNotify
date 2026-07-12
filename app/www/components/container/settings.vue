@@ -198,9 +198,11 @@
             listDevices() {
                 var self = this;
 
-                bluetoothSerial.enable(enabled => {
-                    bluetoothSerial.list(devices => {
-                        self.devices = devices;
+                native.requestBluetoothPermissions(() => {
+                    bluetoothSerial.enable(enabled => {
+                        bluetoothSerial.list(devices => {
+                            self.devices = devices;
+                        }, err => console.error(err));
                     }, err => console.error(err));
                 }, err => console.error(err));
             },

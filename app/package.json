@@ -8,6 +8,7 @@
       "android"
     ],
     "plugins": {
+      "cordova-plugin-android-permissions": {},
       "cordova-plugin-bluetooth-serial": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
@@ -78,8 +79,8 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "cordova": "^13.0.0",
-    "cordova-android": "^15.0.0",
     "cordova-browser": "^7.0.0",
+    "cordova-plugin-android-permissions": "^1.1.5",
     "cordova-plugin-autostart": "git+https://github.com/ToniKorin/cordova-plugin-autostart.git",
     "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-bluetooth-serial": "^0.4.7",

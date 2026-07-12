@@ -40,6 +40,12 @@ function getLaunchNavigatorPlugin() {
     return window.launchnavigator;
 }
 
+function getAndroidPermissionsPlugin() {
+    var cordova = getCordova();
+
+    return (cordova && cordova.plugins) ? cordova.plugins.permissions : undefined;
+}
+
 function logPluginError(err) {
     if (typeof console !== 'undefined' && console && typeof console.error === 'function') console.error(err);
 }
@@ -56,6 +62,38 @@ export default {
 
         if (!plugin || typeof plugin.requestPermission !== 'function') return (success || noop)(true);
         plugin.requestPermission((success || noop), (error || noop));
+    },
+    requestBluetoothPermissions: function (success, error) {
+        var permissions = getAndroidPermissionsPlugin();
+        var platform = (window.device && typeof window.device.platform === 'string') ? window.device.platform.toLowerCase() : '';
+        var onSuccess = success || noop;
+        var onError = error || noop;
+        var androidVersion = (typeof window.device !== 'undefined') ? parseInt(window.device.version, 10) : 0;
+        var permissionList = ['android.permission.ACCESS_FINE_LOCATION'];
+        var verifyPermissionList = ['android.permission.ACCESS_FINE_LOCATION'];
+        var verifyPermissions = function(index) {
+            if (index >= verifyPermissionList.length) return onSuccess();
+            permissions.checkPermission(verifyPermissionList[index], function(status) {
+                if (status && status.hasPermission) verifyPermissions(index + 1);
+                else onError(status);
+            }, onError);
+        };
+
+        if (platform !== 'android') return onSuccess();
+        if (!permissions || typeof permissions.checkPermission !== 'function' || typeof permissions.requestPermissions !== 'function') {
+            return onError(new Error('cordova-plugin-android-permissions is unavailable'));
+        }
+        if (androidVersion >= 12) {
+            permissionList.push('android.permission.BLUETOOTH_SCAN');
+            permissionList.push('android.permission.BLUETOOTH_CONNECT');
+            verifyPermissionList.push('android.permission.BLUETOOTH_SCAN');
+            verifyPermissionList.push('android.permission.BLUETOOTH_CONNECT');
+        }
+
+        permissions.requestPermissions(permissionList, function(requestStatus) {
+            if (!(requestStatus && requestStatus.hasPermission)) return onError(requestStatus);
+            verifyPermissions(0);
+        }, onError);
     },
     setPersistentNotificationDefaults: function (defaults) {
         var plugin = getLocalNotificationPlugin();
