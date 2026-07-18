@@ -245,11 +245,17 @@
                     <md-list slot="md-expand">
                         <md-field>
                             <label for="devices">{{ translated.OBD2_DEVICE }}</label>
-                            <md-select v-model="settings.device" required @click="listDevices()">
+                            <md-select v-if="bluetoothPermissionGranted" v-model="settings.device" required @click="listDevices()">
                                 <md-option v-for="(device, index) in devices" :key="index" :value="device.id">{{
                                     device.name }}</md-option>
                             </md-select>
+                            <span class="md-helper-text bluetooth-permission-notice" v-if="!bluetoothPermissionGranted">
+                                {{ translated.BLUETOOTH_PERMISSION_REQUIRED }}
+                            </span>
                         </md-field>
+                        <md-button class="md-raised md-primary" v-if="!bluetoothPermissionGranted" @click="listDevices()">
+                            {{ translated.BLUETOOTH_PERMISSION_REQUEST }}
+                        </md-button>
                         <a href="#" @click="showBluetoothSettings()">{{ translated.OBD2_DEVICE_PAIR }}</a>
                     </md-list>
                 </md-list-item>
@@ -340,6 +346,7 @@
                 translated: {},
                 settings: {},
                 devices: [],
+                bluetoothPermissionGranted: true,
                 carMessage: '',
                 errortracking: false,
                 locationsync: false,
@@ -527,15 +534,21 @@
             listDevices() {
                 var self = this;
 
-                native.requestBluetoothPermissions(() => {
-                    bluetoothSerial.enable(enabled => {
-                        bluetoothSerial.list(devices => {
-                            devices.forEach((device, idX) => {
-                                Vue.set(self.devices, idX, device);
-                            });
-                        }, err => console.log(err));
-                    }, err => console.log(err));
-                }, err => console.log(err));
+                bluetoothSerial.enable(enabled => {
+                    self.bluetoothPermissionGranted = true;
+                    bluetoothSerial.list(devices => {
+                        self.devices = [];
+                        devices.forEach((device, idX) => {
+                            Vue.set(self.devices, idX, device);
+                        });
+                    }, err => {
+                        self.bluetoothPermissionGranted = false;
+                        console.log(err);
+                    });
+                }, err => {
+                    self.bluetoothPermissionGranted = false;
+                    console.log(err);
+                });
             },
             resetToken() {
                 var self = this;
@@ -711,6 +724,10 @@
     .field-error-message {
         color: red;
         font-weight: bold;
+    }
+    .bluetooth-permission-notice {
+        color: red;
+        white-space: initial;
     }
     .telegram-linking-text {
         color: #4589fc;

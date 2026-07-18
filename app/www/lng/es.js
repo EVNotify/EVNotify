@@ -201,6 +201,8 @@ export default {
     FORCE_SYNC_MODES: 'Forzar modos de sincronización',
     CONNECTION: 'Conexión',
     BLUETOOTH_ENABLE_ERROR: 'Bluetooth no se pudo habilitar',
+    BLUETOOTH_PERMISSION_REQUIRED: 'Se requiere el permiso de dispositivos cercanos para listar y conectar dispositivos OBDII.',
+    BLUETOOTH_PERMISSION_REQUEST: 'Solicitar permiso de Bluetooth',
     BLUETOOTH_CONNECT_ERROR: 'Falló la conexión Bluetooth',
     INITIALIZATION: 'Inicialización. Por favor espera.',
     ESTABLISHED: 'Conexión establecida',

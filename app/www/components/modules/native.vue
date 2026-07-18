@@ -69,8 +69,8 @@ export default {
         var onSuccess = success || noop;
         var onError = error || noop;
         var androidVersion = (typeof window.device !== 'undefined') ? parseInt(window.device.version, 10) : 0;
-        var permissionList = ['android.permission.ACCESS_FINE_LOCATION'];
-        var verifyPermissionList = ['android.permission.ACCESS_FINE_LOCATION'];
+        var permissionList = [];
+        var verifyPermissionList = [];
         var verifyPermissions = function(index) {
             if (index >= verifyPermissionList.length) return onSuccess();
             permissions.checkPermission(verifyPermissionList[index], function(status) {
@@ -84,10 +84,11 @@ export default {
             return onError(new Error('cordova-plugin-android-permissions is unavailable'));
         }
         if (androidVersion >= 12) {
-            permissionList.push('android.permission.BLUETOOTH_SCAN');
             permissionList.push('android.permission.BLUETOOTH_CONNECT');
-            verifyPermissionList.push('android.permission.BLUETOOTH_SCAN');
             verifyPermissionList.push('android.permission.BLUETOOTH_CONNECT');
+        } else {
+            permissionList.push('android.permission.ACCESS_FINE_LOCATION');
+            verifyPermissionList.push('android.permission.ACCESS_FINE_LOCATION');
         }
 
         permissions.requestPermissions(permissionList, function(requestStatus) {

@@ -617,7 +617,7 @@
                     self.pullData();
                     if (!self.showedBluetoothPermissionError) {
                         self.showedBluetoothPermissionError = true;
-                        self.$refs.snackbar.setMessage('BLUETOOTH_ENABLE_ERROR', true, 'error');
+                        self.$refs.snackbar.setMessage('BLUETOOTH_PERMISSION_REQUIRED', true, 'error');
                     }
                 };
 
@@ -627,45 +627,50 @@
                     else native.unsubscribeFromPushTopic(storage.getValue('token'));
                 }
 
-                // if device set and car supported, start watch
-                if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
-                    native.requestBluetoothPermissions(() => {
+                var startAfterBluetoothPermission = () => {
+                    // if device set and car supported, start watch
+                    if (self.device && self.supportedCars.indexOf(self.car) !== -1) {
                         startBluetoothWatch();
-                    }, () => {
-                        handleBluetoothPermissionDenied();
-                    });
-                    // listener for location changes to push location to server
-                    if (storage.getValue('locationsync')) {
-                        self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
-                            // send location if communication is established
-                            if (!self.communicationEstablished) return;
-                            http.sendRequest('POST', 'location', {
-                                akey: storage.getValue('akey'),
-                                token: storage.getValue('token'),
-                                location: {
-                                    latitude: pos.coords.latitude,
-                                    longitude: pos.coords.longitude,
-                                    speed: pos.coords.speed,
-                                    timestamp: pos.timestamp,
-                                    accuracy: pos.coords.accuracy
-                                }
-                            }, false, err => { 
-                                // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
-                            }, 2000);
-                        }, err => console.log(err), {
-                            maximumAge: 2000,
-                            timeout: 5000,
-                            enableHighAccuracy: true
-                        });
-                    }
-                } else {
-                    // the sync interval
-                    self.syncInterval = setInterval(() => {
+                        // listener for location changes to push location to server
+                        if (storage.getValue('locationsync')) {
+                            self.locationWatcher = navigator.geolocation.watchPosition((pos) => {
+                                // send location if communication is established
+                                if (!self.communicationEstablished) return;
+                                http.sendRequest('POST', 'location', {
+                                    akey: storage.getValue('akey'),
+                                    token: storage.getValue('token'),
+                                    location: {
+                                        latitude: pos.coords.latitude,
+                                        longitude: pos.coords.longitude,
+                                        speed: pos.coords.speed,
+                                        timestamp: pos.timestamp,
+                                        accuracy: pos.coords.accuracy
+                                    }
+                                }, false, err => { 
+                                    // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history. 
+                                }, 2000);
+                            }, err => console.log(err), {
+                                maximumAge: 2000,
+                                timeout: 5000,
+                                enableHighAccuracy: true
+                            });
+                        }
+                    } else {
+                        // the sync interval
+                        self.syncInterval = setInterval(() => {
+                            self.pullData();
+                        }, 10000);
                         self.pullData();
-                    }, 10000);
-                    self.pullData();
-                    self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), !!self.device, 'warning');
-                }
+                        self.$refs.snackbar.setMessage(((!self.device) ? 'NO_DEVICE_SELECTED' : 'NO_CAR_SELECTED'), !!self.device, 'warning');
+                    }
+                };
+
+                bluetoothSerial.isEnabled(() => {
+                    startAfterBluetoothPermission();
+                }, err => {
+                    if (err === 'Bluetooth permission is required.') handleBluetoothPermissionDenied();
+                    else startAfterBluetoothPermission();
+                });
                 
                 // plugin handling based on local device settings
                 native.setKeepAwake(storage.getValue('keepawake'));

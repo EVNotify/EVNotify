@@ -103,6 +103,13 @@
     "vue-template-compiler": "^2.5.16"
   },
   "scripts": {
-    "test": "mocha ../tests/*"
+    "test": "mocha ../tests/*",
+    "prepare:android": "node scripts/cordova-android.js prepare android",
+    "build:android": "node scripts/cordova-android.js build android",
+    "launch:android": "node scripts/cordova-android.js prepare android && node scripts/cordova-android.js run android ",
+    "build:android:release": "node scripts/cordova-android.js build android --release"
+  },
+  "devDependencies": {
+    "cordova-android": "^15.0.0"
   }
 }

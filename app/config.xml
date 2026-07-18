@@ -23,7 +23,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <config-file parent="/manifest" target="AndroidManifest.xml">
-            <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+            <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
             <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
         </config-file>
         <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />

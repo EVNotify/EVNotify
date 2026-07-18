@@ -21,8 +21,7 @@ For web/browser:
 
   export ANDROID_HOME="$HOME/Android/Sdk"
   export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
-  export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/tools/bin:
-  $PATH"
+  export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 
   If you do not have Gradle installed system-wide, use the local temp download flow:
 
@@ -36,7 +35,7 @@ For web/browser:
   Then build Android:
 
   cd /home/gplay97/Developing/EVNotify/app
-  ./node_modules/.bin/cordova build android --release
+  npm run build:android:release
 
   Release outputs:
 
