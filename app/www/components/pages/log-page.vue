@@ -311,7 +311,7 @@
                     var map = L.map('log-map');
 
                     map.fitBounds(L.polyline(coords, {
-                        color: '#4589fc'
+                        color: '#00297A'
                     }).addTo(map).getBounds());
 
                     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {

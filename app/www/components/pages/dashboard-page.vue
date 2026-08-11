@@ -293,7 +293,7 @@
             },
             powerAmountColor() {
                 if (this.obd2Data.CHARGING) return 'green';
-                return parseFloat(this.obd2Data.DC_BATTERY_POWER) <= 0 ? '#448aff' : 'red';
+                return parseFloat(this.obd2Data.DC_BATTERY_POWER) <= 0 ? '#00297A' : 'red';
             },
             totalRange() {
                 return parseInt((this.carCapacity / (this.consumption || 12.34)) * 100) || 0;
@@ -918,7 +918,7 @@
     color: #1976d2;
 }
 .progress-cycle-text-container i {
-    color: #448aff;
+    color: #00297A;
 }
 
 .temperature-text {
@@ -938,7 +938,7 @@
 
 <style>
 .vueperslides__arrows .vueperslides__arrow {
-    fill: #448aff;
+    fill: #00297A;
 }
 .v-list--two-line .v-list__tile {
     height: 60px;

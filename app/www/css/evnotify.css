@@ -1,3 +1,11 @@
+.md-theme-default {
+    --md-theme-default-primary: #00297A;
+    --md-theme-default-primary-on-background: #00297A;
+    --md-theme-default-primary-on-primary: #001E5C;
+    --md-theme-default-text-primary-on-primary: #FFFFFF;
+    --md-theme-default-icon-on-primary: #FFFFFF;
+}
+
 .loading-overlay {
     z-index: 10;
     top: 0;

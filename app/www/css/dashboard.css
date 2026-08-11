@@ -20,11 +20,11 @@
 
 .vueperslides__bullet {
     border: 1px solid #74787b;
-    background-color: #448aff;
+    background-color: #00297A;
 }
 
 .vueperslides__bullet--active {
-    background-color: #bbe9ff;
+    background-color: #E0E5EF;
 }
 
 .vueperslides--fixed-height {

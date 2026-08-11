@@ -263,8 +263,8 @@
 </style>
 
 <style>
-    .vueperslides__arrows .vueperslides__arrow {
-        fill: #448aff;
+.vueperslides__arrows .vueperslides__arrow {
+        fill: #00297A;
     }
     #station-map {
         width: 100%;

@@ -730,7 +730,7 @@
         white-space: initial;
     }
     .telegram-linking-text {
-        color: #4589fc;
+        color: #00297A;
         text-decoration: underline;
     }
 </style>
