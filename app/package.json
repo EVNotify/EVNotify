@@ -10,7 +10,9 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-bluetooth-serial": {},
-      "cordova-plugin-geolocation": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      },
       "uk.co.workingedge.phonegap.plugin.launchnavigator": {
         "LOCATION_USAGE_DESCRIPTION": "This app requires access to your location for navigation purposes"
       },
@@ -32,7 +34,6 @@
     "cordova-browser": "^5.0.4",
     "cordova-ios": "^5.0.1",
     "cordova-plugin-actionsheet": "^2.3.3",
-    "cordova-plugin-autostart": "git+https://github.com/ToniKorin/cordova-plugin-autostart.git",
     "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-bluetooth-serial": "^0.4.7",
@@ -41,7 +42,6 @@
     "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-fcm": "^2.1.2",
     "cordova-plugin-geolocation": "^4.0.1",
-    "cordova-plugin-insomnia": "git+https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
     "cordova-plugin-local-notification": "^0.9.0-beta.2",
     "cordova-plugin-whitelist": "^1.3.3",
     "mocha": "^5.0.0",
@@ -58,5 +58,9 @@
   },
   "scripts": {
     "test": "mocha ../tests/*"
+  },
+  "devDependencies": {
+    "cordova-plugin-autostart": "github:ToniKorin/cordova-plugin-autostart",
+    "cordova-plugin-insomnia": "github:EddyVerbruggen/Insomnia-PhoneGap-Plugin"
   }
 }

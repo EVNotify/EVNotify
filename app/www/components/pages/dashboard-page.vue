@@ -87,6 +87,17 @@
                                 <v-list-tile-sub-title>{{ translated.BATTERY_TEMPERATURE_SHORTS }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
+                        <v-list-tile v-if="obd2Data.BATTERY_FAN_SPEED != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :ripple="false">
+                                    <img src="icons/blue/power.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ obd2Data.BATTERY_FAN_SPEED || 0 }}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.BATTERY_FAN_SPEED }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_DATA }}</v-subheader>
                         <v-list-tile>
                             <v-list-tile-action>
@@ -110,6 +121,17 @@
                                 <v-list-tile-sub-title>{{ translated.DC_BATTERY_CURRENT }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
+                        <v-list-tile class="double-line" v-if="obd2Data.BATTERY_CELL_VOLTAGE_MIN != null && obd2Data.BATTERY_CELL_VOLTAGE_MAX != null && obd2Data.BATTERY_CELL_VOLTAGE_DELTA != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/battery_100.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ formatCellVoltage(obd2Data.BATTERY_CELL_VOLTAGE_MIN) }} V / {{ formatCellVoltage(obd2Data.BATTERY_CELL_VOLTAGE_MAX) }} V / {{ formatCellVoltageDelta(obd2Data.BATTERY_CELL_VOLTAGE_DELTA) }} mV</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.BATTERY_CELL_VOLTAGE_SHORTS }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
                         <v-list-tile class="double-line">
                             <v-list-tile-action>
                                 <v-btn flat icon :rippled="false">
@@ -119,6 +141,17 @@
                             <v-list-tile-content>
                                 <v-list-tile-title>{{ obd2Data.CUMULATIVE_ENERGY_CHARGED || 0 }} kWh / {{ obd2Data.CUMULATIVE_ENERGY_DISCHARGED || 0 }} kWh</v-list-tile-title>
                                 <v-list-tile-sub-title>{{ translated.CUMULATIVE_ENERGY_CHARGED }} / <br>{{ translated.CUMULATIVE_ENERGY_DISCHARGED }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile v-if="obd2Data.ODO != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/car.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ obd2Data.ODO || 0 }} km</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.ODO }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_HEALTH }}</v-subheader>
@@ -358,6 +391,14 @@
             formatDecimalTime(time) {
                 return helper.convertDecimalTime(time) + 'h';
             },
+            formatCellVoltage(num) {
+                if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(3);
+                return '0.000';
+            },
+            formatCellVoltageDelta(num) {
+                if (!isNaN(parseFloat(num)) && isFinite(num)) return Math.round(parseFloat(num) * 1000);
+                return 0;
+            },
             roundTo2Digits(num) {
                 if (!isNaN(parseFloat(num)) && isFinite(num)) return parseFloat(num).toFixed(2);
                 return 0;
@@ -395,7 +436,11 @@
                             cumulativeEnergyDischarged: self.obd2Data.CUMULATIVE_ENERGY_DISCHARGED,
                             batteryMinTemperature: self.obd2Data.BATTERY_MIN_TEMPERATURE,
                             batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
-                            batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE
+                            batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE,
+                            batteryCellVoltageMin: self.obd2Data.BATTERY_CELL_VOLTAGE_MIN,
+                            batteryCellVoltageMax: self.obd2Data.BATTERY_CELL_VOLTAGE_MAX,
+                            batteryCellVoltageDelta: self.obd2Data.BATTERY_CELL_VOLTAGE_DELTA,
+                            batteryFanSpeed: self.obd2Data.BATTERY_FAN_SPEED
                         }, false, err => {
                             // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                             self.syncEventEmitter(err, 'upload');
@@ -449,6 +494,10 @@
                         Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
                         Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
+                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_MIN', res.battery_cell_voltage_min);
+                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_MAX', res.battery_cell_voltage_max);
+                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_DELTA', res.battery_cell_voltage_delta);
+                        Vue.set(self.obd2Data, 'BATTERY_FAN_SPEED', res.battery_fan_speed);
                     }, 10000);
                 }, 10000);
             },
