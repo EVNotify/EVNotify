@@ -273,6 +273,38 @@
                                 lineTension: 0,
                                 spanGaps: true,
                                 data: self.log.stats.map(stat => stat.battery_inlet_temperature),
+                            },
+                            {
+                                label: 'Battery Cell Voltage (Min) V',
+                                borderColor: '#1c7c54',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_cell_voltage_min),
+                            },
+                            {
+                                label: 'Battery Cell Voltage (Max) V',
+                                borderColor: '#6a4c93',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_cell_voltage_max),
+                            },
+                            {
+                                label: 'Battery Cell Voltage Delta mV',
+                                borderColor: '#ff9f1c',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_cell_voltage_delta != null ? Math.round(stat.battery_cell_voltage_delta * 1000) : stat.battery_cell_voltage_delta),
+                            },
+                            {
+                                label: 'Battery Fan Speed',
+                                borderColor: '#0081a7',
+                                fill: false,
+                                lineTension: 0,
+                                spanGaps: true,
+                                data: self.log.stats.map(stat => stat.battery_fan_speed),
                             }
                         ].concat(((charging) ? [] : [{
                             label: 'GPS_SPEED',

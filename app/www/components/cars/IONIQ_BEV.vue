@@ -13,7 +13,27 @@
                 offset: 0,
                 inStandbyMode: false,
                 emptyResponses: 0,
-                command: '2105'
+                currentCommand: 0,
+                commands: [
+                    {
+                        name: '2105',
+                        header: '7E4',
+                        response: '7EC',
+                        delay: 2000
+                    },
+                    {
+                        name: '2101',
+                        header: '7E4',
+                        response: '7EC',
+                        delay: 2000
+                    },
+                    {
+                        name: '22B002',
+                        header: '7C6',
+                        response: '7CE',
+                        delay: 2000
+                    }
+                ]
             };
         },
         methods: {
@@ -46,32 +66,48 @@
                         data.indexOf('STOPPED') !== -1 ||
                         data.indexOf('UNABLETOCONNECT') !== -1 ||
                         data.indexOf('BUFFERFULL') !== -1 ||
-                        (data.indexOf('7EC2600000000000000') !== -1 && self.emptyResponses > 5)) {
+                        (data.indexOf('7EC2600000000000000') !== -1 && self.getCurrentCommand().response === '7EC' && self.emptyResponses > 5)) {
                         // there was an error - reset offset, to start with first command afterwards
                         self.offset = -1;
                         self.emptyResponses = 0;
+                        self.currentCommand = 0;
                         // emit obd2 error
                         eventBus.$emit('obd2Error', data);
                     }
                     if (self.offset + 1 === self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
-                        // toggle between commands each time
-                        self.command = ((self.command === '2105') ? '2101' : '2105');
-                        setTimeout(() => bluetoothSerial.write(self.command + '\r'), 2000);
+                        self.sendCurrentCommand();
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
 
                 // initialize the dongle by sending the first command
                 bluetoothSerial.write(self.initCMD[self.offset] + '\r');
             },
+            getCurrentCommand() {
+                return this.commands[this.currentCommand];
+            },
+            advanceCommand() {
+                this.currentCommand = (this.currentCommand + 1) % this.commands.length;
+            },
+            sendCurrentCommand() {
+                var self = this,
+                    command = self.getCurrentCommand();
+
+                bluetoothSerial.write('ATSH' + command.header + '\r', () => {
+                    bluetoothSerial.write('ATCRA' + command.response + '\r', () => {
+                        setTimeout(() => bluetoothSerial.write(command.name + '\r'), command.delay);
+                    }, err => console.error(err));
+                }, err => console.error(err));
+            },
             parseData(data) {
                 var self = this,
                     parsedData = {},
-                    baseData = self.getBaseData();
+                    baseData = self.getBaseData(),
+                    command = self.getCurrentCommand();
 
                 try {
-                    if (self.command === '2105') {
+                    if (command.name === '2105') {
                         var fourthBlock = '7EC24',
                             fifthBlock = '7EC25',
                             extractedFourthBlock = data.substring(data.indexOf(fourthBlock), data.indexOf(fifthBlock)),
@@ -92,7 +128,7 @@
                                 ) / 10
                             };
                         }
-                    } else if (self.command === '2101') {
+                    } else if (command.name === '2101') {
                         var firstBlock = '7EC21',
                             extractedFirstBlock = ((data.indexOf(firstBlock) !== -1) ? data.substring(data.indexOf(firstBlock), data.indexOf(firstBlock) +
                                 19) : ''),
@@ -128,6 +164,9 @@
                                 CHARGING: parseInt(chargingBits.slice(0, 1)), // 7th bit of charging bits
                                 RAPID_CHARGE_PORT: parseInt(chargingBits.slice(1, 2)), // 6th bit of charging bits
                                 NORMAL_CHARGE_PORT: parseInt(chargingBits.slice(2, 3)), // 5th bit of charging bits,
+                                BATTERY_CELL_VOLTAGE_MAX: parseInt(extractedFourthData.slice(0, 2), 16) / 50, // first byte within 4th block
+                                BATTERY_CELL_VOLTAGE_MIN: parseInt(extractedFourthData.slice(2, 4), 16) / 50, // second byte within 4th block
+                                BATTERY_FAN_SPEED: parseInt(extractedFourthData.slice(6, 8), 16), // fourth byte within 4th block
                                 AUX_BATTERY_VOLTAGE: parseInt(extractedFourthData.slice(8, 10), 16) / 10, // 9th + 10th byte within fourth block divided by 10
                                 BATTERY_MIN_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(8, 10), 16), // fifth byte within 2nd block
                                 BATTERY_MAX_TEMPERATURE: helper.parseSigned(extractedSecondData.slice(6, 8), 16), // fourth byte within 2nd block
@@ -172,9 +211,20 @@
                                     )
                                 )) / 10)
                             };
+                            parsedData.BATTERY_CELL_VOLTAGE_DELTA = parsedData.BATTERY_CELL_VOLTAGE_MAX - parsedData.BATTERY_CELL_VOLTAGE_MIN;
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
                         } else self.emptyResponses++;
+                    } else if (command.name === '22B002') {
+                        var odoBlock = '7CE',
+                            extractedOdoBlock = ((data.indexOf(odoBlock) !== -1) ? data.substring(data.indexOf(odoBlock), data.indexOf(odoBlock) + 16) : ''),
+                            extractedOdoData = extractedOdoBlock.replace(odoBlock, '');
+
+                        if (extractedOdoData.length >= 10 && extractedOdoData.slice(0, 4) === '62B0') {
+                            parsedData = {
+                                ODO: parseInt(extractedOdoData.slice(4, 10), 16)
+                            };
+                        }
                     }
                 } catch (err) {
                     console.error(err);
@@ -184,6 +234,7 @@
                 console.log({
                     parsedData
                 });
+                self.advanceCommand();
                 return parsedData;
             },
             getBaseData() {
