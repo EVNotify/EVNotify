@@ -14,7 +14,7 @@
             <md-button class="md-icon-button" :disabled="true">
                 <img :src="syncIcon" />
             </md-button>
-            <md-button class="md-icon-button" @click="toggleDebug()">
+            <md-button class="md-icon-button" @click="openDebugData()">
                 <img :src="debugIcon" />
             </md-button>
         </div>
@@ -58,9 +58,8 @@ export default {
         };
     },
     methods: {
-        toggleDebug() {
-            this.debugIcon = ((this.debugIcon === 'icons/white/bug_report.svg') ? 'icons/white/adb.svg' : 'icons/white/bug_report.svg');
-            this.$emit('debugChanged', (DEBUG = !DEBUG));
+        openDebugData() {
+            this.$router.push('/debugdata');
         },
         openInNew() {
             eventBus.$emit('station_openInNew');

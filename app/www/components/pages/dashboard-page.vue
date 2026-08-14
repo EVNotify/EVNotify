@@ -2,7 +2,7 @@
 <template>
     <div>
         <!-- <v-tour name="dashboard-tour" :steps="steps" :callbacks="tourCallbacks"></v-tour> -->
-        <toolbar @debugChanged="debugInfo()" class="v-step-1"></toolbar>
+        <toolbar class="v-step-1"></toolbar>
         <div class="content-within-page">
             <v-layout>
                 <v-flex xs12 sm6 offset-sm3>
@@ -64,6 +64,62 @@
                     </v-alert>
                     <div class="bottom-part">
                         <v-list two-line>
+                        <v-subheader>{{ translated.CONNECTION }}</v-subheader>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/flash.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ roundTo2Digits(obd2Data.DC_BATTERY_POWER) || 0 }} kW</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.DC_BATTERY_POWER }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile>
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/power.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ formatBoolean(obd2Data.CHARGING) }}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.CHARGING }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile v-if="obd2Data.SLOW_CHARGE_PORT != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/ev_station_slow.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ formatBoolean(obd2Data.SLOW_CHARGE_PORT) }}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.SLOW_CHARGE_PORT }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile v-if="obd2Data.NORMAL_CHARGE_PORT != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/ev_station_normal.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ formatBoolean(obd2Data.NORMAL_CHARGE_PORT) }}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.NORMAL_CHARGE_PORT }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile v-if="obd2Data.RAPID_CHARGE_PORT != null">
+                            <v-list-tile-action>
+                                <v-btn flat icon :rippled="false">
+                                    <img src="icons/blue/ev_station_fast.svg" />
+                                </v-btn>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ formatBoolean(obd2Data.RAPID_CHARGE_PORT) }}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{ translated.RAPID_CHARGE_PORT }}</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_TEMPERATURE }}</v-subheader>
                         <v-list-tile>
                             <v-list-tile-action>
@@ -188,6 +244,20 @@
                                 <v-list-tile-sub-title>{{ translated.AUX_BATTERY_VOLTAGE }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
+                        <template v-if="additionalObd2Data.length">
+                            <v-subheader>{{ translated.ADDITIONAL_DATA }}</v-subheader>
+                            <v-list-tile v-for="entry in additionalObd2Data" :key="entry.key">
+                                <v-list-tile-action>
+                                    <v-btn flat icon :rippled="false">
+                                        <img src="icons/blue/adb.svg" />
+                                    </v-btn>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ entry.value }}</v-list-tile-title>
+                                    <v-list-tile-sub-title>{{ entry.label }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </template>
                         </v-list>
                     </div>
                     </v-card-title>
@@ -228,6 +298,7 @@
     import native from './../modules/native.vue';
     import snackbar from './../modules/snackbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
+    import obdDebug from './../../js/obd-debug.js';
     import AMPERAE from './../cars/AMPERA_E.vue';
     import BOLTEV from './../cars/BOLT_EV.vue';
     import IONIQBEV from './../cars/IONIQ_BEV.vue';
@@ -357,9 +428,55 @@
                 const settingsCapacity = parseInt(storage.getValue('settings', {}).capacity) || 0;
 
                 return settingsCapacity || this.obd2Data.CAPACITY;
+            },
+            additionalObd2Data() {
+                var hiddenKeys = [
+                    'SOC_DISPLAY', 'SOC_BMS', 'CHARGING', 'SOH', 'AUX_BATTERY_VOLTAGE', 'DC_BATTERY_VOLTAGE',
+                    'DC_BATTERY_CURRENT', 'DC_BATTERY_POWER', 'BATTERY_MIN_TEMPERATURE', 'BATTERY_MAX_TEMPERATURE',
+                    'BATTERY_INLET_TEMPERATURE', 'BATTERY_CELL_VOLTAGE_MIN', 'BATTERY_CELL_VOLTAGE_MAX',
+                    'BATTERY_CELL_VOLTAGE_DELTA', 'BATTERY_FAN_SPEED', 'CUMULATIVE_ENERGY_CHARGED',
+                    'CUMULATIVE_ENERGY_DISCHARGED', 'ODO', 'CAPACITY', 'SLOW_SPEED', 'NORMAL_SPEED', 'FAST_SPEED',
+                    'SLOW_CHARGE_PORT', 'NORMAL_CHARGE_PORT', 'RAPID_CHARGE_PORT'
+                ];
+
+                return Object.keys(this.obd2Data)
+                    .filter(key => hiddenKeys.indexOf(key) === -1 && this.obd2Data[key] != null && /^[A-Z0-9_]+$/.test(key))
+                    .map(key => ({
+                        key,
+                        label: translation.translate(key),
+                        value: this.formatAdditionalValue(this.obd2Data[key])
+                    }));
             }
         },
         methods: {
+            decorateDebugParser() {
+                var self = this;
+                var component = self.$refs[self.car];
+
+                if (!component || typeof component.parseData !== 'function' || component.__debugWrapped) return;
+                var originalParseData = component.parseData;
+
+                component.parseData = function(raw) {
+                    var commandLabel = obdDebug.getCommandLabel(this);
+                    var parsed = originalParseData.call(this, raw);
+
+                    eventBus.$emit('obd2DebugData', obdDebug.buildHistoryEntry(
+                        self.car,
+                        commandLabel,
+                        raw,
+                        parsed
+                    ));
+                    return parsed;
+                };
+                component.__debugWrapped = true;
+            },
+            formatBoolean(value) {
+                return value ? this.translated.YES : this.translated.NO;
+            },
+            formatAdditionalValue(value) {
+                if (typeof value === 'boolean') return this.formatBoolean(value);
+                return value;
+            },
             dataOutdated() {
                 const now = parseInt(new Date() / 1000);
                 const lastUpdate = this.timestamp;
@@ -411,6 +528,33 @@
             },
             pushData(callback) {
                 var self = this;
+                var extendedFieldMap = {
+                    SOH: 'soh',
+                    CHARGING: 'charging',
+                    RAPID_CHARGE_PORT: 'rapidChargePort',
+                    NORMAL_CHARGE_PORT: 'normalChargePort',
+                    SLOW_CHARGE_PORT: 'slowChargePort',
+                    AUX_BATTERY_VOLTAGE: 'auxBatteryVoltage',
+                    DC_BATTERY_CURRENT: 'dcBatteryCurrent',
+                    DC_BATTERY_VOLTAGE: 'dcBatteryVoltage',
+                    DC_BATTERY_POWER: 'dcBatteryPower',
+                    CUMULATIVE_ENERGY_CHARGED: 'cumulativeEnergyCharged',
+                    CUMULATIVE_ENERGY_DISCHARGED: 'cumulativeEnergyDischarged',
+                    BATTERY_MIN_TEMPERATURE: 'batteryMinTemperature',
+                    BATTERY_MAX_TEMPERATURE: 'batteryMaxTemperature',
+                    BATTERY_INLET_TEMPERATURE: 'batteryInletTemperature',
+                    BATTERY_CELL_VOLTAGE_MIN: 'batteryCellVoltageMin',
+                    BATTERY_CELL_VOLTAGE_MAX: 'batteryCellVoltageMax',
+                    BATTERY_CELL_VOLTAGE_DELTA: 'batteryCellVoltageDelta',
+                    BATTERY_FAN_SPEED: 'batteryFanSpeed',
+                    ODO: 'odo'
+                };
+                var extendedPayload = {
+                    akey: storage.getValue('akey'),
+                    token: storage.getValue('token')
+                };
+
+                Object.keys(extendedFieldMap).forEach(key => extendedPayload[extendedFieldMap[key]] = self.obd2Data[key]);
 
                 http.sendRequest('POST', 'soc', {
                     akey: storage.getValue('akey'),
@@ -421,29 +565,7 @@
                     // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                     self.syncEventEmitter(err, 'upload');
                     if (!err) {
-                        // push extended data
-                        http.sendRequest('POST', 'extended', {
-                            akey: storage.getValue('akey'),
-                            token: storage.getValue('token'),
-                            soh: self.obd2Data.SOH,
-                            charging: self.obd2Data.CHARGING,
-                            rapidChargePort: self.obd2Data.RAPID_CHARGE_PORT,
-                            normalChargePort: self.obd2Data.NORMAL_CHARGE_PORT,
-                            slowChargePort: self.obd2Data.SLOW_CHARGE_PORT,
-                            auxBatteryVoltage: self.obd2Data.AUX_BATTERY_VOLTAGE,
-                            dcBatteryCurrent: self.obd2Data.DC_BATTERY_CURRENT,
-                            dcBatteryVoltage: self.obd2Data.DC_BATTERY_VOLTAGE,
-                            dcBatteryPower: self.obd2Data.DC_BATTERY_POWER,
-                            cumulativeEnergyCharged: self.obd2Data.CUMULATIVE_ENERGY_CHARGED,
-                            cumulativeEnergyDischarged: self.obd2Data.CUMULATIVE_ENERGY_DISCHARGED,
-                            batteryMinTemperature: self.obd2Data.BATTERY_MIN_TEMPERATURE,
-                            batteryMaxTemperature: self.obd2Data.BATTERY_MAX_TEMPERATURE,
-                            batteryInletTemperature: self.obd2Data.BATTERY_INLET_TEMPERATURE,
-                            batteryCellVoltageMin: self.obd2Data.BATTERY_CELL_VOLTAGE_MIN,
-                            batteryCellVoltageMax: self.obd2Data.BATTERY_CELL_VOLTAGE_MAX,
-                            batteryCellVoltageDelta: self.obd2Data.BATTERY_CELL_VOLTAGE_DELTA,
-                            batteryFanSpeed: self.obd2Data.BATTERY_FAN_SPEED
-                        }, false, err => {
+                        http.sendRequest('POST', 'extended', extendedPayload, false, err => {
                             // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                             self.syncEventEmitter(err, 'upload');
                             if (typeof callback === 'function') callback(err);
@@ -481,25 +603,33 @@
                     // TODO: if err.status===0, the request failed because of a timeout, which most likely means that there is no internet connection. We could collect all of these failed requests and push them later to keep history.
                         self.syncEventEmitter(err, 'download');
                         if (err || !res) return;
-                        // update extended data
-                        Vue.set(self.obd2Data, 'SOH', res.soh);
-                        Vue.set(self.obd2Data, 'CHARGING', res.charging);
-                        Vue.set(self.obd2Data, 'RAPID_CHARGE_PORT', res.rapid_charge_port);
-                        Vue.set(self.obd2Data, 'NORMAL_CHARGE_PORT', res.normal_charge_port);
-                        Vue.set(self.obd2Data, 'SLOW_CHARGE_PORT', res.slow_charge_port);
-                        Vue.set(self.obd2Data, 'AUX_BATTERY_VOLTAGE', res.aux_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_VOLTAGE', res.dc_battery_voltage);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_CURRENT', res.dc_battery_current);
-                        Vue.set(self.obd2Data, 'DC_BATTERY_POWER', res.dc_battery_power);
-                        Vue.set(self.obd2Data, 'CUMULATIVE_ENERGY_CHARGED', res.cumulative_energy_charged);
-                        Vue.set(self.obd2Data, 'CUMULATIVE_ENERGY_DISCHARGED', res.cumulative_energy_discharged);
-                        Vue.set(self.obd2Data, 'BATTERY_MIN_TEMPERATURE', res.battery_min_temperature);
-                        Vue.set(self.obd2Data, 'BATTERY_MAX_TEMPERATURE', res.battery_max_temperature);
-                        Vue.set(self.obd2Data, 'BATTERY_INLET_TEMPERATURE', res.battery_inlet_temperature);
-                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_MIN', res.battery_cell_voltage_min);
-                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_MAX', res.battery_cell_voltage_max);
-                        Vue.set(self.obd2Data, 'BATTERY_CELL_VOLTAGE_DELTA', res.battery_cell_voltage_delta);
-                        Vue.set(self.obd2Data, 'BATTERY_FAN_SPEED', res.battery_fan_speed);
+                        var extendedFieldMap = {
+                            SOH: 'soh',
+                            CHARGING: 'charging',
+                            RAPID_CHARGE_PORT: 'rapid_charge_port',
+                            NORMAL_CHARGE_PORT: 'normal_charge_port',
+                            SLOW_CHARGE_PORT: 'slow_charge_port',
+                            AUX_BATTERY_VOLTAGE: 'aux_battery_voltage',
+                            DC_BATTERY_VOLTAGE: 'dc_battery_voltage',
+                            DC_BATTERY_CURRENT: 'dc_battery_current',
+                            DC_BATTERY_POWER: 'dc_battery_power',
+                            CUMULATIVE_ENERGY_CHARGED: 'cumulative_energy_charged',
+                            CUMULATIVE_ENERGY_DISCHARGED: 'cumulative_energy_discharged',
+                            BATTERY_MIN_TEMPERATURE: 'battery_min_temperature',
+                            BATTERY_MAX_TEMPERATURE: 'battery_max_temperature',
+                            BATTERY_INLET_TEMPERATURE: 'battery_inlet_temperature',
+                            BATTERY_CELL_VOLTAGE_MIN: 'battery_cell_voltage_min',
+                            BATTERY_CELL_VOLTAGE_MAX: 'battery_cell_voltage_max',
+                            BATTERY_CELL_VOLTAGE_DELTA: 'battery_cell_voltage_delta',
+                            BATTERY_FAN_SPEED: 'battery_fan_speed',
+                            ODO: 'odo'
+                        };
+
+                        Object.keys(extendedFieldMap).forEach(key => {
+                            if (Object.prototype.hasOwnProperty.call(res, extendedFieldMap[key])) {
+                                Vue.set(self.obd2Data, key, res[extendedFieldMap[key]]);
+                            }
+                        });
                     }, 10000);
                 }, 10000);
             },
@@ -725,9 +855,6 @@
                 native.setKeepAwake(storage.getValue('keepawake'));
                 native.setAutoStart(storage.getValue('autoboot'));
             },
-            debugInfo() {
-                this.$refs.snackbar.setMessage('DEBUG_MODE_' + ((DEBUG) ? 'ENABLED' : 'DISABLED'));
-            },
             initMessage() {
                 if (this.initialized) this.$refs.snackbar.setMessage('INITIALIZATION');
             },
@@ -797,6 +924,7 @@
             self.consumption = parseFloat(storage.getValue('settings', {}).consumption) || 0;
             self.socThreshold = parseInt(storage.getValue('settings', {}).soc) || 0;
             self.debugSettings = storage.getValue('debugSettings', {});
+            self.decorateDebugParser();
 
             // apply backbuttonPressed listener to handle exit or back
             eventBus.$off('backbuttonPressed');
@@ -880,6 +1008,10 @@
                     self.notificationSent = false;
                 }
             });
+            eventBus.$off('obd2DebugData');
+            eventBus.$on('obd2DebugData', function(entry) {
+                obdDebug.appendHistory(entry);
+            });
             eventBus.$off('obd2Error');
             eventBus.$on('obd2Error', function (error) {
                 self.$refs.snackbar.setMessage('OBD2_ERROR', false, 'warning');
@@ -901,6 +1033,7 @@
 
             // wait for cordova device to be ready - apply listener, if not ready yet
             eventBus.$off('deviceReady');
+            self.decorateDebugParser();
             if (self.$root.deviceReady) self.startWatch();
             else {
                 eventBus.$on('deviceReady', function () {

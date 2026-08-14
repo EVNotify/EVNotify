@@ -13,6 +13,7 @@ import StationsPage from './../components/pages/stations-page.vue';
 import StationPage from './../components/pages/station-page.vue';
 import SettingsPage from './../components/pages/settings-page.vue';
 import DebugSettingsPage from './../components/pages/debug-settings-page.vue';
+import DebugDataPage from './../components/pages/debug-data-page.vue';
 import MomentJS from 'moment';
 
 var runtimeRESTURL = (typeof RESTURL === 'string' && RESTURL.length) ? RESTURL : '';
@@ -80,6 +81,10 @@ var router = new VueRouter({
         {
             path: '/debugsettings',
             component: DebugSettingsPage
+        },
+        {
+            path: '/debugdata',
+            component: DebugDataPage
         }
     ]
 });
@@ -108,7 +113,8 @@ var vm = new Vue({
         'stations-page': StationsPage,
         'station-page': StationPage,
         'settings-page': SettingsPage,
-        'debug-settings-page': DebugSettingsPage
+        'debug-settings-page': DebugSettingsPage,
+        'debug-data-page': DebugDataPage
     },
     router: router,
     render: function (h) {

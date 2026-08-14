@@ -8,29 +8,31 @@
         data() {
             return {
                 initCMD: [
-                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6', 'ATCRA7EC'
+                    'ATD', 'ATZ', 'ATE0', 'ATL0', 'ATS0', 'ATH1', 'AT0', 'ATSTFF', 'ATFE', 'ATSP6'
                 ],
                 offset: 0,
+                initFinished: false,
                 inStandbyMode: false,
                 emptyResponses: 0,
+                failedCommandsInCycle: 0,
                 currentCommand: 0,
+                pendingSetupResponses: 0,
+                awaitingCommandResponse: false,
+                setupDelay: 75,
                 commands: [
                     {
                         name: '2105',
-                        header: '7E4',
-                        response: '7EC',
+                        setupCommands: ['ATSH7E4', 'ATCRA7EC'],
                         delay: 2000
                     },
                     {
                         name: '2101',
-                        header: '7E4',
-                        response: '7EC',
+                        setupCommands: ['ATSH7E4', 'ATCRA7EC'],
                         delay: 2000
                     },
                     {
                         name: '22B002',
-                        header: '7C6',
-                        response: '7CE',
+                        setupCommands: ['ATSH7C6', 'ATCRA7CE'],
                         delay: 2000
                     }
                 ]
@@ -61,22 +63,30 @@
                         akey: storage.getValue('akey')
                     });
 
-                    // error and empty response detection to start re-initialization
-                    if (data.indexOf('CANERROR') !== -1 ||
-                        data.indexOf('STOPPED') !== -1 ||
-                        data.indexOf('UNABLETOCONNECT') !== -1 ||
-                        data.indexOf('BUFFERFULL') !== -1 ||
-                        (data.indexOf('7EC2600000000000000') !== -1 && self.getCurrentCommand().response === '7EC' && self.emptyResponses > 5)) {
-                        // there was an error - reset offset, to start with first command afterwards
-                        self.offset = -1;
-                        self.emptyResponses = 0;
-                        self.currentCommand = 0;
-                        // emit obd2 error
-                        eventBus.$emit('obd2Error', data);
+                    if (!self.initFinished) {
+                        if (self.offset + 1 < self.initCMD.length) {
+                            bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
+                        } else {
+                            self.initFinished = true;
+                            self.sendCurrentCommand();
+                        }
+                        return;
                     }
-                    if (self.offset + 1 === self.initCMD.length) {
+
+                    if (self.pendingSetupResponses > 0) {
+                        self.pendingSetupResponses--;
+                        if (self.pendingSetupResponses === 0) self.awaitingCommandResponse = true;
+                        return;
+                    }
+
+                    if (!self.awaitingCommandResponse) return;
+                    self.awaitingCommandResponse = false;
+
+                    if (self.hasAdapterError(data)) return self.reinitialize(data);
+                    if (self.offset + 1 >= self.initCMD.length) {
                         // init of dongle finished, parse data and just send the OBD2 command
                         eventBus.$emit('obd2Data', self.parseData(data));
+                        if (self.shouldReinitializeAfterCycleFailure(data)) return self.reinitialize(data);
                         self.sendCurrentCommand();
                     } else bluetoothSerial.write(self.initCMD[++self.offset] + '\r');
                 }, err => console.error(err));
@@ -87,24 +97,67 @@
             getCurrentCommand() {
                 return this.commands[this.currentCommand];
             },
+            hasAdapterError(data) {
+                return data.indexOf('CANERROR') !== -1 ||
+                    data.indexOf('STOPPED') !== -1 ||
+                    data.indexOf('UNABLETOCONNECT') !== -1 ||
+                    data.indexOf('BUFFERFULL') !== -1;
+            },
+            hasCommandFailure(data) {
+                return data.indexOf('?') !== -1 ||
+                    data.indexOf('NODATA') !== -1 ||
+                    data.indexOf('7EC2600000000000000') !== -1;
+            },
+            reinitialize(data) {
+                this.offset = -1;
+                this.initFinished = false;
+                this.emptyResponses = 0;
+                this.failedCommandsInCycle = 0;
+                this.currentCommand = 0;
+                this.pendingSetupResponses = 0;
+                this.awaitingCommandResponse = false;
+                eventBus.$emit('obd2Error', data);
+            },
+            markCommandSuccess() {
+                this.emptyResponses = 0;
+                this.failedCommandsInCycle = 0;
+            },
+            markCommandFailure() {
+                this.emptyResponses++;
+                this.failedCommandsInCycle++;
+            },
+            shouldReinitializeAfterCycleFailure(data) {
+                if (!this.hasCommandFailure(data)) return false;
+                return this.failedCommandsInCycle >= this.commands.length;
+            },
             advanceCommand() {
                 this.currentCommand = (this.currentCommand + 1) % this.commands.length;
             },
             sendCurrentCommand() {
                 var self = this,
                     command = self.getCurrentCommand();
+                var setupCommands = command.setupCommands || [];
 
-                bluetoothSerial.write('ATSH' + command.header + '\r', () => {
-                    bluetoothSerial.write('ATCRA' + command.response + '\r', () => {
+                self.pendingSetupResponses = setupCommands.length;
+                self.awaitingCommandResponse = (setupCommands.length === 0);
+                var runSetup = index => {
+                    if (index >= setupCommands.length) {
                         setTimeout(() => bluetoothSerial.write(command.name + '\r'), command.delay);
+                        return;
+                    }
+                    bluetoothSerial.write(setupCommands[index] + '\r', () => {
+                        setTimeout(() => runSetup(index + 1), self.setupDelay);
                     }, err => console.error(err));
-                }, err => console.error(err));
+                };
+
+                runSetup(0);
             },
             parseData(data) {
                 var self = this,
                     parsedData = {},
                     baseData = self.getBaseData(),
-                    command = self.getCurrentCommand();
+                    command = self.getCurrentCommand(),
+                    parsedSuccessfully = false;
 
                 try {
                     if (command.name === '2105') {
@@ -114,6 +167,7 @@
                             extractedFourthData = extractedFourthBlock.replace(fourthBlock, '');
 
                         if (extractedFourthBlock) {
+                            parsedSuccessfully = true;
                             parsedData = {
                                 SOC_DISPLAY: parseInt(
                                     extractedFourthBlock.slice(-2), 16
@@ -156,7 +210,7 @@
                             extractedSixthData = extractedSixthBlock.replace(sixthBlock, '');
 
                         if (extractedFirstData && extractedSecondData && extractedThirdData && extractedFourthData && extractedFifthData && extractedSixthData && extractedSixthData !== '00000000000000') {
-                            self.emptyResponses = 0;
+                            parsedSuccessfully = true;
                             // fill charging bits with leading zeros if smaller than 8 (counting binary from right to left!)
                             chargingBits = new Array(8 - chargingBits.length + 1).join(0) + chargingBits;
                             parsedData = {
@@ -214,13 +268,14 @@
                             parsedData.BATTERY_CELL_VOLTAGE_DELTA = parsedData.BATTERY_CELL_VOLTAGE_MAX - parsedData.BATTERY_CELL_VOLTAGE_MIN;
                             // add battery power
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
-                        } else self.emptyResponses++;
+                        }
                     } else if (command.name === '22B002') {
                         var odoBlock = '7CE',
                             extractedOdoBlock = ((data.indexOf(odoBlock) !== -1) ? data.substring(data.indexOf(odoBlock), data.indexOf(odoBlock) + 16) : ''),
                             extractedOdoData = extractedOdoBlock.replace(odoBlock, '');
 
                         if (extractedOdoData.length >= 10 && extractedOdoData.slice(0, 4) === '62B0') {
+                            parsedSuccessfully = true;
                             parsedData = {
                                 ODO: parseInt(extractedOdoData.slice(4, 10), 16)
                             };
@@ -229,6 +284,8 @@
                 } catch (err) {
                     console.error(err);
                 }
+                if (parsedSuccessfully) self.markCommandSuccess();
+                else if (self.hasCommandFailure(data)) self.markCommandFailure();
                 // extend with base data
                 Object.keys(baseData).forEach(key => parsedData[key] = baseData[key]);
                 console.log({

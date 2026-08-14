@@ -53,7 +53,7 @@ The content of the `www/client.js` file must be the following:
 ```JavaScript
 RESTURL = 'https://app.evnotify.de/', /* you can replace this with your custom EVNotify backend url if exists */
 DEBUG = false,
-VERSION = '2.5.0'
+VERSION = '2.5.2'
 SOC_CMD = {
     IONIQ: '2105',  /* for compatibility to old versions only! */
     IONIQ_BEV: '2105',

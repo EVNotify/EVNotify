@@ -5,6 +5,7 @@ For web/browser:
   nvm use 22.5.1
   npm install
   ./node_modules/.bin/rollup -c
+  Ensure `app/www/client.js` has the intended `VERSION`, because the Settings page reads `window.VERSION` from that runtime config file.
   ./node_modules/.bin/cordova build browser
 
   For Android, first make sure these exist:
@@ -18,6 +19,9 @@ For web/browser:
   cd /home/gplay97/Developing/EVNotify/app
   . "$HOME/.nvm/nvm.sh"
   nvm use 22.5.1
+  npm install
+  ./node_modules/.bin/rollup -c
+  Ensure `app/www/client.js` has the intended `VERSION`, because the Settings page reads `window.VERSION` from that runtime config file.
 
   export ANDROID_HOME="$HOME/Android/Sdk"
   export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
@@ -35,6 +39,17 @@ For web/browser:
   Then build Android:
 
   cd /home/gplay97/Developing/EVNotify/app
+  npm install
+  ./node_modules/.bin/rollup -c
+  Ensure `app/www/client.js` has the intended `VERSION`, because the Settings page reads `window.VERSION` from that runtime config file.
+  npm run build:android
+  
+  For release builds, also rebundle first:
+
+  cd /home/gplay97/Developing/EVNotify/app
+  npm install
+  ./node_modules/.bin/rollup -c
+  Ensure `app/www/client.js` has the intended `VERSION`, because the Settings page reads `window.VERSION` from that runtime config file.
   npm run build:android:release
 
   Release outputs:
