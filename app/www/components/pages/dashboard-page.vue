@@ -79,45 +79,14 @@
                         <v-list-tile>
                             <v-list-tile-action>
                                 <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/power.svg" />
+                                    <img src="icons/blue/flash.svg" />
                                 </v-btn>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                                <v-list-tile-title>{{ formatBoolean(obd2Data.CHARGING) }}</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.CHARGING }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-if="obd2Data.SLOW_CHARGE_PORT != null">
-                            <v-list-tile-action>
-                                <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/ev_station_slow.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ formatBoolean(obd2Data.SLOW_CHARGE_PORT) }}</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.SLOW_CHARGE_PORT }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-if="obd2Data.NORMAL_CHARGE_PORT != null">
-                            <v-list-tile-action>
-                                <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/ev_station_normal.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ formatBoolean(obd2Data.NORMAL_CHARGE_PORT) }}</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.NORMAL_CHARGE_PORT }}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-if="obd2Data.RAPID_CHARGE_PORT != null">
-                            <v-list-tile-action>
-                                <v-btn flat icon :rippled="false">
-                                    <img src="icons/blue/ev_station_fast.svg" />
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ formatBoolean(obd2Data.RAPID_CHARGE_PORT) }}</v-list-tile-title>
-                                <v-list-tile-sub-title>{{ translated.RAPID_CHARGE_PORT }}</v-list-tile-sub-title>
+                                <v-list-tile-title :class="{'charging-active': obd2Data.CHARGING}">
+                                    {{ chargingStatusValue }}
+                                </v-list-tile-title>
+                                <v-list-tile-sub-title>{{ chargingStatusLabel }}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-subheader>{{ translated.BATTERY_TEMPERATURE }}</v-subheader>
@@ -423,6 +392,21 @@
             },
             finishTime() {
                 return helper.chargeTime(this.carCapacity, this.obd2Data.SOC_DISPLAY, this.obd2Data.SOC_BMS, this.obd2Data.DC_BATTERY_POWER || this.obd2Data.FAST_SPEED, "finishtime");
+            },
+            activeChargePortLabel() {
+                if (this.obd2Data.RAPID_CHARGE_PORT) return this.translated.RAPID_CHARGE_PORT;
+                if (this.obd2Data.NORMAL_CHARGE_PORT) return this.translated.NORMAL_CHARGE_PORT;
+                if (this.obd2Data.SLOW_CHARGE_PORT) return this.translated.SLOW_CHARGE_PORT;
+                return '';
+            },
+            chargingStatusValue() {
+                if (!this.obd2Data.CHARGING) return this.translated.NO;
+
+                var portLabel = this.activeChargePortLabel;
+                return portLabel ? this.translated.YES + ' (' + portLabel + ')' : this.translated.YES;
+            },
+            chargingStatusLabel() {
+                return this.translated.CHARGING;
             },
             carCapacity() {
                 const settingsCapacity = parseInt(storage.getValue('settings', {}).capacity) || 0;
@@ -1105,6 +1089,10 @@
 
 .temperature-text {
     display: inline;
+}
+
+.charging-active {
+    color: #2e7d32;
 }
 
 .last-tile {
