@@ -59,6 +59,7 @@
     import toolbar from './../container/toolbar.vue';
     import bottomBar from './../container/bottom-bar.vue';
     import translation from './../modules/translation.vue';
+    import eventBus from './../modules/event.vue';
     import obdDebug from './../../js/obd-debug.js';
 
     export default {
@@ -99,6 +100,11 @@
         created() {
             this.translated = translation.translatePage();
             this.loadHistory();
+            eventBus.$off('obd2DebugDataLive');
+            eventBus.$on('obd2DebugDataLive', () => this.loadHistory());
+        },
+        beforeDestroy() {
+            eventBus.$off('obd2DebugDataLive');
         },
         components: {
             toolbar,

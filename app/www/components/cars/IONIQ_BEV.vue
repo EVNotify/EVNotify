@@ -39,6 +39,31 @@
             };
         },
         methods: {
+            extractIsoTpPayload(data, canId) {
+                var frameRegex = new RegExp(canId + '[0-9A-F]{16}', 'g');
+                var frames = data.match(frameRegex) || [];
+                var payloadBytes = [];
+                var expectedLength = 0;
+
+                frames.forEach(frame => {
+                    var framePayload = frame.slice(canId.length);
+                    var bytes = framePayload.match(/../g) || [];
+                    var pci = bytes[0] || '';
+
+                    if (pci.charAt(0) === '1') {
+                        expectedLength = parseInt((pci.charAt(1) || '0') + (bytes[1] || '0'), 16);
+                        payloadBytes = payloadBytes.concat(bytes.slice(2));
+                    } else if (pci.charAt(0) === '2') {
+                        payloadBytes = payloadBytes.concat(bytes.slice(1));
+                    } else if (pci.charAt(0) === '0') {
+                        expectedLength = parseInt(pci.charAt(1) || '0', 16);
+                        payloadBytes = payloadBytes.concat(bytes.slice(1));
+                    }
+                });
+
+                if (!expectedLength || payloadBytes.length < expectedLength) return '';
+                return payloadBytes.slice(0, expectedLength).join('');
+            },
             init() {
                 var self = this;
 
@@ -270,14 +295,12 @@
                             parsedData.DC_BATTERY_POWER = parsedData.DC_BATTERY_CURRENT * parsedData.DC_BATTERY_VOLTAGE / 1000;
                         }
                     } else if (command.name === '22B002') {
-                        var odoBlock = '7CE',
-                            extractedOdoBlock = ((data.indexOf(odoBlock) !== -1) ? data.substring(data.indexOf(odoBlock), data.indexOf(odoBlock) + 16) : ''),
-                            extractedOdoData = extractedOdoBlock.replace(odoBlock, '');
+                        var extractedOdoData = self.extractIsoTpPayload(data, '7CE');
 
-                        if (extractedOdoData.length >= 10 && extractedOdoData.slice(0, 4) === '62B0') {
+                        if (extractedOdoData.length >= 24 && extractedOdoData.slice(0, 6) === '62B002') {
                             parsedSuccessfully = true;
                             parsedData = {
-                                ODO: parseInt(extractedOdoData.slice(4, 10), 16)
+                                ODO: parseInt(extractedOdoData.slice(18, 24), 16)
                             };
                         }
                     }

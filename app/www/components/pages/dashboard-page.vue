@@ -995,6 +995,7 @@
             eventBus.$off('obd2DebugData');
             eventBus.$on('obd2DebugData', function(entry) {
                 obdDebug.appendHistory(entry);
+                eventBus.$emit('obd2DebugDataLive');
             });
             eventBus.$off('obd2Error');
             eventBus.$on('obd2Error', function (error) {
