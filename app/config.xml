@@ -9,6 +9,7 @@
     </author>
     <content src="index.html" />
     <hook src="scripts/patch-bluetooth-serial.js" type="after_prepare" />
+    <hook src="scripts/patch-android-splash-theme.js" type="after_prepare" />
     <access origin="*" />
     <preference name="android-minSdkVersion" value="24" />
     <preference name="android-compileSdkVersion" value="36" />
